@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+    <title>多程换乘校验工具</title>
+
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --danger-color: #dc3545;
+            --danger-hover: #a71d2a;
+            --secondary-color: #6c757d;
+            --secondary-hover: #545b62;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        .dark-mode {
+            --bg-color: #212529;
+            --text-color: #f8f9fa;
+            --card-bg: #343a40;
+            --border-color: #495057;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .btn-danger { background-color: var(--danger-color); color: white; }
+        .btn-danger:hover { background-color: var(--danger-hover); }
+
+        .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn-secondary:hover { background-color: var(--secondary-hover); }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        #current-journey-legs .leg-item {
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .history-card .summary {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .history-card .summary span {
+            margin-right: 15px;
+        }
+
+        .leg-details {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .leg-details p { margin: 5px 0; }
+        .leg-details strong { min-width: 80px; display: inline-block; }
+
+        .validation-error {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        .validation-ok {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .notes-content {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+        
+        #theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        #empty-history-placeholder {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary-color);
+            font-size: 1.2em;
+        }
+
+        /* Quill Editor Height */
+        #notes-editor {
+            height: 120px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            #theme-toggle {
+                position: static;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle">切换模式</button>
+
+    <div class="container">
+        <div class="left-panel panel">
+            <h1 id="form-title">创建新方案</h1>
+            <form id="leg-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="transport-type">交通工具</label>
+                        <select id="transport-type" required>
+                            <option value="高铁">高铁</option>
+                            <option value="飞机">飞机</option>
+                            <option value="火车">火车</option>
+                            <option value="地铁">地铁</option>
+                            <option value="公交">公交</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="flight-no">车次/航班号</label>
+                        <input type="text" id="flight-no" placeholder="例如 G123 / CA4567">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="dep-station">出发站</label>
+                        <input type="text" id="dep-station" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dep-time">出发时间</label>
+                        <input type="datetime-local" id="dep-time" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="arr-station">到达站</label>
+                        <input type="text" id="arr-station" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="arr-time">到达时间</label>
+                        <input type="datetime-local" id="arr-time" required>
+                    </div>
+                </div>
+                
+                 <div class="form-grid">
+                    <div class="form-group">
+                        <label for="cost">费用 (元)</label>
+                        <input type="number" id="cost" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-type">票据类型</label>
+                        <select id="ticket-type"></select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">添加行程段</button>
+                </div>
+            </form>
+
+            <h2 style="margin-top: 20px;">当前方案预览</h2>
+            <div id="current-journey-legs"></div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="notes-editor">备注信息 (快捷键 Ctrl+B: 加粗, Ctrl+I: 斜体)</label>
+                <div id="notes-editor"></div>
+            </div>
+
+            <div class="button-group">
+                <button id="save-plan" class="btn-primary">保存完整方案</button>
+                <button id="clear-plan" class="btn-secondary">清空当前方案</button>
+            </div>
+        </div>
+
+        <div class="right-panel panel">
+            <h2>历史方案 (最近10条)</h2>
+            <div id="history-container">
+                </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM 元素
+            const legForm = document.getElementById('leg-form');
+            const currentJourneyLegs = document.getElementById('current-journey-legs');
+            const savePlanBtn = document.getElementById('save-plan');
+            const clearPlanBtn = document.getElementById('clear-plan');
+            const historyContainer = document.getElementById('history-container');
+            const themeToggle = document.getElementById('theme-toggle');
+            const formTitle = document.getElementById('form-title');
+            const transportTypeSelect = document.getElementById('transport-type');
+            const ticketTypeSelect = document.getElementById('ticket-type');
+
+            // Quill 编辑器初始化
+            const quill = new Quill('#notes-editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+                    ],
+                    keyboard: {
+                        bindings: {
+                            bold: { key: 'B', shortKey: true },
+                            italic: { key: 'I', shortKey: true }
+                        }
+                    }
+                }
+            });
+
+            // 应用程序状态
+            let currentLegs = [];
+            let savedPlans = [];
+            let editingPlanId = null;
+
+            // v4.0 新增：票据类型与交通工具的联动映射
+            const ticketMappings = {
+                '高铁': ['二等座', '一等座', '商务座', '无座'],
+                '飞机': ['经济舱', '超级经济舱', '公务舱', '头等舱'],
+                '火车': ['硬座', '硬卧', '软卧', '无座'],
+                '地铁': ['单程票', '交通卡', '二维码'],
+                '公交': ['现金', '交通卡', '二维码'],
+                '其他': ['标准票', '优惠票', '团体票']
+            };
+
+            // v4.0 核心功能：根据交通工具更新票据类型
+            function updateTicketTypes() {
+                const selectedTransport = transportTypeSelect.value;
+                const types = ticketMappings[selectedTransport] || [];
+                ticketTypeSelect.innerHTML = ''; // 清空选项
+                types.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    ticketTypeSelect.appendChild(option);
+                });
+            }
+
+            // 加载数据
+            function loadPlansFromStorage() {
+                const plansJSON = localStorage.getItem('transitPlans');
+                savedPlans = plansJSON ? JSON.parse(plansJSON) : [];
+                // BUG 修复：处理旧数据结构，确保每个方案都有所有新字段
+                savedPlans.forEach(plan => {
+                    plan.legs.forEach(leg => {
+                        leg.cost = leg.cost || 0;
+                        leg.ticketType = leg.ticketType || '';
+                    });
+                });
+            }
+
+            // 保存数据
+            function savePlansToStorage() {
+                localStorage.setItem('transitPlans', JSON.stringify(savedPlans));
+            }
+
+            // 渲染当前行程段
+            function renderCurrentLegs() {
+                currentJourneyLegs.innerHTML = '';
+                if (currentLegs.length === 0) {
+                    currentJourneyLegs.innerHTML = '<p>请在上方表单添加行程段。</p>';
+                    return;
+                }
+                currentLegs.forEach((leg, index) => {
+                    const legDiv = document.createElement('div');
+                    legDiv.className = 'leg-item';
+                    legDiv.innerHTML = `
+                        <span>
+                            <strong>${index + 1}.</strong> ${leg.transport} ${leg.flightNo || ''} <br>
+                            ${escapeHTML(leg.depStation)} → ${escapeHTML(leg.arrStation)}
+                        </span>
+                        <button class="btn-danger btn-sm" data-index="${index}">删除</button>
+                    `;
+                    currentJourneyLegs.appendChild(legDiv);
+                });
+            }
+
+            // 渲染历史记录
+            function renderHistory() {
+                historyContainer.innerHTML = '';
+
+                // v4.0 BUG 修复：检查是否存在历史数据
+                if (savedPlans.length === 0) {
+                    const placeholder = document.createElement('div');
+                    placeholder.id = 'empty-history-placeholder';
+                    placeholder.textContent = '暂无历史方案，快去创建一个吧！';
+                    historyContainer.appendChild(placeholder);
+                    return; // 提前返回，不再执行后续渲染
+                }
+
+                const sortedPlans = savedPlans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                sortedPlans.forEach(plan => {
+                    const cardId = `plan-${plan.id}`;
+                    const card = document.createElement('div');
+                    card.className = 'history-card';
+                    card.id = cardId;
+                    
+                    const { totalDuration, totalCost, validationResults } = analyzePlan(plan.legs);
+                    
+                    let legsHTML = '';
+                    plan.legs.forEach((leg, index) => {
+                        const validation = validationResults[index];
+                        legsHTML += `
+                            <div class="leg-details">
+                                <p><strong>第 ${index + 1} 程:</strong> ${leg.transport} ${escapeHTML(leg.flightNo) || ''}</p>
+                                <p><strong>站点:</strong> ${escapeHTML(leg.depStation)} → ${escapeHTML(leg.arrStation)}</p>
+                                <p><strong>时间:</strong> ${formatDateTime(leg.depTime)} → ${formatDateTime(leg.arrTime)}</p>
+                                <p><strong>费用:</strong> ${leg.cost} 元 (${escapeHTML(leg.ticketType) || '未指定'})</p>
+                                ${validation ? `<p class="${validation.ok ? 'validation-ok' : 'validation-error'}">↳ ${validation.message}</p>` : ''}
+                            </div>
+                        `;
+                    });
+
+                    card.innerHTML = `
+                        <div class="summary">
+                            <span>总耗时: ${totalDuration}</span>
+                            <span>总费用: ${totalCost.toFixed(2)} 元</span>
+                        </div>
+                        ${legsHTML}
+                        ${plan.notes ? `<div class="notes-content"><strong>备注:</strong> ${plan.notes}</div>` : ''}
+                        <div class="button-group">
+                            <button class="btn-secondary" data-action="edit" data-id="${plan.id}">编辑</button>
+                            <button class="btn-danger" data-action="delete" data-id="${plan.id}">删除</button>
+                            <button class="btn-primary" data-action="export" data-id="${plan.id}">导出图片</button>
+                        </div>
+                    `;
+                    historyContainer.appendChild(card);
+                });
+            }
+            
+            // 分析方案（校验、计算总耗时和总费用）
+            function analyzePlan(legs) {
+                let totalDurationMs = 0;
+                let totalCost = 0;
+                const validationResults = [];
+
+                if (legs.length > 0) {
+                    const firstDep = new Date(legs[0].depTime);
+                    const lastArr = new Date(legs[legs.length - 1].arrTime);
+                    if (!isNaN(firstDep) && !isNaN(lastArr)) {
+                        totalDurationMs = lastArr - firstDep;
+                    }
+                }
+
+                legs.forEach((leg, index) => {
+                    totalCost += parseFloat(leg.cost) || 0;
+                    if (index > 0) {
+                        const prevLeg = legs[index - 1];
+                        const prevArrTime = new Date(prevLeg.arrTime);
+                        const currDepTime = new Date(leg.depTime);
+                        
+                        // 1. 站点校验
+                        if (prevLeg.arrStation.trim() !== leg.depStation.trim()) {
+                            validationResults[index] = { ok: false, message: `换乘站点不匹配 (应为 ${escapeHTML(prevLeg.arrStation)})` };
+                            return;
+                        }
+                        
+                        // 2. 时间校验
+                        const interval = (currDepTime - prevArrTime) / (1000 * 60);
+                        if (interval < 10) {
+                             validationResults[index] = { ok: false, message: `换乘时间不足10分钟 (实际: ${interval.toFixed(0)}分钟)` };
+                        } else {
+                             validationResults[index] = { ok: true, message: `换乘时间: ${formatDuration(interval * 60 * 1000)}` };
+                        }
+                    }
+                });
+
+                return {
+                    totalDuration: formatDuration(totalDurationMs),
+                    totalCost: totalCost,
+                    validationResults: validationResults
+                };
+            }
+
+            // 表单提交：添加行程段
+            legForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newLeg = {
+                    transport: document.getElementById('transport-type').value,
+                    flightNo: document.getElementById('flight-no').value,
+                    depStation: document.getElementById('dep-station').value,
+                    depTime: document.getElementById('dep-time').value,
+                    arrStation: document.getElementById('arr-station').value,
+                    arrTime: document.getElementById('arr-time').value,
+                    cost: parseFloat(document.getElementById('cost').value) || 0,
+                    ticketType: document.getElementById('ticket-type').value,
+                };
+                
+                if (new Date(newLeg.arrTime) <= new Date(newLeg.depTime)) {
+                    alert('到达时间必须晚于出发时间！');
+                    return;
+                }
+
+                currentLegs.push(newLeg);
+                renderCurrentLegs();
+                legForm.reset();
+                updateTicketTypes(); // 重置表单后，再次根据默认交通工具更新票据类型
+            });
+            
+            // 清空当前方案
+            clearPlanBtn.addEventListener('click', clearCurrentPlan);
+
+            function clearCurrentPlan() {
+                currentLegs = [];
+                editingPlanId = null;
+                quill.setContents([]);
+                legForm.reset();
+                updateTicketTypes();
+                renderCurrentLegs();
+                formTitle.textContent = "创建新方案";
+                savePlanBtn.textContent = "保存完整方案";
+            }
+            
+            // 保存方案
+            savePlanBtn.addEventListener('click', () => {
+                if (currentLegs.length === 0) {
+                    alert('请至少添加一个行程段！');
+                    return;
+                }
+
+                const plan = {
+                    id: editingPlanId || Date.now(),
+                    legs: currentLegs,
+                    notes: quill.root.innerHTML,
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (editingPlanId) {
+                    // 更新现有方案
+                    const index = savedPlans.findIndex(p => p.id === editingPlanId);
+                    if (index !== -1) {
+                        savedPlans[index] = plan;
+                    }
+                } else {
+                    // 添加新方案
+                    savedPlans.push(plan);
+                    if (savedPlans.length > 10) {
+                        savedPlans.shift(); // 保持最多10条
+                    }
+                }
+                
+                savePlansToStorage();
+                renderHistory();
+                clearCurrentPlan();
+            });
+
+            // 当前行程段列表中的删除按钮
+            currentJourneyLegs.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON' && e.target.dataset.index) {
+                    const index = parseInt(e.target.dataset.index, 10);
+                    currentLegs.splice(index, 1);
+                    renderCurrentLegs();
+                }
+            });
+
+            // 历史记录区域的事件代理 (编辑、删除、导出)
+            historyContainer.addEventListener('click', (e) => {
+                const target = e.target.closest('button');
+                if (!target) return;
+
+                const action = target.dataset.action;
+                const id = parseInt(target.dataset.id, 10);
+
+                switch (action) {
+                    case 'delete':
+                        if (confirm('确定要删除这个方案吗？')) {
+                            savedPlans = savedPlans.filter(p => p.id !== id);
+                            savePlansToStorage();
+                            renderHistory();
+                        }
+                        break;
+                    case 'edit':
+                        const planToEdit = savedPlans.find(p => p.id === id);
+                        if (planToEdit) {
+                            currentLegs = JSON.parse(JSON.stringify(planToEdit.legs)); // 深拷贝
+                            quill.root.innerHTML = planToEdit.notes || '';
+                            editingPlanId = id;
+
+                            renderCurrentLegs();
+                            formTitle.textContent = "正在编辑方案";
+                            savePlanBtn.textContent = "更新方案";
+                            window.scrollTo(0, 0); // 滚动到页面顶部
+                        }
+                        break;
+                    case 'export':
+                        const cardToExport = document.getElementById(`plan-${id}`);
+                        if (cardToExport) {
+                            html2canvas(cardToExport).then(canvas => {
+                                const link = document.createElement('a');
+                                link.download = `行程方案_${id}.png`;
+                                link.href = canvas.toDataURL('image/png');
+                                link.click();
+                            });
+                        }
+                        break;
+                }
+            });
+            
+            // 主题切换
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+
+            function loadTheme() {
+                const theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                }
+            }
+
+            // 辅助函数
+            function escapeHTML(str) {
+                if (typeof str !== 'string') return '';
+                return str.replace(/[&<>'"]/g, tag => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+                }[tag] || tag));
+            }
+
+            function formatDateTime(isoString) {
+                if (!isoString) return 'N/A';
+                const date = new Date(isoString);
+                return date.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            }
+
+            function formatDuration(ms) {
+                if (ms < 0) return '时间无效';
+                const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+                let result = '';
+                if (days > 0) result += `${days}天`;
+                if (hours > 0) result += `${hours}小时`;
+                if (minutes > 0) result += `${minutes}分钟`;
+                return result || '0分钟';
+            }
+
+            // 初始化
+            function init() {
+                loadTheme();
+                loadPlansFromStorage();
+                renderCurrentLegs();
+                renderHistory();
+                updateTicketTypes(); // 页面加载时初始化票据类型
+                transportTypeSelect.addEventListener('change', updateTicketTypes); // 监听交通工具变化
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
