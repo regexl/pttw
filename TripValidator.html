@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
-    <title>多程换乘校验工具</title>
+    <title>多程换乘校验工具 (Multi-Leg Trip Validator)</title>
 
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        /* --- 基础与变量定义 --- */
         :root {
             --bg-color: #f8f9fa;
             --text-color: #212529;
@@ -17,649 +18,1142 @@
             --primary-color: #007bff;
             --primary-hover: #0056b3;
             --danger-color: #dc3545;
-            --danger-hover: #a71d2a;
-            --secondary-color: #6c757d;
-            --secondary-hover: #545b62;
-            --success-color: #28a745;
+            --danger-hover: #c82333;
             --warning-color: #ffc107;
+            --warning-bg: #fff3cd;
+            --success-color: #28a745;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         .dark-mode {
-            --bg-color: #212529;
-            --text-color: #f8f9fa;
-            --card-bg: #343a40;
-            --border-color: #495057;
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border-color: #444;
+            --primary-color: #4dabf7;
+            --primary-hover: #1e88e5;
+        }
+
+        /* --- 全局样式 --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            font-family: var(--font-family);
             background-color: var(--bg-color);
             color: var(--text-color);
+            line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
-            font-size: 16px;
+            padding: 1rem;
         }
 
         .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            max-width: 1400px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
-        .left-panel, .right-panel {
-            flex: 1;
-            min-width: 320px;
+        @media (min-width: 1024px) {
+            .container {
+                grid-template-columns: 450px 1fr;
+            }
         }
 
-        .panel {
+        /* --- 卡片与表单样式 --- */
+        .card {
             background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
         }
-        
-        h1, h2 {
-            margin-top: 0;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             background-color: var(--bg-color);
             color: var(--text-color);
-            box-sizing: border-box;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            font-size: 1rem;
         }
 
-        button {
-            padding: 10px 15px;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.2s;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
         }
 
-        .btn-primary { background-color: var(--primary-color); color: white; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-
-        .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-danger:hover { background-color: var(--danger-hover); }
-
-        .btn-secondary { background-color: var(--secondary-color); color: white; }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
         }
 
-        #current-journey-legs .leg-item {
-            border: 1px dashed var(--border-color);
-            border-radius: 4px;
-            padding: 10px;
-            margin-top: 10px;
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* --- 行程段列表样式 --- */
+        #current-legs-list {
+            list-style-type: none;
+            margin-top: 1.5rem;
+            min-height: 50px;
+        }
+
+        .leg-item {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            background-color: var(--bg-color);
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            cursor: move;
+        }
+        .leg-item .icon {
+            font-size: 1.5rem;
+        }
+        .leg-item .details {
+            flex-grow: 1;
+        }
+        .leg-item .details p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .leg-item .details strong {
+            font-size: 1rem;
+        }
+        .leg-item .actions button {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* --- 已保存方案样式 --- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
             align-items: center;
         }
 
-        .history-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+        .plan-card {
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
         }
 
-        .history-card .summary {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-        
-        .history-card .summary span {
-            margin-right: 15px;
+        .plan-card.export-selected {
+            border-color: var(--success-color);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
         }
 
-        .leg-details {
-            border-left: 3px solid var(--primary-color);
-            padding-left: 10px;
-            margin-bottom: 10px;
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
-        
-        .leg-details p { margin: 5px 0; }
-        .leg-details strong { min-width: 80px; display: inline-block; }
+        .plan-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
 
-        .validation-error {
+        .plan-summary {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .dark-mode .plan-summary {
+            color: #aaa;
+        }
+
+        .plan-leg {
+            display: grid;
+            grid-template-columns: 2em 1fr;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            position: relative;
+        }
+        .plan-leg:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-icon {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: calc(1em - 1px);
+            top: 1.5em;
+            bottom: -0.5em;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+
+        .leg-details strong {
+            display: inline-block;
+            margin-bottom: 0.25rem;
+        }
+        .leg-details .trip-info {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .dark-mode .leg-details .trip-info {
+             color: #aaa;
+        }
+
+        .layover {
+            padding: 0.5rem 0 0.5rem 3rem;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        .layover.invalid-time {
             color: var(--danger-color);
             font-weight: bold;
+            background-color: rgba(220, 53, 69, 0.1);
         }
-        .validation-ok {
-            color: var(--success-color);
+
+        .layover.invalid-station {
+            color: var(--warning-color);
             font-weight: bold;
+            background-color: var(--warning-bg);
         }
-        
-        .notes-content {
-            background-color: var(--bg-color);
+
+        .plan-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* --- 弹框样式 (Modal) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: auto;
+            padding: 2rem;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin-top: 10px;
-        }
-        
-        #theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        #empty-history-placeholder {
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
             text-align: center;
-            padding: 40px;
-            color: var(--secondary-color);
-            font-size: 1.2em;
+        }
+        .modal-buttons {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
         }
 
-        /* Quill Editor Height */
-        #notes-editor {
-            height: 120px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            #theme-toggle {
-                position: static;
-                margin-bottom: 20px;
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <button id="theme-toggle">切换模式</button>
-
     <div class="container">
-        <div class="left-panel panel">
-            <h1 id="form-title">创建新方案</h1>
-            <form id="leg-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="transport-type">交通工具</label>
-                        <select id="transport-type" required>
-                            <option value="高铁">高铁</option>
-                            <option value="飞机">飞机</option>
-                            <option value="火车">火车</option>
-                            <option value="地铁">地铁</option>
-                            <option value="公交">公交</option>
-                            <option value="其他">其他</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="flight-no">车次/航班号</label>
-                        <input type="text" id="flight-no" placeholder="例如 G123 / CA4567">
-                    </div>
+        <div class="left-panel">
+            <div class="card">
+                <h2 class="card-title" data-lang="left_panel_title">创建/编辑换乘方案</h2>
+
+                <input type="hidden" id="editing-plan-id">
+
+                <div class="form-group">
+                    <label for="plan-title" data-lang="plan_title_label">方案名称</label>
+                    <input type="text" id="plan-title" placeholder="例如：北京-广州 出差方案A">
                 </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="dep-station">出发站</label>
-                        <input type="text" id="dep-station" required>
+                <h3 style="margin-top: 2rem; font-size: 1.2rem; font-weight: 500;" data-lang="add_leg_title">添加行程分段</h3>
+                <div id="leg-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="transport-mode" data-lang="transport_mode">交通工具</label>
+                            <select id="transport-mode"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ticket-type" data-lang="ticket_type">票据类型</label>
+                            <select id="ticket-type"></select>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="dep-time">出发时间</label>
-                        <input type="datetime-local" id="dep-time" required>
+                        <label for="trip-number" data-lang="trip_number">车次/航班号</label>
+                        <input type="text" id="trip-number" placeholder="例如: G80, CA1234">
                     </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="from-station" data-lang="from_station">出发站</label>
+                            <input type="text" id="from-station" placeholder="例如：北京南站">
+                        </div>
+                        <div class="form-group">
+                            <label for="to-station" data-lang="to_station">到达站</label>
+                            <input type="text" id="to-station" placeholder="例如：上海虹桥">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="departure-time" data-lang="departure_time">出发时间</label>
+                            <input type="datetime-local" id="departure-time">
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival-time" data-lang="arrival_time">到达时间</label>
+                            <input type="datetime-local" id="arrival-time">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cost" data-lang="cost">费用 (元)</label>
+                        <input type="number" id="cost" placeholder="例如: 553.5">
+                    </div>
+
+                    <button class="btn btn-secondary" id="add-leg-btn" style="width:100%;" data-lang="add_leg_btn">添加分段</button>
                 </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="arr-station">到达站</label>
-                        <input type="text" id="arr-station" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="arr-time">到达时间</label>
-                        <input type="datetime-local" id="arr-time" required>
-                    </div>
-                </div>
-                
-                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="cost">费用 (元)</label>
-                        <input type="number" id="cost" min="0" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="ticket-type">票据类型</label>
-                        <select id="ticket-type"></select>
-                    </div>
-                </div>
+                <hr style="margin: 1.5rem 0; border-color: var(--border-color);">
 
-                <div class="button-group">
-                    <button type="submit" class="btn-primary">添加行程段</button>
-                </div>
-            </form>
+                <h3 style="font-size: 1.2rem; font-weight: 500;" data-lang="current_legs_title">当前行程分段 (可拖拽排序)</h3>
+                <ul id="current-legs-list"></ul>
 
-            <h2 style="margin-top: 20px;">当前方案预览</h2>
-            <div id="current-journey-legs"></div>
-
-            <div class="form-group" style="margin-top: 20px;">
-                <label for="notes-editor">备注信息 (快捷键 Ctrl+B: 加粗, Ctrl+I: 斜体)</label>
-                <div id="notes-editor"></div>
-            </div>
-
-            <div class="button-group">
-                <button id="save-plan" class="btn-primary">保存完整方案</button>
-                <button id="clear-plan" class="btn-secondary">清空当前方案</button>
+                <button class="btn btn-primary" id="save-plan-btn" style="margin-top: 1rem;" data-lang="save_plan_btn">校验并保存方案</button>
             </div>
         </div>
 
-        <div class="right-panel panel">
-            <h2>历史方案 (最近10条)</h2>
-            <div id="history-container">
+        <div class="right-panel">
+            <div class="card">
+                <h2 class="card-title" data-lang="right_panel_title">已保存的换乘方案</h2>
+
+                <div class="toolbar">
+                    <select id="language-switcher"></select>
+                    <button id="theme-switcher" class="btn btn-secondary">🌓</button>
+                    <button id="export-selected-btn" class="btn btn-success" data-lang="export_selected_btn">导出对比图</button>
                 </div>
+
+                <div id="saved-plans-container">
+                    </div>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <h3 data-lang="delete_confirm_title">确认删除</h3>
+            <p data-lang="delete_confirm_text">您确定要删除这个方案吗？此操作无法撤销。</p>
+            <div class="modal-buttons">
+                <button id="confirm-delete-btn" class="btn btn-danger" data-lang="delete_btn">删除</button>
+                <button id="cancel-delete-btn" class="btn btn-secondary" data-lang="cancel_btn">取消</button>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM 元素
-            const legForm = document.getElementById('leg-form');
-            const currentJourneyLegs = document.getElementById('current-journey-legs');
-            const savePlanBtn = document.getElementById('save-plan');
-            const clearPlanBtn = document.getElementById('clear-plan');
-            const historyContainer = document.getElementById('history-container');
-            const themeToggle = document.getElementById('theme-toggle');
-            const formTitle = document.getElementById('form-title');
-            const transportTypeSelect = document.getElementById('transport-type');
-            const ticketTypeSelect = document.getElementById('ticket-type');
+    <div id="validation-alert-modal" class="modal">
+        <div class="modal-content">
+            <h3 data-lang="validation_error_title">校验提醒</h3>
+            <p id="validation-alert-text"></p>
+            <div class="modal-buttons">
+                <button id="close-alert-btn" class="btn btn-primary" data-lang="ok_btn">好的</button>
+            </div>
+        </div>
+    </div>
 
-            // Quill 编辑器初始化
-            const quill = new Quill('#notes-editor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }]
-                    ],
-                    keyboard: {
-                        bindings: {
-                            bold: { key: 'B', shortKey: true },
-                            italic: { key: 'I', shortKey: true }
-                        }
-                    }
-                }
-            });
 
-            // 应用程序状态
-            let currentLegs = [];
-            let savedPlans = [];
-            let editingPlanId = null;
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-            // v4.0 新增：票据类型与交通工具的联动映射
-            const ticketMappings = {
-                '高铁': ['二等座', '一等座', '商务座', '无座'],
-                '飞机': ['经济舱', '超级经济舱', '公务舱', '头等舱'],
-                '火车': ['硬座', '硬卧', '软卧', '无座'],
-                '地铁': ['单程票', '交通卡', '二维码'],
-                '公交': ['现金', '交通卡', '二维码'],
-                '其他': ['标准票', '优惠票', '团体票']
-            };
+    // --- 1. STATE & CONFIGURATION ---
+    let state = {
+        currentLegs: [],
+        savedPlans: [],
+        editingPlanId: null,
+        planToDeleteId: null,
+        currentLanguage: 'zh-CN',
+    };
 
-            // v4.0 核心功能：根据交通工具更新票据类型
-            function updateTicketTypes() {
-                const selectedTransport = transportTypeSelect.value;
-                const types = ticketMappings[selectedTransport] || [];
-                ticketTypeSelect.innerHTML = ''; // 清空选项
-                types.forEach(type => {
-                    const option = document.createElement('option');
-                    option.value = type;
-                    option.textContent = type;
-                    ticketTypeSelect.appendChild(option);
-                });
+    const MIN_TRANSFER_MINUTES = 10;
+
+    const I18N = {
+        'zh-CN': {
+            left_panel_title: '创建/编辑换乘方案',
+            plan_title_label: '方案名称',
+            add_leg_title: '添加行程分段',
+            transport_mode: '交通工具',
+            ticket_type: '票据类型',
+            trip_number: '车次/航班号',
+            from_station: '出发站',
+            to_station: '到达站',
+            departure_time: '出发时间',
+            arrival_time: '到达时间',
+            cost: '费用 (元)',
+            add_leg_btn: '添加分段',
+            update_leg_btn: '更新分段',
+            current_legs_title: '当前行程分段 (可拖拽排序)',
+            save_plan_btn: '校验并保存方案',
+            right_panel_title: '已保存的换乘方案',
+            export_selected_btn: '导出对比图',
+            delete_confirm_title: '确认删除',
+            delete_confirm_text: '您确定要删除这个方案吗？此操作无法撤销。',
+            delete_btn: '删除',
+            cancel_btn: '取消',
+            validation_error_title: '校验提醒',
+            ok_btn: '好的',
+            total_duration: '总耗时',
+            total_cost: '总费用',
+            transfer_info: '换乘信息',
+            edit_btn: '编辑',
+            export_img_btn: '导出图片',
+            select_for_compare: '选择对比',
+            validation_msg_short_time: '下一程发车时间距离上一程到达时间不足 {min} 分钟！',
+            validation_msg_mismatch_station: '换乘站点不一致 ({from} → {to})！',
+            validation_msg_invalid_date: '到达时间不能早于或等于出发时间。',
+            validation_msg_missing_fields: '请填写所有必填项。',
+            plan_saved_success: '方案已成功保存！',
+            plan_updated_success: '方案已成功更新！',
+            no_plans_saved: '暂无已保存的方案。',
+            language_name: '简体中文',
+            minutes: '分钟',
+        },
+        'en-US': {
+            left_panel_title: 'Create/Edit Trip Plan',
+            plan_title_label: 'Plan Name',
+            add_leg_title: 'Add a Trip Leg',
+            transport_mode: 'Transport Mode',
+            ticket_type: 'Ticket Type',
+            trip_number: 'Train/Flight No.',
+            from_station: 'Departure Station',
+            to_station: 'Arrival Station',
+            departure_time: 'Departure Time',
+            arrival_time: 'Arrival Time',
+            cost: 'Cost ($)',
+            add_leg_btn: 'Add Leg',
+            update_leg_btn: 'Update Leg',
+            current_legs_title: 'Current Legs (Drag to reorder)',
+            save_plan_btn: 'Validate & Save Plan',
+            right_panel_title: 'Saved Trip Plans',
+            export_selected_btn: 'Export Comparison',
+            delete_confirm_title: 'Confirm Deletion',
+            delete_confirm_text: 'Are you sure you want to delete this plan? This action cannot be undone.',
+            delete_btn: 'Delete',
+            cancel_btn: 'Cancel',
+            validation_error_title: 'Validation Alert',
+            ok_btn: 'OK',
+            total_duration: 'Total Duration',
+            total_cost: 'Total Cost',
+            transfer_info: 'Transfer Info',
+            edit_btn: 'Edit',
+            export_img_btn: 'Export Image',
+            select_for_compare: 'Select to Compare',
+            validation_msg_short_time: 'Less than {min} minutes between arrival and next departure!',
+            validation_msg_mismatch_station: 'Transfer stations do not match ({from} → {to})!',
+            validation_msg_invalid_date: 'Arrival time must be after departure time.',
+            validation_msg_missing_fields: 'Please fill in all required fields.',
+            plan_saved_success: 'Plan saved successfully!',
+            plan_updated_success: 'Plan updated successfully!',
+            no_plans_saved: 'No saved plans yet.',
+            language_name: 'English',
+            minutes: 'minutes',
+        },
+        'zh-TW': {
+            left_panel_title: '創建/編輯換乘方案',
+            plan_title_label: '方案名稱',
+            add_leg_title: '新增行程分段',
+            transport_mode: '交通工具',
+            ticket_type: '票據類型',
+            trip_number: '車次/航班號',
+            from_station: '出發站',
+            to_station: '到達站',
+            departure_time: '出發時間',
+            arrival_time: '到達時間',
+            cost: '費用 (元)',
+            add_leg_btn: '新增分段',
+            update_leg_btn: '更新分段',
+            current_legs_title: '目前行程分段 (可拖拽排序)',
+            save_plan_btn: '校驗並儲存方案',
+            right_panel_title: '已儲存的換乘方案',
+            export_selected_btn: '匯出對比圖',
+            delete_confirm_title: '確認刪除',
+            delete_confirm_text: '您確定要刪除這個方案嗎？此操作無法撤銷。',
+            delete_btn: '刪除',
+            cancel_btn: '取消',
+            validation_error_title: '校驗提醒',
+            ok_btn: '好的',
+            total_duration: '總耗時',
+            total_cost: '總費用',
+            transfer_info: '換乘資訊',
+            edit_btn: '編輯',
+            export_img_btn: '匯出圖片',
+            select_for_compare: '選擇對比',
+            validation_msg_short_time: '下一程發車時間距離上一程到達時間不足 {min} 分鐘！',
+            validation_msg_mismatch_station: '換乘站點不一致 ({from} → {to})！',
+            validation_msg_invalid_date: '到達時間不能早於或等於出發時間。',
+            validation_msg_missing_fields: '請填寫所有必填項。',
+            plan_saved_success: '方案已成功儲存！',
+            plan_updated_success: '方案已成功更新！',
+            no_plans_saved: '暫無已儲存的方案。',
+            language_name: '繁體中文',
+            minutes: '分鐘',
+        },
+        'ja-JP': {
+            left_panel_title: '乗り換えプランの作成・編集',
+            plan_title_label: 'プラン名',
+            add_leg_title: '旅程区間の追加',
+            transport_mode: '交通手段',
+            ticket_type: 'チケットタイプ',
+            trip_number: '列車番号/便名',
+            from_station: '出発駅',
+            to_station: '到着駅',
+            departure_time: '出発時刻',
+            arrival_time: '到着時刻',
+            cost: '費用 (円)',
+            add_leg_btn: '区間を追加',
+            update_leg_btn: '区間を更新',
+            current_legs_title: '現在の旅程区間 (ドラッグして並べ替え)',
+            save_plan_btn: '検証して保存',
+            right_panel_title: '保存された乗り換えプラン',
+            export_selected_btn: '比較画像をエクスポート',
+            delete_confirm_title: '削除の確認',
+            delete_confirm_text: 'このプランを削除してもよろしいですか？この操作は元に戻せません。',
+            delete_btn: '削除',
+            cancel_btn: 'キャンセル',
+            validation_error_title: '検証アラート',
+            ok_btn: 'はい',
+            total_duration: '総所要時間',
+            total_cost: '総費用',
+            transfer_info: '乗り換え情報',
+            edit_btn: '編集',
+            export_img_btn: '画像をエクスポート',
+            select_for_compare: '比較対象を選択',
+            validation_msg_short_time: '次の出発時刻が前の到着時刻から {min} 分未満です！',
+            validation_msg_mismatch_station: '乗り換え駅が一致しません ({from} → {to})！',
+            validation_msg_invalid_date: '到着時刻は出発時刻より後でなければなりません。',
+            validation_msg_missing_fields: '必須項目をすべて入力してください。',
+            plan_saved_success: 'プランが正常に保存されました！',
+            plan_updated_success: 'プランが正常に更新されました！',
+            no_plans_saved: '保存されたプランはまだありません。',
+            language_name: '日本語',
+            minutes: '分',
+        },
+        'de-DE': {
+            left_panel_title: 'Reiseplan erstellen/bearbeiten',
+            plan_title_label: 'Planname',
+            add_leg_title: 'Reiseabschnitt hinzufügen',
+            transport_mode: 'Transportmittel',
+            ticket_type: 'Ticket-Typ',
+            trip_number: 'Zug-/Flugnummer',
+            from_station: 'Abfahrtsstation',
+            to_station: 'Ankunftsstation',
+            departure_time: 'Abfahrtszeit',
+            arrival_time: 'Ankunftszeit',
+            cost: 'Kosten (€)',
+            add_leg_btn: 'Abschnitt hinzufügen',
+            update_leg_btn: 'Abschnitt aktualisieren',
+            current_legs_title: 'Aktuelle Abschnitte (ziehen zum Sortieren)',
+            save_plan_btn: 'Prüfen & Speichern',
+            right_panel_title: 'Gespeicherte Reisepläne',
+            export_selected_btn: 'Vergleich exportieren',
+            delete_confirm_title: 'Löschen bestätigen',
+            delete_confirm_text: 'Möchten Sie diesen Plan wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+            delete_btn: 'Löschen',
+            cancel_btn: 'Abbrechen',
+            validation_error_title: 'Validierungsfehler',
+            ok_btn: 'OK',
+            total_duration: 'Gesamtdauer',
+            total_cost: 'Gesamtkosten',
+            transfer_info: 'Umstiegsinfo',
+            edit_btn: 'Bearbeiten',
+            export_img_btn: 'Bild exportieren',
+            select_for_compare: 'Zum Vergleich auswählen',
+            validation_msg_short_time: 'Weniger als {min} Minuten zwischen Ankunft und nächster Abfahrt!',
+            validation_msg_mismatch_station: 'Umsteigestationen stimmen nicht überein ({from} → {to})!',
+            validation_msg_invalid_date: 'Die Ankunftszeit muss nach der Abfahrtszeit liegen.',
+            validation_msg_missing_fields: 'Bitte füllen Sie alle erforderlichen Felder aus.',
+            plan_saved_success: 'Plan erfolgreich gespeichert!',
+            plan_updated_success: 'Plan erfolgreich aktualisiert!',
+            no_plans_saved: 'Noch keine Pläne gespeichert.',
+            language_name: 'Deutsch',
+            minutes: 'Minuten',
+        },
+    };
+
+    const TRANSPORT_MODES = {
+    '高铁': { icon: '🚄', types: ['商务座', '高铁软卧', '高铁硬卧', '一等座', '二等座', '无座'] },
+    '火车': { icon: '🚂', types: ['软卧', '硬卧', '硬座', '无座'] },
+    '飞机': { icon: '✈️', types: ['经济舱', '超级经济舱', '公务舱', '头等舱'] },
+    '地铁': { icon: '🚇', types: ['单程票', '交通卡', '二维码'] },
+    '轻轨': { icon: '🚈', types: ['单程票', '交通卡', '二维码'] },
+    '有轨电车': { icon: '🚊', types: ['单程票', '交通卡', '二维码'] },
+    '公交': { icon: '🚌', types: ['现金', '交通卡', '二维码'] },
+    '汽车': { icon: '🚗', types: ['普通座', '商务座'] },
+    '网约车': { icon: '🚕', types: ['经济型', '舒适型', '豪华型'] },
+    '顺风车': { icon: '🚘', types: ['拼车', '专享'] },
+    '出租车': { icon: '🚖', types: ['标准', '商务'] },
+    '直升机': { icon: '🚁', types: ['观光票', '商务票'] },
+    '热气球': { icon: '🎈', types: ['体验票', 'VIP票'] },
+    '长途客车': { icon: '🚍', types: ['普通座', '卧铺'] },
+    '步行': { icon: '🚶', types: ['无'] },
+    '自行车': { icon: '🚲', types: ['无'] },
+    '共享单车': { icon: '🚲', types: ['单次', '月卡'] },
+    '共享汽车': { icon: '🚙', types: ['时租', '日租'] },
+    '电动自行车': { icon: '🛵', types: ['无'] },
+    '摩托车': { icon: '🏍️', types: ['无'] },
+    '三轮车': { icon: '🛺', types: ['无'] },
+    '马车': { icon: '🐎', types: ['观光', '交通'] },
+    '手推车': { icon: '🛒', types: ['无'] },
+    '其他': { icon: '📦', types: ['标准票', '优惠票', '团体票'] }
+    };
+
+    // --- 2. DOM ELEMENTS ---
+    const dom = {
+        planTitle: document.getElementById('plan-title'),
+        modeSelect: document.getElementById('transport-mode'),
+        ticketTypeSelect: document.getElementById('ticket-type'),
+        tripNumber: document.getElementById('trip-number'),
+        fromStation: document.getElementById('from-station'),
+        toStation: document.getElementById('to-station'),
+        departureTime: document.getElementById('departure-time'),
+        arrivalTime: document.getElementById('arrival-time'),
+        cost: document.getElementById('cost'),
+        addLegBtn: document.getElementById('add-leg-btn'),
+        currentLegsList: document.getElementById('current-legs-list'),
+        savePlanBtn: document.getElementById('save-plan-btn'),
+        savedPlansContainer: document.getElementById('saved-plans-container'),
+        themeSwitcher: document.getElementById('theme-switcher'),
+        languageSwitcher: document.getElementById('language-switcher'),
+        exportSelectedBtn: document.getElementById('export-selected-btn'),
+        deleteModal: document.getElementById('delete-confirm-modal'),
+        confirmDeleteBtn: document.getElementById('confirm-delete-btn'),
+        cancelDeleteBtn: document.getElementById('cancel-delete-btn'),
+        alertModal: document.getElementById('validation-alert-modal'),
+        alertText: document.getElementById('validation-alert-text'),
+        closeAlertBtn: document.getElementById('close-alert-btn'),
+        editingPlanId: document.getElementById('editing-plan-id'),
+    };
+
+    // --- 3. UTILITY FUNCTIONS ---
+
+    const sanitize = (str) => {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    };
+
+    const showAlert = (messageKey, params = {}) => {
+        let message = I18N[state.currentLanguage][messageKey] || messageKey;
+        for (const key in params) {
+            message = message.replace(`{${key}}`, params[key]);
+        }
+        dom.alertText.textContent = message;
+        dom.alertModal.style.display = 'flex';
+    };
+
+    const formatDuration = (minutes) => {
+        const h = Math.floor(minutes / 60);
+        const m = minutes % 60;
+        return `${h}h ${m}m`;
+    };
+
+    // --- 4. LANGUAGE & THEME ---
+
+    const updateTexts = () => {
+        const lang = I18N[state.currentLanguage];
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            const key = el.getAttribute('data-lang');
+            if (lang[key]) {
+                el.textContent = lang[key];
             }
-
-            // 加载数据
-            function loadPlansFromStorage() {
-                const plansJSON = localStorage.getItem('transitPlans');
-                savedPlans = plansJSON ? JSON.parse(plansJSON) : [];
-                // BUG 修复：处理旧数据结构，确保每个方案都有所有新字段
-                savedPlans.forEach(plan => {
-                    plan.legs.forEach(leg => {
-                        leg.cost = leg.cost || 0;
-                        leg.ticketType = leg.ticketType || '';
-                    });
-                });
-            }
-
-            // 保存数据
-            function savePlansToStorage() {
-                localStorage.setItem('transitPlans', JSON.stringify(savedPlans));
-            }
-
-            // 渲染当前行程段
-            function renderCurrentLegs() {
-                currentJourneyLegs.innerHTML = '';
-                if (currentLegs.length === 0) {
-                    currentJourneyLegs.innerHTML = '<p>请在上方表单添加行程段。</p>';
-                    return;
-                }
-                currentLegs.forEach((leg, index) => {
-                    const legDiv = document.createElement('div');
-                    legDiv.className = 'leg-item';
-                    legDiv.innerHTML = `
-                        <span>
-                            <strong>${index + 1}.</strong> ${leg.transport} ${leg.flightNo || ''} <br>
-                            ${escapeHTML(leg.depStation)} → ${escapeHTML(leg.arrStation)}
-                        </span>
-                        <button class="btn-danger btn-sm" data-index="${index}">删除</button>
-                    `;
-                    currentJourneyLegs.appendChild(legDiv);
-                });
-            }
-
-            // 渲染历史记录
-            function renderHistory() {
-                historyContainer.innerHTML = '';
-
-                // v4.0 BUG 修复：检查是否存在历史数据
-                if (savedPlans.length === 0) {
-                    const placeholder = document.createElement('div');
-                    placeholder.id = 'empty-history-placeholder';
-                    placeholder.textContent = '暂无历史方案，快去创建一个吧！';
-                    historyContainer.appendChild(placeholder);
-                    return; // 提前返回，不再执行后续渲染
-                }
-
-                const sortedPlans = savedPlans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-                sortedPlans.forEach(plan => {
-                    const cardId = `plan-${plan.id}`;
-                    const card = document.createElement('div');
-                    card.className = 'history-card';
-                    card.id = cardId;
-                    
-                    const { totalDuration, totalCost, validationResults } = analyzePlan(plan.legs);
-                    
-                    let legsHTML = '';
-                    plan.legs.forEach((leg, index) => {
-                        const validation = validationResults[index];
-                        legsHTML += `
-                            <div class="leg-details">
-                                <p><strong>第 ${index + 1} 程:</strong> ${leg.transport} ${escapeHTML(leg.flightNo) || ''}</p>
-                                <p><strong>站点:</strong> ${escapeHTML(leg.depStation)} → ${escapeHTML(leg.arrStation)}</p>
-                                <p><strong>时间:</strong> ${formatDateTime(leg.depTime)} → ${formatDateTime(leg.arrTime)}</p>
-                                <p><strong>费用:</strong> ${leg.cost} 元 (${escapeHTML(leg.ticketType) || '未指定'})</p>
-                                ${validation ? `<p class="${validation.ok ? 'validation-ok' : 'validation-error'}">↳ ${validation.message}</p>` : ''}
-                            </div>
-                        `;
-                    });
-
-                    card.innerHTML = `
-                        <div class="summary">
-                            <span>总耗时: ${totalDuration}</span>
-                            <span>总费用: ${totalCost.toFixed(2)} 元</span>
-                        </div>
-                        ${legsHTML}
-                        ${plan.notes ? `<div class="notes-content"><strong>备注:</strong> ${plan.notes}</div>` : ''}
-                        <div class="button-group">
-                            <button class="btn-secondary" data-action="edit" data-id="${plan.id}">编辑</button>
-                            <button class="btn-danger" data-action="delete" data-id="${plan.id}">删除</button>
-                            <button class="btn-primary" data-action="export" data-id="${plan.id}">导出图片</button>
-                        </div>
-                    `;
-                    historyContainer.appendChild(card);
-                });
-            }
-            
-            // 分析方案（校验、计算总耗时和总费用）
-            function analyzePlan(legs) {
-                let totalDurationMs = 0;
-                let totalCost = 0;
-                const validationResults = [];
-
-                if (legs.length > 0) {
-                    const firstDep = new Date(legs[0].depTime);
-                    const lastArr = new Date(legs[legs.length - 1].arrTime);
-                    if (!isNaN(firstDep) && !isNaN(lastArr)) {
-                        totalDurationMs = lastArr - firstDep;
-                    }
-                }
-
-                legs.forEach((leg, index) => {
-                    totalCost += parseFloat(leg.cost) || 0;
-                    if (index > 0) {
-                        const prevLeg = legs[index - 1];
-                        const prevArrTime = new Date(prevLeg.arrTime);
-                        const currDepTime = new Date(leg.depTime);
-                        
-                        // 1. 站点校验
-                        if (prevLeg.arrStation.trim() !== leg.depStation.trim()) {
-                            validationResults[index] = { ok: false, message: `换乘站点不匹配 (应为 ${escapeHTML(prevLeg.arrStation)})` };
-                            return;
-                        }
-                        
-                        // 2. 时间校验
-                        const interval = (currDepTime - prevArrTime) / (1000 * 60);
-                        if (interval < 10) {
-                             validationResults[index] = { ok: false, message: `换乘时间不足10分钟 (实际: ${interval.toFixed(0)}分钟)` };
-                        } else {
-                             validationResults[index] = { ok: true, message: `换乘时间: ${formatDuration(interval * 60 * 1000)}` };
-                        }
-                    }
-                });
-
-                return {
-                    totalDuration: formatDuration(totalDurationMs),
-                    totalCost: totalCost,
-                    validationResults: validationResults
-                };
-            }
-
-            // 表单提交：添加行程段
-            legForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const newLeg = {
-                    transport: document.getElementById('transport-type').value,
-                    flightNo: document.getElementById('flight-no').value,
-                    depStation: document.getElementById('dep-station').value,
-                    depTime: document.getElementById('dep-time').value,
-                    arrStation: document.getElementById('arr-station').value,
-                    arrTime: document.getElementById('arr-time').value,
-                    cost: parseFloat(document.getElementById('cost').value) || 0,
-                    ticketType: document.getElementById('ticket-type').value,
-                };
-                
-                if (new Date(newLeg.arrTime) <= new Date(newLeg.depTime)) {
-                    alert('到达时间必须晚于出发时间！');
-                    return;
-                }
-
-                currentLegs.push(newLeg);
-                renderCurrentLegs();
-                legForm.reset();
-                updateTicketTypes(); // 重置表单后，再次根据默认交通工具更新票据类型
-            });
-            
-            // 清空当前方案
-            clearPlanBtn.addEventListener('click', clearCurrentPlan);
-
-            function clearCurrentPlan() {
-                currentLegs = [];
-                editingPlanId = null;
-                quill.setContents([]);
-                legForm.reset();
-                updateTicketTypes();
-                renderCurrentLegs();
-                formTitle.textContent = "创建新方案";
-                savePlanBtn.textContent = "保存完整方案";
-            }
-            
-            // 保存方案
-            savePlanBtn.addEventListener('click', () => {
-                if (currentLegs.length === 0) {
-                    alert('请至少添加一个行程段！');
-                    return;
-                }
-
-                const plan = {
-                    id: editingPlanId || Date.now(),
-                    legs: currentLegs,
-                    notes: quill.root.innerHTML,
-                    createdAt: new Date().toISOString()
-                };
-                
-                if (editingPlanId) {
-                    // 更新现有方案
-                    const index = savedPlans.findIndex(p => p.id === editingPlanId);
-                    if (index !== -1) {
-                        savedPlans[index] = plan;
-                    }
-                } else {
-                    // 添加新方案
-                    savedPlans.push(plan);
-                    if (savedPlans.length > 10) {
-                        savedPlans.shift(); // 保持最多10条
-                    }
-                }
-                
-                savePlansToStorage();
-                renderHistory();
-                clearCurrentPlan();
-            });
-
-            // 当前行程段列表中的删除按钮
-            currentJourneyLegs.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' && e.target.dataset.index) {
-                    const index = parseInt(e.target.dataset.index, 10);
-                    currentLegs.splice(index, 1);
-                    renderCurrentLegs();
-                }
-            });
-
-            // 历史记录区域的事件代理 (编辑、删除、导出)
-            historyContainer.addEventListener('click', (e) => {
-                const target = e.target.closest('button');
-                if (!target) return;
-
-                const action = target.dataset.action;
-                const id = parseInt(target.dataset.id, 10);
-
-                switch (action) {
-                    case 'delete':
-                        if (confirm('确定要删除这个方案吗？')) {
-                            savedPlans = savedPlans.filter(p => p.id !== id);
-                            savePlansToStorage();
-                            renderHistory();
-                        }
-                        break;
-                    case 'edit':
-                        const planToEdit = savedPlans.find(p => p.id === id);
-                        if (planToEdit) {
-                            currentLegs = JSON.parse(JSON.stringify(planToEdit.legs)); // 深拷贝
-                            quill.root.innerHTML = planToEdit.notes || '';
-                            editingPlanId = id;
-
-                            renderCurrentLegs();
-                            formTitle.textContent = "正在编辑方案";
-                            savePlanBtn.textContent = "更新方案";
-                            window.scrollTo(0, 0); // 滚动到页面顶部
-                        }
-                        break;
-                    case 'export':
-                        const cardToExport = document.getElementById(`plan-${id}`);
-                        if (cardToExport) {
-                            html2canvas(cardToExport).then(canvas => {
-                                const link = document.createElement('a');
-                                link.download = `行程方案_${id}.png`;
-                                link.href = canvas.toDataURL('image/png');
-                                link.click();
-                            });
-                        }
-                        break;
-                }
-            });
-            
-            // 主题切换
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-            });
-
-            function loadTheme() {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'dark') {
-                    document.body.classList.add('dark-mode');
-                }
-            }
-
-            // 辅助函数
-            function escapeHTML(str) {
-                if (typeof str !== 'string') return '';
-                return str.replace(/[&<>'"]/g, tag => ({
-                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-                }[tag] || tag));
-            }
-
-            function formatDateTime(isoString) {
-                if (!isoString) return 'N/A';
-                const date = new Date(isoString);
-                return date.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-            }
-
-            function formatDuration(ms) {
-                if (ms < 0) return '时间无效';
-                const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-                let result = '';
-                if (days > 0) result += `${days}天`;
-                if (hours > 0) result += `${hours}小时`;
-                if (minutes > 0) result += `${minutes}分钟`;
-                return result || '0分钟';
-            }
-
-            // 初始化
-            function init() {
-                loadTheme();
-                loadPlansFromStorage();
-                renderCurrentLegs();
-                renderHistory();
-                updateTicketTypes(); // 页面加载时初始化票据类型
-                transportTypeSelect.addEventListener('change', updateTicketTypes); // 监听交通工具变化
-            }
-
-            init();
         });
-    </script>
+        document.documentElement.lang = state.currentLanguage.split('-')[0];
+    };
+
+    const setLanguage = (lang) => {
+        state.currentLanguage = lang;
+        localStorage.setItem('trip_validator_lang', lang);
+        updateTexts();
+        populateTransportModes();
+        renderSavedPlans();
+    };
+
+    const initLanguageSwitcher = () => {
+        Object.keys(I18N).forEach(langCode => {
+            const option = document.createElement('option');
+            option.value = langCode;
+            option.textContent = I18N[langCode].language_name;
+            dom.languageSwitcher.appendChild(option);
+        });
+        const savedLang = localStorage.getItem('trip_validator_lang') || 'zh-CN';
+        dom.languageSwitcher.value = savedLang;
+        setLanguage(savedLang);
+    };
+
+    const toggleTheme = () => {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('trip_validator_theme', isDarkMode ? 'dark' : 'light');
+    };
+
+    // --- 5. CORE APP LOGIC ---
+
+    const populateTransportModes = () => {
+        dom.modeSelect.innerHTML = '';
+        Object.keys(TRANSPORT_MODES).forEach(mode => {
+            const option = document.createElement('option');
+            option.value = mode;
+            option.textContent = `${TRANSPORT_MODES[mode].icon} ${mode}`;
+            dom.modeSelect.appendChild(option);
+        });
+        updateTicketTypes();
+    };
+
+    const updateTicketTypes = () => {
+        const selectedMode = dom.modeSelect.value;
+        const types = TRANSPORT_MODES[selectedMode].types;
+        dom.ticketTypeSelect.innerHTML = '';
+        types.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            dom.ticketTypeSelect.appendChild(option);
+        });
+    };
+
+    const resetForm = () => {
+        dom.tripNumber.value = '';
+        dom.fromStation.value = '';
+        dom.toStation.value = '';
+        dom.departureTime.value = '';
+        dom.arrivalTime.value = '';
+        dom.cost.value = '';
+    };
+
+    const addLeg = () => {
+        if (!dom.fromStation.value || !dom.toStation.value || !dom.departureTime.value || !dom.arrivalTime.value) {
+            showAlert('validation_msg_missing_fields');
+            return;
+        }
+
+        const depTime = new Date(dom.departureTime.value);
+        const arrTime = new Date(dom.arrivalTime.value);
+
+        if (arrTime <= depTime) {
+            showAlert('validation_msg_invalid_date');
+            return;
+        }
+
+        const newLeg = {
+            id: Date.now(),
+            mode: dom.modeSelect.value,
+            ticketType: dom.ticketTypeSelect.value,
+            tripNumber: sanitize(dom.tripNumber.value),
+            from: sanitize(dom.fromStation.value.trim()),
+            to: sanitize(dom.toStation.value.trim()),
+            departure: dom.departureTime.value,
+            arrival: dom.arrivalTime.value,
+            cost: parseFloat(dom.cost.value) || 0,
+        };
+        state.currentLegs.push(newLeg);
+        renderCurrentLegs();
+        resetForm();
+    };
+
+    const deleteLeg = (id) => {
+        state.currentLegs = state.currentLegs.filter(leg => leg.id !== id);
+        renderCurrentLegs();
+    };
+
+    const savePlan = () => {
+        const title = sanitize(dom.planTitle.value.trim());
+        if (!title || state.currentLegs.length === 0) {
+            showAlert('validation_msg_missing_fields');
+            return;
+        }
+
+        let validationMessages = [];
+        for (let i = 1; i < state.currentLegs.length; i++) {
+            const prevLeg = state.currentLegs[i - 1];
+            const currentLeg = state.currentLegs[i];
+
+            const arrivalTime = new Date(prevLeg.arrival);
+            const departureTime = new Date(currentLeg.departure);
+            const diffMinutes = (departureTime - arrivalTime) / (1000 * 60);
+
+            if (diffMinutes < MIN_TRANSFER_MINUTES) {
+                validationMessages.push(I18N[state.currentLanguage].validation_msg_short_time.replace('{min}', MIN_TRANSFER_MINUTES));
+            }
+            if (prevLeg.to.toLowerCase() !== currentLeg.from.toLowerCase()) {
+                validationMessages.push(I18N[state.currentLanguage].validation_msg_mismatch_station.replace('{from}', prevLeg.to).replace('{to}', currentLeg.from));
+            }
+        }
+
+        if (validationMessages.length > 0) {
+            showAlert(validationMessages.join('\n'));
+        }
+
+        const planId = state.editingPlanId || Date.now();
+        const newPlan = {
+            id: planId,
+            title: title,
+            legs: state.currentLegs,
+        };
+
+        if (state.editingPlanId) {
+            const index = state.savedPlans.findIndex(p => p.id === state.editingPlanId);
+            state.savedPlans[index] = newPlan;
+        } else {
+            state.savedPlans.unshift(newPlan);
+            if (state.savedPlans.length > 10) {
+                state.savedPlans.pop();
+            }
+        }
+
+        localStorage.setItem('trip_validator_plans', JSON.stringify(state.savedPlans));
+        clearForm();
+        renderSavedPlans();
+    };
+
+    const editPlan = (id) => {
+        const plan = state.savedPlans.find(p => p.id === id);
+        if (plan) {
+            state.editingPlanId = id;
+            dom.planTitle.value = plan.title;
+            state.currentLegs = [...plan.legs]; // Create a copy
+            renderCurrentLegs();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const clearForm = () => {
+        state.currentLegs = [];
+        state.editingPlanId = null;
+        dom.planTitle.value = '';
+        renderCurrentLegs();
+        resetForm();
+    };
+
+    const openDeleteModal = (id) => {
+        state.planToDeleteId = id;
+        dom.deleteModal.style.display = 'flex';
+    };
+
+    const confirmDelete = () => {
+        state.savedPlans = state.savedPlans.filter(p => p.id !== state.planToDeleteId);
+        localStorage.setItem('trip_validator_plans', JSON.stringify(state.savedPlans));
+        dom.deleteModal.style.display = 'none';
+        state.planToDeleteId = null;
+        renderSavedPlans();
+    };
+
+    const exportPlanAsImage = (planId) => {
+        const planElement = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
+        html2canvas(planElement, {
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color'),
+            scale: 2 // Higher scale for better resolution
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `trip-plan-${planId}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    };
+
+    const exportSelectedAsImage = () => {
+        const selectedPlans = document.querySelectorAll('.plan-card.export-selected');
+        if(selectedPlans.length === 0) return;
+
+        const container = document.createElement('div');
+        container.style.padding = '20px';
+        container.style.backgroundColor = getComputedStyle(document.body).getPropertyValue('--bg-color');
+
+        const title = document.createElement('h2');
+        title.textContent = 'Trip Plans Comparison';
+        title.style.textAlign = 'center';
+        title.style.marginBottom = '20px';
+        title.style.color = getComputedStyle(document.body).getPropertyValue('--text-color');
+        container.appendChild(title);
+
+        const content = document.createElement('div');
+        content.style.display = 'flex';
+        content.style.gap = '20px';
+        content.style.alignItems = 'flex-start';
+
+        selectedPlans.forEach(planEl => {
+            const clone = planEl.cloneNode(true);
+            clone.style.width = '400px'; // Set a fixed width for consistency
+            clone.classList.remove('export-selected');
+            content.appendChild(clone);
+        });
+        container.appendChild(content);
+
+        document.body.appendChild(container);
+
+        html2canvas(container, {
+             backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color'),
+             scale: 2
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'trip-comparison.png';
+            link.href = canvas.toDataURL();
+            link.click();
+            document.body.removeChild(container);
+        });
+    };
+
+    // --- 6. RENDERING FUNCTIONS ---
+
+    const renderCurrentLegs = () => {
+        dom.currentLegsList.innerHTML = '';
+        state.currentLegs.forEach(leg => {
+            const li = document.createElement('li');
+            li.className = 'leg-item';
+            li.dataset.id = leg.id;
+            li.innerHTML = `
+                <span class="icon">${TRANSPORT_MODES[leg.mode].icon}</span>
+                <div class="details">
+                    <p><strong>${leg.from} → ${leg.to}</strong></p>
+                    <p>${new Date(leg.departure).toLocaleString()} - ${new Date(leg.arrival).toLocaleString()}</p>
+                </div>
+                <div class="actions">
+                    <button class="delete-leg-btn" data-id="${leg.id}">🗑️</button>
+                </div>
+            `;
+            dom.currentLegsList.appendChild(li);
+        });
+    };
+
+    const renderSavedPlans = () => {
+        dom.savedPlansContainer.innerHTML = '';
+        if (state.savedPlans.length === 0) {
+            dom.savedPlansContainer.innerHTML = `<p>${I18N[state.currentLanguage].no_plans_saved}</p>`;
+            return;
+        }
+
+        state.savedPlans.forEach(plan => {
+            let totalCost = 0;
+            let totalDurationMinutes = 0;
+            let legsHtml = '';
+
+            if (plan.legs.length > 0) {
+                const firstDep = new Date(plan.legs[0].departure);
+                const lastArr = new Date(plan.legs[plan.legs.length - 1].arrival);
+                totalDurationMinutes = (lastArr - firstDep) / (1000 * 60);
+            }
+
+            plan.legs.forEach((leg, index) => {
+                totalCost += leg.cost;
+                const dep = new Date(leg.departure);
+                const arr = new Date(leg.arrival);
+
+                legsHtml += `
+                    <div class="plan-leg">
+                        <div class="timeline-icon">${TRANSPORT_MODES[leg.mode].icon}<div class="timeline-line"></div></div>
+                        <div class="leg-details">
+                            <strong>${leg.from} → ${leg.to}</strong>
+                            <div class="trip-info">
+                                ${leg.tripNumber} (${leg.ticketType}) | ￥${leg.cost.toFixed(2)}
+                            </div>
+                            <div class="trip-info">
+                                ${dep.toLocaleString()} → ${arr.toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (index < plan.legs.length - 1) {
+                    const nextLeg = plan.legs[index + 1];
+                    const nextDep = new Date(nextLeg.departure);
+                    const diffMinutes = Math.round((nextDep - arr) / (1000 * 60));
+
+                    let timeClass = diffMinutes < MIN_TRANSFER_MINUTES ? 'invalid-time' : '';
+                    let stationClass = leg.to.toLowerCase() !== nextLeg.from.toLowerCase() ? 'invalid-station' : '';
+
+                    let transferInfo = `<div class="layover ${timeClass} ${stationClass}">
+                        <strong>${I18N[state.currentLanguage].transfer_info}</strong>: ${diffMinutes} ${I18N[state.currentLanguage].minutes}`;
+
+                    if (stationClass) {
+                        transferInfo += ` (${leg.to} → ${nextLeg.from})`;
+                    }
+                    transferInfo += `</div>`;
+                    legsHtml += transferInfo;
+                }
+            });
+
+            const card = document.createElement('div');
+            card.className = 'card plan-card';
+            card.dataset.planId = plan.id;
+            card.innerHTML = `
+                <div class="plan-header">
+                    <h3 class="plan-title">${plan.title}</h3>
+                    <input type="checkbox" class="compare-checkbox" title="${I18N[state.currentLanguage].select_for_compare}">
+                </div>
+                <div class="plan-summary">
+                    <span>${I18N[state.currentLanguage].total_duration}: <strong>${formatDuration(totalDurationMinutes)}</strong></span>
+                    <span>${I18N[state.currentLanguage].total_cost}: <strong>￥${totalCost.toFixed(2)}</strong></span>
+                </div>
+                <div class="plan-body">
+                    ${legsHtml}
+                </div>
+                <div class="plan-actions">
+                    <button class="btn btn-primary edit-plan-btn" data-id="${plan.id}">${I18N[state.currentLanguage].edit_btn}</button>
+                    <button class="btn btn-secondary export-btn" data-id="${plan.id}">${I18N[state.currentLanguage].export_img_btn}</button>
+                    <button class="btn btn-danger delete-plan-btn" data-id="${plan.id}">${I18N[state.currentLanguage].delete_btn}</button>
+                </div>
+            `;
+            dom.savedPlansContainer.appendChild(card);
+        });
+    };
+
+    // --- 7. EVENT LISTENERS ---
+
+    dom.modeSelect.addEventListener('change', updateTicketTypes);
+    dom.addLegBtn.addEventListener('click', addLeg);
+    dom.savePlanBtn.addEventListener('click', savePlan);
+    dom.themeSwitcher.addEventListener('click', toggleTheme);
+    dom.languageSwitcher.addEventListener('change', (e) => setLanguage(e.target.value));
+
+    dom.currentLegsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-leg-btn')) {
+            const id = parseInt(e.target.dataset.id, 10);
+            deleteLeg(id);
+        }
+    });
+
+    dom.savedPlansContainer.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('edit-plan-btn')) {
+            editPlan(parseInt(target.dataset.id));
+        }
+        if (target.classList.contains('delete-plan-btn')) {
+            openDeleteModal(parseInt(target.dataset.id));
+        }
+        if (target.classList.contains('export-btn')) {
+            exportPlanAsImage(parseInt(target.dataset.id));
+        }
+        if(target.classList.contains('compare-checkbox')){
+            target.closest('.plan-card').classList.toggle('export-selected', target.checked);
+        }
+    });
+
+    dom.confirmDeleteBtn.addEventListener('click', confirmDelete);
+    dom.cancelDeleteBtn.addEventListener('click', () => dom.deleteModal.style.display = 'none');
+    dom.closeAlertBtn.addEventListener('click', () => dom.alertModal.style.display = 'none');
+
+    dom.exportSelectedBtn.addEventListener('click', exportSelectedAsImage);
+
+    // Keyboard shortcut (Ctrl+Enter to save)
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            dom.savePlanBtn.click();
+        }
+    });
+
+    // --- 8. INITIALIZATION ---
+
+    const init = () => {
+        // Load theme
+        const savedTheme = localStorage.getItem('trip_validator_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Load data
+        const savedPlansData = localStorage.getItem('trip_validator_plans');
+        if (savedPlansData) {
+            state.savedPlans = JSON.parse(savedPlansData);
+        }
+
+        initLanguageSwitcher();
+        populateTransportModes();
+        renderSavedPlans();
+
+        // Init SortableJS for drag-and-drop
+        new Sortable(dom.currentLegsList, {
+            animation: 150,
+            ghostClass: 'blue-background-class',
+            onEnd: (evt) => {
+                const movedItem = state.currentLegs.splice(evt.oldIndex, 1)[0];
+                state.currentLegs.splice(evt.newIndex, 0, movedItem);
+            }
+        });
+    };
+
+    init();
+});
+</script>
+
 </body>
 </html>
