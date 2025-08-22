@@ -6,7 +6,8 @@
     <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
     <title>个人主页 - 测试开发工程师</title>
     <meta name="description" content="一位测试开发工程师的专业主页，展示技能、项目与专业思考。">
-    <meta name="author" content="Alan">
+    <meta name="author" content="Ethan">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- V3: Bright & Interactive Theme --- */
         :root {
@@ -85,15 +86,14 @@
 
         /* --- Navigation --- */
         .navbar {
-            background-color: rgba(248, 250, 252, 0.8); /* 导航栏背景 */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background-color: #fff; /* 修改为纯白背景 */
             border-bottom: 1px solid var(--border-color);
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .navbar-container {
@@ -111,6 +111,7 @@
             font-size: 1.5rem;
             color: #1e293b;
             text-decoration: none;
+            font-weight: 700;
         }
 
         .nav-menu {
@@ -123,13 +124,72 @@
         .nav-item a {
             color: var(--text-color);
             text-decoration: none;
-            font-weight: bold;
-            padding: 5px 10px;
+            font-weight: 500;
+            padding: 8px 12px;
             border-radius: 5px;
             transition: all 0.3s;
         }
 
-        .nav-item a:hover, .nav-item a.active {
+        .nav-item a:hover:not(.active), .nav-item a.active {
+            color: #fff;
+            background-color: var(--primary-color);
+        }
+
+        /* 新增下拉菜单样式 - 更贴近图片效果 */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px 0;
+            min-width: 220px;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(5px);
+            transition: all 0.25s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #334155;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+        }
+
+        .dropdown-item i {
+            width: 24px;
+            margin-right: 10px;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .dropdown-item:hover i {
+            color: var(--primary-color);
+        }
+
+        /* 悬停时高亮显示工具项 */
+        .dropdown:hover .nav-link {
             color: #fff;
             background-color: var(--primary-color);
         }
@@ -192,7 +252,7 @@
 
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
-            .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background-color: var(--light-bg-start); padding: 1rem 0; text-align: center; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background-color: #fff; padding: 1rem 0; text-align: center; border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
             .nav-menu.active { display: flex; }
             .hamburger { display: flex; }
             .hamburger.active .bar:nth-child(2) { opacity: 0; }
@@ -200,7 +260,24 @@
             .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
             .hero h1 { font-size: 2.5rem; }
             h2 { font-size: 1.8rem; }
-            #mouse-aura { display: none; } /* On mobile, hide the aura */
+            #mouse-aura { display: none; } /* 在移动端隐藏光标效果 */
+
+            /* 移动端下拉菜单调整 */
+            .dropdown-menu {
+                position: static;
+                display: none;
+                width: 100%;
+                box-shadow: none;
+                padding: 0;
+                margin-top: 0;
+                background-color: #f8fafc;
+                opacity: 1;
+                transform: none;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -211,20 +288,44 @@
 
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="#" class="nav-logo">Alan</a>
+            <a href="#" class="nav-logo">Ethan</a>
             <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="#hero" class="nav-link active">首页</a></li>
                 <li class="nav-item"><a href="#skills" class="nav-link">专业技能</a></li>
                 <li class="nav-item"><a href="#projects" class="nav-link">项目经验</a></li>
-                <li class="nav-item"><a href="TripValidator.html" class="nav-link">工具</a></li>
+
+                <!-- 修改后的工具项：悬停显示下拉菜单 -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">工具</a>
+                    <div class="dropdown-menu">
+                        <a href="TripValidator.html" class="dropdown-item">
+                            <i class="fas fa-check-circle"></i>行程校验工具
+                        </a>
+                        <a href="QuotePilot.html" class="dropdown-item">
+                            <i class="fas fa-file-code"></i>车险方案对比分析工具
+                        </a>
+<!--                        <a href="TestGenerator.html" class="dropdown-item">-->
+<!--                            <i class="fas fa-file-code"></i>测试用例生成器-->
+<!--                        </a>-->
+<!--                        <a href="BugTracker.html" class="dropdown-item">-->
+<!--                            <i class="fas fa-bug"></i>缺陷跟踪工具-->
+<!--                        </a>-->
+<!--                        <a href="PerformanceAnalyzer.html" class="dropdown-item">-->
+<!--                            <i class="fas fa-tachometer-alt"></i>性能分析工具-->
+<!--                        </a>-->
+<!--                        <a href="CodeCoverage.html" class="dropdown-item">-->
+<!--                            <i class="fas fa-chart-pie"></i>代码覆盖率工具-->
+<!--                        </a>-->
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
 
     <main>
         <section id="hero" class="hero">
-            <h1>你好，我是Alan</h1>
+            <h1>你好，我是Ethan</h1>
             <p class="subtitle">测试开发工程师 (SDET) | 致力于构建高效、可靠的质量保障体系</p>
             <p>专注于自动化测试、性能测试与测试基础架构建设。</p>
         </section>
@@ -259,6 +360,16 @@
             const navMenu = document.querySelector('.nav-menu');
             hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); });
             document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => { hamburger.classList.remove('active'); navMenu.classList.remove('active'); }));
+
+            // 移动端下拉菜单交互
+            const dropdown = document.querySelector('.dropdown');
+            const dropdownToggle = dropdown.querySelector('.nav-link');
+            dropdownToggle.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                }
+            });
 
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-menu a');

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+    <title>车险方案对比分析工具</title>
+    <meta name="description" content="一款帮助您对比和评估多个汽车保险报价方案的专业工具。轻松录入、智能对比、一键导出，选择最优车险。">
+    <meta name="author" content="Gemini - AI Financial Frontend Expert">
+    <meta name="keywords" content="车险对比, 保费评估, 保额分析, 汽车保险, 金融工具">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.quilljs.com/2.0.0-rc.4/quill.snow.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --dark-bg: #1e293b;
+            --card-bg: #ffffff;
+            --card-dark-bg: #334155;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+        }
+
+        .dark {
+            --card-bg: var(--card-dark-bg);
+        }
+
+        .dark ::-webkit-scrollbar { width: 8px; }
+        .dark ::-webkit-scrollbar-track { background: #1a202c; }
+        .dark ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #718096; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        #remarks-editor { height: 150px; }
+
+        @media (max-width: 1024px) {
+            .main-container { flex-direction: column; }
+            .left-panel, .right-panel { width: 100%; }
+            .left-panel { position: static; height: auto; }
+        }
+
+        .sortable-ghost {
+            opacity: 0.4;
+            background-color: var(--primary-color);
+            border: 2px dashed #fff;
+        }
+        
+        .transition-all { transition: all 0.3s ease-in-out; }
+        .plan-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .plan-card:hover { transform: translateY(-5px); }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background-color: #2d3748;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        
+        /* 布局切换样式 */
+        .layout-btn {
+            background: var(--card-bg);
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .layout-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .layout-btn:hover {
+            background: #eef2ff;
+        }
+        
+        .dark .layout-btn:hover {
+            background: #475569;
+        }
+        
+        .horizontal-layout .plans-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .horizontal-layout .plan-card {
+            width: calc(50% - 10px);
+            min-width: 450px;
+        }
+        
+        @media (max-width: 1200px) {
+            .horizontal-layout .plan-card {
+                width: 100%;
+            }
+        }
+        
+        .vertical-layout .plans-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .chart-container {
+            height: 200px;
+            width: 100%;
+        }
+        
+        .comparison-view {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        
+        .comparison-card {
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+        
+        .export-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .export-content {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: auto;
+        }
+        
+        .dark .export-content {
+            background: var(--dark-bg);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-all">
+
+    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="ti ti-shield-half-filled text-3xl text-indigo-600"></i>
+                <h1 class="text-xl font-bold">车险方案对比分析工具</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <select id="language-switcher" class="bg-slate-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="zh-CN">简体中文</option>
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="en">English</option>
+                </select>
+                <button id="theme-toggle" class="relative" data-tooltip="切换模式">
+                    <i class="ti ti-sun text-2xl dark:hidden"></i>
+                    <i class="ti ti-moon text-2xl hidden dark:inline"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 lg:p-6">
+        <div class="flex gap-6 main-container">
+            <div class="left-panel lg:w-1/3 lg:sticky lg:top-20 self-start bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <form id="plan-form">
+                    <input type="hidden" id="plan-id">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="ti ti-circle-plus"></i>
+                        <span>添加/编辑方案</span>
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <input type="text" id="plan-title" placeholder="方案标题 (例如：平安-王经理-方案A)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
+                        <input type="text" id="insurance-company" placeholder="保险公司 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <input type="text" id="salesperson" placeholder="销售 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <input type="text" id="contact-info" placeholder="联系方式 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                    </div>
+                    
+                    <div id="insurance-items-container" class="space-y-3 mb-4">
+                        <!-- 险种项目将通过JS动态生成 -->
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">备注 (Ctrl+Enter 提交)</label>
+                        <div id="remarks-editor" class="bg-white dark:bg-gray-700"></div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6">
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
+                            <i class="ti ti-device-floppy"></i>
+                            <span>保存方案</span>
+                        </button>
+                        <button type="button" id="clear-form-btn" class="w-1/3 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                            <span>清空</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="right-panel lg:w-2/3">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="ti ti-filter"></i>
+                        <span class="font-bold">筛选与排序</span>
+                    </div>
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <select id="sort-by" class="p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <option value="date_desc">按时间降序</option>
+                            <option value="date_asc">按时间升序</option>
+                            <option value="premium_asc">按总保费升序</option>
+                            <option value="premium_desc">按总保费降序</option>
+                            <option value="coverage_desc">按总保额降序</option>
+                        </select>
+                        
+                        <!-- 布局切换按钮 -->
+                        <div class="flex items-center gap-2">
+                            <span>布局:</span>
+                            <div class="flex gap-1">
+                                <button id="horizontal-layout-btn" class="layout-btn active" data-layout="horizontal">
+                                    <i class="ti ti-layout-grid"></i> 横向
+                                </button>
+                                <button id="vertical-layout-btn" class="layout-btn" data-layout="vertical">
+                                    <i class="ti ti-layout-rows"></i> 纵向
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow flex gap-2">
+                            <button id="export-all-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+                                <i class="ti ti-photo-down"></i>
+                                <span>导出对比图</span>
+                            </button>
+                            <button id="comparison-view-btn" class="bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
+                                <i class="ti ti-layout-sidebar-right"></i>
+                                <span>对比视图</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="plans-container" class="horizontal-layout">
+                    <div class="plans-container">
+                        <!-- 方案卡片将通过JS动态生成 -->
+                    </div>
+                </div>
+                
+                <div id="comparison-container" class="hidden">
+                    <!-- 对比视图将通过JS动态生成 -->
+                </div>
+                
+                <div id="no-plans-placeholder" class="text-center py-12">
+                    <i class="ti ti-file-off text-6xl text-gray-400"></i>
+                    <p class="mt-4 text-gray-500">暂无方案，请在左侧添加您的第一个保险方案。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 导出模态框 -->
+    <div id="export-modal" class="export-modal hidden">
+        <div class="export-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">导出对比图</h3>
+                <button id="close-export-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="ti ti-x text-2xl"></i>
+                </button>
+            </div>
+            <div id="export-preview" class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                <!-- 导出预览内容 -->
+            </div>
+            <div class="mt-4 flex justify-end gap-2">
+                <button id="export-png-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700">
+                    <i class="ti ti-download"></i> 导出PNG
+                </button>
+                <button id="export-pdf-btn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700">
+                    <i class="ti ti-file-download"></i> 导出PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/quill/2.0.0-rc.4/quill.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/SortableJS/1.15.2/Sortable.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dompurify/3.1.4/purify.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 全局状态管理
+        const state = {
+            plans: JSON.parse(localStorage.getItem('insurancePlans')) || [],
+            editingId: null,
+            currentLanguage: localStorage.getItem('language') || 'zh-CN',
+            layout: localStorage.getItem('layout') || 'horizontal',
+            comparisonMode: false
+        };
+
+        // 险种类型配置
+        const insuranceTypes = {
+            'vehicleDamage': { name: '机动车损失险', defaultCoverage: 200000, defaultPremium: 2000 },
+            'thirdPartyLiability': { name: '第三者责任险', defaultCoverage: 2000000, defaultPremium: 1500 },
+            'thirdPartyMedical': { name: '三者医保外医疗', defaultCoverage: 50000, defaultPremium: 80 },
+            'driverLiability': { name: '司机责任险', defaultCoverage: 50000, defaultPremium: 50 },
+            'passengerLiability': { name: '乘客责任险', defaultCoverage: 50000, defaultPremium: 100 },
+            'compulsory': { name: '交强险', defaultCoverage: 200000, defaultPremium: 950 },
+            'vehicleTax': { name: '车船税', defaultCoverage: 0, defaultPremium: 360 },
+            'drivingAccident': { name: '驾驶意外险', defaultCoverage: 200000, defaultPremium: 200 }
+        };
+
+        // DOM元素获取
+        const form = document.getElementById('plan-form');
+        const planIdInput = document.getElementById('plan-id');
+        const planTitleInput = document.getElementById('plan-title');
+        const insuranceItemsContainer = document.getElementById('insurance-items-container');
+        const plansContainer = document.querySelector('.plans-container');
+        const noPlansPlaceholder = document.getElementById('no-plans-placeholder');
+        const clearFormBtn = document.getElementById('clear-form-btn');
+        const sortBySelect = document.getElementById('sort-by');
+        const exportAllBtn = document.getElementById('export-all-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const langSwitcher = document.getElementById('language-switcher');
+        const horizontalLayoutBtn = document.getElementById('horizontal-layout-btn');
+        const verticalLayoutBtn = document.getElementById('vertical-layout-btn');
+        const comparisonViewBtn = document.getElementById('comparison-view-btn');
+        const comparisonContainer = document.getElementById('comparison-container');
+        const exportModal = document.getElementById('export-modal');
+        const exportPreview = document.getElementById('export-preview');
+        const closeExportModal = document.getElementById('close-export-modal');
+        const exportPngBtn = document.getElementById('export-png-btn');
+        const exportPdfBtn = document.getElementById('export-pdf-btn');
+
+        // Quill编辑器初始化
+        const quill = new Quill('#remarks-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+                ]
+            }
+        });
+
+        // 初始化布局
+        function initLayout() {
+            if (state.layout === 'horizontal') {
+                horizontalLayoutBtn.classList.add('active');
+                verticalLayoutBtn.classList.remove('active');
+                document.getElementById('plans-container').classList.add('horizontal-layout');
+                document.getElementById('plans-container').classList.remove('vertical-layout');
+            } else {
+                verticalLayoutBtn.classList.add('active');
+                horizontalLayoutBtn.classList.remove('active');
+                document.getElementById('plans-container').classList.add('vertical-layout');
+                document.getElementById('plans-container').classList.remove('horizontal-layout');
+            }
+        }
+
+        // 渲染险种输入表单
+        function renderInsuranceInputs(planData = {}) {
+            insuranceItemsContainer.innerHTML = '';
+            const items = planData.items || {};
+            
+            for (const key in insuranceTypes) {
+                const info = insuranceTypes[key];
+                const itemHtml = `
+                    <div class="insurance-item grid grid-cols-10 gap-2 items-center" data-key="${key}">
+                        <label for="coverage-${key}" class="col-span-10 sm:col-span-3 text-sm font-medium truncate">${info.name}</label>
+                        <div class="col-span-5 sm:col-span-3 relative">
+                            <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">保额</span>
+                            <input type="number" id="coverage-${key}" value="${items[key]?.coverage || info.defaultCoverage}" class="w-full p-2 pl-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
+                        </div>
+                        <div class="col-span-5 sm:col-span-3 relative">
+                           <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">保费</span>
+                           <input type="number" id="premium-${key}" value="${items[key]?.premium || info.defaultPremium}" class="w-full p-2 pl-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
+                        </div>
+                        <i class="ti ti-grip-vertical col-span-10 sm:col-span-1 text-center text-gray-400 cursor-grab"></i>
+                    </div>
+                `;
+                insuranceItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+            }
+            
+            // 拖拽排序初始化
+            new Sortable(insuranceItemsContainer, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                handle: '.ti-grip-vertical',
+            });
+        }
+
+        // 渲染所有方案卡片
+        function renderPlans() {
+            const sortedPlans = sortPlans(state.plans, sortBySelect.value);
+            plansContainer.innerHTML = '';
+
+            if (sortedPlans.length === 0) {
+                noPlansPlaceholder.classList.remove('hidden');
+                return;
+            }
+            
+            noPlansPlaceholder.classList.add('hidden');
+            
+            sortedPlans.slice(0, 10).forEach(plan => {
+                const totalCoverage = Object.values(plan.items).reduce((sum, item) => sum + (item.coverage || 0), 0);
+                const totalPremium = Object.values(plan.items).reduce((sum, item) => sum + (item.premium || 0), 0);
+                const valueRatio = totalPremium > 0 ? (totalCoverage / totalPremium).toFixed(2) : '∞';
+
+                const card = document.createElement('div');
+                card.className = 'plan-card bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg flex flex-col gap-4';
+                card.id = `plan-card-${plan.id}`;
+                card.dataset.id = plan.id;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">${plan.title}</h3>
+                            <p class="text-xs text-gray-400">${new Date(plan.id).toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="edit-btn p-1 hover:text-indigo-500" data-id="${plan.id}" data-tooltip="编辑">
+                                <i class="ti ti-pencil"></i>
+                            </button>
+                            <button class="delete-btn p-1 hover:text-red-500" data-id="${plan.id}" data-tooltip="删除">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                            <button class="export-btn p-1 hover:text-green-500" data-id="${plan.id}" data-tooltip="导出图片">
+                                <i class="ti ti-photo-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">总保额</p>
+                            <p class="text-lg font-bold">¥${totalCoverage.toLocaleString()}</p>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">总保费</p>
+                            <p class="text-lg font-bold text-red-500">¥${totalPremium.toLocaleString()}</p>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">性价比</p>
+                            <p class="text-lg font-bold text-green-500">${valueRatio}</p>
+                        </div>
+                    </div>
+
+                    <div id="chart-${plan.id}" class="chart-container"></div>
+
+                    <details class="text-sm">
+                        <summary class="cursor-pointer font-semibold text-gray-600 dark:text-gray-300">展开查看详情</summary>
+                        <div class="mt-3 space-y-3">
+                            ${ plan.company || plan.salesperson || plan.contact ? `
+                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
+                                <h4 class="font-bold mb-2">基础信息</h4>
+                                <ul class="space-y-1">
+                                    ${plan.company ? `<li><strong>保险公司:</strong> ${plan.company}</li>` : ''}
+                                    ${plan.salesperson ? `<li><strong>销售:</strong> ${plan.salesperson}</li>` : ''}
+                                    ${plan.contact ? `<li><strong>联系方式:</strong> ${plan.contact}</li>` : ''}
+                                </ul>
+                            </div>` : ''}
+
+                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
+                                <h4 class="font-bold mb-2">保费/保额详情</h4>
+                                <ul class="space-y-1">
+                                    ${Object.entries(plan.items).map(([key, value]) => `
+                                        <li class="flex justify-between">
+                                            <span>${insuranceTypes[key].name}</span>
+                                            <span>
+                                                <strong>保额:</strong> ${value.coverage.toLocaleString()} / 
+                                                <strong>保费:</strong> <span class="text-red-500">${value.premium.toLocaleString()}</span>
+                                            </span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                            
+                            ${ plan.remarks ? `
+                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
+                                <h4 class="font-bold mb-2">备注</h4>
+                                <div class="prose prose-sm dark:prose-invert max-w-none">${plan.remarks}</div>
+                            </div>` : ''}
+                        </div>
+                    </details>
+                `;
+                plansContainer.appendChild(card);
+                renderChart(plan);
+            });
+        }
+
+        // 渲染对比视图
+        function renderComparisonView() {
+            const sortedPlans = sortPlans(state.plans, sortBySelect.value);
+            comparisonContainer.innerHTML = '';
+            
+            if (sortedPlans.length === 0) return;
+            
+            const comparisonHtml = `
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold">方案对比视图</h2>
+                        <button id="exit-comparison-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                            退出对比
+                        </button>
+                    </div>
+                    <div class="comparison-view">
+                        ${sortedPlans.slice(0, 5).map(plan => {
+                            const totalCoverage = Object.values(plan.items).reduce((sum, item) => sum + (item.coverage || 0), 0);
+                            const totalPremium = Object.values(plan.items).reduce((sum, item) => sum + (item.premium || 0), 0);
+                            const valueRatio = totalPremium > 0 ? (totalCoverage / totalPremium).toFixed(2) : '∞';
+                            
+                            return `
+                                <div class="comparison-card">
+                                    <h3 class="font-bold text-lg mb-3 text-indigo-600 dark:text-indigo-400">${plan.title}</h3>
+                                    <div class="mb-3">
+                                        <div class="flex justify-between mb-1">
+                                            <span>总保额:</span>
+                                            <span class="font-bold">¥${totalCoverage.toLocaleString()}</span>
+                                        </div>
+                                        <div class="flex justify-between mb-1">
+                                            <span>总保费:</span>
+                                            <span class="font-bold text-red-500">¥${totalPremium.toLocaleString()}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>性价比:</span>
+                                            <span class="font-bold text-green-500">${valueRatio}</span>
+                                        </div>
+                                    </div>
+                                    <div id="comparison-chart-${plan.id}" class="h-40"></div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            
+            comparisonContainer.innerHTML = comparisonHtml;
+            comparisonContainer.classList.remove('hidden');
+            document.querySelector('.plans-container').classList.add('hidden');
+            
+            // 渲染对比视图中的图表
+            sortedPlans.slice(0, 5).forEach(plan => {
+                renderComparisonChart(plan);
+            });
+            
+            // 添加退出对比事件
+            document.getElementById('exit-comparison-btn').addEventListener('click', () => {
+                comparisonContainer.classList.add('hidden');
+                document.querySelector('.plans-container').classList.remove('hidden');
+                state.comparisonMode = false;
+            });
+        }
+
+        // 渲染图表
+        function renderChart(plan) {
+            const chartDom = document.getElementById(`chart-${plan.id}`);
+            if (!chartDom) return;
+            
+            const myChart = echarts.init(chartDom, document.documentElement.classList.contains('dark') ? 'dark' : null);
+            const chartData = Object.entries(plan.items).map(([key, value]) => ({
+                name: insuranceTypes[key].name,
+                coverage: value.coverage,
+                premium: value.premium,
+            }));
+            
+            const option = {
+                tooltip: { trigger: 'axis' },
+                legend: { data: ['保额', '保费'] },
+                xAxis: { 
+                    type: 'category', 
+                    data: chartData.map(d => d.name),
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 30
+                    }
+                },
+                yAxis: [
+                    { type: 'value', name: '保额' }, 
+                    { type: 'value', name: '保费' }
+                ],
+                series: [
+                    { 
+                        name: '保额', 
+                        type: 'bar', 
+                        data: chartData.map(d => d.coverage),
+                        itemStyle: {
+                            color: '#4f46e5'
+                        }
+                    },
+                    { 
+                        name: '保费', 
+                        type: 'line', 
+                        yAxisIndex: 1, 
+                        data: chartData.map(d => d.premium),
+                        itemStyle: {
+                            color: '#10b981'
+                        }
+                    }
+                ],
+                grid: { left: '3%', right: '4%', bottom: '15%', top: '10%', containLabel: true },
+                textStyle: {
+                    color: document.documentElement.classList.contains('dark') ? '#ccc' : '#333'
+                }
+            };
+            
+            myChart.setOption(option);
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', () => {
+                myChart.resize();
+            });
+        }
+
+        // 渲染对比视图中的图表
+        function renderComparisonChart(plan) {
+            const chartDom = document.getElementById(`comparison-chart-${plan.id}`);
+            if (!chartDom) return;
+            
+            const myChart = echarts.init(chartDom, document.documentElement.classList.contains('dark') ? 'dark' : null);
+            const chartData = Object.entries(plan.items).map(([key, value]) => ({
+                name: insuranceTypes[key].name,
+                coverage: value.coverage,
+                premium: value.premium,
+            }));
+            
+            const option = {
+                tooltip: { trigger: 'axis' },
+                xAxis: { 
+                    type: 'category', 
+                    data: chartData.map(d => d.name),
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 30,
+                        fontSize: 10
+                    }
+                },
+                yAxis: { type: 'value' },
+                series: [
+                    { 
+                        name: '保费', 
+                        type: 'bar', 
+                        data: chartData.map(d => d.premium),
+                        itemStyle: {
+                            color: '#10b981'
+                        }
+                    }
+                ],
+                grid: { left: '3%', right: '4%', bottom: '25%', top: '10%', containLabel: true },
+                textStyle: {
+                    color: document.documentElement.classList.contains('dark') ? '#ccc' : '#333'
+                }
+            };
+            
+            myChart.setOption(option);
+        }
+
+        // 排序方案
+        function sortPlans(plans, sortBy) {
+            return [...plans].sort((a, b) => {
+                const totalPremiumA = Object.values(a.items).reduce((s, i) => s + i.premium, 0);
+                const totalPremiumB = Object.values(b.items).reduce((s, i) => s + i.premium, 0);
+                const totalCoverageA = Object.values(a.items).reduce((s, i) => s + i.coverage, 0);
+                const totalCoverageB = Object.values(b.items).reduce((s, i) => s + i.coverage, 0);
+
+                switch (sortBy) {
+                    case 'date_asc': return a.id - b.id;
+                    case 'premium_asc': return totalPremiumA - totalPremiumB;
+                    case 'premium_desc': return totalPremiumB - totalPremiumA;
+                    case 'coverage_desc': return totalCoverageB - totalCoverageA;
+                    default: return b.id - a.id; // date_desc
+                }
+            });
+        }
+        
+        // 保存数据
+        function persistData() {
+            localStorage.setItem('insurancePlans', JSON.stringify(state.plans));
+        }
+        
+        // 清空表单
+        function clearForm() {
+            form.reset();
+            planIdInput.value = '';
+            quill.root.innerHTML = '';
+            state.editingId = null;
+            renderInsuranceInputs();
+            document.querySelector('h2 span').textContent = '添加/编辑方案';
+        }
+
+        // 导出图片
+        async function exportImage(element, filename) {
+            const canvas = await html2canvas(element, { 
+                useCORS: true,
+                scale: 2,
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
+            });
+            
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // 显示导出模态框
+        function showExportModal() {
+            // 克隆对比视图
+            const comparisonView = document.querySelector('.comparison-view');
+            if (comparisonView) {
+                const clone = comparisonView.cloneNode(true);
+                clone.classList.remove('comparison-view');
+                clone.classList.add('export-comparison');
+                exportPreview.innerHTML = '';
+                exportPreview.appendChild(clone);
+            }
+            
+            exportModal.classList.remove('hidden');
+        }
+
+        // 事件监听器
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = state.editingId || Date.now();
+            const orderedItems = {};
+            
+            document.querySelectorAll('#insurance-items-container .insurance-item').forEach(itemEl => {
+                const key = itemEl.dataset.key;
+                orderedItems[key] = {
+                    coverage: parseFloat(document.getElementById(`coverage-${key}`).value) || 0,
+                    premium: parseFloat(document.getElementById(`premium-${key}`).value) || 0,
+                };
+            });
+
+            const plan = {
+                id,
+                title: planTitleInput.value,
+                company: document.getElementById('insurance-company').value,
+                salesperson: document.getElementById('salesperson').value,
+                contact: document.getElementById('contact-info').value,
+                items: orderedItems,
+                remarks: quill.root.innerHTML,
+            };
+
+            if (state.editingId) {
+                const index = state.plans.findIndex(p => p.id === state.editingId);
+                state.plans[index] = plan;
+            } else {
+                state.plans.push(plan);
+            }
+            
+            persistData();
+            renderPlans();
+            clearForm();
+            alert('方案已保存！');
+        });
+
+        quill.root.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
+        });
+
+        clearFormBtn.addEventListener('click', () => {
+            clearForm();
+            alert('表单已清空。');
+        });
+
+        sortBySelect.addEventListener('change', renderPlans);
+        
+        // 布局切换事件
+        horizontalLayoutBtn.addEventListener('click', () => {
+            state.layout = 'horizontal';
+            localStorage.setItem('layout', 'horizontal');
+            initLayout();
+            renderPlans();
+        });
+        
+        verticalLayoutBtn.addEventListener('click', () => {
+            state.layout = 'vertical';
+            localStorage.setItem('layout', 'vertical');
+            initLayout();
+            renderPlans();
+        });
+        
+        // 对比视图事件
+        comparisonViewBtn.addEventListener('click', () => {
+            if (state.plans.length === 0) {
+                alert('请先添加方案进行对比');
+                return;
+            }
+            
+            state.comparisonMode = true;
+            renderComparisonView();
+        });
+        
+        // 导出事件
+        exportAllBtn.addEventListener('click', () => {
+            if (state.plans.length === 0) {
+                alert('请先添加方案');
+                return;
+            }
+            
+            showExportModal();
+        });
+        
+        // 关闭导出模态框
+        closeExportModal.addEventListener('click', () => {
+            exportModal.classList.add('hidden');
+        });
+        
+        // 导出PNG
+        exportPngBtn.addEventListener('click', async () => {
+            const element = exportPreview;
+            const canvas = await html2canvas(element, { 
+                useCORS: true,
+                scale: 2,
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
+            });
+            
+            const link = document.createElement('a');
+            link.download = '车险方案对比图.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+        
+        // 导出PDF
+        exportPdfBtn.addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+            const element = exportPreview;
+            const canvas = await html2canvas(element, { 
+                useCORS: true,
+                scale: 2,
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
+            });
+            
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('l', 'mm', 'a4');
+            const imgWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            pdf.save('车险方案对比图.pdf');
+        });
+
+        // 主题切换
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+            renderPlans();
+        });
+        
+        // 语言切换
+        langSwitcher.addEventListener('change', (e) => {
+            state.currentLanguage = e.target.value;
+            localStorage.setItem('language', e.target.value);
+            renderPlans();
+        });
+
+        // 事件委托：处理卡片上的按钮点击
+        document.querySelector('.plans-container').addEventListener('click', (e) => {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const id = Number(target.dataset.id);
+
+            // 编辑
+            if (target.classList.contains('edit-btn')) {
+                const plan = state.plans.find(p => p.id === id);
+                state.editingId = id;
+                planIdInput.value = id;
+                planTitleInput.value = plan.title;
+                document.getElementById('insurance-company').value = plan.company;
+                document.getElementById('salesperson').value = plan.salesperson;
+                document.getElementById('contact-info').value = plan.contact;
+                quill.root.innerHTML = plan.remarks;
+                renderInsuranceInputs(plan);
+                document.querySelector('h2 span').textContent = '编辑方案';
+                window.scrollTo(0, 0);
+            }
+            // 删除
+            else if (target.classList.contains('delete-btn')) {
+                if (confirm('您确定要删除这个方案吗？此操作无法撤销。')) {
+                    state.plans = state.plans.filter(p => p.id !== id);
+                    persistData();
+                    renderPlans();
+                }
+            }
+            // 导出单个图片
+            else if (target.classList.contains('export-btn')) {
+                const cardElement = document.getElementById(`plan-card-${id}`);
+                const planTitle = state.plans.find(p => p.id === id).title;
+                exportImage(cardElement, `${planTitle}.png`);
+            }
+        });
+
+        // 初始化
+        function init() {
+            // 设置初始主题
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // 设置初始语言
+            langSwitcher.value = state.currentLanguage;
+            
+            // 初始化布局
+            initLayout();
+            
+            // 首次渲染
+            renderInsuranceInputs();
+            renderPlans();
+        }
+
+        init();
+    });
+    </script>
+</body>
+</html>
