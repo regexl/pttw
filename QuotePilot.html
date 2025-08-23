@@ -3,371 +3,798 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
-    <title>车险方案对比分析工具</title>
-    <meta name="description" content="一款帮助您对比和评估多个汽车保险报价方案的专业工具。轻松录入、智能对比、一键导出，选择最优车险。">
-    <meta name="author" content="Gemini - AI Financial Frontend Expert">
-    <meta name="keywords" content="车险对比, 保费评估, 保额分析, 汽车保险, 金融工具">
-
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.quilljs.com/2.0.0-rc.4/quill.snow.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-
+    <title data-i18n-key="appTitle">车险报价对比工具</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
+    
     <style>
+        /* CSS Variables for Theming */
         :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #10b981;
-            --dark-bg: #1e293b;
-            --card-bg: #ffffff;
-            --card-dark-bg: #334155;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
-        }
-
-        .dark {
-            --card-bg: var(--card-dark-bg);
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-color: #212529;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --highlight-bg: #fff3cd;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        .dark ::-webkit-scrollbar { width: 8px; }
-        .dark ::-webkit-scrollbar-track { background: #1a202c; }
-        .dark ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #718096; }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        #remarks-editor { height: 150px; }
-
-        @media (max-width: 1024px) {
-            .main-container { flex-direction: column; }
-            .left-panel, .right-panel { width: 100%; }
-            .left-panel { position: static; height: auto; }
+        html[data-theme='dark'] {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --border-color: #444;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --highlight-bg: #332700;
         }
 
-        .sortable-ghost {
-            opacity: 0.4;
-            background-color: var(--primary-color);
-            border: 2px dashed #fff;
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        
-        .transition-all { transition: all 0.3s ease-in-out; }
-        .plan-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .plan-card:hover { transform: translateY(-5px); }
 
-        [data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 5px;
-            padding: 5px 10px;
-            background-color: #2d3748;
-            color: white;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            z-index: 10;
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 1rem;
         }
-        
-        /* 布局切换样式 */
-        .layout-btn {
-            background: var(--card-bg);
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            padding: 6px 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .layout-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .layout-btn:hover {
-            background: #eef2ff;
-        }
-        
-        .dark .layout-btn:hover {
-            background: #475569;
-        }
-        
-        .horizontal-layout .plans-container {
+
+        .container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 2rem;
+        }
+
+        /* Form Panel */
+        .form-panel {
+            flex: 1;
+            min-width: 320px;
+            background: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 1rem;
+            align-self: flex-start;
+        }
+
+        .form-panel h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
         
-        .horizontal-layout .plan-card {
-            width: calc(50% - 10px);
-            min-width: 450px;
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem 1rem;
+            align-items: center;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        #remarks-editor {
+            height: 120px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .ql-toolbar.ql-snow, .ql-container.ql-snow {
+             border-color: var(--border-color);
+        }
+        .ql-snow .ql-stroke {
+            stroke: var(--text-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        html[data-theme='dark'] .submit-btn:hover {
+            background-color: #0b5ed7;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            flex: 3;
+            min-width: 320px;
         }
         
-        @media (max-width: 1200px) {
-            .horizontal-layout .plan-card {
-                width: 100%;
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--surface-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .toolbar input, .toolbar select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .plan-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .plan-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .plan-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .plan-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        .plan-header .sales-info {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .plan-body {
+            padding: 1rem;
+            flex-grow: 1;
+        }
+
+        .plan-item, .plan-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .plan-item:last-child {
+            border-bottom: none;
+        }
+        .plan-item .label, .plan-total .label {
+            font-weight: 500;
+        }
+        .plan-item .value, .plan-total .value {
+            text-align: right;
+        }
+        .plan-item .value .premium {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        .plan-item .value .coverage {
+             color: var(--success-color);
+        }
+
+        .plan-total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .plan-remarks {
+            padding: 1rem;
+            margin-top: 1rem;
+            background: var(--background-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .plan-remarks h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .plan-actions button {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-color);
+            transition: background-color 0.2s;
+        }
+        .plan-actions button.edit-btn:hover { background-color: var(--primary-color); color: white; }
+        .plan-actions button.delete-btn:hover { background-color: var(--danger-color); color: white; }
+        .plan-actions button.export-btn:hover { background-color: var(--success-color); color: white; }
+
+        .hidden { display: none; }
+        
+        #global-export-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .export-checkbox {
+            margin-right: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .modal-actions {
+            margin-top: 20px;
+        }
+         .modal-actions button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .modal-confirm { background-color: var(--danger-color); color: white; }
+        .modal-cancel { background-color: var(--secondary-color); color: white; }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .form-panel {
+                position: static;
+            }
+            .plans-container {
+                grid-template-columns: 1fr;
             }
         }
         
-        .vertical-layout .plans-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        /* Export styling fixes */
+        .export-mode {
+            padding: 20px !important;
+            border: 2px solid #000 !important;
+            width: 500px !important; /* Force width for mobile */
+            font-size: 14px !important; /* Ensure consistent font size */
         }
-        
-        .chart-container {
-            height: 200px;
-            width: 100%;
-        }
-        
-        .comparison-view {
-            display: flex;
-            overflow-x: auto;
-            gap: 20px;
-            padding: 10px 0;
-            margin-top: 20px;
-        }
-        
-        .comparison-card {
-            min-width: 300px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 15px;
-        }
-        
-        .export-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        
-        .export-content {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow: auto;
-        }
-        
-        .dark .export-content {
-            background: var(--dark-bg);
+        .export-mode .plan-item, .export-mode .plan-total {
+            white-space: nowrap; /* Prevent wrapping */
         }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-all">
+<body>
 
-    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="ti ti-shield-half-filled text-3xl text-indigo-600"></i>
-                <h1 class="text-xl font-bold">车险方案对比分析工具</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <select id="language-switcher" class="bg-slate-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="zh-CN">简体中文</option>
-                    <option value="zh-TW">繁體中文</option>
-                    <option value="en">English</option>
+    <div class="container">
+        <aside class="form-panel">
+            <h2 data-i18n-key="formTitle">添加/编辑保险方案</h2>
+            <form id="plan-form">
+                <input type="hidden" id="plan-id">
+                
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="company" data-i18n-key="company">保险公司</label>
+                        <input type="text" id="company" placeholder="e.g. 平安保险">
+                    </div>
+                    <div class="form-group">
+                        <label for="sales" data-i18n-key="sales">销售</label>
+                        <input type="text" id="sales" placeholder="e.g. 张三">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="contact" data-i18n-key="contact">联系方式</label>
+                    <input type="text" id="contact" placeholder="e.g. 13800138000">
+                </div>
+
+                <hr style="border:1px solid var(--border-color); margin: 1.5rem 0;">
+
+                <div id="insurance-fields"></div>
+
+                <hr style="border:1px solid var(--border-color); margin: 1.5rem 0;">
+
+                <div class="form-group">
+                    <label for="remarks-editor" data-i18n-key="remarks">备注</label>
+                    <div id="remarks-editor"></div>
+                </div>
+
+                <button type="submit" class="submit-btn" data-i18n-key="addPlanBtn">添加方案</button>
+            </form>
+        </aside>
+
+        <main class="results-panel">
+             <div class="toolbar">
+                <input type="search" id="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="按公司、销售搜索...">
+                
+                <select id="sort-select">
+                    <option value="date_desc" data-i18n-key="sortByDateDesc">按时间降序</option>
+                    <option value="date_asc" data-i18n-key="sortByDateAsc">按时间升序</option>
+                    <option value="company_asc" data-i18n-key="sortByCompanyAsc">按公司名升序</option>
                 </select>
-                <button id="theme-toggle" class="relative" data-tooltip="切换模式">
-                    <i class="ti ti-sun text-2xl dark:hidden"></i>
-                    <i class="ti ti-moon text-2xl hidden dark:inline"></i>
+
+                <select id="lang-select"></select>
+
+                <button id="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
                 </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto p-4 lg:p-6">
-        <div class="flex gap-6 main-container">
-            <div class="left-panel lg:w-1/3 lg:sticky lg:top-20 self-start bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-                <form id="plan-form">
-                    <input type="hidden" id="plan-id">
-                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                        <i class="ti ti-circle-plus"></i>
-                        <span>添加/编辑方案</span>
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <input type="text" id="plan-title" placeholder="方案标题 (例如：平安-王经理-方案A)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
-                        <input type="text" id="insurance-company" placeholder="保险公司 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                        <input type="text" id="salesperson" placeholder="销售 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                        <input type="text" id="contact-info" placeholder="联系方式 (选填)" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                    </div>
-                    
-                    <div id="insurance-items-container" class="space-y-3 mb-4">
-                        <!-- 险种项目将通过JS动态生成 -->
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium mb-1">备注 (Ctrl+Enter 提交)</label>
-                        <div id="remarks-editor" class="bg-white dark:bg-gray-700"></div>
-                    </div>
-                    
-                    <div class="flex gap-4 mt-6">
-                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
-                            <i class="ti ti-device-floppy"></i>
-                            <span>保存方案</span>
-                        </button>
-                        <button type="button" id="clear-form-btn" class="w-1/3 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
-                            <span>清空</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="right-panel lg:w-2/3">
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex flex-wrap gap-4 items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <i class="ti ti-filter"></i>
-                        <span class="font-bold">筛选与排序</span>
-                    </div>
-                    <div class="flex flex-wrap gap-4 items-center">
-                        <select id="sort-by" class="p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                            <option value="date_desc">按时间降序</option>
-                            <option value="date_asc">按时间升序</option>
-                            <option value="premium_asc">按总保费升序</option>
-                            <option value="premium_desc">按总保费降序</option>
-                            <option value="coverage_desc">按总保额降序</option>
-                        </select>
-                        
-                        <!-- 布局切换按钮 -->
-                        <div class="flex items-center gap-2">
-                            <span>布局:</span>
-                            <div class="flex gap-1">
-                                <button id="horizontal-layout-btn" class="layout-btn active" data-layout="horizontal">
-                                    <i class="ti ti-layout-grid"></i> 横向
-                                </button>
-                                <button id="vertical-layout-btn" class="layout-btn" data-layout="vertical">
-                                    <i class="ti ti-layout-rows"></i> 纵向
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="flex-grow flex gap-2">
-                            <button id="export-all-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
-                                <i class="ti ti-photo-down"></i>
-                                <span>导出对比图</span>
-                            </button>
-                            <button id="comparison-view-btn" class="bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
-                                <i class="ti ti-layout-sidebar-right"></i>
-                                <span>对比视图</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="plans-container" class="horizontal-layout">
-                    <div class="plans-container">
-                        <!-- 方案卡片将通过JS动态生成 -->
-                    </div>
-                </div>
                 
-                <div id="comparison-container" class="hidden">
-                    <!-- 对比视图将通过JS动态生成 -->
-                </div>
-                
-                <div id="no-plans-placeholder" class="text-center py-12">
-                    <i class="ti ti-file-off text-6xl text-gray-400"></i>
-                    <p class="mt-4 text-gray-500">暂无方案，请在左侧添加您的第一个保险方案。</p>
-                </div>
+                <button id="global-export-btn"><i class="fas fa-camera"></i> <span data-i18n-key="exportSelectedBtn">导出选中</span></button>
             </div>
-        </div>
-    </main>
+            
+            <div id="plans-container" class="plans-container">
+                </div>
+        </main>
+    </div>
 
-    <!-- 导出模态框 -->
-    <div id="export-modal" class="export-modal hidden">
-        <div class="export-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">导出对比图</h3>
-                <button id="close-export-modal" class="text-gray-500 hover:text-gray-700">
-                    <i class="ti ti-x text-2xl"></i>
-                </button>
-            </div>
-            <div id="export-preview" class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                <!-- 导出预览内容 -->
-            </div>
-            <div class="mt-4 flex justify-end gap-2">
-                <button id="export-png-btn" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700">
-                    <i class="ti ti-download"></i> 导出PNG
-                </button>
-                <button id="export-pdf-btn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700">
-                    <i class="ti ti-file-download"></i> 导出PDF
-                </button>
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <p id="delete-modal-text" data-i18n-key="deleteConfirmText">您确定要删除这个方案吗？此操作无法撤销。</p>
+            <div class="modal-actions">
+                <button id="modal-confirm-btn" class="modal-confirm" data-i18n-key="confirmBtn">确定</button>
+                <button id="modal-cancel-btn" class="modal-cancel" data-i18n-key="cancelBtn">取消</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/quill/2.0.0-rc.4/quill.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/SortableJS/1.15.2/Sortable.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/dompurify/3.1.4/purify.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 全局状态管理
-        const state = {
-            plans: JSON.parse(localStorage.getItem('insurancePlans')) || [],
-            editingId: null,
-            currentLanguage: localStorage.getItem('language') || 'zh-CN',
-            layout: localStorage.getItem('layout') || 'horizontal',
-            comparisonMode: false
+
+        // --- I18N (Internationalization) ---
+        const translations = {
+            en: {
+                appTitle: "Car Insurance Comparator",
+                formTitle: "Add/Edit Insurance Plan",
+                company: "Insurance Company",
+                sales: "Salesperson",
+                contact: "Contact Info",
+                remarks: "Remarks",
+                addPlanBtn: "Add Plan",
+                updatePlanBtn: "Update Plan",
+                searchPlaceholder: "Search by company, salesperson...",
+                sortByDateDesc: "Sort by Date (Newest)",
+                sortByDateAsc: "Sort by Date (Oldest)",
+                sortByCompanyAsc: "Sort by Company (A-Z)",
+                exportSelectedBtn: "Export Selected",
+                deleteConfirmText: "Are you sure you want to delete this plan? This action cannot be undone.",
+                confirmBtn: "Confirm",
+                cancelBtn: "Cancel",
+                editBtn: "Edit",
+                deleteBtn: "Delete",
+                exportBtn: "Export",
+                coverage: "Coverage",
+                premium: "Premium",
+                totalCoverage: "Total Coverage",
+                totalPremium: "Total Premium",
+                salesInfoLabel: "Sales",
+                contactInfoLabel: "Contact",
+                planSaved: "Plan saved successfully!",
+                planUpdated: "Plan updated successfully!",
+                planDeleted: "Plan deleted.",
+                noPlans: "No insurance plans saved yet. Add one using the form on the left.",
+                insuranceItems: {
+                    vehicleDamage: { label: "Vehicle Damage", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "Third-Party Liability", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "Supplementary Medical", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "Driver Liability", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "Passenger Liability", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "Compulsory Insurance", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "Vehicle & Vessel Tax", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "Driving Accident", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            'zh-CN': {
+                appTitle: "车险报价对比工具",
+                formTitle: "添加/编辑保险方案",
+                company: "保险公司",
+                sales: "销售",
+                contact: "联系方式",
+                remarks: "备注",
+                addPlanBtn: "添加方案",
+                updatePlanBtn: "更新方案",
+                searchPlaceholder: "按公司、销售搜索...",
+                sortByDateDesc: "按时间降序",
+                sortByDateAsc: "按时间升序",
+                sortByCompanyAsc: "按公司名升序",
+                exportSelectedBtn: "导出选中",
+                deleteConfirmText: "您确定要删除这个方案吗？此操作无法撤销。",
+                confirmBtn: "确定",
+                cancelBtn: "取消",
+                editBtn: "编辑",
+                deleteBtn: "删除",
+                exportBtn: "导出",
+                coverage: "保额",
+                premium: "保费",
+                totalCoverage: "总保额",
+                totalPremium: "总保费",
+                salesInfoLabel: "销售",
+                contactInfoLabel: "联系",
+                planSaved: "方案已保存！",
+                planUpdated: "方案已更新！",
+                planDeleted: "方案已删除。",
+                noPlans: "暂无保险方案，请使用左侧表单添加。",
+                insuranceItems: {
+                    vehicleDamage: { label: "机动车损失险", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "机动车第三者责任险", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "三者附加医保外医疗", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "机动车司机责任险", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "机动车乘客责任险", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "交强险", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "车船税", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "驾驶意外险", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            'zh-TW': {
+                appTitle: "車險報價對比工具",
+                formTitle: "新增/編輯保險方案",
+                company: "保險公司",
+                sales: "銷售",
+                contact: "聯絡方式",
+                remarks: "備註",
+                addPlanBtn: "新增方案",
+                updatePlanBtn: "更新方案",
+                searchPlaceholder: "按公司、銷售搜尋...",
+                sortByDateDesc: "按時間降序",
+                sortByDateAsc: "按時間升序",
+                sortByCompanyAsc: "按公司名升序",
+                exportSelectedBtn: "匯出選中",
+                deleteConfirmText: "您確定要刪除這個方案嗎？此操作無法撤銷。",
+                confirmBtn: "確定",
+                cancelBtn: "取消",
+                editBtn: "編輯",
+                deleteBtn: "刪除",
+                exportBtn: "匯出",
+                coverage: "保額",
+                premium: "保費",
+                totalCoverage: "總保額",
+                totalPremium: "總保費",
+                salesInfoLabel: "銷售",
+                contactInfoLabel: "聯絡",
+                planSaved: "方案已儲存！",
+                planUpdated: "方案已更新！",
+                planDeleted: "方案已刪除。",
+                noPlans: "暫無保險方案，請使用左側表單新增。",
+                insuranceItems: {
+                    vehicleDamage: { label: "機動車損失險", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "機動車第三者責任險", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "三者附加醫保外醫療", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "機動車司機責任险", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "機動車乘客責任险", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "交強險", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "車船稅", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "駕駛意外險", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            de: {
+                appTitle: "Kfz-Versicherungsvergleich",
+                formTitle: "Versicherungsplan hinzufügen/bearbeiten",
+                company: "Versicherungsgesellschaft",
+                sales: "Verkäufer",
+                contact: "Kontakt",
+                remarks: "Bemerkungen",
+                addPlanBtn: "Plan hinzufügen",
+                updatePlanBtn: "Plan aktualisieren",
+                searchPlaceholder: "Suche nach Firma, Verkäufer...",
+                sortByDateDesc: "Nach Datum (neueste)",
+                sortByDateAsc: "Nach Datum (älteste)",
+                sortByCompanyAsc: "Nach Firma (A-Z)",
+                exportSelectedBtn: "Ausgewählte exportieren",
+                deleteConfirmText: "Möchten Sie diesen Plan wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+                confirmBtn: "Bestätigen",
+                cancelBtn: "Abbrechen",
+                editBtn: "Bearbeiten",
+                deleteBtn: "Löschen",
+                exportBtn: "Exportieren",
+                coverage: "Deckung",
+                premium: "Prämie",
+                totalCoverage: "Gesamtdeckung",
+                totalPremium: "Gesamtprämie",
+                salesInfoLabel: "Verkäufer",
+                contactInfoLabel: "Kontakt",
+                planSaved: "Plan erfolgreich gespeichert!",
+                planUpdated: "Plan erfolgreich aktualisiert!",
+                planDeleted: "Plan gelöscht.",
+                noPlans: "Noch keine Versicherungspläne gespeichert. Fügen Sie einen über das Formular links hinzu.",
+                insuranceItems: {
+                    vehicleDamage: { label: "Fahrzeugschaden", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "Haftpflicht", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "Zusätzliche Krankenversicherung", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "Fahrerhaftpflicht", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "Insassenhaftpflicht", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "Pflichtversicherung", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "Kfz-Steuer", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "Fahrunfall", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            ja: {
+                appTitle: "自動車保険見積比較ツール",
+                formTitle: "保険プランの追加/編集",
+                company: "保険会社",
+                sales: "営業担当者",
+                contact: "連絡先",
+                remarks: "備考",
+                addPlanBtn: "プランを追加",
+                updatePlanBtn: "プランを更新",
+                searchPlaceholder: "会社名、営業担当者で検索...",
+                sortByDateDesc: "日付順（新しい順）",
+                sortByDateAsc: "日付順（古い順）",
+                sortByCompanyAsc: "会社名順（昇順）",
+                exportSelectedBtn: "選択項目をエクスポート",
+                deleteConfirmText: "このプランを本当に削除しますか？この操作は元に戻せません。",
+                confirmBtn: "確認",
+                cancelBtn: "キャンセル",
+                editBtn: "編集",
+                deleteBtn: "削除",
+                exportBtn: "エクスポート",
+                coverage: "補償額",
+                premium: "保険料",
+                totalCoverage: "総補償額",
+                totalPremium: "総保険料",
+                salesInfoLabel: "営業",
+                contactInfoLabel: "連絡先",
+                planSaved: "プランが保存されました！",
+                planUpdated: "プランが更新されました！",
+                planDeleted: "プランが削除されました。",
+                noPlans: "保険プランはまだありません。左のフォームで追加してください。",
+                insuranceItems: {
+                    vehicleDamage: { label: "車両保険", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "対人賠償責任保険", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "対人臨時費用", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "運転者傷害保険", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "搭乗者傷害保険", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "自賠責保険", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "自動車税", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "運転事故保険", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+             ko: {
+                appTitle: "자동차 보험 견적 비교 도구",
+                formTitle: "보험 플랜 추가/편집",
+                company: "보험사",
+                sales: "영업 사원",
+                contact: "연락처",
+                remarks: "비고",
+                addPlanBtn: "플랜 추가",
+                updatePlanBtn: "플랜 업데이트",
+                searchPlaceholder: "회사, 영업 사원으로 검색...",
+                sortByDateDesc: "날짜순 (최신순)",
+                sortByDateAsc: "날짜순 (오래된순)",
+                sortByCompanyAsc: "회사명순 (오름차순)",
+                exportSelectedBtn: "선택 항목 내보내기",
+                deleteConfirmText: "이 플랜을 정말로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+                confirmBtn: "확인",
+                cancelBtn: "취소",
+                editBtn: "편집",
+                deleteBtn: "삭제",
+                exportBtn: "내보내기",
+                coverage: "보장 금액",
+                premium: "보험료",
+                totalCoverage: "총 보장 금액",
+                totalPremium: "총 보험료",
+                salesInfoLabel: "영업",
+                contactInfoLabel: "연락처",
+                planSaved: "플랜이 성공적으로 저장되었습니다!",
+                planUpdated: "플랜이 성공적으로 업데이트되었습니다!",
+                planDeleted: "플랜이 삭제되었습니다.",
+                noPlans: "저장된 보험 플랜이 없습니다. 왼쪽 양식을 사용하여 추가하십시오.",
+                insuranceItems: {
+                    vehicleDamage: { label: "자차손해", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "대인배상", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "대인 추가 의료비", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "운전자 책임", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "동승자 책임", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "의무보험", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "자동차세", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "운전 사고 보험", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            fr: {
+                appTitle: "Comparateur d'assurance auto",
+                formTitle: "Ajouter/Modifier un plan d'assurance",
+                company: "Compagnie d'assurance",
+                sales: "Vendeur",
+                contact: "Contact",
+                remarks: "Remarques",
+                addPlanBtn: "Ajouter un plan",
+                updatePlanBtn: "Mettre à jour le plan",
+                searchPlaceholder: "Rechercher par compagnie, vendeur...",
+                sortByDateDesc: "Trier par date (plus récent)",
+                sortByDateAsc: "Trier par date (plus ancien)",
+                sortByCompanyAsc: "Trier par compagnie (A-Z)",
+                exportSelectedBtn: "Exporter la sélection",
+                deleteConfirmText: "Êtes-vous sûr de vouloir supprimer ce plan ? Cette action est irréversible.",
+                confirmBtn: "Confirmer",
+                cancelBtn: "Annuler",
+                editBtn: "Modifier",
+                deleteBtn: "Supprimer",
+                exportBtn: "Exporter",
+                coverage: "Couverture",
+                premium: "Prime",
+                totalCoverage: "Couverture totale",
+                totalPremium: "Prime totale",
+                salesInfoLabel: "Vendeur",
+                contactInfoLabel: "Contact",
+                planSaved: "Plan enregistré avec succès !",
+                planUpdated: "Plan mis à jour avec succès !",
+                planDeleted: "Plan supprimé.",
+                noPlans: "Aucun plan d'assurance enregistré. Ajoutez-en un via le formulaire à gauche.",
+                insuranceItems: {
+                    vehicleDamage: { label: "Dommages au véhicule", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "Responsabilité civile", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "Frais médicaux supplémentaires", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "Responsabilité du conducteur", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "Responsabilité des passagers", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "Assurance obligatoire", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "Taxe sur les véhicules", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "Accident de la route", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            },
+            ru: {
+                appTitle: "Сравнение автострахования",
+                formTitle: "Добавить/изменить план страхования",
+                company: "Страховая компания",
+                sales: "Продавец",
+                contact: "Контакт",
+                remarks: "Примечания",
+                addPlanBtn: "Добавить план",
+                updatePlanBtn: "Обновить план",
+                searchPlaceholder: "Поиск по компании, продавцу...",
+                sortByDateDesc: "Сортировать по дате (сначала новые)",
+                sortByDateAsc: "Сортировать по дате (сначала старые)",
+                sortByCompanyAsc: "Сортировать по компании (А-Я)",
+                exportSelectedBtn: "Экспорт выбранного",
+                deleteConfirmText: "Вы уверены, что хотите удалить этот план? Это действие необратимо.",
+                confirmBtn: "Подтвердить",
+                cancelBtn: "Отмена",
+                editBtn: "Редактировать",
+                deleteBtn: "Удалить",
+                exportBtn: "Экспорт",
+                coverage: "Покрытие",
+                premium: "Премия",
+                totalCoverage: "Общее покрытие",
+                totalPremium: "Общая премия",
+                salesInfoLabel: "Продавец",
+                contactInfoLabel: "Контакт",
+                planSaved: "План успешно сохранен!",
+                planUpdated: "План успешно обновлен!",
+                planDeleted: "План удален.",
+                noPlans: "Нет сохраненных планов страхования. Добавьте один с помощью формы слева.",
+                insuranceItems: {
+                    vehicleDamage: { label: "Ущерб транспортному средству", defaultCoverage: 200000, defaultPremium: 2000 },
+                    thirdParty: { label: "Гражданская ответственность", defaultCoverage: 3000000, defaultPremium: 1500 },
+                    thirdPartyMedical: { label: "Дополнительное медицинское страхование", defaultCoverage: 50000, defaultPremium: 100 },
+                    driverLiability: { label: "Ответственность водителя", defaultCoverage: 50000, defaultPremium: 50 },
+                    passengerLiability: { label: "Ответственность перед пассажирами", defaultCoverage: 50000, defaultPremium: 150 },
+                    compulsory: { label: "Обязательное страхование", defaultCoverage: 200000, defaultPremium: 950 },
+                    vehicleTax: { label: "Транспортный налог", defaultCoverage: 0, defaultPremium: 360 },
+                    drivingAccident: { label: "Страхование от несчастных случаев при вождении", defaultCoverage: 100000, defaultPremium: 200 },
+                }
+            }
         };
 
-        // 险种类型配置
-        const insuranceTypes = {
-            'vehicleDamage': { name: '机动车损失险', defaultCoverage: 200000, defaultPremium: 2000 },
-            'thirdPartyLiability': { name: '第三者责任险', defaultCoverage: 2000000, defaultPremium: 1500 },
-            'thirdPartyMedical': { name: '三者医保外医疗', defaultCoverage: 50000, defaultPremium: 80 },
-            'driverLiability': { name: '司机责任险', defaultCoverage: 50000, defaultPremium: 50 },
-            'passengerLiability': { name: '乘客责任险', defaultCoverage: 50000, defaultPremium: 100 },
-            'compulsory': { name: '交强险', defaultCoverage: 200000, defaultPremium: 950 },
-            'vehicleTax': { name: '车船税', defaultCoverage: 0, defaultPremium: 360 },
-            'drivingAccident': { name: '驾驶意外险', defaultCoverage: 200000, defaultPremium: 200 }
+        const supportedLangs = {
+            'en': 'English',
+            'zh-CN': '简体中文',
+            'zh-TW': '繁體中文',
+            'de': 'Deutsch',
+            'ja': '日本語',
+            'ko': '한국어',
+            'fr': 'Français',
+            'ru': 'Русский'
         };
+        
+        let currentLang = localStorage.getItem('appLanguage') || 'zh-CN';
+        const insuranceItems = translations[currentLang].insuranceItems;
 
-        // DOM元素获取
-        const form = document.getElementById('plan-form');
-        const planIdInput = document.getElementById('plan-id');
-        const planTitleInput = document.getElementById('plan-title');
-        const insuranceItemsContainer = document.getElementById('insurance-items-container');
-        const plansContainer = document.querySelector('.plans-container');
-        const noPlansPlaceholder = document.getElementById('no-plans-placeholder');
-        const clearFormBtn = document.getElementById('clear-form-btn');
-        const sortBySelect = document.getElementById('sort-by');
-        const exportAllBtn = document.getElementById('export-all-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        const langSwitcher = document.getElementById('language-switcher');
-        const horizontalLayoutBtn = document.getElementById('horizontal-layout-btn');
-        const verticalLayoutBtn = document.getElementById('vertical-layout-btn');
-        const comparisonViewBtn = document.getElementById('comparison-view-btn');
-        const comparisonContainer = document.getElementById('comparison-container');
-        const exportModal = document.getElementById('export-modal');
-        const exportPreview = document.getElementById('export-preview');
-        const closeExportModal = document.getElementById('close-export-modal');
-        const exportPngBtn = document.getElementById('export-png-btn');
-        const exportPdfBtn = document.getElementById('export-pdf-btn');
+        const langSelect = document.getElementById('lang-select');
+        for (const [code, name] of Object.entries(supportedLangs)) {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = name;
+            if (code === currentLang) {
+                option.selected = true;
+            }
+            langSelect.appendChild(option);
+        }
 
-        // Quill编辑器初始化
+        const setLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('appLanguage', lang);
+            document.documentElement.lang = lang;
+            
+            const t = translations[lang];
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                 if (t[key]) {
+                    el.placeholder = t[key];
+                }
+            });
+            generateInsuranceFields();
+            renderPlans();
+        };
+        langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+
+        // --- Rich Text Editor ---
         const quill = new Quill('#remarks-editor', {
             theme: 'snow',
             modules: {
@@ -378,577 +805,350 @@
             }
         });
 
-        // 初始化布局
-        function initLayout() {
-            if (state.layout === 'horizontal') {
-                horizontalLayoutBtn.classList.add('active');
-                verticalLayoutBtn.classList.remove('active');
-                document.getElementById('plans-container').classList.add('horizontal-layout');
-                document.getElementById('plans-container').classList.remove('vertical-layout');
-            } else {
-                verticalLayoutBtn.classList.add('active');
-                horizontalLayoutBtn.classList.remove('active');
-                document.getElementById('plans-container').classList.add('vertical-layout');
-                document.getElementById('plans-container').classList.remove('horizontal-layout');
-            }
-        }
+        // --- DOM Elements ---
+        const form = document.getElementById('plan-form');
+        const planIdInput = document.getElementById('plan-id');
+        const plansContainer = document.getElementById('plans-container');
+        const searchInput = document.getElementById('search-input');
+        const sortSelect = document.getElementById('sort-select');
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const insuranceFieldsContainer = document.getElementById('insurance-fields');
+        const globalExportBtn = document.getElementById('global-export-btn');
+        
+        // --- Modal ---
+        const modal = document.getElementById('delete-modal');
+        const confirmBtn = document.getElementById('modal-confirm-btn');
+        const cancelBtn = document.getElementById('modal-cancel-btn');
+        let deleteCallback = null;
 
-        // 渲染险种输入表单
-        function renderInsuranceInputs(planData = {}) {
-            insuranceItemsContainer.innerHTML = '';
-            const items = planData.items || {};
-            
-            for (const key in insuranceTypes) {
-                const info = insuranceTypes[key];
-                const itemHtml = `
-                    <div class="insurance-item grid grid-cols-10 gap-2 items-center" data-key="${key}">
-                        <label for="coverage-${key}" class="col-span-10 sm:col-span-3 text-sm font-medium truncate">${info.name}</label>
-                        <div class="col-span-5 sm:col-span-3 relative">
-                            <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">保额</span>
-                            <input type="number" id="coverage-${key}" value="${items[key]?.coverage || info.defaultCoverage}" class="w-full p-2 pl-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
+        const showModal = (callback) => {
+            deleteCallback = callback;
+            modal.style.display = 'flex';
+        };
+
+        const hideModal = () => {
+            modal.style.display = 'none';
+            deleteCallback = null;
+        };
+
+        confirmBtn.addEventListener('click', () => {
+            if (deleteCallback) {
+                deleteCallback();
+            }
+            hideModal();
+        });
+        cancelBtn.addEventListener('click', hideModal);
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                hideModal();
+            }
+        });
+
+
+        // --- Local Storage ---
+        const getPlans = () => JSON.parse(localStorage.getItem('insurancePlans') || '[]');
+        const savePlans = (plans) => localStorage.setItem('insurancePlans', JSON.stringify(plans));
+        
+        // --- Theme ---
+        const applyTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            themeToggleBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', theme);
+        };
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+        
+        // --- Generate Dynamic Form Fields ---
+        const generateInsuranceFields = () => {
+            insuranceFieldsContainer.innerHTML = '';
+            const items = translations[currentLang].insuranceItems;
+            for (const key in items) {
+                const item = items[key];
+                const fieldHtml = `
+                    <div class="form-group">
+                        <label>${item.label}</label>
+                        <div class="form-group-grid">
+                            <input type="number" step="0.01" id="${key}-coverage" placeholder="${translations[currentLang].coverage}" value="${item.defaultCoverage}" required>
+                            <input type="number" step="0.01" id="${key}-premium" placeholder="${translations[currentLang].premium}" value="${item.defaultPremium}" required>
                         </div>
-                        <div class="col-span-5 sm:col-span-3 relative">
-                           <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">保费</span>
-                           <input type="number" id="premium-${key}" value="${items[key]?.premium || info.defaultPremium}" class="w-full p-2 pl-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required>
-                        </div>
-                        <i class="ti ti-grip-vertical col-span-10 sm:col-span-1 text-center text-gray-400 cursor-grab"></i>
                     </div>
                 `;
-                insuranceItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+                insuranceFieldsContainer.insertAdjacentHTML('beforeend', fieldHtml);
             }
+        };
+
+        // --- Render Plans ---
+        const renderPlans = () => {
+            let plans = getPlans();
+            const searchTerm = searchInput.value.toLowerCase();
+            const sortValue = sortSelect.value;
             
-            // 拖拽排序初始化
-            new Sortable(insuranceItemsContainer, {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                handle: '.ti-grip-vertical',
-            });
-        }
-
-        // 渲染所有方案卡片
-        function renderPlans() {
-            const sortedPlans = sortPlans(state.plans, sortBySelect.value);
-            plansContainer.innerHTML = '';
-
-            if (sortedPlans.length === 0) {
-                noPlansPlaceholder.classList.remove('hidden');
-                return;
+            // Filter
+            if (searchTerm) {
+                plans = plans.filter(p => 
+                    p.company.toLowerCase().includes(searchTerm) || 
+                    p.sales.toLowerCase().includes(searchTerm)
+                );
             }
-            
-            noPlansPlaceholder.classList.add('hidden');
-            
-            sortedPlans.slice(0, 10).forEach(plan => {
-                const totalCoverage = Object.values(plan.items).reduce((sum, item) => sum + (item.coverage || 0), 0);
-                const totalPremium = Object.values(plan.items).reduce((sum, item) => sum + (item.premium || 0), 0);
-                const valueRatio = totalPremium > 0 ? (totalCoverage / totalPremium).toFixed(2) : '∞';
 
-                const card = document.createElement('div');
-                card.className = 'plan-card bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg flex flex-col gap-4';
-                card.id = `plan-card-${plan.id}`;
-                card.dataset.id = plan.id;
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">${plan.title}</h3>
-                            <p class="text-xs text-gray-400">${new Date(plan.id).toLocaleString()}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="edit-btn p-1 hover:text-indigo-500" data-id="${plan.id}" data-tooltip="编辑">
-                                <i class="ti ti-pencil"></i>
-                            </button>
-                            <button class="delete-btn p-1 hover:text-red-500" data-id="${plan.id}" data-tooltip="删除">
-                                <i class="ti ti-trash"></i>
-                            </button>
-                            <button class="export-btn p-1 hover:text-green-500" data-id="${plan.id}" data-tooltip="导出图片">
-                                <i class="ti ti-photo-down"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">总保额</p>
-                            <p class="text-lg font-bold">¥${totalCoverage.toLocaleString()}</p>
-                        </div>
-                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">总保费</p>
-                            <p class="text-lg font-bold text-red-500">¥${totalPremium.toLocaleString()}</p>
-                        </div>
-                        <div class="bg-slate-100 dark:bg-gray-700 p-3 rounded-lg">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">性价比</p>
-                            <p class="text-lg font-bold text-green-500">${valueRatio}</p>
-                        </div>
-                    </div>
-
-                    <div id="chart-${plan.id}" class="chart-container"></div>
-
-                    <details class="text-sm">
-                        <summary class="cursor-pointer font-semibold text-gray-600 dark:text-gray-300">展开查看详情</summary>
-                        <div class="mt-3 space-y-3">
-                            ${ plan.company || plan.salesperson || plan.contact ? `
-                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
-                                <h4 class="font-bold mb-2">基础信息</h4>
-                                <ul class="space-y-1">
-                                    ${plan.company ? `<li><strong>保险公司:</strong> ${plan.company}</li>` : ''}
-                                    ${plan.salesperson ? `<li><strong>销售:</strong> ${plan.salesperson}</li>` : ''}
-                                    ${plan.contact ? `<li><strong>联系方式:</strong> ${plan.contact}</li>` : ''}
-                                </ul>
-                            </div>` : ''}
-
-                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
-                                <h4 class="font-bold mb-2">保费/保额详情</h4>
-                                <ul class="space-y-1">
-                                    ${Object.entries(plan.items).map(([key, value]) => `
-                                        <li class="flex justify-between">
-                                            <span>${insuranceTypes[key].name}</span>
-                                            <span>
-                                                <strong>保额:</strong> ${value.coverage.toLocaleString()} / 
-                                                <strong>保费:</strong> <span class="text-red-500">${value.premium.toLocaleString()}</span>
-                                            </span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                            
-                            ${ plan.remarks ? `
-                            <div class="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
-                                <h4 class="font-bold mb-2">备注</h4>
-                                <div class="prose prose-sm dark:prose-invert max-w-none">${plan.remarks}</div>
-                            </div>` : ''}
-                        </div>
-                    </details>
-                `;
-                plansContainer.appendChild(card);
-                renderChart(plan);
-            });
-        }
-
-        // 渲染对比视图
-        function renderComparisonView() {
-            const sortedPlans = sortPlans(state.plans, sortBySelect.value);
-            comparisonContainer.innerHTML = '';
-            
-            if (sortedPlans.length === 0) return;
-            
-            const comparisonHtml = `
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold">方案对比视图</h2>
-                        <button id="exit-comparison-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-                            退出对比
-                        </button>
-                    </div>
-                    <div class="comparison-view">
-                        ${sortedPlans.slice(0, 5).map(plan => {
-                            const totalCoverage = Object.values(plan.items).reduce((sum, item) => sum + (item.coverage || 0), 0);
-                            const totalPremium = Object.values(plan.items).reduce((sum, item) => sum + (item.premium || 0), 0);
-                            const valueRatio = totalPremium > 0 ? (totalCoverage / totalPremium).toFixed(2) : '∞';
-                            
-                            return `
-                                <div class="comparison-card">
-                                    <h3 class="font-bold text-lg mb-3 text-indigo-600 dark:text-indigo-400">${plan.title}</h3>
-                                    <div class="mb-3">
-                                        <div class="flex justify-between mb-1">
-                                            <span>总保额:</span>
-                                            <span class="font-bold">¥${totalCoverage.toLocaleString()}</span>
-                                        </div>
-                                        <div class="flex justify-between mb-1">
-                                            <span>总保费:</span>
-                                            <span class="font-bold text-red-500">¥${totalPremium.toLocaleString()}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span>性价比:</span>
-                                            <span class="font-bold text-green-500">${valueRatio}</span>
-                                        </div>
-                                    </div>
-                                    <div id="comparison-chart-${plan.id}" class="h-40"></div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-            
-            comparisonContainer.innerHTML = comparisonHtml;
-            comparisonContainer.classList.remove('hidden');
-            document.querySelector('.plans-container').classList.add('hidden');
-            
-            // 渲染对比视图中的图表
-            sortedPlans.slice(0, 5).forEach(plan => {
-                renderComparisonChart(plan);
-            });
-            
-            // 添加退出对比事件
-            document.getElementById('exit-comparison-btn').addEventListener('click', () => {
-                comparisonContainer.classList.add('hidden');
-                document.querySelector('.plans-container').classList.remove('hidden');
-                state.comparisonMode = false;
-            });
-        }
-
-        // 渲染图表
-        function renderChart(plan) {
-            const chartDom = document.getElementById(`chart-${plan.id}`);
-            if (!chartDom) return;
-            
-            const myChart = echarts.init(chartDom, document.documentElement.classList.contains('dark') ? 'dark' : null);
-            const chartData = Object.entries(plan.items).map(([key, value]) => ({
-                name: insuranceTypes[key].name,
-                coverage: value.coverage,
-                premium: value.premium,
-            }));
-            
-            const option = {
-                tooltip: { trigger: 'axis' },
-                legend: { data: ['保额', '保费'] },
-                xAxis: { 
-                    type: 'category', 
-                    data: chartData.map(d => d.name),
-                    axisLabel: {
-                        interval: 0,
-                        rotate: 30
-                    }
-                },
-                yAxis: [
-                    { type: 'value', name: '保额' }, 
-                    { type: 'value', name: '保费' }
-                ],
-                series: [
-                    { 
-                        name: '保额', 
-                        type: 'bar', 
-                        data: chartData.map(d => d.coverage),
-                        itemStyle: {
-                            color: '#4f46e5'
-                        }
-                    },
-                    { 
-                        name: '保费', 
-                        type: 'line', 
-                        yAxisIndex: 1, 
-                        data: chartData.map(d => d.premium),
-                        itemStyle: {
-                            color: '#10b981'
-                        }
-                    }
-                ],
-                grid: { left: '3%', right: '4%', bottom: '15%', top: '10%', containLabel: true },
-                textStyle: {
-                    color: document.documentElement.classList.contains('dark') ? '#ccc' : '#333'
-                }
-            };
-            
-            myChart.setOption(option);
-            
-            // 响应窗口大小变化
-            window.addEventListener('resize', () => {
-                myChart.resize();
-            });
-        }
-
-        // 渲染对比视图中的图表
-        function renderComparisonChart(plan) {
-            const chartDom = document.getElementById(`comparison-chart-${plan.id}`);
-            if (!chartDom) return;
-            
-            const myChart = echarts.init(chartDom, document.documentElement.classList.contains('dark') ? 'dark' : null);
-            const chartData = Object.entries(plan.items).map(([key, value]) => ({
-                name: insuranceTypes[key].name,
-                coverage: value.coverage,
-                premium: value.premium,
-            }));
-            
-            const option = {
-                tooltip: { trigger: 'axis' },
-                xAxis: { 
-                    type: 'category', 
-                    data: chartData.map(d => d.name),
-                    axisLabel: {
-                        interval: 0,
-                        rotate: 30,
-                        fontSize: 10
-                    }
-                },
-                yAxis: { type: 'value' },
-                series: [
-                    { 
-                        name: '保费', 
-                        type: 'bar', 
-                        data: chartData.map(d => d.premium),
-                        itemStyle: {
-                            color: '#10b981'
-                        }
-                    }
-                ],
-                grid: { left: '3%', right: '4%', bottom: '25%', top: '10%', containLabel: true },
-                textStyle: {
-                    color: document.documentElement.classList.contains('dark') ? '#ccc' : '#333'
-                }
-            };
-            
-            myChart.setOption(option);
-        }
-
-        // 排序方案
-        function sortPlans(plans, sortBy) {
-            return [...plans].sort((a, b) => {
-                const totalPremiumA = Object.values(a.items).reduce((s, i) => s + i.premium, 0);
-                const totalPremiumB = Object.values(b.items).reduce((s, i) => s + i.premium, 0);
-                const totalCoverageA = Object.values(a.items).reduce((s, i) => s + i.coverage, 0);
-                const totalCoverageB = Object.values(b.items).reduce((s, i) => s + i.coverage, 0);
-
-                switch (sortBy) {
+            // Sort
+            plans.sort((a, b) => {
+                switch (sortValue) {
                     case 'date_asc': return a.id - b.id;
-                    case 'premium_asc': return totalPremiumA - totalPremiumB;
-                    case 'premium_desc': return totalPremiumB - totalPremiumA;
-                    case 'coverage_desc': return totalCoverageB - totalCoverageA;
-                    default: return b.id - a.id; // date_desc
+                    case 'company_asc': return a.company.localeCompare(b.company);
+                    case 'date_desc':
+                    default:
+                        return b.id - a.id;
                 }
             });
-        }
-        
-        // 保存数据
-        function persistData() {
-            localStorage.setItem('insurancePlans', JSON.stringify(state.plans));
-        }
-        
-        // 清空表单
-        function clearForm() {
+
+            // Keep only recent 10 if needed (optional, current setup shows all filtered/sorted)
+            // plans = plans.slice(0, 10);
+
+            plansContainer.innerHTML = '';
+            if (plans.length === 0) {
+                 plansContainer.innerHTML = `<p>${translations[currentLang].noPlans}</p>`;
+                 return;
+            }
+
+            plans.forEach(plan => {
+                let totalCoverage = 0;
+                let totalPremium = 0;
+                let itemsHtml = '';
+                const t = translations[currentLang];
+
+                for (const key in plan.items) {
+                    const item = plan.items[key];
+                    const itemDef = t.insuranceItems[key] || { label: key };
+                    totalCoverage += parseFloat(item.coverage);
+                    totalPremium += parseFloat(item.premium);
+                    itemsHtml += `
+                        <div class="plan-item">
+                            <span class="label">${itemDef.label}</span>
+                            <span class="value">
+                                <span class="coverage">${t.coverage}: ${parseFloat(item.coverage).toLocaleString()}</span> /
+                                <span class="premium">${t.premium}: ${parseFloat(item.premium).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                            </span>
+                        </div>
+                    `;
+                }
+                
+                // Sanitize user HTML content from Quill
+                const sanitizedRemarks = DOMPurify.sanitize(plan.remarks);
+
+                const cardHtml = `
+                    <div class="plan-card" id="plan-${plan.id}">
+                         <div class="plan-header">
+                            <h3><input type="checkbox" class="export-checkbox" data-plan-id="${plan.id}"> ${plan.company}</h3>
+                            <div class="sales-info">
+                                ${plan.sales ? `<span>${t.salesInfoLabel}: ${plan.sales}</span>` : ''}
+                                ${plan.contact ? ` | <span>${t.contactInfoLabel}: ${plan.contact}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="plan-body">
+                            ${itemsHtml}
+                            <div class="plan-total">
+                                <span class="label">${t.totalCoverage}</span>
+                                <span class="value">${totalCoverage.toLocaleString()}</span>
+                            </div>
+                            <div class="plan-total">
+                                <span class="label">${t.totalPremium}</span>
+                                <span class="value">${totalPremium.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                            </div>
+                             ${sanitizedRemarks ? `
+                                <div class="plan-remarks">
+                                    <h4>${t.remarks}</h4>
+                                    <div>${sanitizedRemarks}</div>
+                                </div>` 
+                            : ''}
+                        </div>
+                        <div class="plan-actions">
+                            <button class="edit-btn" data-id="${plan.id}"><i class="fas fa-edit"></i> ${t.editBtn}</button>
+                            <button class="delete-btn" data-id="${plan.id}"><i class="fas fa-trash"></i> ${t.deleteBtn}</button>
+                            <button class="export-btn" data-id="${plan.id}"><i class="fas fa-camera"></i> ${t.exportBtn}</button>
+                        </div>
+                    </div>
+                `;
+                plansContainer.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        };
+
+        // --- Form Submission ---
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = planIdInput.value;
+            const items = {};
+            for (const key in translations[currentLang].insuranceItems) {
+                items[key] = {
+                    coverage: parseFloat(document.getElementById(`${key}-coverage`).value) || 0,
+                    premium: parseFloat(document.getElementById(`${key}-premium`).value) || 0
+                };
+            }
+
+            const plan = {
+                id: id ? parseInt(id) : Date.now(),
+                company: document.getElementById('company').value.trim() || '未命名方案',
+                sales: document.getElementById('sales').value.trim(),
+                contact: document.getElementById('contact').value.trim(),
+                items: items,
+                remarks: quill.root.innerHTML
+            };
+            
+            // XSS Prevention for plain text fields
+            plan.company = DOMPurify.sanitize(plan.company, { USE_PROFILES: { html: false } });
+            plan.sales = DOMPurify.sanitize(plan.sales, { USE_PROFILES: { html: false } });
+            plan.contact = DOMPurify.sanitize(plan.contact, { USE_PROFILES: { html: false } });
+
+            let plans = getPlans();
+            if (id) {
+                // Update
+                const index = plans.findIndex(p => p.id === parseInt(id));
+                if (index !== -1) {
+                    plans[index] = plan;
+                }
+                alert(translations[currentLang].planUpdated);
+            } else {
+                // Add
+                plans.push(plan);
+                alert(translations[currentLang].planSaved);
+            }
+            savePlans(plans);
             form.reset();
             planIdInput.value = '';
             quill.root.innerHTML = '';
-            state.editingId = null;
-            renderInsuranceInputs();
-            document.querySelector('h2 span').textContent = '添加/编辑方案';
-        }
-
-        // 导出图片
-        async function exportImage(element, filename) {
-            const canvas = await html2canvas(element, { 
-                useCORS: true,
-                scale: 2,
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
-            });
-            
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
-
-        // 显示导出模态框
-        function showExportModal() {
-            // 克隆对比视图
-            const comparisonView = document.querySelector('.comparison-view');
-            if (comparisonView) {
-                const clone = comparisonView.cloneNode(true);
-                clone.classList.remove('comparison-view');
-                clone.classList.add('export-comparison');
-                exportPreview.innerHTML = '';
-                exportPreview.appendChild(clone);
-            }
-            
-            exportModal.classList.remove('hidden');
-        }
-
-        // 事件监听器
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = state.editingId || Date.now();
-            const orderedItems = {};
-            
-            document.querySelectorAll('#insurance-items-container .insurance-item').forEach(itemEl => {
-                const key = itemEl.dataset.key;
-                orderedItems[key] = {
-                    coverage: parseFloat(document.getElementById(`coverage-${key}`).value) || 0,
-                    premium: parseFloat(document.getElementById(`premium-${key}`).value) || 0,
-                };
-            });
-
-            const plan = {
-                id,
-                title: planTitleInput.value,
-                company: document.getElementById('insurance-company').value,
-                salesperson: document.getElementById('salesperson').value,
-                contact: document.getElementById('contact-info').value,
-                items: orderedItems,
-                remarks: quill.root.innerHTML,
-            };
-
-            if (state.editingId) {
-                const index = state.plans.findIndex(p => p.id === state.editingId);
-                state.plans[index] = plan;
-            } else {
-                state.plans.push(plan);
-            }
-            
-            persistData();
+            document.querySelector('.submit-btn').textContent = translations[currentLang].addPlanBtn;
             renderPlans();
-            clearForm();
-            alert('方案已保存！');
         });
 
-        quill.root.addEventListener('keydown', (e) => {
+        // --- Actions (Edit, Delete, Export) ---
+        plansContainer.addEventListener('click', (e) => {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const id = parseInt(target.dataset.id);
+
+            if (target.classList.contains('edit-btn')) {
+                const plans = getPlans();
+                const planToEdit = plans.find(p => p.id === id);
+                if (planToEdit) {
+                    planIdInput.value = planToEdit.id;
+                    document.getElementById('company').value = planToEdit.company;
+                    document.getElementById('sales').value = planToEdit.sales;
+                    document.getElementById('contact').value = planToEdit.contact;
+                    for (const key in planToEdit.items) {
+                        document.getElementById(`${key}-coverage`).value = planToEdit.items[key].coverage;
+                        document.getElementById(`${key}-premium`).value = planToEdit.items[key].premium;
+                    }
+                    quill.root.innerHTML = planToEdit.remarks;
+                    document.querySelector('.submit-btn').textContent = translations[currentLang].updatePlanBtn;
+                    window.scrollTo(0, 0);
+                }
+            } else if (target.classList.contains('delete-btn')) {
+                showModal(() => {
+                    let plans = getPlans();
+                    plans = plans.filter(p => p.id !== id);
+                    savePlans(plans);
+                    alert(translations[currentLang].planDeleted);
+                    renderPlans();
+                });
+            } else if (target.classList.contains('export-btn')) {
+                exportAsImage(`plan-${id}`);
+            }
+        });
+
+        // --- Image Export ---
+        const exportAsImage = (elementId, filename = 'insurance-plan.png') => {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            // Add a class for specific export styling and remove checkbox from output
+            element.classList.add('export-mode');
+            const checkbox = element.querySelector('.export-checkbox');
+            if (checkbox) checkbox.style.display = 'none';
+
+            html2canvas(element, {
+                scale: 2, // Higher resolution
+                useCORS: true,
+                backgroundColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e1e1e' : '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Cleanup
+                element.classList.remove('export-mode');
+                if (checkbox) checkbox.style.display = 'inline-block';
+            });
+        };
+        
+        globalExportBtn.addEventListener('click', () => {
+            const selectedIds = Array.from(document.querySelectorAll('.export-checkbox:checked')).map(cb => cb.dataset.planId);
+            if(selectedIds.length === 0) {
+                alert('Please select at least one plan to export.');
+                return;
+            }
+
+            // Create a temporary container for selected cards
+            const exportContainer = document.createElement('div');
+            exportContainer.style.position = 'absolute';
+            exportContainer.style.left = '-9999px'; // Hide it off-screen
+            exportContainer.style.display = 'flex';
+            exportContainer.style.gap = '20px';
+            exportContainer.style.padding = '20px';
+            exportContainer.style.background = document.documentElement.getAttribute('data-theme') === 'dark' ? '#121212' : '#f8f9fa';
+
+            selectedIds.forEach(id => {
+                const originalCard = document.getElementById(`plan-${id}`);
+                const clonedCard = originalCard.cloneNode(true);
+                clonedCard.id = `clone-${id}`;
+                clonedCard.style.margin = '0'; // Reset margin
+                const checkbox = clonedCard.querySelector('.export-checkbox');
+                if (checkbox) checkbox.style.display = 'none';
+                exportContainer.appendChild(clonedCard);
+            });
+            document.body.appendChild(exportContainer);
+
+            // Temporarily set a fixed width for consistent rendering, especially on mobile
+             const cards = exportContainer.querySelectorAll('.plan-card');
+             const totalWidth = Array.from(cards).reduce((acc, card) => acc + card.offsetWidth + 20, 0);
+             exportContainer.style.width = `${totalWidth}px`;
+
+            html2canvas(exportContainer, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#121212' : '#f8f9fa'
+            }).then(canvas => {
+                 const link = document.createElement('a');
+                link.download = `insurance-comparison-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                document.body.removeChild(exportContainer);
+            }).catch(err => {
+                console.error('Export failed:', err);
+                document.body.removeChild(exportContainer);
+            });
+        });
+
+        // --- Event Listeners for Toolbar ---
+        searchInput.addEventListener('input', renderPlans);
+        sortSelect.addEventListener('change', renderPlans);
+
+        // --- Keyboard Shortcut (Ctrl+Enter to submit) ---
+        form.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
             }
         });
 
-        clearFormBtn.addEventListener('click', () => {
-            clearForm();
-            alert('表单已清空。');
-        });
-
-        sortBySelect.addEventListener('change', renderPlans);
-        
-        // 布局切换事件
-        horizontalLayoutBtn.addEventListener('click', () => {
-            state.layout = 'horizontal';
-            localStorage.setItem('layout', 'horizontal');
-            initLayout();
-            renderPlans();
-        });
-        
-        verticalLayoutBtn.addEventListener('click', () => {
-            state.layout = 'vertical';
-            localStorage.setItem('layout', 'vertical');
-            initLayout();
-            renderPlans();
-        });
-        
-        // 对比视图事件
-        comparisonViewBtn.addEventListener('click', () => {
-            if (state.plans.length === 0) {
-                alert('请先添加方案进行对比');
-                return;
-            }
-            
-            state.comparisonMode = true;
-            renderComparisonView();
-        });
-        
-        // 导出事件
-        exportAllBtn.addEventListener('click', () => {
-            if (state.plans.length === 0) {
-                alert('请先添加方案');
-                return;
-            }
-            
-            showExportModal();
-        });
-        
-        // 关闭导出模态框
-        closeExportModal.addEventListener('click', () => {
-            exportModal.classList.add('hidden');
-        });
-        
-        // 导出PNG
-        exportPngBtn.addEventListener('click', async () => {
-            const element = exportPreview;
-            const canvas = await html2canvas(element, { 
-                useCORS: true,
-                scale: 2,
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
-            });
-            
-            const link = document.createElement('a');
-            link.download = '车险方案对比图.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-        
-        // 导出PDF
-        exportPdfBtn.addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const element = exportPreview;
-            const canvas = await html2canvas(element, { 
-                useCORS: true,
-                scale: 2,
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#f1f5f9'
-            });
-            
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('l', 'mm', 'a4');
-            const imgWidth = pdf.internal.pageSize.getWidth();
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            
-            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-            pdf.save('车险方案对比图.pdf');
-        });
-
-        // 主题切换
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-            renderPlans();
-        });
-        
-        // 语言切换
-        langSwitcher.addEventListener('change', (e) => {
-            state.currentLanguage = e.target.value;
-            localStorage.setItem('language', e.target.value);
-            renderPlans();
-        });
-
-        // 事件委托：处理卡片上的按钮点击
-        document.querySelector('.plans-container').addEventListener('click', (e) => {
-            const target = e.target.closest('button');
-            if (!target) return;
-
-            const id = Number(target.dataset.id);
-
-            // 编辑
-            if (target.classList.contains('edit-btn')) {
-                const plan = state.plans.find(p => p.id === id);
-                state.editingId = id;
-                planIdInput.value = id;
-                planTitleInput.value = plan.title;
-                document.getElementById('insurance-company').value = plan.company;
-                document.getElementById('salesperson').value = plan.salesperson;
-                document.getElementById('contact-info').value = plan.contact;
-                quill.root.innerHTML = plan.remarks;
-                renderInsuranceInputs(plan);
-                document.querySelector('h2 span').textContent = '编辑方案';
-                window.scrollTo(0, 0);
-            }
-            // 删除
-            else if (target.classList.contains('delete-btn')) {
-                if (confirm('您确定要删除这个方案吗？此操作无法撤销。')) {
-                    state.plans = state.plans.filter(p => p.id !== id);
-                    persistData();
-                    renderPlans();
-                }
-            }
-            // 导出单个图片
-            else if (target.classList.contains('export-btn')) {
-                const cardElement = document.getElementById(`plan-card-${id}`);
-                const planTitle = state.plans.find(p => p.id === id).title;
-                exportImage(cardElement, `${planTitle}.png`);
-            }
-        });
-
-        // 初始化
-        function init() {
-            // 设置初始主题
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-            
-            // 设置初始语言
-            langSwitcher.value = state.currentLanguage;
-            
-            // 初始化布局
-            initLayout();
-            
-            // 首次渲染
-            renderInsuranceInputs();
-            renderPlans();
-        }
+        // --- Initial Load ---
+        const init = () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            setLanguage(currentLang); // This will call generateInsuranceFields and renderPlans
+        };
 
         init();
     });
