@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人投资看板 - 专业版</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        /* CSS 变量定义 */
+        :root {
+            --bg-color: #f4f7fa;
+            --card-bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --primary-color: #007bff;
+            --primary-hover-color: #0056b3;
+            --green-color: #28a745;
+            --red-color: #dc3545;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --border-color: #444444;
+            --primary-color: #3b82f6;
+            --primary-hover-color: #2563eb;
+            --shadow-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 全局样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* 头部控制区 */
+        .header-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        button, input, select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover-color);
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* 总览卡片 */
+        .summary-card {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .summary-kpis { display: flex; flex-direction: column; justify-content: center; gap: 15px; }
+        .kpi-item { text-align: center; }
+        .kpi-item .label { font-size: 0.9em; color: #888; margin-bottom: 5px; }
+        .kpi-item .value { font-size: 1.8em; font-weight: bold; }
+        .summary-chart-container { min-height: 200px; }
+
+
+        /* 资产卡片网格 */
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        /* 单个资产卡片 */
+        .asset-card {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .asset-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px var(--shadow-color);
+        }
+
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .asset-header h3 { margin: 0; font-size: 1.2em; }
+        .asset-header .asset-code { font-size: 0.9em; color: #888; }
+        .asset-type-badge { font-size: 0.8em; padding: 3px 8px; border-radius: 12px; background-color: var(--primary-color); color: white; }
+        .asset-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em; }
+        .summary-item { padding: 8px; background-color: var(--bg-color); border-radius: 4px; }
+        .summary-item strong { display: block; color: #888; font-weight: normal; margin-bottom: 4px; }
+        .profit { color: var(--green-color); font-weight: bold; }
+        .loss { color: var(--red-color); font-weight: bold; }
+        .chart-container { position: relative; height: 200px; }
+        .transactions-section h4 { margin-bottom: 10px; }
+        .transactions-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        .transactions-table th, .transactions-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .transactions-table th { cursor: pointer; }
+        .transactions-table .buy, .transactions-table .deposit { color: var(--green-color); }
+        .transactions-table .sell, .transactions-table .withdrawal { color: var(--red-color); }
+
+        /* 模态框样式 */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--card-bg-color); padding: 25px; border-radius: 8px;
+            width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-button { cursor: pointer; font-size: 1.5rem; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group .rich-text-editor { width: 100%; box-sizing: border-box; padding: 8px 12px; }
+
+        /* 富文本编辑器 */
+        .rich-text-editor { min-height: 80px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; }
+        .editor-toolbar { margin-bottom: 5px; }
+        .editor-toolbar button { background: none; border: 1px solid var(--border-color); color: var(--text-color); padding: 4px 8px; font-size: 12px; }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header-controls { flex-direction: column; align-items: stretch; }
+            .control-group { flex-direction: column; align-items: stretch; }
+            .asset-summary { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; padding: 20px; }
+        }
+
+        /* 导出图片样式优化 */
+        .export-image {
+            --bg-color: #ffffff; --card-bg-color: #ffffff; --text-color: #111111;
+            --border-color: #dddddd; background-color: var(--bg-color); padding: 20px;
+        }
+        .export-image .summary-item strong, .export-image .summary-item span { white-space: nowrap; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-controls">
+            <h2 data-i18n-key="title" style="margin:0; flex-grow: 1;">个人投资看板</h2>
+             <div class="control-group">
+                <button id="addAssetBtn" data-i18n-key="addAsset">添加持仓</button>
+                <button id="addCashFlowBtn" data-i18n-key="addCashFlow">记录资金</button>
+                <button id="exportImageBtn" data-i18n-key="exportImages">导出对比图</button>
+            </div>
+            <div class="control-group">
+                <button id="importJsonBtn" data-i18n-key="importData">导入JSON</button>
+                <input type="file" id="importFileJson" accept=".json" style="display:none;">
+                <button id="exportJsonBtn" data-i18n-key="exportData">导出JSON</button>
+                <button id="importExcelBtn" data-i18n-key="importExcel">导入Excel</button>
+                <input type="file" id="importFileExcel" accept=".xlsx, .xls" style="display:none;">
+                <button id="exportExcelBtn" data-i18n-key="exportExcel">导出Excel</button>
+            </div>
+            <div class="control-group">
+                 <select id="themeSwitcher">
+                    <option value="light" data-i18n-key="themeLight">明亮主题</option>
+                    <option value="dark" data-i18n-key="themeDark">黑暗主题</option>
+                </select>
+                <select id="languageSwitcher">
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="summaryContainer"></div>
+
+        <div class="assets-grid" id="assetsGrid">
+            </div>
+    </div>
+
+    <div id="assetModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" data-i18n-key="addTransactionTitle">添加交易记录</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <form id="assetForm">
+                <div class="form-group">
+                    <label for="assetCode" data-i18n-key="assetCodeLabel">代码</label>
+                    <input type="text" id="assetCode" required placeholder="例如：600519 或 300750">
+                </div>
+                <div class="form-group">
+                    <label for="assetName" data-i18n-key="assetNameLabel">名称</label>
+                    <input type="text" id="assetName" placeholder="例如：贵州茅台">
+                </div>
+                <div class="form-group">
+                    <label for="assetType" data-i18n-key="assetTypeLabel">类型</label>
+                    <select id="assetType" required>
+                        <option value="main_board" data-i18n-key="typeMainBoard">主板</option>
+                        <option value="growth_enterprise" data-i18n-key="typeGrowthEnterprise">创业板</option>
+                        <option value="star_market" data-i18n-key="typeStarMarket">科创板</option>
+                        <option value="bse" data-i18n-key="typeBse">北交所</option>
+                        <option value="fund" data-i18n-key="typeFund">基金</option>
+                        <option value="convertible_bond" data-i18n-key="typeConvertibleBond">可转债</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="txType" data-i18n-key="txTypeLabel">操作类型</label>
+                    <select id="txType" required>
+                        <option value="buy" data-i18n-key="txTypeBuy">买入</option>
+                        <option value="sell" data-i18n-key="txTypeSell">卖出</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="txDate" data-i18n-key="txDateLabel">日期</label><input type="date" id="txDate" required></div>
+                <div class="form-group"><label for="txPrice" data-i18n-key="txPriceLabel">价格</label><input type="number" id="txPrice" required step="any" placeholder="成交单价"></div>
+                <div class="form-group"><label for="txQuantity" data-i18n-key="txQuantityLabel">数量</label><input type="number" id="txQuantity" required step="any" placeholder="成交数量/份额"></div>
+                <div class="form-group">
+                    <label data-i18n-key="txNotesLabel">备注</label>
+                    <div class="editor-toolbar"><button type="button" class="editor-btn" data-command="bold">B</button><button type="button" class="editor-btn" data-command="italic">I</button><button type="button" class="editor-btn" data-command="insertUnorderedList">UL</button></div>
+                    <div id="txNotes" class="rich-text-editor" contenteditable="true"></div>
+                </div>
+                <button type="submit" style="width:100%;" data-i18n-key="submitBtn">提交 (Ctrl+Enter)</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="cashFlowModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n-key="addCashFlowTitle">记录资金流水</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <form id="cashFlowForm">
+                <div class="form-group">
+                    <label for="cfType" data-i18n-key="cfTypeLabel">资金类型</label>
+                    <select id="cfType" required>
+                        <option value="deposit" data-i18n-key="cfTypeDeposit">存入 (充值)</option>
+                        <option value="withdrawal" data-i18n-key="cfTypeWithdrawal">取出 (到银行卡)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="cfDate" data-i18n-key="cfDateLabel">日期</label><input type="date" id="cfDate" required></div>
+                <div class="form-group"><label for="cfAmount" data-i18n-key="cfAmountLabel">金额</label><input type="number" id="cfAmount" required step="any" placeholder="资金数额"></div>
+                <div class="form-group"><label for="cfNotes" data-i18n-key="cfNotesLabel">备注</label><input type="text" id="cfNotes" placeholder="例如：工资转入"></div>
+                <button type="submit" style="width:100%;" data-i18n-key="submitBtn">提交 (Ctrl+Enter)</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 全局状态
+        let state = {
+            assets: [],
+            cashFlows: [],
+            theme: 'light',
+            language: 'zh-CN',
+        };
+
+        const chartInstances = {};
+
+        // 国际化(i18n)字符串
+        const translations = {
+            'en': {
+                title: "Investment Dashboard", addAsset: "Add Holding", addCashFlow: "Record Fund", exportImages: "Export Images",
+                importData: "Import JSON", exportData: "Export JSON", importExcel: "Import Excel", exportExcel: "Export Excel",
+                themeLight: "Light Theme", themeDark: "Dark Theme", addTransactionTitle: "Add Transaction", assetCodeLabel: "Code",
+                assetNameLabel: "Name", assetTypeLabel: "Type",
+                typeMainBoard: "Main Board", typeGrowthEnterprise: "ChiNext", typeStarMarket: "STAR Market", typeBse: "BSE", typeFund: "Fund", typeConvertibleBond: "Convertible Bond",
+                txTypeLabel: "Action", txTypeBuy: "Buy", txTypeSell: "Sell", txDateLabel: "Date", txPriceLabel: "Price", txQuantityLabel: "Quantity",
+                txNotesLabel: "Notes", submitBtn: "Submit (Ctrl+Enter)", avgCost: "Avg. Cost", holdings: "Holdings", totalCost: "Total Cost",
+                marketValue: "Market Value", profitLoss: "P/L", roi: "ROI", chartTitle: "P/L and Cost Trend", addTxBtn: "Add Tx",
+                exportImgBtn: "Export Image", deleteAssetBtn: "Delete Asset", txHistoryTitle: "Transaction History (Last 10)", colDate: "Date", colAction: "Action",
+                colPrice: "Price", colQty: "Quantity", deleteConfirm: "Are you sure to delete this asset and all its transactions?",
+                dataImported: "Data imported successfully!", dataExported: "Data exported!", noData: "No data. Click 'Add Holding' to start.",
+                addCashFlowTitle: "Record Fund Flow", cfTypeLabel: "Flow Type", cfTypeDeposit: "Deposit", cfTypeWithdrawal: "Withdrawal",
+                cfDateLabel: "Date", cfAmountLabel: "Amount", cfNotesLabel: "Notes", summaryTitle: "Investment Overview",
+                totalAssets: "Total Assets", netInvestment: "Net Investment", actualTotalPL: "Actual Total P/L",
+                netInvestmentTrend: "Net Investment Trend", recentCashFlows: "Recent Fund Flows",
+            },
+            'zh-CN': {
+                title: "个人投资看板", addAsset: "添加持仓", addCashFlow: "记录资金", exportImages: "导出对比图",
+                importData: "导入JSON", exportData: "导出JSON", importExcel: "导入Excel", exportExcel: "导出Excel",
+                themeLight: "明亮主题", themeDark: "黑暗主题", addTransactionTitle: "添加交易记录", assetCodeLabel: "代码",
+                assetNameLabel: "名称", assetTypeLabel: "类型",
+                typeMainBoard: "主板", typeGrowthEnterprise: "创业板", typeStarMarket: "科创板", typeBse: "北交所", typeFund: "基金", typeConvertibleBond: "可转债",
+                txTypeLabel: "操作类型", txTypeBuy: "买入", txTypeSell: "卖出", txDateLabel: "日期", txPriceLabel: "价格", txQuantityLabel: "数量",
+                txNotesLabel: "备注", submitBtn: "提交 (Ctrl+Enter)", avgCost: "平均成本", holdings: "持仓数量", totalCost: "总成本",
+                marketValue: "当前市值", profitLoss: "浮动盈亏", roi: "回报率", chartTitle: "盈亏与成本趋势", addTxBtn: "添加交易",
+                exportImgBtn: "导出图片", deleteAssetBtn: "删除资产", txHistoryTitle: "交易历史（最近10条）", colDate: "日期", colAction: "操作",
+                colPrice: "价格", colQty: "数量", deleteConfirm: "确定要删除此资产及其所有交易记录吗？",
+                dataImported: "数据导入成功！", dataExported: "数据已导出！", noData: "暂无数据，点击“添加持仓”开始记录吧。",
+                addCashFlowTitle: "记录资金流水", cfTypeLabel: "资金类型", cfTypeDeposit: "存入 (充值)", cfTypeWithdrawal: "取出 (到银行卡)",
+                cfDateLabel: "日期", cfAmountLabel: "金额", cfNotesLabel: "备注", summaryTitle: "投资总览",
+                totalAssets: "总资产", netInvestment: "总投入", actualTotalPL: "实际总盈亏",
+                netInvestmentTrend: "净投入趋势", recentCashFlows: "近期资金流水",
+            },
+        };
+
+        // DOM 元素
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => document.querySelectorAll(selector);
+
+        const elements = {
+            assetsGrid: $('#assetsGrid'),
+            summaryContainer: $('#summaryContainer'),
+            assetModal: $('#assetModal'),
+            cashFlowModal: $('#cashFlowModal'),
+            addAssetBtn: $('#addAssetBtn'),
+            addCashFlowBtn: $('#addCashFlowBtn'),
+            exportImageBtn: $('#exportImageBtn'),
+            importJsonBtn: $('#importJsonBtn'),
+            exportJsonBtn: $('#exportJsonBtn'),
+            importExcelBtn: $('#importExcelBtn'),
+            exportExcelBtn: $('#exportExcelBtn'),
+            importFileJson: $('#importFileJson'),
+            importFileExcel: $('#importFileExcel'),
+            themeSwitcher: $('#themeSwitcher'),
+            languageSwitcher: $('#languageSwitcher'),
+        };
+
+        // --- 核心业务逻辑 ---
+        function calculateAssetStats(asset) {
+            let holdings = 0, totalCost = 0, realizedProfit = 0, tempHoldings = 0, tempCost = 0, history = [];
+            const sortedTransactions = [...asset.transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const lastPrice = sortedTransactions.length > 0 ? parseFloat(sortedTransactions[sortedTransactions.length - 1].price) : 0;
+            asset.lastPrice = lastPrice; // Update last price for global calculations
+
+            sortedTransactions.forEach(tx => {
+                const txQuantity = parseFloat(tx.quantity), txPrice = parseFloat(tx.price);
+                if (tx.type === 'buy') {
+                    tempHoldings += txQuantity;
+                    tempCost += txQuantity * txPrice;
+                } else {
+                    if (tempHoldings > 0) {
+                        const costOfSold = (tempCost / tempHoldings) * Math.min(txQuantity, tempHoldings);
+                        realizedProfit += (txQuantity * txPrice) - costOfSold;
+                        tempCost -= costOfSold;
+                    }
+                    tempHoldings -= txQuantity;
+                }
+                tempHoldings = Math.max(0, tempHoldings);
+                tempCost = tempHoldings > 0 ? tempCost : 0;
+
+                const currentMarketValue = tempHoldings * asset.lastPrice;
+                const floatingPL = tempHoldings > 0 ? currentMarketValue - tempCost : 0;
+
+                history.push({
+                    date: tx.date,
+                    avgCost: tempHoldings > 0 ? tempCost / tempHoldings : 0,
+                    totalProfit: realizedProfit + floatingPL,
+                });
+            });
+
+            holdings = tempHoldings; totalCost = tempCost;
+            const avgCost = holdings > 0 ? totalCost / holdings : 0;
+            const marketValue = holdings * lastPrice;
+            const floatingProfitLoss = holdings > 0 ? marketValue - totalCost : 0;
+            const totalProfitLoss = floatingProfitLoss + realizedProfit;
+            const roi = totalCost > 0 ? (floatingProfitLoss / totalCost) * 100 : 0;
+            return { holdings, totalCost, avgCost, marketValue, floatingProfitLoss, totalProfitLoss, roi, history };
+        }
+
+        // --- UI 渲染 ---
+        function render() {
+            saveState();
+            renderSummaryCard();
+            elements.assetsGrid.innerHTML = '';
+            if (state.assets.length === 0) {
+                elements.assetsGrid.innerHTML = `<p data-i18n-key="noData">${getTranslation('noData')}</p>`;
+            } else {
+                state.assets.forEach(asset => {
+                    const stats = calculateAssetStats(asset);
+                    const card = createAssetCard(asset, stats);
+                    elements.assetsGrid.appendChild(card);
+                    renderAssetChart(asset, stats);
+                    attachCardEventListeners(card, asset);
+                });
+            }
+            applyLanguage(state.language);
+        }
+
+        function createAssetCard(asset, stats) {
+            const card = document.createElement('div');
+            card.className = 'asset-card'; card.dataset.id = asset.id;
+            const profitLossClass = stats.totalProfitLoss >= 0 ? 'profit' : 'loss';
+            const roiClass = stats.roi >= 0 ? 'profit' : 'loss';
+            const typeKey = 'type' + asset.type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+            card.innerHTML = `
+                <div class="asset-header">
+                    <div><h3>${sanitize(asset.name)} <span class="asset-code">(${sanitize(asset.code)})</span></h3><span class="asset-type-badge" data-i18n-key="${typeKey}"></span></div>
+                    <input type="checkbox" class="export-checkbox" title="Select for comparison export">
+                </div>
+                <div class="asset-summary">
+                    <div class="summary-item"><strong data-i18n-key="avgCost"></strong><span>${stats.avgCost.toFixed(3)}</span></div>
+                    <div class="summary-item"><strong data-i18n-key="holdings"></strong><span>${stats.holdings.toFixed(2)}</span></div>
+                    <div class="summary-item"><strong data-i18n-key="totalCost"></strong><span>${stats.totalCost.toFixed(2)}</span></div>
+                    <div class="summary-item"><strong data-i18n-key="marketValue"></strong><span>${stats.marketValue.toFixed(2)}</span></div>
+                    <div class="summary-item"><strong data-i18n-key="profitLoss"></strong><span class="${profitLossClass}">${stats.totalProfitLoss.toFixed(2)}</span></div>
+                    <div class="summary-item"><strong data-i18n-key="roi"></strong><span class="${roiClass}">${stats.roi.toFixed(2)}%</span></div>
+                </div>
+                <div class="chart-container"><canvas id="chart-${asset.id}"></canvas></div>
+                <div class="transactions-section">
+                    <h4 data-i18n-key="txHistoryTitle"></h4>
+                    <table class="transactions-table">
+                        <thead><tr><th data-i18n-key="colDate"></th><th data-i18n-key="colAction"></th><th data-i18n-key="colPrice"></th><th data-i18n-key="colQty"></th></tr></thead>
+                        <tbody>${asset.transactions.slice(-10).reverse().map(tx => `
+                            <tr><td>${tx.date}</td><td class="${tx.type}" data-i18n-key="txType${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}"></td><td>${parseFloat(tx.price).toFixed(3)}</td><td>${parseFloat(tx.quantity).toFixed(2)}</td></tr>
+                        `).join('')}</tbody>
+                    </table>
+                </div>
+                <div class="card-actions" style="display:flex; gap:10px; margin-top: auto;">
+                    <button class="add-tx-btn" data-i18n-key="addTxBtn"></button>
+                    <button class="export-single-btn" data-i18n-key="exportImgBtn"></button>
+                    <button class="delete-asset-btn" data-i18n-key="deleteAssetBtn" style="background-color: var(--red-color);"></button>
+                </div>`;
+            return card;
+        }
+
+        function renderSummaryCard() {
+            let totalAssetsValue = 0;
+            state.assets.forEach(asset => {
+                const stats = calculateAssetStats(asset);
+                totalAssetsValue += stats.marketValue;
+            });
+
+            let netInvestment = 0;
+            let cfHistory = [];
+            const sortedCashFlows = [...state.cashFlows].sort((a,b) => new Date(a.date) - new Date(b.date));
+            sortedCashFlows.forEach(cf => {
+                const amount = parseFloat(cf.amount);
+                netInvestment += (cf.type === 'deposit' ? amount : -amount);
+                cfHistory.push({ date: cf.date, netInvestment });
+            });
+
+            const actualTotalPL = (totalAssetsValue || 0) - netInvestment;
+            const plClass = actualTotalPL >= 0 ? 'profit' : 'loss';
+
+            elements.summaryContainer.innerHTML = `
+            <div class="summary-card">
+                <div class="summary-kpis">
+                    <h3 data-i18n-key="summaryTitle"></h3>
+                    <div class="kpi-item"><div class="label" data-i18n-key="totalAssets"></div><div class="value">${totalAssetsValue.toFixed(2)}</div></div>
+                    <div class="kpi-item"><div class="label" data-i18n-key="netInvestment"></div><div class="value">${netInvestment.toFixed(2)}</div></div>
+                    <div class="kpi-item"><div class="label" data-i18n-key="actualTotalPL"></div><div class="value ${plClass}">${actualTotalPL.toFixed(2)}</div></div>
+                </div>
+                <div class="summary-chart-container"><canvas id="cashFlowChart"></canvas></div>
+                <div class="transactions-section">
+                    <h4 data-i18n-key="recentCashFlows"></h4>
+                    <table class="transactions-table">
+                        <tbody>${sortedCashFlows.slice(-5).reverse().map(cf => `
+                            <tr><td>${cf.date}</td><td class="${cf.type}" data-i18n-key="cfType${cf.type.charAt(0).toUpperCase() + cf.type.slice(1)}"></td><td>${parseFloat(cf.amount).toFixed(2)}</td><td>${sanitize(cf.notes)}</td></tr>
+                        `).join('')}</tbody>
+                    </table>
+                </div>
+            </div>`;
+            renderCashFlowChart(cfHistory);
+        }
+
+        function renderAssetChart(asset, stats) {
+            const ctx = document.getElementById(`chart-${asset.id}`).getContext('2d');
+            if (chartInstances[asset.id]) {
+                chartInstances[asset.id].destroy();
+            }
+
+            const labels = stats.history.map(h => h.date);
+            const profitData = stats.history.map(h => h.totalProfit);
+            const costData = stats.history.map(h => h.avgCost);
+
+            chartInstances[asset.id] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: getTranslation('profitLoss'),
+                        data: profitData,
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        fill: false,
+                        yAxisID: 'y-profit',
+                    }, {
+                        label: getTranslation('avgCost'),
+                        data: costData,
+                        borderColor: 'rgba(220, 53, 69, 1)',
+                        backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                        fill: false,
+                        yAxisID: 'y-cost',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        'y-profit': {
+                            type: 'linear',
+                            position: 'left',
+                            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') }
+                        },
+                        'y-cost': {
+                            type: 'linear',
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') }
+                        },
+                        x: {
+                            ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                        title: { display: true, text: getTranslation('chartTitle'), color: getComputedStyle(document.body).getPropertyValue('--text-color')}
+                    }
+                }
+            });
+        }
+
+        function renderCashFlowChart(history) {
+            const ctx = document.getElementById('cashFlowChart')?.getContext('2d');
+            if(!ctx) return;
+            if (chartInstances.cashFlow) chartInstances.cashFlow.destroy();
+            chartInstances.cashFlow = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: history.map(h => h.date),
+                    datasets: [{
+                        label: getTranslation('netInvestment'), data: history.map(h => h.netInvestment),
+                        borderColor: 'rgba(0, 123, 255, 1)', backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        fill: true, tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { y: { ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                              x: { ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } } },
+                    plugins: { legend: { display: false }, title: { display: true, text: getTranslation('netInvestmentTrend'), color: getComputedStyle(document.body).getPropertyValue('--text-color')} }
+                }
+            });
+        }
+
+        // --- 事件处理 ---
+        function attachCardEventListeners(card, asset) {
+            card.querySelector('.add-tx-btn').addEventListener('click', () => openModal('asset', asset.id));
+            card.querySelector('.delete-asset-btn').addEventListener('click', () => deleteAsset(asset.id));
+            card.querySelector('.export-single-btn').addEventListener('click', () => exportCardAsImage(card));
+        }
+
+        elements.addAssetBtn.addEventListener('click', () => openModal('asset'));
+        elements.addCashFlowBtn.addEventListener('click', () => openModal('cashFlow'));
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                if (elements.assetModal.style.display === 'flex') {
+                    e.preventDefault();
+                    $('#assetForm').requestSubmit();
+                } else if (elements.cashFlowModal.style.display === 'flex') {
+                    e.preventDefault();
+                    $('#cashFlowForm').requestSubmit();
+                }
+            }
+        });
+
+        function openModal(type, assetId = null) {
+            if (type === 'asset') {
+                const form = $('#assetForm'); form.reset();
+                $('#txNotes').innerHTML = '';
+                if (assetId) {
+                    const asset = state.assets.find(a => a.id === assetId);
+                    $('#assetCode').value = asset.code; $('#assetName').value = asset.name; $('#assetType').value = asset.type;
+                    $('#assetCode').readOnly = true; $('#assetName').readOnly = true; $('#assetType').disabled = true;
+                } else {
+                    $('#assetCode').readOnly = false; $('#assetName').readOnly = false; $('#assetType').disabled = false;
+                }
+                $('#txDate').valueAsDate = new Date();
+                elements.assetModal.style.display = 'flex';
+                $('#assetCode').focus();
+            } else if (type === 'cashFlow') {
+                const form = $('#cashFlowForm'); form.reset();
+                $('#cfDate').valueAsDate = new Date();
+                elements.cashFlowModal.style.display = 'flex';
+                $('#cfAmount').focus();
+            }
+        }
+
+        function closeModal() {
+            elements.assetModal.style.display = 'none';
+            elements.cashFlowModal.style.display = 'none';
+        }
+
+        $$('.close-button').forEach(btn => btn.addEventListener('click', closeModal));
+        window.addEventListener('click', (e) => {
+            if (e.target == elements.assetModal || e.target == elements.cashFlowModal) closeModal();
+        });
+
+        $('#assetForm').addEventListener('submit', handleAssetFormSubmit);
+        $('#cashFlowForm').addEventListener('submit', handleCashFlowFormSubmit);
+
+        function handleAssetFormSubmit(e) {
+            e.preventDefault();
+            const assetCode = $('#assetCode').value.trim();
+            let targetAsset = state.assets.find(a => a.code === assetCode);
+            if (!targetAsset) {
+                targetAsset = { id: Date.now().toString(), code: assetCode, name: $('#assetName').value.trim() || assetCode, type: $('#assetType').value, transactions: [] };
+                state.assets.push(targetAsset);
+            }
+            targetAsset.transactions.push({
+                id: `tx-${Date.now()}`, type: $('#txType').value, date: $('#txDate').value,
+                price: $('#txPrice').value, quantity: $('#txQuantity').value, notes: $('#txNotes').innerHTML,
+            });
+            closeModal(); render();
+        }
+
+        function handleCashFlowFormSubmit(e) {
+            e.preventDefault();
+            state.cashFlows.push({
+                id: `cf-${Date.now()}`, type: $('#cfType').value, date: $('#cfDate').value,
+                amount: $('#cfAmount').value, notes: $('#cfNotes').value.trim(),
+            });
+            closeModal(); render();
+        }
+
+        function deleteAsset(assetId) {
+            if (confirm(getTranslation('deleteConfirm'))) {
+                state.assets = state.assets.filter(a => a.id !== assetId);
+                render();
+            }
+        }
+
+        $$('.editor-btn').forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault(); document.execCommand(e.target.dataset.command, false, null);
+        }));
+
+        elements.themeSwitcher.addEventListener('change', (e) => { state.theme = e.target.value; applyTheme(); render(); });
+        elements.languageSwitcher.addEventListener('change', (e) => { state.language = e.target.value; applyLanguage(); });
+        function applyTheme() { document.documentElement.setAttribute('data-theme', state.theme); elements.themeSwitcher.value = state.theme; }
+        function applyLanguage() {
+            const trans = translations[state.language] || translations['zh-CN'];
+            document.documentElement.lang = state.language;
+            $$('[data-i18n-key]').forEach(el => {
+                const key = el.dataset.i18nKey; if (trans[key]) el.textContent = trans[key];
+            });
+            elements.languageSwitcher.value = state.language; saveState();
+        }
+        function getTranslation(key) { return (translations[state.language] && translations[state.language][key]) || translations['zh-CN'][key] || key; }
+
+        elements.importJsonBtn.addEventListener('click', () => elements.importFileJson.click());
+        elements.importFileJson.addEventListener('change', (e) => handleFileImport(e, 'json'));
+        elements.exportJsonBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(state, null, 2);
+            downloadFile(dataStr, `investment-backup-${new Date().toISOString().slice(0,10)}.json`, 'application/json');
+        });
+
+        elements.importExcelBtn.addEventListener('click', () => elements.importFileExcel.click());
+        elements.importFileExcel.addEventListener('change', (e) => handleFileImport(e, 'excel'));
+        elements.exportExcelBtn.addEventListener('click', () => {
+            const wb = XLSX.utils.book_new();
+            const summaryData = state.assets.map(asset => {
+                const stats = calculateAssetStats(asset);
+                const typeKey = 'type' + asset.type.split('_').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join('');
+                return {
+                    '代码': asset.code, '名称': asset.name, '类型': getTranslation(typeKey),
+                    '平均成本': stats.avgCost, '持仓数量': stats.holdings, '总成本': stats.totalCost,
+                    '当前市值': stats.marketValue, '浮动盈亏': stats.floatingProfitLoss, '总盈亏': stats.totalProfitLoss, '回报率(%)': stats.roi
+                };
+            });
+            const wsSummary = XLSX.utils.json_to_sheet(summaryData);
+            XLSX.utils.book_append_sheet(wb, wsSummary, '资产总览');
+            state.assets.forEach(asset => {
+                const cleanTransactions = asset.transactions.map(({id, ...tx}) => tx);
+                const wsAsset = XLSX.utils.json_to_sheet(cleanTransactions);
+                const safeSheetName = `${asset.name}(${asset.code})`.replace(/[*?:/\\\[\]]/g, "_").slice(0, 31);
+                XLSX.utils.book_append_sheet(wb, wsAsset, safeSheetName);
+            });
+            const cleanCashFlows = state.cashFlows.map(({id, ...cf}) => cf);
+            const wsCashFlow = XLSX.utils.json_to_sheet(cleanCashFlows);
+            XLSX.utils.book_append_sheet(wb, wsCashFlow, '资金流水');
+            XLSX.writeFile(wb, `investment-export-${new Date().toISOString().slice(0,10)}.xlsx`);
+        });
+
+        function handleFileImport(event, format) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    let importedState;
+                    if (format === 'json') {
+                        importedState = JSON.parse(e.target.result);
+                    } else if (format === 'excel') {
+                        const data = new Uint8Array(e.target.result);
+                        const wb = XLSX.read(data, {type: 'array'});
+                        const summarySheet = wb.Sheets['资产总览'];
+                        const cashFlowSheet = wb.Sheets['资金流水'];
+                        if(!summarySheet) throw new Error('导入失败: Excel文件中缺少"资产总览"工作表');
+
+                        const assetsMeta = XLSX.utils.sheet_to_json(summarySheet);
+                        const reverseTypeMap = Object.fromEntries(Object.entries(translations['zh-CN']).filter(([k,v])=>k.startsWith('type')).map(([k,v])=>[v, k.replace('type','').replace(/([A-Z])/g, '_$1').toLowerCase().slice(1)]));
+
+                        importedState = { assets: [], cashFlows: [], theme: state.theme, language: state.language };
+                        assetsMeta.forEach(meta => {
+                            const sheetName = `${meta['名称']}(${meta['代码']})`.replace(/[*?:/\\\[\]]/g, "_").slice(0, 31);
+                            const txSheet = wb.Sheets[sheetName];
+                            importedState.assets.push({
+                                id: Date.now().toString() + meta['代码'],
+                                code: meta['代码'], name: meta['名称'], type: reverseTypeMap[meta['类型']] || 'main_board',
+                                transactions: txSheet ? XLSX.utils.sheet_to_json(txSheet) : []
+                            });
+                        });
+                        if (cashFlowSheet) importedState.cashFlows = XLSX.utils.sheet_to_json(cashFlowSheet);
+                    }
+                    if (importedState && Array.isArray(importedState.assets)) {
+                        state = { ...state, ...importedState, cashFlows: importedState.cashFlows || [] };
+                        applyTheme(); applyLanguage(); render();
+                        alert(getTranslation('dataImported'));
+                    } else throw new Error('Invalid file format');
+                } catch (error) { alert('导入文件出错: ' + error.message); }
+            };
+            if(format === 'json') reader.readAsText(file);
+            else if(format === 'excel') reader.readAsArrayBuffer(file);
+            event.target.value = '';
+        }
+
+        async function exportCardAsImage(cardElement) {
+            cardElement.classList.add('export-image');
+            try {
+                const canvas = await html2canvas(cardElement, {
+                    useCORS: true,
+                    scale: 2,
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg-color')
+                });
+                downloadCanvasAsImage(canvas, `asset-${cardElement.dataset.id}.png`);
+            } catch (error) {
+                console.error('Error exporting image:', error);
+            } finally {
+                cardElement.classList.remove('export-image');
+            }
+        }
+
+        elements.exportImageBtn.addEventListener('click', async () => {
+            const selectedCards = Array.from($$('.export-checkbox:checked')).map(cb => cb.closest('.asset-card'));
+            if (selectedCards.length === 0) {
+                alert('请勾选至少一个资产卡片以导出对比图。');
+                return;
+            }
+            const exportContainer = document.createElement('div');
+            exportContainer.style.position = 'absolute';
+            exportContainer.style.left = '-9999px';
+            exportContainer.style.display = 'inline-flex';
+            exportContainer.style.flexDirection = 'row';
+            exportContainer.style.gap = '20px';
+            exportContainer.style.padding = '20px';
+
+            selectedCards.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.querySelector('.export-checkbox').style.display = 'none';
+                exportContainer.appendChild(clone);
+            });
+
+            document.body.appendChild(exportContainer);
+            exportContainer.classList.add('export-image');
+
+            try {
+                const canvas = await html2canvas(exportContainer, {
+                    useCORS: true,
+                    scale: 2,
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color')
+                });
+                downloadCanvasAsImage(canvas, 'asset-comparison.png');
+            } catch (error) {
+                console.error('Error exporting comparison image:', error);
+            } finally {
+                document.body.removeChild(exportContainer);
+            }
+        });
+
+        function downloadCanvasAsImage(canvas, filename) {
+            const image = canvas.toDataURL('image/png', 1.0);
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = filename;
+            link.click();
+        }
+
+        function downloadFile(content, fileName, contentType) {
+            const a = document.createElement('a');
+            const file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file); a.download = fileName; a.click(); URL.revokeObjectURL(a.href);
+        }
+
+        function saveState() { localStorage.setItem('investmentDashboardState', JSON.stringify(state)); }
+        function loadState() {
+            const saved = localStorage.getItem('investmentDashboardState');
+            if (saved) {
+                const loadedState = JSON.parse(saved);
+                // Ensure new data structures exist
+                state = {
+                    ...loadedState,
+                    cashFlows: loadedState.cashFlows || [],
+                };
+            }
+        }
+
+        function sanitize(str) {
+            if (str === null || str === undefined) return '';
+            const temp = document.createElement('div'); temp.textContent = str; return temp.innerHTML;
+        }
+
+        function init() { loadState(); applyTheme(); applyLanguage(); render(); }
+        init();
+    });
+    </script>
+
+</body>
+</html>
