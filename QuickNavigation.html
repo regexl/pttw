@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人快捷导航</title>
+    <style>
+        /* --- Theme Color Variables --- */
+        :root {
+            --primary-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --primary-text: #212529;
+            --secondary-text: #6c757d;
+            --border-color: #dee2e6;
+            --accent-color: #0d6efd;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --input-bg: #ffffff;
+            --warning-bg: #fff3cd;
+            --warning-text: #664d03;
+            --highlight-bg: #ffe066; /* NEW: Highlight color */
+            --btn-bg: #e9ecef;
+            --btn-hover-bg: #d3d9df;
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: #121212;
+            --card-bg: #1e1e1e;
+            --primary-text: #e9ecef;
+            --secondary-text: #adb5bd;
+            --border-color: #495057;
+            --accent-color: #2196f3;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --input-bg: #2d2d2d;
+            --warning-bg: #3b300a;
+            --warning-text: #ffecb3;
+            --highlight-bg: #6c5e0a; /* NEW: Highlight color for dark mode */
+            --btn-bg: #2d2d2d;
+            --btn-hover-bg: #3a3f44;
+        }
+
+        /* --- Global Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h2 .collapser::before {
+            content: '▲';
+            display: inline-block;
+            transition: transform 0.2s ease-in-out;
+        }
+        h2.collapsed .collapser::before {
+            transform: rotate(180deg);
+        }
+
+        /* --- Layout & Cards --- */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            break-inside: avoid;
+        }
+
+        /* --- Controls Area --- */
+        .controls-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+        }
+        #search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--primary-text);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        #clear-search-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--secondary-text);
+            cursor: pointer;
+            display: none;
+        }
+        .control-btn {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            background-color: var(--btn-bg);
+            color: var(--primary-text);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .control-btn:hover {
+            background-color: var(--btn-hover-bg);
+        }
+        #import-file-input {
+            display: none;
+        }
+
+        /* --- Content Area --- */
+        .content-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding-top: 1rem;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding-top 0.4s ease-in-out;
+            max-height: 5000px;
+        }
+        .content-group.collapsed {
+            max-height: 0;
+            padding-top: 0;
+        }
+
+        .item-link, .snippet-block {
+            background: var(--primary-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+            word-break: break-all;
+            position: relative;
+        }
+        .item-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+        .item-link img.favicon {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        mark {
+            background-color: var(--highlight-bg);
+            color: var(--primary-text);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .snippet-block {
+            font-family: 'SF Mono', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 2.5rem; /* Space for title */
+        }
+        .snippet-title {
+            position: absolute;
+            top: 10px;
+            left: 1rem;
+            font-weight: bold;
+            color: var(--secondary-text);
+        }
+        .snippet-content {
+            white-space: pre-wrap;
+            width: 100%;
+        }
+        .copy-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-text);
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 1rem;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+        .copy-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        .warning-block {
+            background-color: var(--warning-bg);
+            color: var(--warning-text);
+            border-color: var(--warning-text);
+        }
+
+        /* --- Theme Switch --- */
+        .theme-switch-wrapper { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        .theme-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .theme-switch input { display: none; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; border-radius: 28px; transition: .4s; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .4s; }
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* --- Feedback Toast --- */
+        #feedback-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #feedback-toast.show { opacity: 1; visibility: visible; }
+
+        /* --- Back to Top Button --- */
+        #back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 30px;
+            z-index: 1000;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+        }
+        #back-to-top:hover {
+            transform: translateY(-2px);
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch">
+            <input type="checkbox" id="themeCheckbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <h1>快捷导航</h1>
+
+    <div class="controls-wrapper">
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="🔍 搜索... (按 / 聚焦)">
+            <button id="clear-search-btn" title="清空搜索">×</button>
+        </div>
+        <button id="import-btn" class="control-btn">📥 导入</button>
+        <button id="export-btn" class="control-btn">📤 导出</button>
+        <input type="file" id="import-file-input" accept=".xlsx, .xls">
+    </div>
+
+    <div id="main-content" class="dashboard-container"></div>
+
+    <div id="feedback-toast"></div>
+    <button id="back-to-top" title="回到顶部">⬆️</button>
+
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script>
+        // --- DATA CENTER: MANAGE YOUR CONTENT HERE ---
+        let pageData = {
+              "凭证 & 笔记": [
+                 
+             ],
+             "常用命令": [
+                
+             ],
+             "内部系统 & 项目": [
+                 
+             ],
+             "常用AI工具": [
+               
+             ],
+             "外部工具 & 链接": [
+                 
+             ],
+              "时间工具": [
+                  { type: 'time_tool' }
+              ]
+        };
+
+        // --- CORE APP LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('main-content');
+            const searchInput = document.getElementById('search-input');
+            const themeCheckbox = document.getElementById('themeCheckbox');
+            const backToTopBtn = document.getElementById('back-to-top');
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const importBtn = document.getElementById('import-btn');
+            const importFileInput = document.getElementById('import-file-input');
+
+            let collapsedState = JSON.parse(localStorage.getItem('collapsedState')) || {};
+
+            const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            const highlightText = (text, filter) => {
+                if (!filter) return text;
+                const regex = new RegExp(escapeRegExp(filter), 'gi');
+                return text.replace(regex, `<mark>${filter}</mark>`);
+            };
+
+            const renderContent = (filter = '') => {
+                mainContent.innerHTML = '';
+                const lowerFilter = filter.toLowerCase().trim();
+
+                for (const category in pageData) {
+                    const items = pageData[category];
+
+                    const filteredItems = items.filter(item => {
+                        if (!lowerFilter) return true;
+                        const searchCorpus = `${item.name || ''} ${item.content || ''} ${item.url || ''}`.toLowerCase();
+                        return searchCorpus.includes(lowerFilter);
+                    });
+
+                    if (filteredItems.length > 0) {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+
+                        const isCollapsed = collapsedState[category] && !filter; // Don't collapse if searching
+
+                        let cardHTML = `<h2 class="${isCollapsed ? 'collapsed' : ''}" data-category="${category}">${category}<span class="collapser"></span></h2><div class="content-group ${isCollapsed ? 'collapsed' : ''}">`;
+
+                        filteredItems.forEach(item => {
+                            if (item.type === 'link') {
+                                const highlightedName = highlightText(item.name, filter);
+                                cardHTML += `
+                                    <a href="${item.url}" target="_blank" class="item-link" title="${item.url}">
+                                        <span>
+                                            <img src="https://www.google.com/s2/favicons?sz=16&domain_url=${item.url}" class="favicon" alt="favicon" onerror="this.style.display='none'">
+                                            ${highlightedName}
+                                        </span>
+                                    </a>`;
+                            } else if (item.type === 'snippet' || item.type === 'warning') {
+                                const extraClass = item.type === 'warning' ? 'warning-block' : '';
+                                const highlightedName = highlightText(item.name, filter);
+                                const highlightedContent = highlightText(item.content, filter);
+                                cardHTML += `
+                                    <div class="snippet-block ${extraClass}">
+                                        <span class="snippet-title">${highlightedName}</span>
+                                        <code class="snippet-content">${highlightedContent}</code>
+                                        <button class="copy-btn" data-copy-text="${item.content}">📋</button>
+                                    </div>`;
+                            } else if (item.type === 'time_tool') {
+                                cardHTML += `
+                                    <div class="snippet-block">
+                                        <span id="current-time" style="font-size: 1.2rem; font-weight: bold;"></span>
+                                        <button class="copy-btn" id="time-copy-btn" data-copy-text="">📋</button>
+                                    </div>`;
+                            }
+                        });
+
+                        cardHTML += '</div>';
+                        card.innerHTML = cardHTML;
+                        mainContent.appendChild(card);
+                    }
+                }
+                updateTime();
+            };
+
+            // --- Event Listeners ---
+            mainContent.addEventListener('click', async (e) => {
+                const copyButton = e.target.closest('.copy-btn');
+                if (copyButton) {
+                    const textToCopy = copyButton.dataset.copyText;
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+                        showFeedback('✅ 已复制到剪贴板!');
+                    } catch (err) {
+                        showFeedback('❌ 复制失败');
+                    }
+                }
+
+                const header = e.target.closest('h2');
+                if (header) {
+                    const category = header.dataset.category;
+                    collapsedState[category] = !collapsedState[category];
+                    localStorage.setItem('collapsedState', JSON.stringify(collapsedState));
+                    header.classList.toggle('collapsed');
+                    header.nextElementSibling.classList.toggle('collapsed');
+                }
+            });
+
+            searchInput.addEventListener('input', () => {
+                renderContent(searchInput.value);
+                clearSearchBtn.style.display = searchInput.value ? 'block' : 'none';
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.focus();
+            });
+
+            // --- Utility Functions ---
+            const showFeedback = (message) => {
+                const toast = document.getElementById('feedback-toast');
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            };
+
+            const updateTime = () => {
+                const timeEl = document.getElementById('current-time');
+                const timeCopyBtn = document.getElementById('time-copy-btn');
+                if (timeEl) {
+                    const now = new Date();
+                    const formattedNow = now.toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-');
+                    timeEl.textContent = formattedNow;
+                    if (timeCopyBtn) {
+                        timeCopyBtn.dataset.copyText = `******************** ${formattedNow} ********************`;
+                    }
+                }
+            };
+
+            // --- Theme Logic ---
+            const applyTheme = (theme) => {
+                document.documentElement.dataset.theme = theme;
+                themeCheckbox.checked = theme === 'dark';
+                localStorage.setItem('theme', theme);
+            };
+
+            themeCheckbox.addEventListener('change', () => {
+                applyTheme(themeCheckbox.checked ? 'dark' : 'light');
+            });
+
+            // --- Scroll & Keyboard Listeners ---
+            window.addEventListener('scroll', () => {
+                backToTopBtn.classList.toggle('show', document.documentElement.scrollTop > 300 || document.body.scrollTop > 300);
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+                if (e.key === 'Escape' && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+
+            // --- NEW: EXCEL IMPORT/EXPORT LOGIC ---
+
+            // EXPORT
+            exportBtn.addEventListener('click', () => {
+                try {
+                    const wb = XLSX.utils.book_new();
+
+                    // Process links
+                    const linksData = [];
+                    for (const category in pageData) {
+                        pageData[category]
+                            .filter(item => item.type === 'link')
+                            .forEach(item => {
+                                linksData.push({ '分类': category, '名称': item.name, 'URL': item.url });
+                            });
+                    }
+                    if (linksData.length > 0) {
+                        const wsLinks = XLSX.utils.json_to_sheet(linksData);
+                        XLSX.utils.book_append_sheet(wb, wsLinks, '链接');
+                    }
+
+                    // Process commands/snippets
+                    const commandsData = [];
+                    pageData['常用命令']
+                        .filter(item => item.type === 'snippet')
+                        .forEach(item => {
+                            commandsData.push({ '名称': item.name, '内容': item.content });
+                        });
+                    
+                    if (commandsData.length > 0) {
+                        const wsCommands = XLSX.utils.json_to_sheet(commandsData);
+                        XLSX.utils.book_append_sheet(wb, wsCommands, '常用命令');
+                    }
+
+                    XLSX.writeFile(wb, '导航数据导出.xlsx');
+                    showFeedback('✅ 导出成功!');
+                } catch(err) {
+                    console.error("Export failed:", err);
+                    showFeedback('❌ 导出失败!');
+                }
+            });
+
+            // IMPORT
+            importBtn.addEventListener('click', () => {
+                importFileInput.click();
+            });
+
+            importFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = new Uint8Array(event.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        let importCount = 0;
+
+                        // Import Links
+                        const linksSheet = workbook.Sheets['链接'];
+                        if (linksSheet) {
+                            const linksJson = XLSX.utils.sheet_to_json(linksSheet);
+                            // Clear existing links
+                            for (const category in pageData) {
+                                pageData[category] = pageData[category].filter(item => item.type !== 'link');
+                            }
+                            linksJson.forEach(row => {
+                                const category = row['分类'] || '外部工具 & 链接';
+                                const name = row['名称'];
+                                const url = row['URL'];
+                                if (name && url) {
+                                    if (!pageData[category]) pageData[category] = [];
+                                    pageData[category].push({ type: 'link', name, url });
+                                    importCount++;
+                                }
+                            });
+                        }
+
+                        // Import Commands
+                        const commandsSheet = workbook.Sheets['常用命令'];
+                        if (commandsSheet) {
+                            const commandsJson = XLSX.utils.sheet_to_json(commandsSheet);
+                            pageData['常用命令'] = []; // Clear existing commands
+                            commandsJson.forEach(row => {
+                                const name = row['名称'];
+                                const content = row['内容'];
+                                if (name && content) {
+                                    pageData['常用命令'].push({ type: 'snippet', name, content });
+                                    importCount++;
+                                }
+                            });
+                        }
+
+                        if (importCount > 0) {
+                            renderContent();
+                            showFeedback(`✅ 成功导入 ${importCount} 条数据!`);
+                        } else {
+                            showFeedback('⚠️ 未找到可导入的数据。请检查Excel文件格式。');
+                        }
+
+                    } catch (err) {
+                        console.error("Import failed:", err);
+                        showFeedback('❌ 导入失败! 请确保文件格式正确。');
+                    } finally {
+                        // Reset file input to allow re-selection of the same file
+                        e.target.value = '';
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            // --- Initial Load ---
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+            renderContent();
+            setInterval(updateTime, 1000);
+            searchInput.focus();
+        });
+    </script>
+</body>
+</html>
