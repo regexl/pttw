@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能便签系统</title>
+  <link href="/viewport/assets/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css">
+  <script src="/viewport/js/vue.js"></script>
+  <script src="/viewport/js/xlsx.full.min.js"></script>
+  <script src="/viewport/js/purify.min.js"></script>
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --text-light: #212529;
+      --card-light: #f8f9fa;
+      --bg-dark: #121212;
+      --text-dark: #e0e0e0;
+      --card-dark: #1e1e1e;
+    }
+
+    [data-theme="light"] {
+      --bg-color: var(--bg-light);
+      --text-color: var(--text-light);
+      --card-bg: var(--card-light);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: var(--bg-dark);
+      --text-color: var(--text-dark);
+      --card-bg: var(--card-dark);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .note-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      margin-bottom: 20px;
+      resize: both;
+      overflow: auto;
+      min-height: 200px;
+      min-width: 250px;
+    }
+
+    .note-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .rich-text-editor {
+      min-height: 150px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      padding: 10px;
+      background: white;
+      color: black;
+    }
+
+    .tag {
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .tag:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .note-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+      
+      .action-buttons .btn {
+        margin-bottom: 5px;
+      }
+    }
+
+    .theme-switch {
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" :data-theme="theme">
+    <div class="container py-4">
+      <!-- 顶部操作栏 -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="far fa-sticky-note me-2"></i>智能便签</h1>
+        <div>
+          <span class="theme-switch me-3" @click="toggleTheme">
+            <i :class="theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'"></i>
+          </span>
+          <button class="btn btn-primary" @click="showEditor">
+            <i class="fas fa-plus me-1"></i> 新建便签
+          </button>
+        </div>
+      </div>
+
+      <!-- 搜索和过滤 -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" placeholder="搜索标题或内容..." v-model="searchQuery">
+          </div>
+        </div>
+        <div class="col-md-3 mb-2">
+          <select class="form-select" v-model="selectedTag">
+            <option value="">所有标签</option>
+            <option v-for="tag in allTags" :value="tag">{{ tag }}</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <select class="form-select" v-model="sortOption">
+            <option value="newest">最新优先</option>
+            <option value="oldest">最旧优先</option>
+            <option value="title">按标题排序</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 便签编辑器 -->
+      <div class="card mb-4" v-if="showNoteEditor">
+        <div class="card-body">
+          <div class="mb-3">
+            <input type="text" class="form-control form-control-lg" placeholder="标题" v-model="currentNote.title">
+          </div>
+          
+          <div class="mb-3">
+            <div class="d-flex flex-wrap mb-2">
+              <button class="btn btn-sm btn-outline-secondary me-1 mb-1" @click="formatText('bold')">
+                <i class="fas fa-bold"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary me-1 mb-1" @click="formatText('italic')">
+                <i class="fas fa-italic"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary me-1 mb-1" @click="formatText('insertUnorderedList')">
+                <i class="fas fa-list-ul"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary me-1 mb-1" @click="formatText('insertOrderedList')">
+                <i class="fas fa-list-ol"></i>
+              </button>
+            </div>
+            
+            <div 
+              contenteditable="true" 
+              class="rich-text-editor" 
+              ref="editor"
+              @input="updateNoteContent"
+              @keydown.ctrl.enter="saveNote"
+            ></div>
+          </div>
+          
+          <div class="mb-3">
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="添加标签 (用逗号分隔)"
+              v-model="currentNote.tags"
+            >
+          </div>
+          
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-secondary" @click="cancelEdit">
+              <i class="fas fa-times me-1"></i> 取消
+            </button>
+            <button class="btn btn-success" @click="saveNote">
+              <i class="fas fa-save me-1"></i> 保存 (Ctrl+Enter)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 便签列表 -->
+      <div class="row">
+        <div 
+          class="col-12 col-md-6 col-lg-4" 
+          v-for="(note, index) in paginatedNotes"
+          :key="note.id"
+        >
+          <div class="note-card p-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5>{{ note.title }}</h5>
+              <div>
+                <button class="btn btn-sm btn-outline-danger me-1" @click="confirmDelete(note.id)">
+                  <i class="fa-solid fa-trash-alt"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" @click="editNote(note)">
+                  <i class="fa-solid fa-edit"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div 
+              class="note-content mb-3" 
+              v-html="safeContent(note.content)"
+            ></div>
+            
+            <div class="mb-2">
+              <span 
+                v-for="tag in note.tagsArray" 
+                :key="tag"
+                class="badge bg-secondary me-1 tag"
+                @click="setTagFilter(tag)"
+              >
+                {{ tag }}
+              </span>
+            </div>
+            
+            <div class="text-muted small d-flex justify-content-between">
+              <span>{{ formatDate(note.createdAt) }}</span>
+              <span v-if="note.updatedAt !== note.createdAt">修改: {{ formatDate(note.updatedAt) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分页控制 -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <button class="btn btn-sm btn-outline-secondary me-2" @click="exportExcel">
+            <i class="fas fa-file-export me-1"></i>导出Excel
+          </button>
+          <label class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-file-import me-1"></i>导入Excel
+            <input type="file" hidden @change="importExcel">
+          </label>
+        </div>
+        
+        <div class="d-flex align-items-center">
+          <span class="me-3">共 {{ filteredNotes.length }} 条便签</span>
+          <div class="btn-group">
+            <button 
+              class="btn btn-outline-secondary" 
+              :disabled="currentPage === 1"
+              @click="currentPage--"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="btn btn-outline-secondary disabled">
+              {{ currentPage }} / {{ totalPages }}
+            </button>
+            <button 
+              class="btn btn-outline-secondary" 
+              :disabled="currentPage >= totalPages"
+              @click="currentPage++"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 删除确认模态框 -->
+      <div class="modal fade" :class="{ show: showDeleteModal, 'd-block': showDeleteModal }" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">确认删除</h5>
+              <button type="button" class="btn-close" @click="showDeleteModal = false"></button>
+            </div>
+            <div class="modal-body">
+              <p>确定要删除这条便签吗？此操作不可恢复。</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="showDeleteModal = false">取消</button>
+              <button type="button" class="btn btn-danger" @click="deleteNote">确认删除</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-backdrop fade" :class="{ show: showDeleteModal }" v-if="showDeleteModal"></div>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        notes: [],
+        currentNote: {
+          id: null,
+          title: '',
+          content: '',
+          tags: '',
+          createdAt: null,
+          updatedAt: null,
+          tagsArray: []
+        },
+        showNoteEditor: false,
+        searchQuery: '',
+        selectedTag: '',
+        sortOption: 'newest',
+        currentPage: 1,
+        itemsPerPage: 6,
+        showDeleteModal: false,
+        noteToDelete: null,
+        theme: localStorage.getItem('noteTheme') || 'light'
+      },
+      computed: {
+        // 所有标签列表
+        allTags() {
+          const tags = new Set();
+          this.notes.forEach(note => {
+            note.tagsArray.forEach(tag => {
+              if (tag) tags.add(tag);
+            });
+          });
+          return Array.from(tags);
+        },
+        
+        // 过滤后的便签
+        filteredNotes() {
+          let notes = [...this.notes];
+          
+          // 搜索过滤
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            notes = notes.filter(note => 
+              note.title.toLowerCase().includes(query) || 
+              note.content.toLowerCase().includes(query)
+            );
+          }
+          
+          // 标签过滤
+          if (this.selectedTag) {
+            notes = notes.filter(note => 
+              note.tagsArray.includes(this.selectedTag)
+            );
+          }
+          
+          // 排序
+          switch (this.sortOption) {
+            case 'newest':
+              notes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+              break;
+            case 'oldest':
+              notes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+              break;
+            case 'title':
+              notes.sort((a, b) => a.title.localeCompare(b.title));
+              break;
+          }
+          
+          return notes;
+        },
+        
+        // 分页后的便签
+        paginatedNotes() {
+          const start = (this.currentPage - 1) * this.itemsPerPage;
+          return this.filteredNotes.slice(start, start + this.itemsPerPage);
+        },
+        
+        // 总页数
+        totalPages() {
+          return Math.ceil(this.filteredNotes.length / this.itemsPerPage);
+        }
+      },
+      watch: {
+        theme(newVal) {
+          localStorage.setItem('noteTheme', newVal);
+        },
+        
+        selectedTag() {
+          this.currentPage = 1;
+        },
+        
+        searchQuery() {
+          this.currentPage = 1;
+        }
+      },
+      mounted() {
+        this.loadNotes();
+        document.body.setAttribute('data-theme', this.theme);
+        
+        // 设置全局快捷键
+        document.addEventListener('keydown', this.handleGlobalShortcut);
+      },
+      beforeDestroy() {
+        document.removeEventListener('keydown', this.handleGlobalShortcut);
+      },
+      methods: {
+        // 加载便签
+        loadNotes() {
+          const savedNotes = localStorage.getItem('stickyNotes');
+          if (savedNotes) {
+            this.notes = JSON.parse(savedNotes);
+          }
+        },
+        
+        // 保存便签
+        saveNotes() {
+          localStorage.setItem('stickyNotes', JSON.stringify(this.notes));
+        },
+        
+        // 显示编辑器
+        showEditor() {
+          this.currentNote = {
+            id: Date.now(),
+            title: '',
+            content: '',
+            tags: '',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            tagsArray: []
+          };
+          this.showNoteEditor = true;
+          
+          this.$nextTick(() => {
+            this.$refs.editor.innerHTML = '';
+            this.$refs.editor.focus();
+          });
+        },
+        
+        // 编辑便签
+        editNote(note) {
+          this.currentNote = {...note};
+          this.showNoteEditor = true;
+          
+          this.$nextTick(() => {
+            this.$refs.editor.innerHTML = DOMPurify.sanitize(note.content);
+            this.$refs.editor.focus();
+          });
+        },
+        
+        // 取消编辑
+        cancelEdit() {
+          this.showNoteEditor = false;
+          this.currentNote = {
+            id: null,
+            title: '',
+            content: '',
+            tags: '',
+            createdAt: null,
+            updatedAt: null,
+            tagsArray: []
+          };
+        },
+        
+        // 更新便签内容
+        updateNoteContent(e) {
+          this.currentNote.content = e.target.innerHTML;
+        },
+        
+        // 保存便签
+        saveNote() {
+          if (!this.currentNote.title.trim() && !this.currentNote.content.trim()) {
+            return;
+          }
+          
+          // 处理标签
+          this.currentNote.tagsArray = this.currentNote.tags
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag);
+            
+          this.currentNote.updatedAt = new Date();
+          
+          // 查找现有便签的索引
+          const index = this.notes.findIndex(n => n.id === this.currentNote.id);
+          
+          if (index !== -1) {
+            // 更新现有便签
+            this.notes.splice(index, 1, {...this.currentNote});
+          } else {
+            // 添加新便签
+            this.notes.push({...this.currentNote});
+          }
+          
+          this.saveNotes();
+          this.cancelEdit();
+        },
+        
+        // 确认删除
+        confirmDelete(id) {
+          this.noteToDelete = id;
+          this.showDeleteModal = true;
+        },
+        
+        // 删除便签
+        deleteNote() {
+          this.notes = this.notes.filter(note => note.id !== this.noteToDelete);
+          this.saveNotes();
+          this.showDeleteModal = false;
+          this.noteToDelete = null;
+        },
+        
+        // 格式化日期
+        formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        },
+        
+        // 切换主题
+        toggleTheme() {
+          this.theme = this.theme === 'light' ? 'dark' : 'light';
+          document.body.setAttribute('data-theme', this.theme);
+        },
+        
+        // 安全内容处理
+        safeContent(content) {
+          return DOMPurify.sanitize(content);
+        },
+        
+        // 设置标签过滤
+        setTagFilter(tag) {
+          this.selectedTag = tag;
+        },
+        
+        // 富文本格式化
+        formatText(command) {
+          document.execCommand(command, false, null);
+          this.updateNoteContent({target: this.$refs.editor});
+          this.$refs.editor.focus();
+        },
+        
+        // 处理全局快捷键
+        handleGlobalShortcut(e) {
+          // Ctrl+Enter 提交
+          if (e.ctrlKey && e.key === 'Enter' && this.showNoteEditor) {
+            this.saveNote();
+          }
+          
+          // Esc 关闭编辑器
+          if (e.key === 'Escape' && this.showNoteEditor) {
+            this.cancelEdit();
+          }
+        },
+        
+        // 导出Excel
+        exportExcel() {
+          const data = this.notes.map(note => ({
+            标题: note.title,
+            内容: note.content.replace(/<[^>]*>/g, ''),
+            标签: note.tagsArray.join(', '),
+            创建时间: this.formatDate(note.createdAt),
+            修改时间: this.formatDate(note.updatedAt)
+          }));
+          
+          const worksheet = XLSX.utils.json_to_sheet(data);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, '便签数据');
+          XLSX.writeFile(workbook, '便签数据导出.xlsx');
+        },
+        
+        // 导入Excel
+        importExcel(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+            
+            jsonData.forEach(item => {
+              this.notes.push({
+                id: Date.now() + Math.random(),
+                title: item['标题'] || '',
+                content: item['内容'] || '',
+                tags: item['标签'] || '',
+                tagsArray: (item['标签'] || '').split(',').map(t => t.trim()).filter(t => t),
+                createdAt: new Date(item['创建时间'] || Date.now()),
+                updatedAt: new Date(item['修改时间'] || Date.now())
+              });
+            });
+            
+            this.saveNotes();
+            e.target.value = ''; // 重置文件输入
+          };
+          reader.readAsArrayBuffer(file);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
