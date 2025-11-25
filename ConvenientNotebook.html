@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>便捷记事本</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --text: #242424;
+      --text-muted: #666;
+      --border: #eaeaea;
+      --input-bg: #fafafa;
+      --button-bg: #0d6efd;
+      --button-hover: #0b5ed7;
+      --shadow: 0 2px 10px rgba(0,0,0,0.05);
+      --radius: 12px;
+      --gap: 20px;
+    }
+
+    .dark-mode {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --text: #f0f0f0;
+      --text-muted: #aaa;
+      --border: #333;
+      --input-bg: #2a2a2a;
+      --button-bg: #0d6efd;
+      --button-hover: #3a8af7;
+      --shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: var(--gap);
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: var(--gap);
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: var(--gap);
+      transition: box-shadow 0.3s;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .controls button, .controls input {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .controls input {
+      flex: 1;
+      min-width: 180px;
+      text-align: center;
+    }
+    .controls button.primary {
+      background: var(--button-bg);
+      color: white;
+    }
+    .controls button.primary:hover {
+      background: var(--button-hover);
+    }
+
+    textarea, #preview {
+      width: 100%;
+      min-height: 500px;
+      padding: 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      color: var(--text);
+      resize: vertical;
+      outline: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    textarea {
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+      line-height: 1.5;
+    }
+    #preview {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      white-space: normal;
+      display: none;
+    }
+    .show-preview #preview {
+      display: block;
+    }
+    .show-preview textarea {
+      display: none;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: var(--gap);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>便捷记事本</h1>
+      <p class="subtitle">纯前端 · 离线可用 · 支持 Markdown</p>
+    </header>
+
+    <div class="card">
+      <div class="controls">
+        <button id="togglePreview">预览</button>
+        <button id="toggleFilename">自定义文件名</button>
+        <button id="downloadBtn" class="primary">下载 .md 文件</button>
+        <button id="themeToggle">🌓 主题</button>
+      </div>
+
+      <div id="filenameGroup" style="display:none; margin-bottom:16px;">
+        <input type="text" id="filenameInput" placeholder="例如：我的笔记.md" />
+      </div>
+
+      <textarea id="editor" placeholder="# 欢迎使用便捷记事本&#10;&#10;支持 **Markdown** 语法，如：&#10;- 标题、列表、代码块&#10;- 实时保存草稿&#10;- 安全预览与下载"></textarea>
+      <div id="preview"></div>
+    </div>
+
+    <footer>
+      单文件静态工具 · 无网络依赖 · 内容仅存于本地
+    </footer>
+  </div>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+    const togglePreviewBtn = document.getElementById('togglePreview');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const toggleFilenameBtn = document.getElementById('toggleFilename');
+    const filenameGroup = document.getElementById('filenameGroup');
+    const filenameInput = document.getElementById('filenameInput');
+    const body = document.body;
+
+    // === Theme ===
+    const THEME_KEY = 'notebook_theme';
+    const applyTheme = (mode) => {
+      if (mode === 'dark') {
+        body.classList.add('dark-mode');
+        themeToggle.textContent = '🌞 明亮';
+      } else {
+        body.classList.remove('dark-mode');
+        themeToggle.textContent = '🌙 黑暗';
+      }
+      localStorage.setItem(THEME_KEY, mode);
+    };
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else {
+      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+      applyTheme(prefersDark ? 'dark' : 'light');
+    }
+    themeToggle.addEventListener('click', () => {
+      const next = body.classList.contains('dark-mode') ? 'light' : 'dark';
+      applyTheme(next);
+    });
+
+    // === Filename Toggle ===
+    toggleFilenameBtn.addEventListener('click', () => {
+      const isVisible = filenameGroup.style.display === 'block';
+      filenameGroup.style.display = isVisible ? 'none' : 'block';
+      toggleFilenameBtn.textContent = isVisible ? '自定义文件名' : '取消';
+    });
+
+    // === Draft Auto-save ===
+    const STORAGE_KEY = 'notebook_draft';
+    const loadDraft = () => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) editor.value = saved;
+    };
+    const saveDraft = () => localStorage.setItem(STORAGE_KEY, editor.value);
+    loadDraft();
+    editor.addEventListener('input', saveDraft);
+
+    // === Preview ===
+    let isPreview = false;
+    togglePreviewBtn.addEventListener('click', () => {
+      isPreview = !isPreview;
+      body.classList.toggle('show-preview', isPreview);
+      togglePreviewBtn.textContent = isPreview ? '编辑' : '预览';
+      if (isPreview) {
+        const raw = marked.parse(editor.value || '');
+        preview.innerHTML = DOMPurify.sanitize(raw);
+      }
+    });
+
+    // === Download ===
+    const getDefaultFilename = () => {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      const h = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      return `note_${y}${m}${d}_${h}${min}${s}.md`;
+    };
+
+    const downloadFile = () => {
+      const content = editor.value || '';
+      const userFilename = filenameInput.value.trim();
+      let filename = userFilename;
+      if (!filename) {
+        filename = getDefaultFilename();
+      } else if (!filename.endsWith('.md')) {
+        filename += '.md';
+      }
+      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    downloadBtn.addEventListener('click', downloadFile);
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        downloadFile();
+      }
+    });
+  </script>
+</body>
+</html>
