@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+  <title>话费使用周期计算器</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #2c3e50;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="date"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .charge-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: flex-end;
+    }
+
+    .charge-row > div {
+      flex: 1;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #result {
+      margin-top: 25px;
+      padding: 15px;
+      background-color: #ecf0f1;
+      border-left: 4px solid #3498db;
+      border-radius: 5px;
+      display: none;
+    }
+
+    #result.show {
+      display: block;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .charge-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 话费使用周期计算器</h1>
+
+    <!-- 充值记录区域 -->
+    <label>充值记录（可添加多条）</label>
+    <div id="charges">
+      <!-- 动态生成的充值记录行将插入此处 -->
+    </div>
+    <button type="button" onclick="addChargeRow()">➕ 添加充值记录</button>
+
+    <!-- 每月固定话费设置 -->
+    <label for="monthlyFee">每月固定话费（元）</label>
+    <input type="number" id="monthlyFee" min="0.01" step="0.01" placeholder="例如：19.00" required />
+
+    <!-- 计算按钮 -->
+    <button type="button" onclick="calculateUsage()">🧮 计算使用周期</button>
+
+    <!-- 结果展示区 -->
+    <div id="result"></div>
+  </div>
+
+  <script>
+    /**
+     * 初始化：添加第一条充值记录
+     */
+    window.onload = function () {
+      addChargeRow();
+    };
+
+    /**
+     * 添加一行充值记录（日期 + 金额）
+     */
+    function addChargeRow() {
+      const container = document.getElementById('charges');
+      const row = document.createElement('div');
+      row.className = 'charge-row';
+
+      // 日期输入
+      const dateDiv = document.createElement('div');
+      const dateLabel = document.createElement('label');
+      dateLabel.textContent = '充值日期';
+      const dateInput = document.createElement('input');
+      dateInput.type = 'date';
+      dateInput.required = true;
+      // 默认设为今天
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.value = today;
+      dateDiv.appendChild(dateLabel);
+      dateDiv.appendChild(dateInput);
+
+      // 金额输入
+      const amountDiv = document.createElement('div');
+      const amountLabel = document.createElement('label');
+      amountLabel.textContent = '充值金额（元）';
+      const amountInput = document.createElement('input');
+      amountInput.type = 'number';
+      amountInput.min = '0.01';
+      amountInput.step = '0.01';
+      amountInput.placeholder = '例如：100.00';
+      amountInput.required = true;
+      amountDiv.appendChild(amountLabel);
+      amountDiv.appendChild(amountInput);
+
+      // 删除按钮（仅当有多于1条记录时显示）
+      if (container.children.length > 0) {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.textContent = '🗑️';
+        deleteBtn.style.marginBottom = '5px';
+        deleteBtn.style.padding = '5px';
+        deleteBtn.style.fontSize = '14px';
+        deleteBtn.onclick = () => row.remove();
+        row.appendChild(deleteBtn);
+      }
+
+      row.appendChild(dateDiv);
+      row.appendChild(amountDiv);
+      container.appendChild(row);
+    }
+
+    /**
+     * 核心算法：计算话费使用截止日期
+     *
+     * 算法思路：
+     * 1. 收集所有充值记录（日期 + 金额）
+     * 2. 按日期升序排序（确保时间顺序）
+     * 3. 从最早充值日开始，逐月扣除固定话费
+     * 4. 当余额不足支付整月话费时，按天折算剩余天数
+     * 5. 返回总使用月数、结束日期、剩余金额（应为0或极小值）
+     */
+    function calculateUsage() {
+      const resultEl = document.getElementById('result');
+      resultEl.classList.remove('show');
+      resultEl.innerHTML = '';
+
+      // 获取每月话费
+      const monthlyFeeStr = document.getElementById('monthlyFee').value.trim();
+      if (!monthlyFeeStr) {
+        showError('请输入每月固定话费');
+        return;
+      }
+      const monthlyFee = parseFloat(monthlyFeeStr);
+      if (isNaN(monthlyFee) || monthlyFee <= 0) {
+        showError('每月话费必须是大于0的数字');
+        return;
+      }
+
+      // 收集所有充值记录
+      const chargeRows = document.querySelectorAll('.charge-row');
+      let charges = [];
+      for (const row of chargeRows) {
+        const dateInput = row.querySelector('input[type="date"]');
+        const amountInput = row.querySelector('input[type="number"]');
+        if (!dateInput.value || !amountInput.value) {
+          showError('请填写所有充值记录的日期和金额');
+          return;
+        }
+        const date = new Date(dateInput.value);
+        const amount = parseFloat(amountInput.value);
+        if (isNaN(amount) || amount <= 0) {
+          showError('充值金额必须是大于0的数字');
+          return;
+        }
+        charges.push({ date, amount });
+      }
+
+      // 按日期升序排序
+      charges.sort((a, b) => a.date - b.date);
+
+      // 合并所有充值金额（因为话费池是累计的）
+      let totalAmount = charges.reduce((sum, c) => sum + c.amount, 0);
+
+      // 起始日期：最早的充值日期
+      let currentDate = new Date(charges[0].date);
+      let balance = totalAmount;
+      let totalMonths = 0;
+
+      // 逐月扣除话费，直到余额不足
+      while (balance >= monthlyFee) {
+        balance -= monthlyFee;
+        totalMonths++;
+        // 移动到下个月同一天（注意：JavaScript 的 Date 会自动处理月末溢出）
+        currentDate.setMonth(currentDate.getMonth() + 1);
+      }
+
+      // 处理不足整月的部分：按天折算
+      if (balance > 0) {
+        // 获取当前月份的天数
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // 计算每天的话费
+        const dailyFee = monthlyFee / daysInMonth;
+
+        // 可使用的天数（向下取整）
+        const extraDays = Math.floor(balance / dailyFee);
+
+        // 增加天数
+        currentDate.setDate(currentDate.getDate() + extraDays);
+
+        // 更新余额（理论上应接近0，但保留用于显示）
+        balance -= extraDays * dailyFee;
+      }
+
+      // 格式化结束日期
+      const endDateStr = formatDate(currentDate);
+      const totalMonthsRounded = totalMonths + (balance > 0 ? 1 : 0); // 向上取整月数（含不足月）
+
+      // 显示结果
+      resultEl.innerHTML = `
+        <h3>📊 计算结果</h3>
+        <p><strong>总充值金额：</strong>¥${totalAmount.toFixed(2)}</p>
+        <p><strong>每月固定话费：</strong>¥${monthlyFee.toFixed(2)}</p>
+        <p><strong>可使用总月数：</strong>${totalMonthsRounded} 个月（精确到天）</p>
+        <p><strong>话费用完日期：</strong>${endDateStr}</p>
+        <p><strong>最终剩余金额：</strong>¥${Math.max(0, balance).toFixed(2)}（因精度舍入）</p>
+        <p style="margin-top:10px; font-size:14px; color:#7f8c8d;">
+          💡 注：不足整月部分按当月天数折算每日话费。
+        </p>
+      `;
+      resultEl.classList.add('show');
+    }
+
+    /**
+     * 辅助函数：格式化日期为 YYYY年MM月DD日
+     */
+    function formatDate(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}年${m}月${d}日`;
+    }
+
+    /**
+     * 显示错误信息
+     */
+    function showError(message) {
+      const resultEl = document.getElementById('result');
+      resultEl.innerHTML = `<div class="error">⚠️ ${message}</div>`;
+      resultEl.classList.add('show');
+    }
+
+    /**
+     * 测试用例（可选调用）
+     * 示例：2025-04-01 充值100元，2025-10-01 充值50元，每月19元
+     */
+    function runTestExample() {
+      // 清空现有记录
+      document.getElementById('charges').innerHTML = '';
+      // 添加两条记录
+      addChargeRow(); // 第一条
+      addChargeRow(); // 第二条
+
+      const rows = document.querySelectorAll('.charge-row');
+      if (rows.length >= 2) {
+        rows[0].querySelector('input[type="date"]').value = '2025-04-01';
+        rows[0].querySelector('input[type="number"]').value = '100';
+        rows[1].querySelector('input[type="date"]').value = '2025-10-01';
+        rows[1].querySelector('input[type="number"]').value = '50';
+      }
+      document.getElementById('monthlyFee').value = '19';
+      calculateUsage();
+    }
+
+    // 取消注释下面这行可自动运行测试用例（调试用）
+    // window.onload = runTestExample;
+  </script>
+</body>
+</html>
