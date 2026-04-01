@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-key="appTitle">车险报价对比工具</title>
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="../viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
+    <script src="../viewport/js/app-utils.js"></script>
     
     <style>
         /* CSS Variables for Theming */
@@ -413,6 +414,9 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const languageStorage = AppUtils.createNamespacedStorage('quote_pilot_language', { version: 1 });
+        const plansStorage = AppUtils.createNamespacedStorage('quote_pilot_plans', { version: 1 });
+        const themeStorage = AppUtils.createNamespacedStorage('quote_pilot_theme', { version: 1 });
 
         // --- I18N (Internationalization) ---
         const translations = {
@@ -757,8 +761,7 @@
             'ru': 'Русский'
         };
         
-        let currentLang = localStorage.getItem('appLanguage') || 'zh-CN';
-        const insuranceItems = translations[currentLang].insuranceItems;
+        let currentLang = languageStorage.get('zh-CN');
 
         const langSelect = document.getElementById('lang-select');
         for (const [code, name] of Object.entries(supportedLangs)) {
@@ -773,7 +776,7 @@
 
         const setLanguage = (lang) => {
             currentLang = lang;
-            localStorage.setItem('appLanguage', lang);
+            languageStorage.set(lang);
             document.documentElement.lang = lang;
             
             const t = translations[lang];
@@ -846,14 +849,17 @@
 
 
         // --- Local Storage ---
-        const getPlans = () => JSON.parse(localStorage.getItem('insurancePlans') || '[]');
-        const savePlans = (plans) => localStorage.setItem('insurancePlans', JSON.stringify(plans));
+        const getPlans = () => {
+            const plans = plansStorage.get([]);
+            return Array.isArray(plans) ? plans : [];
+        };
+        const savePlans = (plans) => plansStorage.set(plans);
         
         // --- Theme ---
         const applyTheme = (theme) => {
             document.documentElement.setAttribute('data-theme', theme);
             themeToggleBtn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', theme);
+            themeStorage.set(theme);
         };
         themeToggleBtn.addEventListener('click', () => {
             const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -862,21 +868,23 @@
         
         // --- Generate Dynamic Form Fields ---
         const generateInsuranceFields = () => {
-            insuranceFieldsContainer.innerHTML = '';
+            insuranceFieldsContainer.replaceChildren();
             const items = translations[currentLang].insuranceItems;
+            const fragment = document.createDocumentFragment();
             for (const key in items) {
                 const item = items[key];
-                const fieldHtml = `
-                    <div class="form-group">
-                        <label>${item.label}</label>
-                        <div class="form-group-grid">
-                            <input type="number" step="0.01" id="${key}-coverage" placeholder="${translations[currentLang].coverage}" value="${item.defaultCoverage}" required>
-                            <input type="number" step="0.01" id="${key}-premium" placeholder="${translations[currentLang].premium}" value="${item.defaultPremium}" required>
-                        </div>
+                const field = document.createElement('div');
+                field.className = 'form-group';
+                field.innerHTML = `
+                    <label>${item.label}</label>
+                    <div class="form-group-grid">
+                        <input type="number" step="0.01" id="${key}-coverage" placeholder="${translations[currentLang].coverage}" value="${item.defaultCoverage}" required>
+                        <input type="number" step="0.01" id="${key}-premium" placeholder="${translations[currentLang].premium}" value="${item.defaultPremium}" required>
                     </div>
                 `;
-                insuranceFieldsContainer.insertAdjacentHTML('beforeend', fieldHtml);
+                fragment.appendChild(field);
             }
+            insuranceFieldsContainer.appendChild(fragment);
         };
 
         // --- Render Plans ---
@@ -907,12 +915,13 @@
             // Keep only recent 10 if needed (optional, current setup shows all filtered/sorted)
             // plans = plans.slice(0, 10);
 
-            plansContainer.innerHTML = '';
+            plansContainer.replaceChildren();
             if (plans.length === 0) {
                  plansContainer.innerHTML = `<p>${translations[currentLang].noPlans}</p>`;
                  return;
             }
 
+            const fragment = document.createDocumentFragment();
             plans.forEach(plan => {
                 let totalCoverage = 0;
                 let totalPremium = 0;
@@ -938,41 +947,43 @@
                 // Sanitize user HTML content from Quill
                 const sanitizedRemarks = DOMPurify.sanitize(plan.remarks);
 
-                const cardHtml = `
-                    <div class="plan-card" id="plan-${plan.id}">
-                         <div class="plan-header">
-                            <h3><input type="checkbox" class="export-checkbox" data-plan-id="${plan.id}"> ${plan.company}</h3>
-                            <div class="sales-info">
-                                ${plan.sales ? `<span>${t.salesInfoLabel}: ${plan.sales}</span>` : ''}
-                                ${plan.contact ? ` | <span>${t.contactInfoLabel}: ${plan.contact}</span>` : ''}
-                            </div>
-                        </div>
-                        <div class="plan-body">
-                            ${itemsHtml}
-                            <div class="plan-total">
-                                <span class="label">${t.totalCoverage}</span>
-                                <span class="value">${totalCoverage.toLocaleString()}</span>
-                            </div>
-                            <div class="plan-total">
-                                <span class="label">${t.totalPremium}</span>
-                                <span class="value">${totalPremium.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-                            </div>
-                             ${sanitizedRemarks ? `
-                                <div class="plan-remarks">
-                                    <h4>${t.remarks}</h4>
-                                    <div>${sanitizedRemarks}</div>
-                                </div>` 
-                            : ''}
-                        </div>
-                        <div class="plan-actions">
-                            <button class="edit-btn" data-id="${plan.id}"><i class="fas fa-edit"></i> ${t.editBtn}</button>
-                            <button class="delete-btn" data-id="${plan.id}"><i class="fas fa-trash"></i> ${t.deleteBtn}</button>
-                            <button class="export-btn" data-id="${plan.id}"><i class="fas fa-camera"></i> ${t.exportBtn}</button>
+                const card = document.createElement('div');
+                card.className = 'plan-card';
+                card.id = `plan-${plan.id}`;
+                card.innerHTML = `
+                    <div class="plan-header">
+                        <h3><input type="checkbox" class="export-checkbox" data-plan-id="${plan.id}"> ${plan.company}</h3>
+                        <div class="sales-info">
+                            ${plan.sales ? `<span>${t.salesInfoLabel}: ${plan.sales}</span>` : ''}
+                            ${plan.contact ? ` | <span>${t.contactInfoLabel}: ${plan.contact}</span>` : ''}
                         </div>
                     </div>
+                    <div class="plan-body">
+                        ${itemsHtml}
+                        <div class="plan-total">
+                            <span class="label">${t.totalCoverage}</span>
+                            <span class="value">${totalCoverage.toLocaleString()}</span>
+                        </div>
+                        <div class="plan-total">
+                            <span class="label">${t.totalPremium}</span>
+                            <span class="value">${totalPremium.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                        </div>
+                        ${sanitizedRemarks ? `
+                            <div class="plan-remarks">
+                                <h4>${t.remarks}</h4>
+                                <div>${sanitizedRemarks}</div>
+                            </div>`
+                        : ''}
+                    </div>
+                    <div class="plan-actions">
+                        <button class="edit-btn" data-id="${plan.id}"><i class="fas fa-edit"></i> ${t.editBtn}</button>
+                        <button class="delete-btn" data-id="${plan.id}"><i class="fas fa-trash"></i> ${t.deleteBtn}</button>
+                        <button class="export-btn" data-id="${plan.id}"><i class="fas fa-camera"></i> ${t.exportBtn}</button>
+                    </div>
                 `;
-                plansContainer.insertAdjacentHTML('beforeend', cardHtml);
+                fragment.appendChild(card);
             });
+            plansContainer.appendChild(fragment);
         };
 
         // --- Form Submission ---
@@ -1073,10 +1084,7 @@
                 useCORS: true,
                 backgroundColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e1e1e' : '#ffffff'
             }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                AppUtils.downloadCanvas(canvas, filename);
                 
                 // Cleanup
                 element.classList.remove('export-mode');
@@ -1121,10 +1129,7 @@
                 useCORS: true,
                 backgroundColor: document.documentElement.getAttribute('data-theme') === 'dark' ? '#121212' : '#f8f9fa'
             }).then(canvas => {
-                 const link = document.createElement('a');
-                link.download = `insurance-comparison-${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                AppUtils.downloadCanvas(canvas, `insurance-comparison-${Date.now()}.png`);
                 document.body.removeChild(exportContainer);
             }).catch(err => {
                 console.error('Export failed:', err);
@@ -1133,7 +1138,7 @@
         });
 
         // --- Event Listeners for Toolbar ---
-        searchInput.addEventListener('input', renderPlans);
+        searchInput.addEventListener('input', AppUtils.debounce(renderPlans, 120));
         sortSelect.addEventListener('change', renderPlans);
 
         // --- Keyboard Shortcut (Ctrl+Enter to submit) ---
@@ -1145,7 +1150,7 @@
 
         // --- Initial Load ---
         const init = () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = themeStorage.get('light');
             applyTheme(savedTheme);
             setLanguage(currentLang); // This will call generateInsuranceFields and renderPlans
         };

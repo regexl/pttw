@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="../viewport/js/app-utils.js"></script>
     <style>
         /* CSS 变量定义 */
         :root {
@@ -298,6 +299,11 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const storage = AppUtils.createNamespacedStorage('investmentDashboardState', { version: 1 });
+        const scheduleStateSave = AppUtils.debounce(() => {
+            storage.set(state);
+        }, 200);
+
         // 全局状态
         let state = {
             assets: [],
@@ -368,6 +374,10 @@
             languageSwitcher: $('#languageSwitcher'),
         };
 
+        function persistState() {
+            scheduleStateSave();
+        }
+
         // --- 核心业务逻辑 ---
         function calculateAssetStats(asset) {
             let holdings = 0, totalCost = 0, realizedProfit = 0, tempHoldings = 0, tempCost = 0, history = [];
@@ -412,21 +422,27 @@
 
         // --- UI 渲染 ---
         function render() {
-            saveState();
             renderSummaryCard();
-            elements.assetsGrid.innerHTML = '';
+            elements.assetsGrid.replaceChildren();
             if (state.assets.length === 0) {
                 elements.assetsGrid.innerHTML = `<p data-i18n-key="noData">${getTranslation('noData')}</p>`;
             } else {
+                const fragment = document.createDocumentFragment();
                 state.assets.forEach(asset => {
                     const stats = calculateAssetStats(asset);
                     const card = createAssetCard(asset, stats);
-                    elements.assetsGrid.appendChild(card);
+                    fragment.appendChild(card);
+                });
+                elements.assetsGrid.appendChild(fragment);
+
+                state.assets.forEach(asset => {
+                    const stats = calculateAssetStats(asset);
                     renderAssetChart(asset, stats);
-                    attachCardEventListeners(card, asset);
                 });
             }
-            applyLanguage(state.language);
+            syncChartInstances();
+            syncTranslations();
+            persistState();
         }
 
         function createAssetCard(asset, stats) {
@@ -563,6 +579,16 @@
             });
         }
 
+        function syncChartInstances() {
+            const activeAssetIds = new Set(state.assets.map(asset => String(asset.id)));
+            Object.keys(chartInstances).forEach(chartId => {
+                if (chartId !== 'cashFlow' && !activeAssetIds.has(String(chartId))) {
+                    chartInstances[chartId].destroy();
+                    delete chartInstances[chartId];
+                }
+            });
+        }
+
         function renderCashFlowChart(history) {
             const ctx = document.getElementById('cashFlowChart')?.getContext('2d');
             if(!ctx) return;
@@ -587,12 +613,6 @@
         }
 
         // --- 事件处理 ---
-        function attachCardEventListeners(card, asset) {
-            card.querySelector('.add-tx-btn').addEventListener('click', () => openModal('asset', asset.id));
-            card.querySelector('.delete-asset-btn').addEventListener('click', () => deleteAsset(asset.id));
-            card.querySelector('.export-single-btn').addEventListener('click', () => exportCardAsImage(card));
-        }
-
         elements.addAssetBtn.addEventListener('click', () => openModal('asset'));
         elements.addCashFlowBtn.addEventListener('click', () => openModal('cashFlow'));
         document.addEventListener('keydown', (e) => {
@@ -673,20 +693,57 @@
             }
         }
 
+        elements.assetsGrid.addEventListener('click', (event) => {
+            const button = event.target.closest('button');
+            if (!button) {
+                return;
+            }
+
+            const card = button.closest('.asset-card');
+            if (!card) {
+                return;
+            }
+
+            const assetId = card.dataset.id;
+            if (button.classList.contains('add-tx-btn')) {
+                openModal('asset', assetId);
+                return;
+            }
+            if (button.classList.contains('delete-asset-btn')) {
+                deleteAsset(assetId);
+                return;
+            }
+            if (button.classList.contains('export-single-btn')) {
+                exportCardAsImage(card);
+            }
+        });
+
         $$('.editor-btn').forEach(btn => btn.addEventListener('click', (e) => {
             e.preventDefault(); document.execCommand(e.target.dataset.command, false, null);
         }));
 
-        elements.themeSwitcher.addEventListener('change', (e) => { state.theme = e.target.value; applyTheme(); render(); });
-        elements.languageSwitcher.addEventListener('change', (e) => { state.language = e.target.value; applyLanguage(); });
-        function applyTheme() { document.documentElement.setAttribute('data-theme', state.theme); elements.themeSwitcher.value = state.theme; }
-        function applyLanguage() {
+        elements.themeSwitcher.addEventListener('change', (e) => {
+            state.theme = e.target.value;
+            applyTheme();
+            render();
+        });
+        elements.languageSwitcher.addEventListener('change', (e) => {
+            state.language = e.target.value;
+            syncTranslations();
+            render();
+        });
+        function applyTheme() {
+            document.documentElement.setAttribute('data-theme', state.theme);
+            elements.themeSwitcher.value = state.theme;
+            persistState();
+        }
+        function syncTranslations() {
             const trans = translations[state.language] || translations['zh-CN'];
             document.documentElement.lang = state.language;
             $$('[data-i18n-key]').forEach(el => {
                 const key = el.dataset.i18nKey; if (trans[key]) el.textContent = trans[key];
             });
-            elements.languageSwitcher.value = state.language; saveState();
+            elements.languageSwitcher.value = state.language;
         }
         function getTranslation(key) { return (translations[state.language] && translations[state.language][key]) || translations['zh-CN'][key] || key; }
 
@@ -756,7 +813,7 @@
                     }
                     if (importedState && Array.isArray(importedState.assets)) {
                         state = { ...state, ...importedState, cashFlows: importedState.cashFlows || [] };
-                        applyTheme(); applyLanguage(); render();
+                        applyTheme(); syncTranslations(); render();
                         alert(getTranslation('dataImported'));
                     } else throw new Error('Invalid file format');
                 } catch (error) { alert('导入文件出错: ' + error.message); }
@@ -820,38 +877,31 @@
         });
 
         function downloadCanvasAsImage(canvas, filename) {
-            const image = canvas.toDataURL('image/png', 1.0);
-            const link = document.createElement('a');
-            link.href = image;
-            link.download = filename;
-            link.click();
+            AppUtils.downloadCanvas(canvas, filename);
         }
 
         function downloadFile(content, fileName, contentType) {
-            const a = document.createElement('a');
-            const file = new Blob([content], {type: contentType});
-            a.href = URL.createObjectURL(file); a.download = fileName; a.click(); URL.revokeObjectURL(a.href);
+            AppUtils.downloadBlob(content, fileName, contentType);
         }
 
-        function saveState() { localStorage.setItem('investmentDashboardState', JSON.stringify(state)); }
         function loadState() {
-            const saved = localStorage.getItem('investmentDashboardState');
-            if (saved) {
-                const loadedState = JSON.parse(saved);
-                // Ensure new data structures exist
-                state = {
-                    ...loadedState,
-                    cashFlows: loadedState.cashFlows || [],
-                };
+            const loadedState = storage.get(null);
+            if (!loadedState) {
+                return;
             }
+            state = {
+                ...state,
+                ...loadedState,
+                assets: Array.isArray(loadedState.assets) ? loadedState.assets : [],
+                cashFlows: Array.isArray(loadedState.cashFlows) ? loadedState.cashFlows : [],
+            };
         }
 
         function sanitize(str) {
-            if (str === null || str === undefined) return '';
-            const temp = document.createElement('div'); temp.textContent = str; return temp.innerHTML;
+            return AppUtils.escapeHTML(str);
         }
 
-        function init() { loadState(); applyTheme(); applyLanguage(); render(); }
+        function init() { loadState(); applyTheme(); syncTranslations(); render(); }
         init();
     });
     </script>

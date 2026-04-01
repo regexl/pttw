@@ -7,6 +7,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="../viewport/js/app-utils.js"></script>
 
     <style>
         /* --- 基础与变量定义 --- */
@@ -434,6 +435,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    const languageStorage = AppUtils.createNamespacedStorage('trip_validator_lang', { version: 1 });
+    const themeStorage = AppUtils.createNamespacedStorage('trip_validator_theme', { version: 1 });
+    const plansStorage = AppUtils.createNamespacedStorage('trip_validator_plans', { version: 1 });
+
 
     // --- 1. STATE & CONFIGURATION ---
     let state = {
@@ -705,11 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. UTILITY FUNCTIONS ---
 
-    const sanitize = (str) => {
-        const temp = document.createElement('div');
-        temp.textContent = str;
-        return temp.innerHTML;
-    };
+    const sanitize = (str) => AppUtils.escapeHTML(str);
 
     const showAlert = (messageKey, params = {}) => {
         let message = I18N[state.currentLanguage][messageKey] || messageKey;
@@ -741,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setLanguage = (lang) => {
         state.currentLanguage = lang;
-        localStorage.setItem('trip_validator_lang', lang);
+        languageStorage.set(lang);
         updateTexts();
         populateTransportModes();
         renderSavedPlans();
@@ -754,7 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = I18N[langCode].language_name;
             dom.languageSwitcher.appendChild(option);
         });
-        const savedLang = localStorage.getItem('trip_validator_lang') || 'zh-CN';
+        const savedLang = languageStorage.get('zh-CN');
         dom.languageSwitcher.value = savedLang;
         setLanguage(savedLang);
     };
@@ -762,7 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleTheme = () => {
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
-        localStorage.setItem('trip_validator_theme', isDarkMode ? 'dark' : 'light');
+        themeStorage.set(isDarkMode ? 'dark' : 'light');
     };
 
     // --- 5. CORE APP LOGIC ---
@@ -879,7 +880,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        localStorage.setItem('trip_validator_plans', JSON.stringify(state.savedPlans));
+        plansStorage.set(state.savedPlans);
         clearForm();
         renderSavedPlans();
     };
@@ -910,7 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const confirmDelete = () => {
         state.savedPlans = state.savedPlans.filter(p => p.id !== state.planToDeleteId);
-        localStorage.setItem('trip_validator_plans', JSON.stringify(state.savedPlans));
+        plansStorage.set(state.savedPlans);
         dom.deleteModal.style.display = 'none';
         state.planToDeleteId = null;
         renderSavedPlans();
@@ -922,10 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color'),
             scale: 2 // Higher scale for better resolution
         }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `trip-plan-${planId}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
+            AppUtils.downloadCanvas(canvas, `trip-plan-${planId}.png`);
         });
     };
 
@@ -963,10 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
              backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color'),
              scale: 2
         }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'trip-comparison.png';
-            link.href = canvas.toDataURL();
-            link.click();
+            AppUtils.downloadCanvas(canvas, 'trip-comparison.png');
             document.body.removeChild(container);
         });
     };
@@ -974,7 +969,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 6. RENDERING FUNCTIONS ---
 
     const renderCurrentLegs = () => {
-        dom.currentLegsList.innerHTML = '';
+        dom.currentLegsList.replaceChildren();
+        const fragment = document.createDocumentFragment();
         state.currentLegs.forEach(leg => {
             const li = document.createElement('li');
             li.className = 'leg-item';
@@ -989,17 +985,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="delete-leg-btn" data-id="${leg.id}">🗑️</button>
                 </div>
             `;
-            dom.currentLegsList.appendChild(li);
+            fragment.appendChild(li);
         });
+        dom.currentLegsList.appendChild(fragment);
     };
 
     const renderSavedPlans = () => {
-        dom.savedPlansContainer.innerHTML = '';
+        dom.savedPlansContainer.replaceChildren();
         if (state.savedPlans.length === 0) {
-            dom.savedPlansContainer.innerHTML = `<p>${I18N[state.currentLanguage].no_plans_saved}</p>`;
-            return;
+             dom.savedPlansContainer.innerHTML = `<p>${I18N[state.currentLanguage].no_plans_saved}</p>`;
+             return;
         }
 
+        const fragment = document.createDocumentFragment();
         state.savedPlans.forEach(plan => {
             let totalCost = 0;
             let totalDurationMinutes = 0;
@@ -1071,8 +1069,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="btn btn-danger delete-plan-btn" data-id="${plan.id}">${I18N[state.currentLanguage].delete_btn}</button>
                 </div>
             `;
-            dom.savedPlansContainer.appendChild(card);
+            fragment.appendChild(card);
         });
+        dom.savedPlansContainer.appendChild(fragment);
     };
 
     // --- 7. EVENT LISTENERS ---
@@ -1092,17 +1091,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dom.savedPlansContainer.addEventListener('click', (e) => {
         const target = e.target;
-        if (target.classList.contains('edit-plan-btn')) {
-            editPlan(parseInt(target.dataset.id));
-        }
-        if (target.classList.contains('delete-plan-btn')) {
-            openDeleteModal(parseInt(target.dataset.id));
-        }
-        if (target.classList.contains('export-btn')) {
-            exportPlanAsImage(parseInt(target.dataset.id));
-        }
+        const button = target.closest('button');
         if(target.classList.contains('compare-checkbox')){
             target.closest('.plan-card').classList.toggle('export-selected', target.checked);
+        }
+        if (button && button.classList.contains('edit-plan-btn')) {
+            editPlan(parseInt(button.dataset.id, 10));
+        }
+        if (button && button.classList.contains('delete-plan-btn')) {
+            openDeleteModal(parseInt(button.dataset.id, 10));
+        }
+        if (button && button.classList.contains('export-btn')) {
+            exportPlanAsImage(parseInt(button.dataset.id, 10));
         }
     });
 
@@ -1124,21 +1124,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const init = () => {
         // Load theme
-        const savedTheme = localStorage.getItem('trip_validator_theme');
+        const savedTheme = themeStorage.get(null);
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             document.body.classList.add('dark-mode');
         }
 
         // Load data
-        const savedPlansData = localStorage.getItem('trip_validator_plans');
-        if (savedPlansData) {
-            state.savedPlans = JSON.parse(savedPlansData);
+        const savedPlansData = plansStorage.get([]);
+        if (Array.isArray(savedPlansData)) {
+            state.savedPlans = savedPlansData;
         }
 
         initLanguageSwitcher();
-        populateTransportModes();
-        renderSavedPlans();
 
         // Init SortableJS for drag-and-drop
         new Sortable(dom.currentLegsList, {
