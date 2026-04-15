@@ -24,26 +24,39 @@
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;700&display=swap');
 
         :root {
-            /* New Bright Color Palette */
-            --primary-color: #f97316;      /* 主色调/高亮色 - 活力橙 */
-            --light-bg-start: #f8fafc;     /* 背景渐变起始 - 极淡灰 */
-            --light-bg-end: #e0f2fe;       /* 背景渐变结束 - 淡天蓝 */
-            --text-color: #334155;         /* 文本颜色 - 深石板灰 */
-            --text-color-light: #64748b;   /* 浅色文本/辅助信息 */
-            --card-bg: rgba(255, 255, 255, 0.7); /* 卡片背景 - 半透明白色 */
-            --border-color: #e2e8f0;       /* 边框颜色 */
+            --primary-color: #f97316;
+            --bg-start: #f8fafc;
+            --bg-end: #e0f2fe;
+            --text-color: #334155;
+            --text-color-light: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --border-color: #e2e8f0;
+            --navbar-bg: #fff;
             --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --font-code: 'Fira Code', 'Courier New', monospace;
         }
 
+        [data-theme="dark"] {
+            --primary-color: #fb923c;
+            --bg-start: #0f172a;
+            --bg-end: #1e293b;
+            --text-color: #e2e8f0;
+            --text-color-light: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --border-color: #334155;
+            --navbar-bg: #1e293b;
+            --particle-color: rgba(251, 146, 60, 0.6);
+        }
+
         body {
-            background: linear-gradient(135deg, var(--light-bg-start), var(--light-bg-end));
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
             color: var(--text-color);
             font-family: var(--font-body);
             line-height: 1.6;
             margin: 0;
             padding-top: 60px;
-            overflow-x: hidden; /* 防止光标效果在边缘产生滚动条 */
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* --- Interactive Backgrounds --- */
@@ -63,9 +76,13 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(249, 115, 22, 0.1), transparent 60%);
             transform: translate(-50%, -50%);
-            pointer-events: none; /* 穿透鼠标事件 */
+            pointer-events: none;
             z-index: -1;
             transition: background 0.3s;
+        }
+
+        [data-theme="dark"] #mouse-aura {
+            background: radial-gradient(circle, rgba(251, 146, 60, 0.12), transparent 60%);
         }
 
         h1, h2, h3 {
@@ -97,7 +114,7 @@
 
         /* --- Navigation --- */
         .navbar {
-            background-color: #fff; /* 修改为纯白背景 */
+            background-color: var(--navbar-bg);
             border-bottom: 1px solid var(--border-color);
             position: fixed;
             top: 0;
@@ -105,6 +122,7 @@
             width: 100%;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .navbar-container {
@@ -148,6 +166,47 @@
 
         .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
         .hamburger .bar { width: 25px; height: 3px; background-color: var(--text-color); border-radius: 5px; transition: all 0.3s; }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3 { color: var(--text-color); transition: color 0.3s; }
+        h2 { border-bottom-color: var(--primary-color); }
+        .hero h1 { color: var(--text-color); }
+
+        /* --- Cards & Surfaces --- */
+        .project-card {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .tool-card {
+            background: linear-gradient(180deg, var(--card-bg), rgba(255,255,255,0.4));
+            border-color: var(--border-color);
+        }
+        .project-card h3, .tool-card h3 { color: var(--primary-color); }
+        .project-card p, .tool-card p { color: var(--text-color); }
+
+        /* --- Particles color update via JS --- */
 
         /* --- Hero Section --- */
         .hero { text-align: center; padding: 6rem 0; }
@@ -372,6 +431,7 @@
     <nav class="navbar">
         <div class="navbar-container">
             <a href="#" class="nav-logo">Ethan</a>
+            <button id="theme-toggle" class="theme-toggle" title="切换主题">🌙</button>
             <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="#hero" class="nav-link active">首页</a></li>
@@ -741,10 +801,39 @@
                 count: 0,
                 maxCount: 90,
                 speed: 0.4,
-                color: 'rgba(249, 115, 22, 0.7)',
+                // RGB triplet for light and dark
+                pr: 249, pg: 115, pb: 22,
                 connectDistance: 120,
                 connectDistanceSquared: 120 * 120
             };
+
+            // ── Theme Toggle ─────────────────────────────────────
+            (function() {
+                var btn = document.getElementById('theme-toggle');
+                var html = document.documentElement;
+
+                function applyTheme(theme) {
+                    if (theme === 'dark') {
+                        html.setAttribute('data-theme', 'dark');
+                        btn.textContent = '☀️';
+                        particleConfig.pr = 251; particleConfig.pg = 146; particleConfig.pb = 60;
+                    } else {
+                        html.removeAttribute('data-theme');
+                        btn.textContent = '🌙';
+                        particleConfig.pr = 249; particleConfig.pg = 115; particleConfig.pb = 22;
+                    }
+                    localStorage.setItem('theme', theme);
+                }
+
+                var saved = localStorage.getItem('theme');
+                if (saved) applyTheme(saved);
+                else applyTheme('light');
+
+                btn.addEventListener('click', function() {
+                    var current = html.getAttribute('data-theme');
+                    applyTheme(current === 'dark' ? 'light' : 'dark');
+                });
+            })();
 
             function updateParticleCount() {
                 particleConfig.count = Math.min(
@@ -807,7 +896,7 @@
                 draw() {
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = particleConfig.color;
+                    ctx.fillStyle = `rgba(${particleConfig.pr},${particleConfig.pg},${particleConfig.pb},0.7)`;
                     ctx.fill();
                 }
             }
@@ -829,7 +918,7 @@
                         if (distanceSquared < particleConfig.connectDistanceSquared) {
                             let distance = Math.sqrt(distanceSquared);
                             opacityValue = 1 - (distance / particleConfig.connectDistance);
-                            ctx.strokeStyle = `rgba(249, 115, 22, ${opacityValue})`;
+                            ctx.strokeStyle = `rgba(${particleConfig.pr},${particleConfig.pg},${particleConfig.pb},${opacityValue})`;
                             ctx.lineWidth = 0.5;
                             ctx.beginPath();
                             ctx.moveTo(particles[a].x, particles[a].y);
