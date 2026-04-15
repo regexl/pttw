@@ -478,16 +478,12 @@
                 el('vc-os').textContent = detectOS(ua);
                 el('vc-browser').textContent = detectBrowser(ua);
 
-                fetch('https://ipwho.is/?fields=status,message,city,country,ip')
+                fetch('https://get.geojs.io/v1/ip/geo.json')
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
-                        if (data.success !== false) {
-                            el('vc-loc').textContent = data.city || data.country || '未知';
-                            el('vc-ip').textContent = data.ip || '未知';
-                            el('vc-ip-wrap').style.display = 'inline';
-                        } else {
-                            el('vc-loc').textContent = '未知';
-                        }
+                        el('vc-loc').textContent = data.city || data.country || '未知';
+                        el('vc-ip').textContent = data.ip || '未知';
+                        el('vc-ip-wrap').style.display = 'inline';
                     })
                     .catch(function() {
                         el('vc-loc').textContent = '获取失败';
@@ -503,10 +499,10 @@
                     navigator.clipboard.writeText(ip).then(showCopied);
                 } else {
                     // Re-fetch fresh IP
-                    fetch('https://ipwho.is/?fields=ip')
+                    fetch('https://get.geojs.io/v1/ip/geo.json')
                         .then(function(r) { return r.json(); })
                         .then(function(d) {
-                            var txt = (d && d.success !== false) ? d.ip : ip;
+                            var txt = d.ip || ip;
                             _lastIP = txt;
                             document.getElementById('vc-ip').textContent = txt;
                             navigator.clipboard.writeText(txt).then(showCopied);
