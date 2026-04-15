@@ -146,65 +146,6 @@
             background-color: var(--primary-color);
         }
 
-        /* 新增下拉菜单样式 - 更贴近图片效果 */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            padding: 8px 0;
-            min-width: 220px;
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(5px);
-            transition: all 0.25s ease;
-        }
-
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 16px;
-            color: #334155;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8fafc;
-            color: var(--primary-color);
-        }
-
-        .dropdown-item i {
-            width: 24px;
-            margin-right: 10px;
-            color: #94a3b8;
-            text-align: center;
-        }
-
-        .dropdown-item:hover i {
-            color: var(--primary-color);
-        }
-
-        /* 悬停时高亮显示工具项 */
-        .dropdown:hover .nav-link {
-            color: #fff;
-            background-color: var(--primary-color);
-        }
-
         .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
         .hamburger .bar { width: 25px; height: 3px; background-color: var(--text-color); border-radius: 5px; transition: all 0.3s; }
 
@@ -374,6 +315,39 @@
         }
         #to-top-btn.show { display: flex; opacity: 1; }
 
+        /* --- Site Footer --- */
+        .site-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--text-color-light);
+        }
+        .footer-sep { color: var(--border-color); }
+        .fmi-item { color: var(--text-color-light); }
+        .fmi-sep { margin: 0 0.2rem; }
+        .footer-ver { color: var(--primary-color); font-weight: 600; }
+        .copy-btn-sm {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 0 2px;
+            color: var(--text-color-light);
+            vertical-align: middle;
+            transition: color 0.2s;
+        }
+        .copy-btn-sm:hover { color: var(--primary-color); }
+        .copy-btn-sm.copied { color: #16a34a; }
+
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
             .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background-color: #fff; padding: 1rem 0; text-align: center; border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -387,22 +361,6 @@
             #mouse-aura { display: none; } /* 在移动端隐藏光标效果 */
             .tools-toolbar { align-items: flex-start; }
 
-            /* 移动端下拉菜单调整 */
-            .dropdown-menu {
-                position: static;
-                display: none;
-                width: 100%;
-                box-shadow: none;
-                padding: 0;
-                margin-top: 0;
-                background-color: #f8fafc;
-                opacity: 1;
-                transform: none;
-            }
-
-            .dropdown.active .dropdown-menu {
-                display: block;
-            }
         }
     </style>
 </head>
@@ -420,43 +378,6 @@
                 <li class="nav-item"><a href="#skills" class="nav-link">专业技能</a></li>
                 <li class="nav-item"><a href="#tools" class="nav-link">工具库</a></li>
                 <li class="nav-item"><a href="#projects" class="nav-link">实践案例</a></li>
-
-                <!-- 修改后的工具项：悬停显示下拉菜单 -->
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">工具</a>
-                    <div class="dropdown-menu">
-                        <a href="pages/TripValidator.html" class="dropdown-item">
-                            <i class="fas fa-check-circle"></i>行程校验工具
-                        </a>
-                        <a href="pages/QuotePilot.html" class="dropdown-item">
-                            <i class="fas fa-file-code"></i>车险方案对比分析工具
-                        </a>
-                        <a href="pages/QuickNavigation.html" class="dropdown-item">
-                            <i class="fas fa-file-code"></i>快捷导航工具
-                        </a>
-                        <a href="pages/SmartNotes.html" class="dropdown-item">
-                            <i class="fas fa-bug"></i>智能便签
-                        </a>
-                        <a href="pages/ConvenientNotebook.html" class="dropdown-item">
-                            <i class="fas fa-file-code"></i>便捷记事本
-                        </a>
-                        <a href="pages/MobileCreditUsageCycleCalculator.html" class="dropdown-item">
-                            <i class="fas fa-file-code"></i>话费使用周期计算器
-                        </a>
-                        <a href="pages/CommercialHousingInformationManagementSystem.html" class="dropdown-item">
-                            <i class="fas fa-file-code"></i>商品房信息管理系统
-                        </a>
-<!--                        <a href="BugTracker.html" class="dropdown-item">-->
-<!--                            <i class="fas fa-bug"></i>缺陷跟踪工具-->
-<!--                        </a>-->
-<!--                        <a href="PerformanceAnalyzer.html" class="dropdown-item">-->
-<!--                            <i class="fas fa-tachometer-alt"></i>性能分析工具-->
-<!--                        </a>-->
-<!--                        <a href="CodeCoverage.html" class="dropdown-item">-->
-<!--                            <i class="fas fa-chart-pie"></i>代码覆盖率工具-->
-<!--                        </a>-->
-                    </div>
-                </li>
             </ul>
         </div>
     </nav>
@@ -500,6 +421,28 @@
         </section>
     </main>
 
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span class="footer-copy">© 2026 Ethan · SDET</span>
+            <span class="footer-sep">|</span>
+            <span class="footer-meta">
+                <span class="fmi-item">📍 <span id="vc-loc">-</span></span>
+                <span class="fmi-sep">·</span>
+                <span class="fmi-item">🖥️ <span id="vc-os">-</span></span>
+                <span class="fmi-sep">·</span>
+                <span class="fmi-item">🌐 <span id="vc-browser">-</span></span>
+            </span>
+            <span class="footer-sep">|</span>
+            <span class="fmi-item" id="vc-ip-wrap" style="display:none;">
+                <span id="vc-ip">-</span>
+                <button id="copy-ip-btn" class="copy-btn-sm" title="点击复制 IP" onclick="copyIP()">📋</button>
+            </span>
+
+            <span class="footer-sep">|</span>
+            <span class="footer-ver">v1.0.0</span>
+        </div>
+    </footer>
+
     <button id="to-top-btn" title="回到顶部">&#8679;</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
@@ -507,21 +450,84 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
+            // ── Footer Visitor Info ───────────────────────────────
+            (function() {
+                function detectOS(ua) {
+                    if (!ua) return 'Unknown';
+                    if (/windows phone/i.test(ua)) return 'Windows Phone';
+                    if (/win/i.test(ua)) return 'Windows';
+                    if (/mac/i.test(ua) && /iphone|ipad|ipod/i.test(ua)) return 'iOS';
+                    if (/mac/i.test(ua)) return 'macOS';
+                    if (/linux/i.test(ua) && !/android/i.test(ua)) return 'Linux';
+                    if (/android/i.test(ua)) return 'Android';
+                    return 'Unknown';
+                }
+                function detectBrowser(ua) {
+                    if (!ua) return 'Unknown';
+                    if (/edg/i.test(ua)) return 'Edge';
+                    if (/chrome/i.test(ua) && /safari/i.test(ua) && !/opr|edge/i.test(ua)) return 'Chrome';
+                    if (/safari/i.test(ua) && !/chrome/i.test(ua)) return 'Safari';
+                    if (/firefox/i.test(ua)) return 'Firefox';
+                    if (/opr|opera/i.test(ua)) return 'Opera';
+                    if (/micromessenger/i.test(ua)) return 'WeChat';
+                    return 'Unknown';
+                }
+                function el(id) { return document.getElementById(id); }
+
+                var ua = navigator.userAgent;
+                el('vc-os').textContent = detectOS(ua);
+                el('vc-browser').textContent = detectBrowser(ua);
+
+                fetch('https://ip-api.com/json/?fields=status,message,country,city,query')
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.status === 'success') {
+                            el('vc-loc').textContent = data.city || data.country || '未知';
+                            el('vc-ip').textContent = data.query || '未知';
+                            el('vc-ip-wrap').style.display = 'inline';
+                        } else {
+                            el('vc-loc').textContent = '未知';
+                        }
+                    })
+                    .catch(function() {
+                        el('vc-loc').textContent = '获取失败';
+                    });
+            })();
+
+            // Copy IP to clipboard
+            var _lastIP = '';
+            function copyIP() {
+                var ip = document.getElementById('vc-ip').textContent;
+                if (ip === '-' || ip === '未知' || ip === '获取失败') return;
+                if (ip === _lastIP && navigator.clipboard) {
+                    navigator.clipboard.writeText(ip).then(showCopied);
+                } else {
+                    // Re-fetch fresh IP
+                    fetch('https://ip-api.com/json/?fields=query')
+                        .then(function(r) { return r.json(); })
+                        .then(function(d) {
+                            var txt = d.query || ip;
+                            _lastIP = txt;
+                            document.getElementById('vc-ip').textContent = txt;
+                            navigator.clipboard.writeText(txt).then(showCopied);
+                        });
+                }
+            }
+            function showCopied() {
+                var btn = document.getElementById('copy-ip-btn');
+                btn.textContent = '✅';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '📋';
+                    btn.classList.remove('copied');
+                }, 1500);
+            }
+
             // --- Basic UI Scripts (Nav, Scrollspy, ToTop) ---
             const hamburger = document.querySelector('.hamburger');
             const navMenu = document.querySelector('.nav-menu');
             hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); });
             document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => { hamburger.classList.remove('active'); navMenu.classList.remove('active'); }));
-
-            // 移动端下拉菜单交互
-            const dropdown = document.querySelector('.dropdown');
-            const dropdownToggle = dropdown.querySelector('.nav-link');
-            dropdownToggle.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    dropdown.classList.toggle('active');
-                }
-            });
 
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-menu a');
