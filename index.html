@@ -498,7 +498,7 @@
             </span>
             <span class="footer-sep">|</span>
             <span class="fmi-item" id="vc-ip-wrap" style="display:none;">
-                <span id="vc-ip">-</span>
+                <span id="vc-ip">获取中...</span>
                 <button id="copy-ip-btn" class="copy-btn-sm" title="点击复制 IP" onclick="copyIP()">📋</button>
             </span>
 
@@ -554,36 +554,56 @@
                     });
             })();
 
-            // Copy IP to clipboard
-            function copyToClipboard(text) {
+            // Copy IP to clipboard — try three methods
+            function copyIP() {
+                var btn = document.getElementById('copy-ip-btn');
+                var ip = btn ? btn.getAttribute('data-ip') : '';
+                if (!ip) ip = document.getElementById('vc-ip').textContent;
+                if (!ip || ip === '-' || ip === '未知' || ip === '获取失败' || ip === '获取中') return;
+
+                // Method 1: Modern clipboard API
                 if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(text).then(function() { showCopied(); });
+                    navigator.clipboard.writeText(ip).then(function() {
+                        btn.textContent = '✅';
+                        setTimeout(function() { btn.textContent = '📋'; }, 1500);
+                    }).catch(function() { copyIPFallback(ip, btn); });
                     return;
                 }
-                // Fallback
-                var el = document.createElement('input');
-                el.setAttribute('value', text);
-                el.style.cssText = 'position:fixed;top:0;left:0;opacity:0;width:1px;height:1px';
-                document.body.appendChild(el);
-                el.select();
-                try { document.execCommand('copy'); showCopied(); } catch(e) { showFail(); }
-                document.body.removeChild(el);
+
+                // Method 2: execCommand via textarea
+                copyIPFallback(ip, btn);
             }
-            function showCopied() {
-                var btn = document.getElementById('copy-ip-btn');
-                btn.textContent = '✅';
-                btn.classList.add('copied');
-                setTimeout(function() { btn.textContent = '📋'; btn.classList.remove('copied'); }, 1500);
+
+            function copyIPFallback(text, btn) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;top:0;left:0;width:2px;height:2px;overflow:hidden;opacity:0;tabindex:-1;outline:none;border:none;padding:0;margin:0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                try {
+                    var ok = document.execCommand('copy');
+                    btn.textContent = ok ? '✅' : '❌';
+                } catch(e) {
+                    btn.textContent = '❌';
+                }
+                setTimeout(function() { document.body.removeChild(ta); btn.textContent = '📋'; }, 1500);
             }
-            function showFail() {
-                var btn = document.getElementById('copy-ip-btn');
-                btn.textContent = '❌';
-                setTimeout(function() { btn.textContent = '📋'; }, 1500);
-            }
-            function copyIP() {
-                var ip = document.getElementById('vc-ip').textContent;
-                if (!ip || ip === '-' || ip === '未知' || ip === '获取失败') return;
-                copyToClipboard(ip);
+
+            // After IP loads, store it on the button for reliable access
+            var ipEl = document.getElementById('vc-ip');
+            var copyBtn = document.getElementById('copy-ip-btn');
+            if (ipEl && copyBtn) {
+                var observer = new MutationObserver(function() {
+                    var ip = ipEl.textContent;
+                    if (ip && ip !== '-' && ip !== '未知' && ip !== '获取失败' && ip !== '获取中') {
+                        copyBtn.setAttribute('data-ip', ip);
+                        observer.disconnect();
+                    }
+                });
+                observer.observe(ipEl, { characterData: true, childList: true, subtree: true });
+                // Also store immediately if already loaded
+                copyBtn.setAttribute('data-ip', ipEl.textContent);
             }
 
             // --- Basic UI Scripts (Nav, Scrollspy, ToTop) ---
