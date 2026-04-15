@@ -491,23 +491,19 @@
             })();
 
             // Copy IP to clipboard
-            var _lastIP = '';
-            function copyIP() {
-                var ip = document.getElementById('vc-ip').textContent;
-                if (ip === '-' || ip === '未知' || ip === '获取失败') return;
-                if (ip === _lastIP && navigator.clipboard) {
-                    navigator.clipboard.writeText(ip).then(showCopied);
-                } else {
-                    // Re-fetch fresh IP
-                    fetch('https://get.geojs.io/v1/ip/geo.json')
-                        .then(function(r) { return r.json(); })
-                        .then(function(d) {
-                            var txt = d.ip || ip;
-                            _lastIP = txt;
-                            document.getElementById('vc-ip').textContent = txt;
-                            navigator.clipboard.writeText(txt).then(showCopied);
-                        });
+            function copyText(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    return navigator.clipboard.writeText(text);
                 }
+                // Fallback: create temporary textarea
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+                document.body.appendChild(ta);
+                ta.focus(); ta.select();
+                var ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok ? Promise.resolve() : Promise.reject();
             }
             function showCopied() {
                 var btn = document.getElementById('copy-ip-btn');
@@ -517,6 +513,31 @@
                     btn.textContent = '📋';
                     btn.classList.remove('copied');
                 }, 1500);
+            }
+            function doCopy(ip) {
+                copyText(ip).then(showCopied).catch(function() {
+                    // Try re-fetching fresh IP then copy
+                    fetch('https://get.geojs.io/v1/ip/geo.json')
+                        .then(function(r) { return r.json(); })
+                        .then(function(d) {
+                            var txt = d.ip || ip;
+                            document.getElementById('vc-ip').textContent = txt;
+                            return copyText(txt);
+                        })
+                        .then(showCopied)
+                        .catch(function() {
+                            var btn = document.getElementById('copy-ip-btn');
+                            btn.textContent = '❌';
+                            setTimeout(function() {
+                                btn.textContent = '📋';
+                            }, 1500);
+                        });
+                });
+            }
+            function copyIP() {
+                var ip = document.getElementById('vc-ip').textContent;
+                if (!ip || ip === '-' || ip === '未知' || ip === '获取失败') return;
+                doCopy(ip);
             }
 
             // --- Basic UI Scripts (Nav, Scrollspy, ToTop) ---
