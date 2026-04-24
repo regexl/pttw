@@ -61,6 +61,8 @@
         /* 画布 */
         #canvas-wrapper { flex: 1; width: 100%; height: 100%; position: relative; overflow: hidden; }
         canvas { display: block; background: white; }
+        /* 移动端：禁用浏览器默认手势，交给白板处理（触摸绘制/双指缩放） */
+        #paintCanvas { touch-action: none; }
 
         input[type="text"] { height: 32px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 8px; width: 120px; }
 
@@ -170,8 +172,27 @@
         config: { stroke: '#000000', fill: '#ffffff', fillEnabled: false, size: 6, fontSize: 20 },
         tempObj: null,
         textPos: { x: 0, y: 0 },
-        isCommittingText: false
+        isCommittingText: false,
+        view: { scale: 1, offsetX: 0, offsetY: 0 }, // world -> screen: (x*scale+offsetX, y*scale+offsetY)
+        pointers: new Map(),
+        drawingPointerId: null,
+        gesture: null
     };
+
+    function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+    }
+
+    function screenToWorld(sx, sy) {
+        return {
+            x: (sx - state.view.offsetX) / state.view.scale,
+            y: (sy - state.view.offsetY) / state.view.scale
+        };
+    }
+
+    function applyViewTransform(targetCtx) {
+        targetCtx.setTransform(state.view.scale, 0, 0, state.view.scale, state.view.offsetX, state.view.offsetY);
+    }
 
     function initCanvas() {
         canvas.width = wrapper.clientWidth;
@@ -235,7 +256,9 @@
 
     // --- 文字输入处理 ---
     function showTextInput(x, y) {
-        state.textPos = { x, y };
+        // x/y 为 screen 坐标；内部存 world 坐标
+        const world = screenToWorld(x, y);
+        state.textPos = { x: world.x, y: world.y };
         textInput.style.display = 'block';
         textInput.style.left = x + 'px';
         textInput.style.top = y + 'px';
@@ -342,58 +365,145 @@
         commitTextInput({ reason: 'pointerdown', cancelIfEmpty: true });
     }, true);
 
-    // --- 鼠标交互 ---
-    canvas.onmousedown = (e) => {
-        const x = e.offsetX, y = e.offsetY;
+    // --- Pointer 交互（兼容鼠标/触摸/手写笔）---
+    function getCanvasScreenPoint(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
 
+    function startGestureIfNeeded() {
+        if (state.pointers.size < 2) return false;
+        const pts = Array.from(state.pointers.values());
+        const p1 = pts[0], p2 = pts[1];
+        const cx = (p1.sx + p2.sx) / 2;
+        const cy = (p1.sy + p2.sy) / 2;
+        const dx = p2.sx - p1.sx;
+        const dy = p2.sy - p1.sy;
+        const dist = Math.hypot(dx, dy) || 1;
+        const worldCenter = screenToWorld(cx, cy);
+        state.gesture = {
+            startScale: state.view.scale,
+            startOffsetX: state.view.offsetX,
+            startOffsetY: state.view.offsetY,
+            startDist: dist,
+            startCenter: { x: cx, y: cy },
+            worldCenter
+        };
+        // 进入双指手势时，结束当前绘制（避免误触）
+        state.isDrawing = false;
+        state.tempObj = null;
+        state.drawingPointerId = null;
+        return true;
+    }
+
+    function updateGesture() {
+        if (!state.gesture || state.pointers.size < 2) return;
+        const pts = Array.from(state.pointers.values());
+        const p1 = pts[0], p2 = pts[1];
+        const cx = (p1.sx + p2.sx) / 2;
+        const cy = (p1.sy + p2.sy) / 2;
+        const dx = p2.sx - p1.sx;
+        const dy = p2.sy - p1.sy;
+        const dist = Math.hypot(dx, dy) || 1;
+        const nextScale = clamp(state.gesture.startScale * (dist / state.gesture.startDist), 0.25, 4);
+        // 让 worldCenter 锚定在手势中心：offset = center - worldCenter*scale
+        state.view.scale = nextScale;
+        state.view.offsetX = cx - state.gesture.worldCenter.x * nextScale;
+        state.view.offsetY = cy - state.gesture.worldCenter.y * nextScale;
+        draw();
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+        // 主动捕获，避免指针移出画布时丢事件
+        try { canvas.setPointerCapture(e.pointerId); } catch {}
+
+        const sp = getCanvasScreenPoint(e);
+        state.pointers.set(e.pointerId, { sx: sp.x, sy: sp.y });
+
+        // 双指：进入缩放/平移
+        if (state.pointers.size === 2) {
+            startGestureIfNeeded();
+            return;
+        }
+
+        // 单指：绘制/文字
+        const wp = screenToWorld(sp.x, sp.y);
         if (state.tool === 'text') {
-            showTextInput(x, y);
+            showTextInput(sp.x, sp.y);
             return;
         }
 
         state.isDrawing = true;
+        state.drawingPointerId = e.pointerId;
         state.undoStack.push(JSON.stringify(state.objects));
 
         if (state.tool === 'brush') {
-            state.tempObj = { type: 'brush', points: [{x, y}], stroke: state.config.stroke, size: state.config.size };
+            state.tempObj = { type: 'brush', points: [{ x: wp.x, y: wp.y }], stroke: state.config.stroke, size: state.config.size };
         } else {
             state.tempObj = {
                 type: state.tool,
-                x, y, w: 0, h: 0,
+                x: wp.x, y: wp.y, w: 0, h: 0,
                 stroke: state.config.stroke,
                 fill: state.config.fill,
                 fillEnabled: state.config.fillEnabled,
                 size: state.config.size
             };
         }
-    };
+        draw();
+        if (state.tempObj) renderSingle(state.tempObj);
+    });
 
-    canvas.onmousemove = (e) => {
-        if (!state.isDrawing) return;
-        const x = e.offsetX, y = e.offsetY;
+    canvas.addEventListener('pointermove', (e) => {
+        if (!state.pointers.has(e.pointerId)) return;
+        const sp = getCanvasScreenPoint(e);
+        state.pointers.set(e.pointerId, { sx: sp.x, sy: sp.y });
+
+        if (state.pointers.size >= 2) {
+            // 双指缩放/平移
+            if (!state.gesture) startGestureIfNeeded();
+            updateGesture();
+            return;
+        }
+
+        if (!state.isDrawing || state.drawingPointerId !== e.pointerId) return;
+        const wp = screenToWorld(sp.x, sp.y);
 
         if (state.tool === 'brush') {
-            state.tempObj.points.push({x, y});
+            state.tempObj.points.push({ x: wp.x, y: wp.y });
         } else if (state.tool === 'rect' || state.tool === 'circle') {
-            state.tempObj.w = x - state.tempObj.x;
-            state.tempObj.h = y - state.tempObj.y;
+            state.tempObj.w = wp.x - state.tempObj.x;
+            state.tempObj.h = wp.y - state.tempObj.y;
         }
         draw();
         if (state.tempObj) renderSingle(state.tempObj);
-    };
+    });
 
-    canvas.onmouseup = () => {
-        if (state.isDrawing) {
+    function endPointer(e) {
+        if (state.pointers.has(e.pointerId)) state.pointers.delete(e.pointerId);
+
+        if (state.gesture) {
+            if (state.pointers.size < 2) state.gesture = null;
+            return;
+        }
+
+        if (state.isDrawing && state.drawingPointerId === e.pointerId) {
             state.objects.push(state.tempObj);
             state.isDrawing = false;
             state.tempObj = null;
+            state.drawingPointerId = null;
             draw();
         }
-    };
+    }
+
+    canvas.addEventListener('pointerup', endPointer);
+    canvas.addEventListener('pointercancel', endPointer);
 
     // --- 渲染引擎 ---
     function draw() {
+        // 清屏必须在 screen space 进行
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        applyViewTransform(ctx);
         state.objects.forEach(renderSingle);
     }
 
