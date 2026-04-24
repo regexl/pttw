@@ -386,6 +386,7 @@
         textInput.style.color = state.config.stroke;
         textInput.value = '';
         textInput.rows = 1;
+        textInput.placeholder = 'Enter 换行 · Ctrl/⌘+Enter 提交 · Esc 取消';
         textInput.style.width = '260px';
         textInput.style.height = Math.max(28, Math.round(state.config.fontSize * 1.4)) + 'px';
         setTimeout(() => textInput.focus(), 50);
@@ -464,6 +465,7 @@
     });
 
     textInput.addEventListener('keydown', (e) => {
+        if (e.isComposing) return;
         if (e.key === 'Escape') {
             e.preventDefault();
             hideTextInput();
@@ -471,8 +473,8 @@
             return;
         }
 
-        // Enter 提交，Shift+Enter 换行
-        if (e.key === 'Enter' && !e.shiftKey) {
+        // Enter 换行；Ctrl/Cmd+Enter 提交（移动端/无 shift 更友好）
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
             e.preventDefault();
             commitTextInput({ reason: 'enter', cancelIfEmpty: true });
         }
