@@ -18,6 +18,7 @@
     <meta name="twitter:title" content="商品房信息管理系统">
     <meta name="twitter:description" content="支持商品房信息录入、筛选、编辑与 Excel 导入导出。">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../viewport/js/app-utils.js"></script>
     <script src="../viewport/js/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
@@ -459,8 +460,10 @@
     </div>
 
     <script>
+        const propStorage = AppUtils.createNamespacedStorage('commercial_housing_properties', { version: 1 });
+
         // 全局变量存储商品房数据
-        let properties = JSON.parse(localStorage.getItem('properties')) || [];
+        let properties = propStorage.get([]);
         let editingIndex = -1; // 当前正在编辑的记录索引
 
         // 页面加载完成后初始化
@@ -547,7 +550,7 @@
             }
 
             // 保存到localStorage
-            localStorage.setItem('properties', JSON.stringify(properties));
+            propStorage.set(properties);
 
             // 重新渲染列表
             renderPropertyList();
@@ -662,7 +665,7 @@
         function deleteProperty(index) {
             if (confirm('确定要删除这条商品房信息吗？')) {
                 properties.splice(index, 1);
-                localStorage.setItem('properties', JSON.stringify(properties));
+                propStorage.set(properties);
                 renderPropertyList();
                 alert('商品房信息已成功删除！');
             }
@@ -803,7 +806,7 @@
 
                         if (newProperties.length > 0) {
                             properties = properties.concat(newProperties);
-                            localStorage.setItem('properties', JSON.stringify(properties));
+                            propStorage.set(properties);
                             renderPropertyList();
                             populateFilterDropdowns(); // 更新筛选下拉框
                             alert(`成功导入 ${newProperties.length} 条新记录！`);

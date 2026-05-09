@@ -317,6 +317,7 @@
     <div id="feedback-toast"></div>
     <button id="back-to-top" title="回到顶部">⬆️</button>
 
+    <script src="../viewport/js/app-utils.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script>
         // --- DATA CENTER: MANAGE YOUR CONTENT HERE ---
@@ -352,7 +353,9 @@
             const importBtn = document.getElementById('import-btn');
             const importFileInput = document.getElementById('import-file-input');
 
-            let collapsedState = JSON.parse(localStorage.getItem('collapsedState')) || {};
+            const themeStorage = AppUtils.createNamespacedStorage('quicknav_theme');
+            const collapsedStorage = AppUtils.createNamespacedStorage('quicknav_collapsed', { version: 1 });
+            let collapsedState = collapsedStorage.get({});
 
             const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -437,7 +440,7 @@
                 if (header) {
                     const category = header.dataset.category;
                     collapsedState[category] = !collapsedState[category];
-                    localStorage.setItem('collapsedState', JSON.stringify(collapsedState));
+                    collapsedStorage.set(collapsedState);
                     header.classList.toggle('collapsed');
                     header.nextElementSibling.classList.toggle('collapsed');
                 }
@@ -479,7 +482,7 @@
             const applyTheme = (theme) => {
                 document.documentElement.dataset.theme = theme;
                 themeCheckbox.checked = theme === 'dark';
-                localStorage.setItem('theme', theme);
+                themeStorage.set(theme);
             };
 
             themeCheckbox.addEventListener('change', () => {
@@ -619,7 +622,7 @@
             });
 
             // --- Initial Load ---
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const savedTheme = themeStorage.get(null) || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             applyTheme(savedTheme);
             renderContent();
             setInterval(updateTime, 1000);

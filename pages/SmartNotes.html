@@ -19,6 +19,7 @@
   <meta name="twitter:description" content="支持富文本编辑、标签筛选和数据导入导出的本地便签工具。">
   <link href="../viewport/assets/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css">
+  <script src="../viewport/js/app-utils.js"></script>
   <script src="../viewport/js/vue.js"></script>
   <script src="../viewport/js/xlsx.full.min.js"></script>
   <script src="../viewport/js/purify.min.js"></script>
@@ -316,7 +317,8 @@
         itemsPerPage: 6,
         showDeleteModal: false,
         noteToDelete: null,
-        theme: localStorage.getItem('noteTheme') || 'light'
+        notesStorage: null,
+        theme: null
       },
       computed: {
         // 所有标签列表
@@ -379,7 +381,7 @@
       },
       watch: {
         theme(newVal) {
-          localStorage.setItem('noteTheme', newVal);
+          AppUtils.createNamespacedStorage('smartnotes_theme').set(newVal);
         },
         
         selectedTag() {
@@ -391,6 +393,8 @@
         }
       },
       mounted() {
+        this.theme = AppUtils.createNamespacedStorage('smartnotes_theme').get('light');
+        this.notesStorage = AppUtils.createNamespacedStorage('smartnotes_notes', { version: 1 });
         this.loadNotes();
         document.body.setAttribute('data-theme', this.theme);
         
@@ -403,15 +407,15 @@
       methods: {
         // 加载便签
         loadNotes() {
-          const savedNotes = localStorage.getItem('stickyNotes');
+          const savedNotes = this.notesStorage.get(null);
           if (savedNotes) {
-            this.notes = JSON.parse(savedNotes);
+            this.notes = savedNotes;
           }
         },
-        
+
         // 保存便签
         saveNotes() {
-          localStorage.setItem('stickyNotes', JSON.stringify(this.notes));
+          this.notesStorage.set(this.notes);
         },
         
         // 显示编辑器

@@ -542,12 +542,21 @@
                 el('vc-os').textContent = detectOS(ua);
                 el('vc-browser').textContent = detectBrowser(ua);
 
+                fetch('https://get.geojs.io/v1/ip.json')
+                    .then(function(r) { return r.json(); })
+                    .then(function(ipData) {
+                        var ipv4 = ipData.ip || '未知';
+                        el('vc-ip').textContent = ipv4;
+                        el('vc-ip-wrap').style.display = 'inline';
+                    })
+                    .catch(function() {
+                        el('vc-ip').textContent = '获取失败';
+                    });
+                // 获取地理位置
                 fetch('https://get.geojs.io/v1/ip/geo.json')
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
                         el('vc-loc').textContent = data.city || data.country || '未知';
-                        el('vc-ip').textContent = data.ip || '未知';
-                        el('vc-ip-wrap').style.display = 'inline';
                     })
                     .catch(function() {
                         el('vc-loc').textContent = '获取失败';
@@ -828,10 +837,10 @@
                         btn.textContent = '🌙';
                         particleConfig.pr = 249; particleConfig.pg = 115; particleConfig.pb = 22;
                     }
-                    localStorage.setItem('theme', theme);
+                    AppUtils.createNamespacedStorage('homepage_theme').set(theme);
                 }
 
-                var saved = localStorage.getItem('theme');
+                var saved = AppUtils.createNamespacedStorage('homepage_theme').get(null);
                 if (saved) applyTheme(saved);
                 else applyTheme('light');
 

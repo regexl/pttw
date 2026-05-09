@@ -183,6 +183,7 @@
   <!-- CDN Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+  <script src="../viewport/js/app-utils.js"></script>
 
   <script>
     const editor = document.getElementById('editor');
@@ -195,8 +196,11 @@
     const filenameInput = document.getElementById('filenameInput');
     const body = document.body;
 
+    // === Storage ===
+    const themeStorage = AppUtils.createNamespacedStorage('notebook_theme', { version: 1 });
+    const draftStorage = AppUtils.createNamespacedStorage('notebook_draft', { version: 1 });
+
     // === Theme ===
-    const THEME_KEY = 'notebook_theme';
     const applyTheme = (mode) => {
       if (mode === 'dark') {
         body.classList.add('dark-mode');
@@ -205,9 +209,9 @@
         body.classList.remove('dark-mode');
         themeToggle.textContent = '🌙 黑暗';
       }
-      localStorage.setItem(THEME_KEY, mode);
+      themeStorage.set(mode);
     };
-    const savedTheme = localStorage.getItem(THEME_KEY);
+    const savedTheme = themeStorage.get(null);
     if (savedTheme) {
       applyTheme(savedTheme);
     } else {
@@ -227,14 +231,13 @@
     });
 
     // === Draft Auto-save ===
-    const STORAGE_KEY = 'notebook_draft';
     const loadDraft = () => {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = draftStorage.get('');
       if (saved) editor.value = saved;
     };
-    const saveDraft = () => localStorage.setItem(STORAGE_KEY, editor.value);
+    const saveDraft = () => draftStorage.set(editor.value);
     loadDraft();
-    editor.addEventListener('input', saveDraft);
+    editor.addEventListener('input', AppUtils.debounce(saveDraft, 300));
 
     // === Preview ===
     let isPreview = false;
@@ -262,20 +265,13 @@
 
     const downloadFile = () => {
       const content = editor.value || '';
-      const userFilename = filenameInput.value.trim();
-      let filename = userFilename;
+      let filename = filenameInput.value.trim();
       if (!filename) {
         filename = getDefaultFilename();
       } else if (!filename.endsWith('.md')) {
         filename += '.md';
       }
-      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement('a'), { href: url, download: filename });
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      AppUtils.downloadBlob(content, filename, 'text/markdown;charset=utf-8');
     };
 
     downloadBtn.addEventListener('click', downloadFile);
