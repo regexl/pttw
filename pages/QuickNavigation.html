@@ -621,13 +621,52 @@
                 reader.readAsArrayBuffer(file);
             });
 
-            // --- Initial Load ---
-            const savedTheme = themeStorage.get(null) || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            applyTheme(savedTheme);
-            renderContent();
-            setInterval(updateTime, 1000);
-            searchInput.focus();
-        });
+            // --- Tool Page Footer ---
+        document.body.insertAdjacentHTML('beforeend', `
+            <div class="tool-footer">
+                <a href="https://232310.xyz/" class="tool-footer-home"><i class="fas fa-home"></i> 返回首页</a>
+                <span class="tool-footer-sep">|</span>
+                <a href="https://232310.xyz/pages/" class="tool-footer-more"><i class="fas fa-th-large"></i> 更多工具</a>
+                <span class="tool-footer-sep">|</span>
+                <a href="https://232310.xyz/#contact" class="tool-footer-contact"><i class="fas fa-envelope"></i> 联系我</a>
+            </div>
+        `);
+        // Tool footer styles
+        const toolFooterStyle = document.createElement('style');
+        toolFooterStyle.textContent = `
+            .tool-footer {
+                text-align: center;
+                padding: 1.5rem;
+                border-top: 1px solid var(--border-color);
+                margin-top: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                font-size: 0.9rem;
+            }
+            .tool-footer a {
+                color: var(--text-color);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+            .tool-footer a:hover {
+                color: var(--primary-color);
+            }
+            .tool-footer-sep {
+                color: var(--border-color);
+            }
+        `;
+        document.head.appendChild(toolFooterStyle);
+
+        // --- Initial Load ---
+        const savedTheme = themeStorage.get(null) || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+        renderContent();
+        setInterval(updateTime, 1000);
+        searchInput.focus();
+    });
     </script>
 </body>
 </html>

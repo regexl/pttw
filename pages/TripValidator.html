@@ -1163,6 +1163,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     init();
+
+        // --- Tool Page Footer ---
+        document.body.insertAdjacentHTML('beforeend', `
+            <div class="tool-footer">
+                <a href="https://232310.xyz/" class="tool-footer-home"><i class="fas fa-home"></i> 返回首页</a>
+                <span class="tool-footer-sep">|</span>
+                <a href="https://232310.xyz/pages/" class="tool-footer-more"><i class="fas fa-th-large"></i> 更多工具</a>
+                <span class="tool-footer-sep">|</span>
+                <a href="https://232310.xyz/#contact" class="tool-footer-contact"><i class="fas fa-envelope"></i> 联系我</a>
+            </div>
+        `);
 });
 </script>
 
