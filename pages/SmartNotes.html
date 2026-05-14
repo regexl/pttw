@@ -1036,25 +1036,7 @@
       color: var(--primary);
     }
 
-    /* 分页器 */
-    .pagination {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .pagination-info {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-right: 0.5rem;
-    }
-
-    .pagination-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
+    /* 分页按钮 */
     .page-btn {
       width: 32px;
       height: 32px;
@@ -1082,10 +1064,9 @@
     }
 
     .page-current {
-      padding: 0.4rem 0.75rem;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text);
-      font-weight: 600;
+      font-weight: 500;
     }
 
     /* ===== 模态框 ===== */
@@ -1520,21 +1501,12 @@
 
       <!-- 底部操作栏 -->
       <div class="bottom-bar" v-if="notes.length > 0">
-        <!-- 分页 -->
-        <div class="pagination">
-          <button
-            class="page-btn"
-            :disabled="currentPage === 1"
-            @click="currentPage--"
-          >
+        <div class="d-flex align-items-center gap-3">
+          <button class="page-btn" :disabled="currentPage === 1" @click="currentPage--">
             <i class="fas fa-chevron-left"></i>
           </button>
           <span class="page-current">{{ currentPage }} / {{ totalPages }}</span>
-          <button
-            class="page-btn"
-            :disabled="currentPage >= totalPages"
-            @click="currentPage++"
-          >
+          <button class="page-btn" :disabled="currentPage >= totalPages" @click="currentPage++">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
