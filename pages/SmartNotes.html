@@ -749,7 +749,7 @@
     .bottom-bar {
       background: var(--surface);
       border-radius: var(--radius-lg);
-      padding: 1rem 1.25rem;
+      padding: 0.875rem 1.25rem;
       box-shadow: var(--shadow-card);
       border: 1px solid var(--border-light);
       margin-top: 2rem;
@@ -760,46 +760,74 @@
       gap: 1rem;
     }
 
-    .btn-group-modern {
+    /* 导入导出按钮组 */
+    .io-group {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
     }
 
-    .btn-modern {
-      padding: 0.5rem 0.875rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--surface);
-      color: var(--text-secondary);
-      font-size: 0.85rem;
+    .io-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .io-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
       font-weight: 500;
       cursor: pointer;
       transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
     }
 
-    .btn-modern:hover {
+    .io-btn:hover {
       border-color: var(--primary);
       color: var(--primary);
-      background: rgba(99,102,241,0.05);
+      background: rgba(99,102,241,0.08);
     }
 
-    .btn-modern i {
-      font-size: 0.9rem;
+    .io-btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .io-btn.primary:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      color: white;
+    }
+
+    /* 分隔线 */
+    .io-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 0.25rem;
     }
 
     /* 分页器 */
     .pagination {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .pagination-info {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
+      margin-right: 0.5rem;
     }
 
     .pagination-controls {
@@ -809,10 +837,10 @@
     }
 
     .page-btn {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       background: var(--surface);
       color: var(--text-secondary);
       cursor: pointer;
@@ -820,24 +848,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     .page-btn:hover:not(:disabled) {
       border-color: var(--primary);
       color: var(--primary);
+      background: rgba(99,102,241,0.08);
     }
 
     .page-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
     }
 
     .page-current {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
       color: var(--text);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     /* ===== 模态框 ===== */
@@ -1234,48 +1263,41 @@
 
       <!-- 底部操作栏 -->
       <div class="bottom-bar" v-if="filteredNotes.length > 0">
-        <div class="d-flex align-items-center gap-3">
-          <span class="text-muted" style="font-size:0.85rem;">
-            <i class="fas fa-file-export me-1"></i>导出
-          </span>
-          <div class="btn-group-modern">
-            <button class="btn-modern" @click="exportExcel" title="导出 Excel">
-              <i class="fas fa-file-excel"></i>
-              <span>Excel</span>
-            </button>
-            <button class="btn-modern" @click="exportJSON" title="导出 JSON">
-              <i class="fas fa-file-code"></i>
-              <span>JSON</span>
-            </button>
-            <button class="btn-modern" @click="exportMarkdown" title="导出 Markdown">
-              <i class="fab fa-markdown"></i>
-              <span>MD</span>
-            </button>
-          </div>
-          <span class="text-muted" style="font-size:0.85rem;">
-            <i class="fas fa-file-import me-1"></i>导入
-          </span>
-          <div class="btn-group-modern">
-            <button class="btn-modern" @click="showBackupModal" title="从备份恢复">
-              <i class="fas fa-archive"></i>
-              <span>恢复</span>
-            </button>
-            <label class="btn-modern" title="导入 JSON">
-              <i class="fas fa-file-import"></i>
-              <span>JSON</span>
-              <input type="file" hidden accept=".json" @change="importJSON($event, 'merge')">
-            </label>
-            <label class="btn-modern" title="导入 Excel">
-              <i class="fas fa-file-excel"></i>
-              <span>Excel</span>
-              <input type="file" hidden accept=".xlsx,.xls" @change="importExcel">
-            </label>
-          </div>
+        <!-- 导入导出按钮组 -->
+        <div class="io-group">
+          <span class="io-label"><i class="fas fa-arrow-up me-1"></i>导出</span>
+          <button class="io-btn" @click="exportExcel" title="导出 Excel">
+            <i class="fas fa-file-excel"></i>Excel
+          </button>
+          <button class="io-btn" @click="exportJSON" title="导出 JSON">
+            <i class="fas fa-file-code"></i>JSON
+          </button>
+          <button class="io-btn" @click="exportMarkdown" title="导出 Markdown">
+            <i class="fab fa-markdown"></i>MD
+          </button>
+
+          <div class="io-divider"></div>
+
+          <span class="io-label"><i class="fas fa-arrow-down me-1"></i>导入</span>
+          <label class="io-btn" title="导入 JSON">
+            <i class="fas fa-file-import"></i>JSON
+            <input type="file" hidden accept=".json" @change="importJSON($event, 'merge')">
+          </label>
+          <label class="io-btn" title="导入 Excel">
+            <i class="fas fa-file-excel"></i>Excel
+            <input type="file" hidden accept=".xlsx,.xls" @change="importExcel">
+          </label>
+
+          <div class="io-divider"></div>
+
+          <button class="io-btn" @click="showBackupModal" title="从备份恢复">
+            <i class="fas fa-archive"></i>恢复
+          </button>
         </div>
 
         <!-- 分页 -->
         <div class="pagination">
-          <span class="pagination-info">共 {{ filteredNotes.length }} 条便签</span>
+          <span class="pagination-info">{{ filteredNotes.length }} 条便签</span>
           <div class="pagination-controls">
             <button
               class="page-btn"
