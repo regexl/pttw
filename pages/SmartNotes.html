@@ -238,16 +238,58 @@
       </div>
 
       <!-- 分页控制 -->
-      <div class="d-flex justify-content-between align-items-center mt-4">
+      <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
         <div>
-          <button class="btn btn-sm btn-outline-secondary me-2" @click="exportExcel">
-            <i class="fas fa-file-export me-1"></i>导出Excel
-          </button>
-          <label class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-file-import me-1"></i>导入Excel
-            <input type="file" hidden @change="importExcel">
-          </label>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-outline-secondary" @click="exportExcel" title="导出为 Excel">
+              <i class="fas fa-file-excel me-1"></i>Excel
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" @click="exportJSON" title="导出为 JSON 备份文件">
+              <i class="fas fa-file-code me-1"></i>JSON
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" @click="exportMarkdown" title="导出为 Markdown">
+              <i class="fab fa-markdown me-1"></i>MD
+            </button>
+          </div>
+          <span class="text-muted small ms-2">导出</span>
         </div>
+        <div>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-outline-secondary" @click="showBackupModal" title="从备份恢复">
+              <i class="fas fa-archive me-1"></i>备份恢复
+            </button>
+            <label class="btn btn-sm btn-outline-secondary" title="导入 JSON (追加)">
+              <i class="fas fa-file-import me-1"></i>JSON
+              <input type="file" hidden accept=".json" @change="importJSON($event, 'merge')">
+            </label>
+            <label class="btn btn-sm btn-outline-secondary" title="导入 Excel">
+              <i class="fas fa-file-excel me-1"></i>Excel
+              <input type="file" hidden accept=".xlsx,.xls" @change="importExcel">
+            </label>
+          </div>
+          <span class="text-muted small ms-2">导入</span>
+        </div>
+      </div>
+
+      <!-- 备份恢复模态框 -->
+      <div class="modal fade" :class="{ show: showBackupOptions, 'd-block': showBackupOptions }" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><i class="fas fa-archive me-2"></i>从备份恢复</h5>
+              <button type="button" class="btn-close" @click="showBackupOptions = false"></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted small mb-3">选择备份文件，当前数据将被覆盖</p>
+              <label class="btn btn-primary w-100">
+                <i class="fas fa-folder-open me-2"></i>选择 JSON 备份文件
+                <input type="file" hidden accept=".json" @change="importJSON($event, 'replace'); showBackupOptions = false">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-backdrop fade" :class="{ show: showBackupOptions }" v-if="showBackupOptions"></div>
         
         <div class="d-flex align-items-center">
           <span class="me-3">共 {{ filteredNotes.length }} 条便签</span>
@@ -318,7 +360,8 @@
         showDeleteModal: false,
         noteToDelete: null,
         notesStorage: null,
-        theme: null
+        theme: null,
+        showBackupOptions: false
       },
       computed: {
         // 所有标签列表
@@ -562,25 +605,25 @@
             创建时间: this.formatDate(note.createdAt),
             修改时间: this.formatDate(note.updatedAt)
           }));
-          
+
           const worksheet = XLSX.utils.json_to_sheet(data);
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, '便签数据');
           XLSX.writeFile(workbook, '便签数据导出.xlsx');
         },
-        
+
         // 导入Excel
         importExcel(e) {
           const file = e.target.files[0];
           if (!file) return;
-          
+
           const reader = new FileReader();
           reader.onload = (event) => {
             const data = new Uint8Array(event.target.result);
             const workbook = XLSX.read(data, {type: 'array'});
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-            
+
             jsonData.forEach(item => {
               this.notes.push({
                 id: Date.now() + Math.random(),
@@ -592,11 +635,131 @@
                 updatedAt: new Date(item['修改时间'] || Date.now())
               });
             });
-            
+
             this.saveNotes();
             e.target.value = ''; // 重置文件输入
           };
           reader.readAsArrayBuffer(file);
+        },
+
+        // HTML 转 Markdown
+        htmlToMarkdown(html) {
+          if (!html) return '';
+          let text = html;
+
+          // 替换换行标签
+          text = text.replace(/<br\s*\/?>/gi, '\n');
+          text = text.replace(/<\/p>/gi, '\n\n');
+
+          // 替换格式标签
+          text = text.replace(/<\/?(b|strong)>/gi, '**');
+          text = text.replace(/<\/?(em|i)>/gi, '*');
+          text = text.replace(/<u>/gi, '__');
+          text = text.replace(/<\/u>/gi, '__');
+
+          // 替换链接
+          text = text.replace(/<a[^>]*href=["']([^"']*)["'][^>]*>([^<]*)<\/a>/gi, '[$2]($1)');
+
+          // 替换引用
+          text = text.replace(/<blockquote>/gi, '> ');
+          text = text.replace(/<\/blockquote>/gi, '\n');
+
+          // 处理列表
+          text = text.replace(/<ul>/gi, '\n');
+          text = text.replace(/<\/ul>/gi, '\n');
+          text = text.replace(/<ol>/gi, '\n');
+          text = text.replace(/<\/ol>/gi, '\n');
+          text = text.replace(/<li>([^<]*)<\/li>/gi, '- $1\n');
+
+          // 移除所有剩余标签
+          text = text.replace(/<[^>]*>/g, '');
+
+          // 清理多余空行
+          text = text.replace(/\n{3,}/g, '\n\n');
+          text = text.trim();
+
+          return text;
+        },
+
+        // 导出 JSON
+        exportJSON() {
+          const data = {
+            version: 1,
+            exportTime: new Date().toISOString(),
+            notes: this.notes
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `便签备份_${this.formatDate(new Date()).replace(/[\/\s:]/g, '-')}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        },
+
+        // 导入 JSON
+        importJSON(e, mode = 'merge') {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            try {
+              const data = JSON.parse(event.target.result);
+
+              if (mode === 'replace') {
+                this.notes = data.notes || [];
+              } else {
+                // merge 模式：追加数据
+                const notes = data.notes || [];
+                notes.forEach(note => {
+                  this.notes.push({
+                    ...note,
+                    id: Date.now() + Math.random() // 生成新 ID 避免冲突
+                  });
+                });
+              }
+
+              this.saveNotes();
+            } catch (err) {
+              alert('JSON 文件格式错误，请选择正确的备份文件');
+            }
+            e.target.value = '';
+          };
+          reader.readAsText(file);
+        },
+
+        // 导出 Markdown
+        exportMarkdown() {
+          let content = '# 智能便签导出\n\n';
+          content += `> 导出时间：${this.formatDate(new Date())}\n\n`;
+          content += '---\n\n';
+
+          this.notes.forEach((note, index) => {
+            content += `## ${index + 1}. ${note.title || '无标题'}\n\n`;
+            content += this.htmlToMarkdown(note.content) + '\n\n';
+            if (note.tagsArray.length > 0) {
+              content += `**标签**：${note.tagsArray.join(', ')}\n\n`;
+            }
+            content += `> 创建时间：${this.formatDate(note.createdAt)}\n\n`;
+            if (note.updatedAt !== note.createdAt) {
+              content += `> 修改时间：${this.formatDate(note.updatedAt)}\n\n`;
+            }
+            content += '---\n\n';
+          });
+
+          const blob = new Blob([content], {type: 'text/markdown;charset=utf-8'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `便签导出_${this.formatDate(new Date()).replace(/[\/\s:]/g, '-')}.md`;
+          a.click();
+          URL.revokeObjectURL(url);
+        },
+
+        // 本地备份（触发 JSON 导入选择）
+        showBackupModal() {
+          this.showBackupOptions = true;
         }
       }
     });
