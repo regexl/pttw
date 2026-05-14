@@ -124,8 +124,8 @@
     /* ===== Header 区域 ===== */
     .app-header {
       background: var(--bg-gradient);
-      padding: 2rem 0 3rem;
-      margin-bottom: 2rem;
+      padding: 1rem 0 1.5rem;
+      margin-bottom: 1.5rem;
       position: relative;
       overflow: hidden;
     }
@@ -133,25 +133,25 @@
     .app-header::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 500px;
-      height: 500px;
+      top: -30%;
+      right: -5%;
+      width: 300px;
+      height: 300px;
       background: rgba(255,255,255,0.1);
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(60px);
     }
 
     .app-header::after {
       content: '';
       position: absolute;
-      bottom: -30%;
-      left: -5%;
-      width: 300px;
-      height: 300px;
+      bottom: -20%;
+      left: -3%;
+      width: 200px;
+      height: 200px;
       background: rgba(255,255,255,0.08);
       border-radius: 50%;
-      filter: blur(60px);
+      filter: blur(40px);
     }
 
     .header-content {
@@ -162,12 +162,12 @@
     .app-logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .app-logo-icon {
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(10px);
       border-radius: var(--radius);
@@ -175,13 +175,13 @@
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       border: 1px solid rgba(255,255,255,0.3);
     }
 
     .app-title {
       color: white;
-      font-size: 1.75rem;
+      font-size: 1.35rem;
       font-weight: 700;
       margin: 0;
       text-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -189,8 +189,9 @@
 
     .app-subtitle {
       color: rgba(255,255,255,0.8);
-      font-size: 0.875rem;
-      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      margin-top: 0.15rem;
+      display: none;
     }
 
     .header-actions {
@@ -201,14 +202,14 @@
 
     /* 主题切换按钮 */
     .theme-toggle {
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: var(--radius);
       color: white;
-      font-size: 1.25rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
@@ -226,10 +227,10 @@
       background: white;
       color: var(--primary);
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.6rem 1.25rem;
       border-radius: var(--radius);
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
