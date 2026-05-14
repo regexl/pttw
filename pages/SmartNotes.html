@@ -222,6 +222,28 @@
       transform: scale(1.05);
     }
 
+    /* 头部工具按钮 */
+    .header-tool-btn {
+      width: 38px;
+      height: 38px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: var(--radius);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-tool-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
+    }
+
     /* 新建按钮 */
     .btn-create {
       background: white;
@@ -1110,6 +1132,12 @@
             </div>
           </div>
           <div class="header-actions">
+            <button class="header-tool-btn" @click="showExportMenu = true" title="导出便签">
+              <i class="fas fa-file-export"></i>
+            </button>
+            <button class="header-tool-btn" @click="showImportMenu = true" title="导入便签">
+              <i class="fas fa-file-import"></i>
+            </button>
             <button class="theme-toggle" @click="toggleTheme" :title="theme === 'light' ? '切换深色模式' : '切换浅色模式'">
               <i :class="theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'"></i>
             </button>
@@ -1306,24 +1334,21 @@
 
         <!-- 分页 -->
         <div class="pagination" v-if="notes.length > 0">
-          <span class="pagination-info">{{ filteredNotes.length }} 条便签</span>
-          <div class="pagination-controls">
-            <button
-              class="page-btn"
-              :disabled="currentPage === 1"
-              @click="currentPage--"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <span class="page-current">{{ currentPage }} / {{ totalPages }}</span>
-            <button
-              class="page-btn"
-              :disabled="currentPage >= totalPages"
-              @click="currentPage++"
-            >
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
+          <button
+            class="page-btn"
+            :disabled="currentPage === 1"
+            @click="currentPage--"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span class="page-current">{{ currentPage }} / {{ totalPages }}</span>
+          <button
+            class="page-btn"
+            :disabled="currentPage >= totalPages"
+            @click="currentPage++"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
       </div>
 
@@ -1368,7 +1393,7 @@
             </label>
             <label class="dropdown-item">
               <i class="fab fa-markdown"></i> 导入 Markdown (.md)
-              <input type="file" hidden accept=".md,.markdown" @change="importMarkdown(); showImportMenu = false">
+              <input type="file" hidden accept=".md,.markdown" @change="importMarkdown($event); showImportMenu = false">
             </label>
           </div>
         </div>
