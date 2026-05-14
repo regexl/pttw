@@ -1366,6 +1366,10 @@
               <i class="fas fa-file-code"></i> 导入 JSON (.json)
               <input type="file" hidden accept=".json" @change="importJSON($event, 'replace'); showImportMenu = false">
             </label>
+            <label class="dropdown-item">
+              <i class="fab fa-markdown"></i> 导入 Markdown (.md)
+              <input type="file" hidden accept=".md,.markdown" @change="importMarkdown(); showImportMenu = false">
+            </label>
           </div>
         </div>
       </div>
@@ -1851,6 +1855,35 @@
         // 本地备份（触发 JSON 导入选择）
         showBackupModal() {
           this.showBackupOptions = true;
+        },
+
+        // 导入 Markdown
+        importMarkdown(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const text = event.target.result;
+            // 简单的 Markdown 解析，生成一条便签
+            const lines = text.split('\n');
+            const title = lines[0]?.replace(/^#+\s*/, '').trim() || file.name;
+            const content = lines.slice(1).join('<br>');
+
+            this.notes = [{
+              id: Date.now(),
+              title: title,
+              content: `<p>${content}</p>`,
+              tags: '',
+              tagsArray: [],
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }];
+
+            this.saveNotes();
+            e.target.value = '';
+          };
+          reader.readAsText(file);
         }
       }
     });
