@@ -697,6 +697,85 @@
       color: var(--text-muted);
     }
 
+    /* Markdown 预览 */
+    .markdown-preview {
+      min-height: 200px;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .markdown-preview h1,
+    .markdown-preview h2,
+    .markdown-preview h3,
+    .markdown-preview h4,
+    .markdown-preview h5,
+    .markdown-preview h6 {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .markdown-preview h1 { font-size: 1.5rem; }
+    .markdown-preview h2 { font-size: 1.3rem; }
+    .markdown-preview h3 { font-size: 1.15rem; }
+
+    .markdown-preview p {
+      margin-bottom: 0.75rem;
+    }
+
+    .markdown-preview a {
+      color: var(--primary);
+    }
+
+    .markdown-preview code {
+      background: var(--surface-hover);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    .markdown-preview pre {
+      background: var(--surface-hover);
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 0.75rem;
+    }
+
+    .markdown-preview pre code {
+      background: transparent;
+      padding: 0;
+    }
+
+    .markdown-preview blockquote {
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+      color: var(--text-secondary);
+      margin: 0.75rem 0;
+    }
+
+    .markdown-preview ul,
+    .markdown-preview ol {
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .markdown-preview li {
+      margin-bottom: 0.25rem;
+    }
+
+    .markdown-preview img {
+      max-width: 100%;
+      border-radius: var(--radius-sm);
+    }
+
     /* 标签输入 */
     .tag-input-group {
       margin-top: 1rem;
@@ -1255,15 +1334,31 @@
               >
                 <i class="fab fa-markdown"></i>
               </button>
+              <template v-if="editorMode === 'markdown'">
+                <div class="format-divider"></div>
+                <button
+                  class="format-btn"
+                  :class="{ active: showMarkdownPreview }"
+                  @click="showMarkdownPreview = !showMarkdownPreview"
+                  title="预览"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </template>
             </div>
 
             <!-- 富文本编辑器 -->
             <textarea
-              v-if="editorMode === 'markdown'"
+              v-if="editorMode === 'markdown' && !showMarkdownPreview"
               class="markdown-editor"
               v-model="currentNote.content"
               placeholder="使用 Markdown 语法编写内容..."
             ></textarea>
+            <div
+              v-else-if="editorMode === 'markdown' && showMarkdownPreview"
+              class="markdown-preview"
+              v-html="renderMarkdown(currentNote.content)"
+            ></div>
             <div
               v-else
               contenteditable="true"
@@ -1506,7 +1601,8 @@
         theme: null,
         showExportMenu: false,
         showImportMenu: false,
-        editorMode: 'rich' // 'rich' 或 'markdown'
+        editorMode: 'rich', // 'rich' 或 'markdown'
+        showMarkdownPreview: false
       },
       computed: {
         // 所有标签列表
@@ -1619,6 +1715,7 @@
           };
           this.showNoteEditor = true;
           this.editorMode = 'rich';
+          this.showMarkdownPreview = false;
 
           this.$nextTick(() => {
             this.$refs.editor.innerHTML = '';
@@ -1734,6 +1831,45 @@
         // 切换编辑器模式
         toggleEditorMode() {
           this.editorMode = this.editorMode === 'rich' ? 'markdown' : 'rich';
+          this.showMarkdownPreview = false;
+        },
+
+        // 渲染 Markdown
+        renderMarkdown(text) {
+          if (!text) return '';
+          let html = text;
+
+          // 代码块
+          html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+          // 行内代码
+          html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+          // 标题
+          html = html.replace(/^######\s+(.*)$/gm, '<h6>$1</h6>');
+          html = html.replace(/^#####\s+(.*)$/gm, '<h5>$1</h5>');
+          html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
+          html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
+          html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
+          html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
+          // 粗体
+          html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          // 斜体
+          html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+          // 链接
+          html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+          // 图片
+          html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;">');
+          // 引用
+          html = html.replace(/^>\s+(.*)$/gm, '<blockquote>$1</blockquote>');
+          // 无序列表
+          html = html.replace(/^-\s+(.*)$/gm, '<li>$1</li>');
+          html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+          // 有序列表
+          html = html.replace(/^\d+\.\s+(.*)$/gm, '<li>$1</li>');
+          // 换行
+          html = html.replace(/\n\n/g, '</p><p>');
+          html = html.replace(/\n/g, '<br>');
+
+          return '<p>' + html + '</p>';
         },
 
         // 插入链接
