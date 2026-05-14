@@ -817,6 +817,38 @@
       margin: 0 0.25rem;
     }
 
+    /* 下拉菜单项 */
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border-radius: var(--radius);
+      margin-bottom: 0.35rem;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(99,102,241,0.08);
+      color: var(--primary);
+    }
+
+    .dropdown-item i {
+      color: var(--text-muted);
+      width: 20px;
+    }
+
+    .dropdown-item:hover i {
+      color: var(--primary);
+    }
+
     /* 分页器 */
     .pagination {
       display: flex;
@@ -1263,35 +1295,12 @@
 
       <!-- 底部操作栏 -->
       <div class="bottom-bar" v-if="filteredNotes.length > 0">
-        <!-- 导入导出按钮组 -->
         <div class="io-group">
-          <span class="io-label"><i class="fas fa-arrow-up me-1"></i>导出</span>
-          <button class="io-btn" @click="exportExcel" title="导出 Excel">
-            <i class="fas fa-file-excel"></i>Excel
+          <button class="io-btn primary" @click="showExportMenu = true">
+            <i class="fas fa-arrow-up"></i>导出
           </button>
-          <button class="io-btn" @click="exportJSON" title="导出 JSON">
-            <i class="fas fa-file-code"></i>JSON
-          </button>
-          <button class="io-btn" @click="exportMarkdown" title="导出 Markdown">
-            <i class="fab fa-markdown"></i>MD
-          </button>
-
-          <div class="io-divider"></div>
-
-          <span class="io-label"><i class="fas fa-arrow-down me-1"></i>导入</span>
-          <label class="io-btn" title="导入 JSON">
-            <i class="fas fa-file-import"></i>JSON
-            <input type="file" hidden accept=".json" @change="importJSON($event, 'merge')">
-          </label>
-          <label class="io-btn" title="导入 Excel">
-            <i class="fas fa-file-excel"></i>Excel
-            <input type="file" hidden accept=".xlsx,.xls" @change="importExcel">
-          </label>
-
-          <div class="io-divider"></div>
-
-          <button class="io-btn" @click="showBackupModal" title="从备份恢复">
-            <i class="fas fa-archive"></i>恢复
+          <button class="io-btn" @click="showImportMenu = true">
+            <i class="fas fa-arrow-down"></i>导入
           </button>
         </div>
 
@@ -1314,6 +1323,49 @@
             >
               <i class="fas fa-chevron-right"></i>
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 导出菜单 -->
+      <div class="modal-overlay" v-if="showExportMenu" @click.self="showExportMenu = false">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-file-export" style="color: var(--primary);"></i>导出便签</h5>
+            <button class="modal-close" @click="showExportMenu = false"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body">
+            <p>选择导出格式</p>
+            <button class="dropdown-item" @click="exportExcel(); showExportMenu = false">
+              <i class="fas fa-file-excel"></i> Excel 格式 (.xlsx)
+            </button>
+            <button class="dropdown-item" @click="exportJSON(); showExportMenu = false">
+              <i class="fas fa-file-code"></i> JSON 格式 (.json)
+            </button>
+            <button class="dropdown-item" @click="exportMarkdown(); showExportMenu = false">
+              <i class="fab fa-markdown"></i> Markdown 格式 (.md)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 导入菜单 -->
+      <div class="modal-overlay" v-if="showImportMenu" @click.self="showImportMenu = false">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-file-import" style="color: var(--primary);"></i>导入便签</h5>
+            <button class="modal-close" @click="showImportMenu = false"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body">
+            <p>选择要导入的文件（将覆盖当前所有数据）</p>
+            <label class="dropdown-item">
+              <i class="fas fa-file-excel"></i> 导入 Excel (.xlsx)
+              <input type="file" hidden accept=".xlsx,.xls" @change="importExcel(); showImportMenu = false">
+            </label>
+            <label class="dropdown-item">
+              <i class="fas fa-file-code"></i> 导入 JSON (.json)
+              <input type="file" hidden accept=".json" @change="importJSON($event, 'replace'); showImportMenu = false">
+            </label>
           </div>
         </div>
       </div>
@@ -1389,7 +1441,8 @@
         noteToDelete: null,
         notesStorage: null,
         theme: null,
-        showBackupOptions: false
+        showExportMenu: false,
+        showImportMenu: false
       },
       computed: {
         // 所有标签列表
