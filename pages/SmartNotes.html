@@ -1873,7 +1873,18 @@
 
         // 切换编辑器模式
         toggleEditorMode() {
-          this.editorMode = this.editorMode === 'rich' ? 'markdown' : 'rich';
+          if (this.editorMode === 'rich') {
+            // 切换到 markdown 模式：把 HTML 转成纯文本
+            const html = this.$refs.editor ? this.$refs.editor.innerHTML : '';
+            // 简单去除 HTML 标签，保留文本
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            this.currentNote.content = temp.textContent || temp.innerText || '';
+            this.editorMode = 'markdown';
+          } else {
+            // 切换回 rich 模式
+            this.editorMode = 'rich';
+          }
           this.showMarkdownPreview = false;
         },
 
