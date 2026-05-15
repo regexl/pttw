@@ -1779,7 +1779,7 @@
             <p>选择要导入的文件（将覆盖当前所有数据）</p>
             <label class="dropdown-item">
               <i class="fas fa-file-excel"></i> 导入 Excel (.xlsx)
-              <input type="file" hidden accept=".xlsx,.xls" @change="importExcel(); showImportMenu = false">
+              <input type="file" hidden accept=".xlsx,.xls" @change="importExcel($event); showImportMenu = false">
             </label>
             <label class="dropdown-item">
               <i class="fas fa-file-code"></i> 导入 JSON (.json)
