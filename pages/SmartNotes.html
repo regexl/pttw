@@ -1911,11 +1911,25 @@
           // Ctrl+Enter 提交
           if (e.ctrlKey && e.key === 'Enter' && this.showNoteEditor) {
             this.saveNote();
+            return;
           }
-          
+
           // Esc 关闭编辑器
           if (e.key === 'Escape' && this.showNoteEditor) {
             this.cancelEdit();
+            return;
+          }
+
+          // 左右箭头键翻页（当焦点不在输入框时）
+          const tag = e.target.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) {
+            return;
+          }
+
+          if (e.key === 'ArrowLeft' && this.currentPage > 1) {
+            this.currentPage--;
+          } else if (e.key === 'ArrowRight' && this.currentPage < this.totalPages) {
+            this.currentPage++;
           }
         },
         
