@@ -131,6 +131,23 @@
       overflow: hidden;
     }
 
+    .app-header.demo-mode {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .demo-banner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.2);
+      color: white;
+      text-align: center;
+      padding: 0.25rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
     .app-header::before {
       content: '';
       position: absolute;
@@ -242,6 +259,11 @@
 
     .header-tool-btn:hover {
       transform: scale(1.05);
+    }
+
+    .header-tool-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .header-export {
@@ -360,6 +382,124 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
+    }
+
+    /* 多选按钮 */
+    .btn-select-mode {
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-select-mode:hover {
+      border-color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .btn-select-mode.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* 批量操作栏 */
+    .batch-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+    }
+
+    .batch-count {
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-right: auto;
+    }
+
+    .batch-action-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .batch-action-btn:hover {
+      background: var(--surface-hover);
+    }
+
+    .batch-add-tags {
+      background: var(--primary);
+      color: white;
+    }
+
+    .batch-add-tags:hover {
+      background: var(--primary-dark);
+    }
+
+    /* 演示按钮 */
+    .btn-demo {
+      padding: 0.625rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .btn-demo:hover {
+      border-color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .btn-demo.active {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    /* 复选框 */
+    .note-checkbox {
+      margin-right: 0.5rem;
+    }
+
+    .note-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    /* 选中状态 */
+    .note-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
     }
 
     /* ===== 便签卡片 ===== */
@@ -1165,6 +1305,48 @@
       background: #b91c1c;
     }
 
+    /* 批量标签模态框样式 */
+    .batch-modal-desc {
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .batch-tag-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    .batch-tag-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
+    }
+
+    .btn-confirm {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-confirm:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
     /* ===== 动画 ===== */
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -1223,6 +1405,14 @@
         padding: 0.75rem;
       }
 
+      .btn-demo span {
+        display: none;
+      }
+
+      .btn-demo {
+        padding: 0.75rem;
+      }
+
       .filter-bar {
         padding: 1rem;
       }
@@ -1265,7 +1455,10 @@
 <body>
   <div id="app" :data-theme="theme">
     <!-- Header -->
-    <header class="app-header">
+    <header class="app-header" :class="{ 'demo-mode': isDemoMode }">
+      <div class="demo-banner" v-if="isDemoMode">
+        <i class="fas fa-play-circle"></i> 演示模式 - 数据仅供演示
+      </div>
       <div class="container">
         <div class="header-content d-flex justify-content-between align-items-center">
           <div class="app-logo">
@@ -1278,14 +1471,22 @@
             </div>
           </div>
           <div class="header-actions">
-            <button class="header-tool-btn header-export" @click="showExportMenu = true" title="导出便签">
+            <button class="header-tool-btn header-export" @click="!isDemoMode && (showExportMenu = true)" title="导出便签" :class="{ disabled: isDemoMode }">
               <i class="fas fa-download"></i>
             </button>
-            <button class="header-tool-btn header-import" @click="showImportMenu = true" title="导入便签">
+            <button class="header-tool-btn header-import" @click="!isDemoMode && (showImportMenu = true)" title="导入便签" :class="{ disabled: isDemoMode }">
               <i class="fas fa-upload"></i>
             </button>
             <button class="theme-toggle" @click="toggleTheme" :title="theme === 'light' ? '切换深色模式' : '切换浅色模式'">
               <i :class="theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'"></i>
+            </button>
+            <button
+              class="btn-demo"
+              :class="{ active: isDemoMode }"
+              @click="isDemoMode ? exitDemoMode() : enterDemoMode()"
+            >
+              <i :class="isDemoMode ? 'fas fa-sign-out-alt' : 'fas fa-play'"></i>
+              <span>{{ isDemoMode ? '退出演示' : '演示' }}</span>
             </button>
             <button class="btn-create" @click="showEditor">
               <i class="fas fa-plus"></i>
@@ -1324,6 +1525,30 @@
               <option value="title">按标题排序</option>
             </select>
           </div>
+          <div class="col-md-2">
+            <button
+              class="btn-select-mode w-100"
+              :class="{ active: isSelectMode }"
+              @click="toggleSelectMode"
+              v-if="!isDemoMode"
+            >
+              <i :class="isSelectMode ? 'fas fa-times' : 'fas fa-check-square'"></i>
+              <span>{{ isSelectMode ? '取消' : '多选' }}</span>
+            </button>
+          </div>
+        </div>
+        <!-- 批量操作栏 -->
+        <div class="batch-action-bar" v-if="isSelectMode && selectedNoteIds.length > 0">
+          <span class="batch-count">已选择 {{ selectedNoteIds.length }} 条</span>
+          <button class="batch-action-btn" @click="selectAll">
+            <i class="fas fa-check-double"></i> 全选
+          </button>
+          <button class="batch-action-btn" @click="deselectAll">
+            <i class="fas fa-times"></i> 取消全选
+          </button>
+          <button class="batch-action-btn batch-add-tags" @click="showBatchTagModal = true">
+            <i class="fas fa-tag"></i> 批量添加标签
+          </button>
         </div>
       </div>
 
@@ -1446,14 +1671,27 @@
           v-for="note in paginatedNotes"
           :key="note.id"
         >
-          <div class="note-card">
+          <div
+            class="note-card"
+            :class="{ selected: selectedNoteIds.includes(note.id) }"
+            @click="isSelectMode && toggleNoteSelection(note.id)"
+          >
             <div class="note-card-header">
+              <!-- 复选框（选择模式时显示） -->
+              <div class="note-checkbox" v-if="isSelectMode">
+                <input
+                  type="checkbox"
+                  :checked="selectedNoteIds.includes(note.id)"
+                  @click.stop
+                  @change="toggleNoteSelection(note.id)"
+                >
+              </div>
               <h3 class="note-title">{{ note.title || '无标题' }}</h3>
-              <div class="note-actions">
-                <button class="note-action-btn edit" @click="editNote(note)" title="编辑">
+              <div class="note-actions" v-if="!isSelectMode">
+                <button class="note-action-btn edit" @click.stop="editNote(note)" title="编辑">
                   <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="note-action-btn delete" @click="confirmDelete(note.id)" title="删除">
+                <button class="note-action-btn delete" @click.stop="confirmDelete(note.id)" title="删除">
                   <i class="fa-solid fa-trash-alt"></i>
                 </button>
               </div>
@@ -1604,9 +1842,102 @@
         </div>
       </div>
     </div>
+
+    <!-- 批量添加标签模态框 -->
+    <div class="modal-overlay" v-if="showBatchTagModal" @click.self="showBatchTagModal = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-tag" style="color: var(--primary);"></i>
+            批量添加标签
+          </h5>
+          <button class="modal-close" @click="showBatchTagModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="batch-modal-desc">为选中的 {{ selectedNoteIds.length }} 条便签添加标签</p>
+          <input
+            type="text"
+            class="batch-tag-input"
+            v-model="batchTagInput"
+            placeholder="输入标签，多个标签用逗号分隔"
+            @keydown.enter="batchAddTags"
+          >
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button class="btn-cancel" @click="showBatchTagModal = false">取消</button>
+            <button class="btn-confirm" @click="batchAddTags">确认添加</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
+    // 演示数据
+    const DEMO_NOTES = [
+      {
+        id: 1,
+        title: '欢迎使用 SmartNotes',
+        content: '<p>这是一条<strong>演示便签</strong>，用于展示功能。</p><p>您可以体验便签的创建、编辑、标签和搜索功能。</p>',
+        tags: '演示,欢迎',
+        tagsArray: ['演示', '欢迎'],
+        createdAt: '2024-01-15T09:00:00Z',
+        updatedAt: '2024-01-15T09:00:00Z',
+        isMarkdown: false
+      },
+      {
+        id: 2,
+        title: '团队周报 - 第3周',
+        content: '<p><strong>本周完成：</strong></p><ul><li>完成用户调研报告</li><li>优化首页加载速度</li><li>修复3个Bug</li></ul><p><strong>下周计划：</strong></p><ul><li>上线新功能</li><li>性能优化</li></ul>',
+        tags: '工作,周报',
+        tagsArray: ['工作', '周报'],
+        createdAt: '2024-01-14T14:30:00Z',
+        updatedAt: '2024-01-15T10:00:00Z',
+        isMarkdown: false
+      },
+      {
+        id: 3,
+        title: '购物清单',
+        content: '<p>牛奶</p><p>面包</p><p>鸡蛋</p><p>水果</p>',
+        tags: '生活,购物',
+        tagsArray: ['生活', '购物'],
+        createdAt: '2024-01-13T08:00:00Z',
+        updatedAt: '2024-01-13T08:00:00Z',
+        isMarkdown: false
+      },
+      {
+        id: 4,
+        title: '读书笔记：JavaScript 高级程序设计',
+        content: '<p><strong>第5章：引用类型</strong></p><p>对象是引用类型，Array 是对象，Date 是对象...</p>',
+        tags: '读书,技术',
+        tagsArray: ['读书', '技术'],
+        createdAt: '2024-01-12T20:00:00Z',
+        updatedAt: '2024-01-12T20:30:00Z',
+        isMarkdown: false
+      },
+      {
+        id: 5,
+        title: '会议记录：产品规划讨论',
+        content: '<p><strong>参会人：</strong>张三、李四、王五</p><p><strong>议题：</strong>Q1产品规划</p><p><strong>结论：</strong>优先开发数据分析模块</p>',
+        tags: '会议,产品',
+        tagsArray: ['会议', '产品'],
+        createdAt: '2024-01-11T15:00:00Z',
+        updatedAt: '2024-01-11T16:30:00Z',
+        isMarkdown: false
+      },
+      {
+        id: 6,
+        title: '项目待办事项',
+        content: '<p>1. 设计数据库架构</p><p>2. 开发用户认证模块</p><p>3. 编写单元测试</p><p>4. 部署到测试环境</p>',
+        tags: '项目,待办',
+        tagsArray: ['项目', '待办'],
+        createdAt: '2024-01-10T10:00:00Z',
+        updatedAt: '2024-01-14T11:00:00Z',
+        isMarkdown: false
+      }
+    ];
+
     new Vue({
       el: '#app',
       data: {
@@ -1621,6 +1952,8 @@
           tagsArray: [],
           isMarkdown: false
         },
+        isDemoMode: false,
+        originalNotes: [],
         showNoteEditor: false,
         searchQuery: '',
         selectedTag: '',
@@ -1635,7 +1968,11 @@
         showImportMenu: false,
         editorMode: 'rich', // 'rich' 或 'markdown'
         showMarkdownPreview: false,
-        showBackupOptions: false
+        showBackupOptions: false,
+        isSelectMode: false,
+        selectedNoteIds: [],
+        showBatchTagModal: false,
+        batchTagInput: ''
       },
       computed: {
         // 所有标签列表
@@ -1700,15 +2037,39 @@
         theme(newVal) {
           AppUtils.createNamespacedStorage('smartnotes_theme').set(newVal);
         },
-        
+
         selectedTag() {
           this.currentPage = 1;
         },
-        
+
         searchQuery() {
           this.currentPage = 1;
         }
       },
+      methods: {
+        // 进入演示模式
+        enterDemoMode() {
+          // 保存当前数据
+          this.originalNotes = [...this.notes];
+          // 加载演示数据
+          this.notes = JSON.parse(JSON.stringify(DEMO_NOTES));
+          this.isDemoMode = true;
+          this.currentPage = 1;
+          // 关闭可能打开的模态框
+          this.showNoteEditor = false;
+          this.showExportMenu = false;
+          this.showImportMenu = false;
+          this.isSelectMode = false;
+        },
+
+        // 退出演示模式
+        exitDemoMode() {
+          // 恢复原始数据
+          this.notes = [...this.originalNotes];
+          this.originalNotes = [];
+          this.isDemoMode = false;
+          this.currentPage = 1;
+        },
       mounted() {
         this.theme = AppUtils.createNamespacedStorage('smartnotes_theme').get('light');
         this.notesStorage = AppUtils.createNamespacedStorage('smartnotes_notes', { version: 1 });
@@ -1737,6 +2098,7 @@
         
         // 显示编辑器
         showEditor() {
+          if (this.isDemoMode) return;
           this.currentNote = {
             id: Date.now(),
             title: '',
@@ -1761,6 +2123,7 @@
         
         // 编辑便签
         editNote(note) {
+          if (this.isDemoMode) return;
           this.currentNote = {...note};
           this.showNoteEditor = true;
           this.editorMode = 'rich';
@@ -1794,6 +2157,7 @@
         
         // 保存便签
         saveNote() {
+          if (this.isDemoMode) return;
           if (!this.currentNote.title.trim() && !this.currentNote.content.trim()) {
             return;
           }
@@ -1831,12 +2195,14 @@
         
         // 确认删除
         confirmDelete(id) {
+          if (this.isDemoMode) return;
           this.noteToDelete = id;
           this.showDeleteModal = true;
         },
-        
+
         // 删除便签
         deleteNote() {
+          if (this.isDemoMode) return;
           this.notes = this.notes.filter(note => note.id !== this.noteToDelete);
           this.saveNotes();
           this.showDeleteModal = false;
@@ -1859,7 +2225,65 @@
         safeContent(content) {
           return DOMPurify.sanitize(content);
         },
-        
+
+        // 切换选择模式
+        toggleSelectMode() {
+          this.isSelectMode = !this.isSelectMode;
+          if (!this.isSelectMode) {
+            this.selectedNoteIds = [];
+          }
+        },
+
+        // 切换便签选中状态
+        toggleNoteSelection(noteId) {
+          const index = this.selectedNoteIds.indexOf(noteId);
+          if (index === -1) {
+            this.selectedNoteIds.push(noteId);
+          } else {
+            this.selectedNoteIds.splice(index, 1);
+          }
+        },
+
+        // 全选
+        selectAll() {
+          this.selectedNoteIds = this.paginatedNotes.map(note => note.id);
+        },
+
+        // 取消全选
+        deselectAll() {
+          this.selectedNoteIds = [];
+        },
+
+        // 批量添加标签
+        batchAddTags() {
+          if (!this.batchTagInput.trim()) {
+            return;
+          }
+          const newTags = this.batchTagInput
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag);
+
+          this.selectedNoteIds.forEach(id => {
+            const note = this.notes.find(n => n.id === id);
+            if (note) {
+              newTags.forEach(tag => {
+                if (!note.tagsArray.includes(tag)) {
+                  note.tagsArray.push(tag);
+                }
+              });
+              // 更新 tags 字符串
+              note.tags = note.tagsArray.join(', ');
+            }
+          });
+
+          this.saveNotes();
+          this.showBatchTagModal = false;
+          this.batchTagInput = '';
+          this.isSelectMode = false;
+          this.selectedNoteIds = [];
+        },
+
         // 设置标签过滤
         setTagFilter(tag) {
           this.selectedTag = tag;
