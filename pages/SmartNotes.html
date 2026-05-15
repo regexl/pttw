@@ -216,6 +216,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      position: relative;
     }
 
     /* 主题切换按钮 */
@@ -264,6 +265,82 @@
     .header-tool-btn.disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    /* 更多按钮 */
+    .btn-more {
+      padding: 0.625rem 1rem;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .btn-more:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .btn-more.has-selection {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* 更多操作下拉菜单 */
+    .more-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      min-width: 180px;
+      z-index: 1000;
+      overflow: hidden;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .dropdown-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .dropdown-item.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .dropdown-item.disabled:hover {
+      background: transparent;
+    }
+
+    .dropdown-item i {
+      width: 16px;
+      color: var(--text-secondary);
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 0.25rem 0;
     }
 
     .header-export {
@@ -382,79 +459,6 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
-    }
-
-    /* 多选按钮 */
-    .btn-select-mode {
-      padding: 0.875rem 1rem;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      background: var(--bg);
-      color: var(--text);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .btn-select-mode:hover {
-      border-color: var(--primary);
-      background: var(--surface-hover);
-    }
-
-    .btn-select-mode.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-
-    /* 批量操作栏 */
-    .batch-action-bar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 1rem;
-      margin-top: 0.75rem;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-light);
-    }
-
-    .batch-count {
-      font-size: 0.9rem;
-      color: var(--primary);
-      font-weight: 600;
-      margin-right: auto;
-    }
-
-    .batch-action-btn {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      background: var(--bg);
-      color: var(--text);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .batch-action-btn:hover {
-      background: var(--surface-hover);
-    }
-
-    .batch-add-tags {
-      background: var(--primary);
-      color: white;
-    }
-
-    .batch-add-tags:hover {
-      background: var(--primary-dark);
     }
 
     /* 演示按钮 */
@@ -1480,14 +1484,31 @@
             <button class="theme-toggle" @click="toggleTheme" :title="theme === 'light' ? '切换深色模式' : '切换浅色模式'">
               <i :class="theme === 'light' ? 'fas fa-moon' : 'fas fa-sun'"></i>
             </button>
-            <button
-              class="btn-demo"
-              :class="{ active: isDemoMode }"
-              @click="isDemoMode ? exitDemoMode() : enterDemoMode()"
-            >
+            <button class="btn-demo" :class="{ active: isDemoMode }" @click="isDemoMode ? exitDemoMode() : enterDemoMode()">
               <i :class="isDemoMode ? 'fas fa-sign-out-alt' : 'fas fa-play'"></i>
               <span>{{ isDemoMode ? '退出演示' : '演示' }}</span>
             </button>
+            <button class="btn-more" @click="toggleMoreMenu" v-if="!isDemoMode">
+              <i class="fas fa-ellipsis-h"></i>
+              <span v-if="selectedNoteIds.length > 0">已选 {{ selectedNoteIds.length }}</span>
+              <span v-else>更多</span>
+            </button>
+            <!-- 更多操作下拉菜单 -->
+            <div class="more-dropdown" v-if="showMoreMenu" @click.stop>
+              <div class="dropdown-item" @click="selectAllNotes">
+                <i class="fas fa-check-square"></i> 全选便签
+              </div>
+              <div class="dropdown-item" @click="openBatchTagModal" :class="{ disabled: selectedNoteIds.length === 0 }">
+                <i class="fas fa-tag"></i> 批量编辑标签
+              </div>
+              <div class="dropdown-item" @click="openBatchDeleteModal" :class="{ disabled: selectedNoteIds.length === 0 }">
+                <i class="fas fa-trash-alt"></i> 批量删除
+              </div>
+              <div class="dropdown-divider" v-if="selectedNoteIds.length > 0"></div>
+              <div class="dropdown-item" @click="clearSelection" v-if="selectedNoteIds.length > 0">
+                <i class="fas fa-times"></i> 取消选择
+              </div>
+            </div>
             <button class="btn-create" @click="showEditor">
               <i class="fas fa-plus"></i>
               <span>新建便签</span>
@@ -1525,30 +1546,6 @@
               <option value="title">按标题排序</option>
             </select>
           </div>
-          <div class="col-md-2">
-            <button
-              class="btn-select-mode w-100"
-              :class="{ active: isSelectMode }"
-              @click="toggleSelectMode"
-              v-if="!isDemoMode"
-            >
-              <i :class="isSelectMode ? 'fas fa-times' : 'fas fa-check-square'"></i>
-              <span>{{ isSelectMode ? '取消' : '多选' }}</span>
-            </button>
-          </div>
-        </div>
-        <!-- 批量操作栏 -->
-        <div class="batch-action-bar" v-if="isSelectMode && selectedNoteIds.length > 0">
-          <span class="batch-count">已选择 {{ selectedNoteIds.length }} 条</span>
-          <button class="batch-action-btn" @click="selectAll">
-            <i class="fas fa-check-double"></i> 全选
-          </button>
-          <button class="batch-action-btn" @click="deselectAll">
-            <i class="fas fa-times"></i> 取消全选
-          </button>
-          <button class="batch-action-btn batch-add-tags" @click="showBatchTagModal = true">
-            <i class="fas fa-tag"></i> 批量添加标签
-          </button>
         </div>
       </div>
 
@@ -1674,11 +1671,11 @@
           <div
             class="note-card"
             :class="{ selected: selectedNoteIds.includes(note.id) }"
-            @click="isSelectMode && toggleNoteSelection(note.id)"
+            @click="toggleNoteSelection(note.id)"
           >
             <div class="note-card-header">
-              <!-- 复选框（选择模式时显示） -->
-              <div class="note-checkbox" v-if="isSelectMode">
+              <!-- 复选框 -->
+              <div class="note-checkbox">
                 <input
                   type="checkbox"
                   :checked="selectedNoteIds.includes(note.id)"
@@ -1687,7 +1684,7 @@
                 >
               </div>
               <h3 class="note-title">{{ note.title || '无标题' }}</h3>
-              <div class="note-actions" v-if="!isSelectMode">
+              <div class="note-actions" v-if="selectedNoteIds.length === 0 || !selectedNoteIds.includes(note.id)">
                 <button class="note-action-btn edit" @click.stop="editNote(note)" title="编辑">
                   <i class="fa-solid fa-pen"></i>
                 </button>
@@ -1871,6 +1868,28 @@
         </div>
       </div>
     </div>
+
+    <!-- 批量删除确认模态框 -->
+    <div class="modal-overlay" v-if="showBatchDeleteModal" @click.self="showBatchDeleteModal = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+            确认批量删除
+          </h5>
+          <button class="modal-close" @click="showBatchDeleteModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>确定要删除选中的 <strong>{{ selectedNoteIds.length }}</strong> 条便签吗？此操作不可恢复。</p>
+          <div class="d-flex justify-content-end gap-2">
+            <button class="btn-cancel" @click="showBatchDeleteModal = false">取消</button>
+            <button class="btn-danger" @click="batchDeleteNotes">确认删除</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1969,10 +1988,11 @@
         editorMode: 'rich', // 'rich' 或 'markdown'
         showMarkdownPreview: false,
         showBackupOptions: false,
-        isSelectMode: false,
         selectedNoteIds: [],
         showBatchTagModal: false,
-        batchTagInput: ''
+        batchTagInput: '',
+        showBatchDeleteModal: false,
+        showMoreMenu: false
       },
       computed: {
         // 所有标签列表
@@ -2054,9 +2074,12 @@
 
         // 设置全局快捷键
         document.addEventListener('keydown', this.handleGlobalShortcut);
+        // 关闭更多菜单
+        document.addEventListener('click', this.handleDocumentClick);
       },
       beforeDestroy() {
         document.removeEventListener('keydown', this.handleGlobalShortcut);
+        document.removeEventListener('click', this.handleDocumentClick);
       },
       methods: {
         // 进入演示模式
@@ -2071,7 +2094,8 @@
           this.showNoteEditor = false;
           this.showExportMenu = false;
           this.showImportMenu = false;
-          this.isSelectMode = false;
+          this.selectedNoteIds = [];
+          this.showMoreMenu = false;
         },
 
         // 退出演示模式
@@ -2081,6 +2105,44 @@
           this.originalNotes = [];
           this.isDemoMode = false;
           this.currentPage = 1;
+          this.selectedNoteIds = [];
+          this.showMoreMenu = false;
+        },
+
+        // 切换更多菜单
+        toggleMoreMenu() {
+          this.showMoreMenu = !this.showMoreMenu;
+        },
+
+        // 关闭更多菜单
+        closeMoreMenu() {
+          this.showMoreMenu = false;
+        },
+
+        // 全选当前页便签
+        selectAllNotes() {
+          this.selectedNoteIds = this.paginatedNotes.map(note => note.id);
+          this.showMoreMenu = false;
+        },
+
+        // 打开批量编辑标签
+        openBatchTagModal() {
+          if (this.selectedNoteIds.length === 0) return;
+          this.showMoreMenu = false;
+          this.showBatchTagModal = true;
+        },
+
+        // 打开批量删除
+        openBatchDeleteModal() {
+          if (this.selectedNoteIds.length === 0) return;
+          this.showMoreMenu = false;
+          this.showBatchDeleteModal = true;
+        },
+
+        // 清除选择
+        clearSelection() {
+          this.selectedNoteIds = [];
+          this.showMoreMenu = false;
         },
 
         // 加载便签
@@ -2226,14 +2288,6 @@
           return DOMPurify.sanitize(content);
         },
 
-        // 切换选择模式
-        toggleSelectMode() {
-          this.isSelectMode = !this.isSelectMode;
-          if (!this.isSelectMode) {
-            this.selectedNoteIds = [];
-          }
-        },
-
         // 切换便签选中状态
         toggleNoteSelection(noteId) {
           const index = this.selectedNoteIds.indexOf(noteId);
@@ -2244,21 +2298,10 @@
           }
         },
 
-        // 全选
-        selectAll() {
-          this.selectedNoteIds = this.paginatedNotes.map(note => note.id);
-        },
-
-        // 取消全选
-        deselectAll() {
-          this.selectedNoteIds = [];
-        },
-
         // 批量添加标签
         batchAddTags() {
-          if (!this.batchTagInput.trim()) {
-            return;
-          }
+          if (!this.batchTagInput.trim()) return;
+
           const newTags = this.batchTagInput
             .split(',')
             .map(tag => tag.trim())
@@ -2272,7 +2315,6 @@
                   note.tagsArray.push(tag);
                 }
               });
-              // 更新 tags 字符串
               note.tags = note.tagsArray.join(', ');
             }
           });
@@ -2280,7 +2322,13 @@
           this.saveNotes();
           this.showBatchTagModal = false;
           this.batchTagInput = '';
-          this.isSelectMode = false;
+        },
+
+        // 批量删除便签
+        batchDeleteNotes() {
+          this.notes = this.notes.filter(note => !this.selectedNoteIds.includes(note.id));
+          this.saveNotes();
+          this.showBatchDeleteModal = false;
           this.selectedNoteIds = [];
         },
 
@@ -2356,7 +2404,14 @@
             this.currentPage++;
           }
         },
-        
+
+        // 处理文档点击（关闭更多菜单）
+        handleDocumentClick(e) {
+          if (this.showMoreMenu && !e.target.closest('.btn-more') && !e.target.closest('.more-dropdown')) {
+            this.showMoreMenu = false;
+          }
+        },
+
         // 导出Excel
         exportExcel() {
           const data = this.notes.map(note => ({
