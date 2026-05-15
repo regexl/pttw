@@ -281,7 +281,6 @@
       align-items: center;
       gap: 0.5rem;
       font-weight: 500;
-      position: relative;
     }
 
     .btn-more:hover {
@@ -296,9 +295,8 @@
     /* 更多操作下拉菜单 */
     .more-dropdown {
       position: absolute;
-      top: 100%;
+      top: calc(100% + 0.5rem);
       right: 0;
-      margin-top: 0.5rem;
       background: var(--surface);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
