@@ -2046,6 +2046,18 @@
           this.currentPage = 1;
         }
       },
+      mounted() {
+        this.theme = AppUtils.createNamespacedStorage('smartnotes_theme').get('light');
+        this.notesStorage = AppUtils.createNamespacedStorage('smartnotes_notes', { version: 1 });
+        this.loadNotes();
+        document.body.setAttribute('data-theme', this.theme);
+
+        // 设置全局快捷键
+        document.addEventListener('keydown', this.handleGlobalShortcut);
+      },
+      beforeDestroy() {
+        document.removeEventListener('keydown', this.handleGlobalShortcut);
+      },
       methods: {
         // 进入演示模式
         enterDemoMode() {
@@ -2070,19 +2082,7 @@
           this.isDemoMode = false;
           this.currentPage = 1;
         },
-      mounted() {
-        this.theme = AppUtils.createNamespacedStorage('smartnotes_theme').get('light');
-        this.notesStorage = AppUtils.createNamespacedStorage('smartnotes_notes', { version: 1 });
-        this.loadNotes();
-        document.body.setAttribute('data-theme', this.theme);
-        
-        // 设置全局快捷键
-        document.addEventListener('keydown', this.handleGlobalShortcut);
-      },
-      beforeDestroy() {
-        document.removeEventListener('keydown', this.handleGlobalShortcut);
-      },
-      methods: {
+
         // 加载便签
         loadNotes() {
           const savedNotes = this.notesStorage.get(null);
