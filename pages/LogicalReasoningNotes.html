@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测判断推理 · 一拖五全能笔记</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Ctext x='32' y='46' font-size='34' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='white'%3E逻%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f7f5f0;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --ink-soft:#4b5563;
+  --muted:#6b7280;
+  --line:#e5e1d8;
+  --accent:#b45309;
+  --accent-soft:#fef3c7;
+  --red:#b91c1c;
+  --red-soft:#fee2e2;
+  --green:#15803d;
+  --green-soft:#dcfce7;
+  --blue:#1d4ed8;
+  --blue-soft:#dbeafe;
+  --teal:#0f766e;
+  --teal-soft:#ccfbf1;
+  --code-bg:#1e293b;
+  --code-ink:#e2e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:15px;
+}
+/* ===== 顶部导航 ===== */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,245,240,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:10px 0;
+}
+.topbar-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.topbar h1{
+  font-family:'Noto Serif SC',serif;
+  font-size:18px;font-weight:700;color:var(--accent);
+}
+.nav-links{display:flex;gap:16px;flex-wrap:wrap}
+.nav-links a{
+  color:var(--ink-soft);text-decoration:none;font-size:13px;font-weight:500;
+  padding:4px 10px;border-radius:6px;transition:all .2s;
+}
+.nav-links a:hover{background:var(--accent-soft);color:var(--accent)}
+/* ===== 主体 ===== */
+.container{max-width:1100px;margin:0 auto;padding:32px 24px 80px}
+.hero{
+  text-align:center;padding:48px 24px 40px;
+  background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);
+  border-radius:16px;border:1px solid #fde68a;margin-bottom:36px;
+}
+.hero h2{
+  font-family:'Noto Serif SC',serif;
+  font-size:32px;font-weight:900;color:var(--accent);margin-bottom:12px;
+}
+.hero p{color:var(--ink-soft);font-size:15px;max-width:640px;margin:0 auto}
+.hero .tags{margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero .tag{
+  background:#fff;padding:5px 14px;border-radius:20px;font-size:12px;
+  color:var(--accent);border:1px solid #fcd34d;font-weight:500;
+}
+/* ===== 章节 ===== */
+section{margin-bottom:48px}
+.section-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:24px;font-weight:700;color:var(--ink);
+  padding-left:14px;border-left:4px solid var(--accent);
+  margin-bottom:24px;line-height:1.3;
+}
+.section-title .num{
+  display:inline-block;background:var(--accent);color:#fff;
+  width:32px;height:32px;line-height:32px;text-align:center;
+  border-radius:8px;font-size:16px;margin-right:10px;vertical-align:middle;
+  font-family:'Noto Sans SC',sans-serif;
+}
+/* ===== 卡片 ===== */
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:24px;margin-bottom:20px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.card h3{
+  font-size:17px;font-weight:700;color:var(--ink);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.card h3 .icon{
+  width:28px;height:28px;border-radius:6px;display:inline-flex;
+  align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;
+}
+.card h4{
+  font-size:15px;font-weight:600;color:var(--ink-soft);
+  margin:16px 0 10px;
+}
+.card p{margin-bottom:10px;color:var(--ink-soft)}
+.card ul,.card ol{margin:8px 0 12px 24px;color:var(--ink-soft)}
+.card li{margin-bottom:6px}
+/* ===== 公式块 ===== */
+.formula{
+  background:var(--code-bg);color:var(--code-ink);
+  padding:14px 18px;border-radius:8px;font-family:'Courier New',monospace;
+  font-size:14px;line-height:1.8;margin:12px 0;overflow-x:auto;
+}
+.formula .hl{color:#fbbf24;font-weight:700}
+.formula .red{color:#f87171}
+.formula .green{color:#4ade80}
+/* ===== 提示框 ===== */
+.tip{
+  padding:14px 18px;border-radius:8px;margin:14px 0;
+  border-left:4px solid;font-size:14px;
+}
+.tip-warn{background:var(--red-soft);border-color:var(--red);color:#7f1d1d}
+.tip-ok{background:var(--green-soft);border-color:var(--green);color:#14532d}
+.tip-info{background:var(--blue-soft);border-color:var(--blue);color:#1e3a8a}
+.tip-key{background:var(--accent-soft);border-color:var(--accent);color:#78350f}
+.tip strong{display:block;margin-bottom:4px}
+/* ===== 表格 ===== */
+table{
+  width:100%;border-collapse:collapse;margin:14px 0;
+  font-size:14px;table-layout:fixed;
+}
+th,td{
+  border:1px solid var(--line);padding:10px 12px;
+  text-align:left;vertical-align:top;word-break:break-word;
+}
+th{background:#f3f0e8;font-weight:700;color:var(--ink)}
+tr:nth-child(even) td{background:#faf9f6}
+/* ===== 两栏 ===== */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .hero h2{font-size:24px}
+  .section-title{font-size:20px}
+  body{font-size:16px}
+  .nav-links a{min-height:44px;line-height:44px;padding:0 12px;font-size:14px}
+  .card{padding:18px}
+  table{font-size:13px}
+}
+/* ===== 口诀框 ===== */
+.mnemonic{
+  background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);
+  border:1px solid #86efac;border-radius:10px;
+  padding:16px 20px;margin:14px 0;
+  font-family:'Noto Serif SC',serif;font-size:15px;
+  color:#14532d;line-height:2;font-weight:500;
+}
+.mnemonic::before{content:"📖 ";font-style:normal}
+/* ===== 步骤流 ===== */
+.steps{counter-reset:step;margin:16px 0}
+.step{
+  display:flex;gap:16px;margin-bottom:18px;position:relative;
+}
+.step-num{
+  flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  background:var(--accent);color:#fff;font-weight:700;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.step-body{flex:1;padding-top:4px}
+.step-body h4{margin:0 0 6px;font-size:15px;color:var(--ink)}
+.step-body p{margin:0;font-size:14px;color:var(--ink-soft)}
+/* ===== 对比块 ===== */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:14px 0;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.compare>div{padding:16px}
+.compare .left{background:var(--red-soft);border-right:1px solid var(--line)}
+.compare .right{background:var(--green-soft)}
+.compare h5{font-size:14px;font-weight:700;margin-bottom:8px}
+.compare .left h5{color:var(--red)}
+.compare .right h5{color:var(--green)}
+.compare p{font-size:13px;margin:4px 0}
+@media(max-width:600px){.compare{grid-template-columns:1fr}.compare .left{border-right:none;border-bottom:1px solid var(--line)}}
+/* ===== 底部 ===== */
+.footer{
+  text-align:center;padding:32px 24px;color:var(--muted);
+  font-size:13px;border-top:1px solid var(--line);margin-top:48px;
+}
+/* ===== 代码行内 ===== */
+code{
+  background:#f3f0e8;padding:2px 7px;border-radius:4px;
+  font-family:'Courier New',monospace;font-size:13px;color:var(--accent);
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <h1>行测判断推理 · 一拖五全能笔记</h1>
+    <nav class="nav-links">
+      <a href="#logic">逻辑词翻译</a>
+      <a href="#robinson">鲁滨逊定律</a>
+      <a href="#traps">高频陷阱</a>
+      <a href="#pipeline">固定流水线</a>
+      <a href="#types">题型考点</a>
+      <a href="#reverse">反向代入</a>
+      <a href="#other">其他模块</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== Hero ===== -->
+<div class="hero">
+  <h2>判断推理 · 一拖五解题体系</h2>
+  <p>从逻辑关联词翻译到固定解题流水线，从高频陷阱到真题实战，一套完整的行测判断推理备考笔记</p>
+  <div class="tags">
+    <span class="tag">当且仅当</span>
+    <span class="tag">只有…否则…</span>
+    <span class="tag">鲁滨逊定律</span>
+    <span class="tag">反向代入法</span>
+    <span class="tag">一拖五</span>
+    <span class="tag">分组排列</span>
+  </div>
+</div>
+
+<!-- ===== 第一章：逻辑词翻译 ===== -->
+<section id="logic">
+  <h2 class="section-title"><span class="num">1</span>逻辑关联词翻译大全</h2>
+
+  <!-- 充分条件 -->
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">充</span>充分条件：如果P，那么Q</h3>
+    <p><strong>句式：</strong>如果P就Q；只要P就Q；一旦P则Q；P必然Q；P推出Q</p>
+    <div class="formula"><span class="hl">P → Q</span>　　逆否：¬Q → ¬P</div>
+    <div class="tip tip-warn">
+      <strong>易错点</strong>
+      肯后、否前无必然结论。例：如果下雨地面湿，地面湿≠下雨。
+    </div>
+  </div>
+
+  <!-- 必要条件 -->
+  <div class="card">
+    <h3><span class="icon" style="background:var(--teal)">必</span>必要条件：只有P，才Q</h3>
+    <p><strong>句式：</strong>只有P才Q；Q离不开P；P是Q的必要前提</p>
+    <div class="formula"><span class="hl">Q → P</span>　　口诀：谁是必要谁放箭头后面</div>
+    <div class="tip tip-warn">
+      <strong>最容易搞反箭头</strong>
+      "只有P才Q"是后推前（Q→P），不是前推后！
+    </div>
+  </div>
+
+  <!-- 充要条件 -->
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">充要</span>充要条件：P当且仅当Q</h3>
+    <p><strong>句式：</strong>P当且仅当Q；P和Q互为唯一前提；P等价Q</p>
+    <div class="formula">
+      <span class="hl">P ↔ Q</span>　=　(P→Q) 且 (Q→P)<br>
+      性质：<span class="green">同真同假</span>　　矛盾：<span class="red">一真一假</span> (P∧¬Q)∨(¬P∧Q)
+    </div>
+    <div class="tip tip-key">
+      <strong>考场口诀</strong>
+      当且仅当，同生共死；一真一假即为错。
+    </div>
+    <h4>长得像但绝对不是充要的迷惑词</h4>
+    <ul>
+      <li>"P是Q的唯一原因" ≠ 当且仅当</li>
+      <li>"只有P才Q" 仅仅必要，不是充要</li>
+      <li>"只要P就Q" 仅仅充分，不是充要</li>
+    </ul>
+  </div>
+
+  <!-- 除非否则全家桶 -->
+  <div class="card">
+    <h3><span class="icon" style="background:#7c3aed">除</span>除非 / 否则全家桶（4种变体）</h3>
+    <table>
+      <colgroup><col style="width:35%"><col style="width:35%"><col style="width:30%"></colgroup>
+      <tr><th>句式</th><th>逻辑式</th><th>人话翻译</th></tr>
+      <tr><td>除非P，否则Q</td><td>¬P → Q</td><td>不P则Q</td></tr>
+      <tr><td>除非P，否则不Q</td><td>¬P → ¬Q ⇔ Q→P</td><td>不P就不Q</td></tr>
+      <tr><td>Q，除非P</td><td>¬P → Q</td><td>同"除非P否则Q"</td></tr>
+      <tr><td>除非不P，否则Q</td><td>P → Q</td><td>P则Q</td></tr>
+    </table>
+    <div class="mnemonic">去掉除非，否前推后；遇到"否则不"单独记逆否。</div>
+  </div>
+
+  <!-- 只有否则的两种歧义 -->
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">坑</span>"只有A去乙地，否则B"的两种语义（顶级陷阱）</h3>
+
+    <div class="compare">
+      <div class="left">
+        <h5>【错误】个体事件理解</h5>
+        <p>A = 赵去乙地（赵∈乙）</p>
+        <p>翻译：¬(赵∈乙) → 周去丙</p>
+        <p>忽略了"只有"的排他性语义</p>
+      </div>
+      <div class="right">
+        <h5>【正确】集合唯一性理解</h5>
+        <p>A = 乙地={赵}（乙地仅有赵一人）</p>
+        <p>¬A = 赵不在乙 <strong>或</strong> 乙有其他人</p>
+        <p>翻译：¬(乙={赵}) → 周去丙</p>
+      </div>
+    </div>
+
+    <h4>完整逻辑链</h4>
+    <div class="formula">
+      条件：只有赵去乙地，否则周去丙地<br>
+      A：乙地={赵}　B：周∈丙<br>
+      <span class="hl">¬A → B</span>：乙地不唯一 → 周去丙地<br>
+      <span class="hl">¬B → A</span>（逆否）：周不去丙地 → 乙地只能有赵
+    </div>
+
+    <div class="tip tip-warn">
+      <strong>杀选项关键推演</strong>
+      假设周去乙地 → 周不在丙地(¬B) → 逆否要求乙={赵} → 但周也在乙，矛盾！<br>
+      因此"周去乙地"直接排除。
+    </div>
+
+    <div class="tip tip-info">
+      <strong>识别标志</strong>
+      当"只有 + 对象 + 地点"整体作为条件，后面接"否则"，且是分组分配题时，触发集合唯一性语义。
+    </div>
+  </div>
+
+  <!-- 或与要么要么 -->
+  <div class="card">
+    <h3><span class="icon" style="background:#0369a1">或</span>"或"与"要么…要么…"（90%考生混淆）</h3>
+    <div class="grid-2">
+      <div>
+        <h4 style="color:var(--blue)">或者P，或者Q（相容选言）</h4>
+        <div class="formula">P ∨ Q</div>
+        <p>三者都可以：P真Q假 / P假Q真 / P真Q真</p>
+        <p>矛盾：¬P ∧ ¬Q</p>
+        <p>否定一则肯定另一则：¬P → Q</p>
+      </div>
+      <div>
+        <h4 style="color:var(--red)">要么P，要么Q（不相容选言）</h4>
+        <div class="formula">二选一，恰好一个</div>
+        <p>仅两种合法：P真Q假 / P假Q真</p>
+        <p>禁止：同时True；同时False</p>
+        <p>矛盾：(P∧Q)∨(¬P∧¬Q)</p>
+      </div>
+    </div>
+    <h4>等价于"要么…要么…"的伪装词</h4>
+    <p>P、Q二者择一 / P和Q有且仅有一个 / P、Q只能选一个</p>
+  </div>
+
+  <!-- 至多至少 -->
+  <div class="card">
+    <h3><span class="icon" style="background:#be185d">数</span>至多 / 至少 / 恰好（分组题之王）</h3>
+    <table>
+      <colgroup><col style="width:25%"><col style="width:30%"><col style="width:45%"></colgroup>
+      <tr><th>表述</th><th>逻辑式</th><th>允许情况</th></tr>
+      <tr><td>至少一个</td><td>P ∨ Q</td><td>不能全不去，可以两个都选</td></tr>
+      <tr><td>至多一个</td><td>¬(P∧Q) = ¬P∨¬Q</td><td>不能同时都选；可以都不选</td></tr>
+      <tr><td>恰好一个</td><td>要么P要么Q</td><td>二选一，不能同选也不能都不选</td></tr>
+    </table>
+    <div class="tip tip-warn">
+      <strong>高频错误</strong>
+      "至多一个" ≠ "要么要么"！至多一个允许两个都不选，要么要么不允许。
+    </div>
+  </div>
+
+  <!-- 速查表 -->
+  <div class="card">
+    <h3><span class="icon" style="background:var(--green)">表</span>逻辑词速查总表</h3>
+    <table>
+      <colgroup><col style="width:28%"><col style="width:28%"><col style="width:44%"></colgroup>
+      <tr><th>语句</th><th>逻辑式</th><th>核心性质</th></tr>
+      <tr><td>如果P，那么Q</td><td>P→Q</td><td>肯前必肯后</td></tr>
+      <tr><td>只有P，才Q</td><td>Q→P</td><td>肯后必肯前</td></tr>
+      <tr><td>P当且仅当Q</td><td>P↔Q</td><td>同生共死</td></tr>
+      <tr><td>除非P，否则Q</td><td>¬P→Q</td><td>不P则Q</td></tr>
+      <tr><td>P或者Q</td><td>P∨Q</td><td>至少一个，可共存</td></tr>
+      <tr><td>要么P要么Q</td><td>二选一</td><td>不能共存，不能都无</td></tr>
+      <tr><td>P、Q至多一个</td><td>¬P∨¬Q</td><td>禁止同时选中</td></tr>
+      <tr><td>只有A去乙地否则B（分组题）</td><td>¬(乙={A})→B</td><td>集合排他，乙地只能A</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 第二章：鲁滨逊定律 ===== -->
+<section id="robinson">
+  <h2 class="section-title"><span class="num">2</span>鲁滨逊定律</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">鲁</span>核心公式</h3>
+    <p>本质：<strong>假言命题和选言命题等价转换</strong></p>
+    <div class="formula">
+      <span class="hl">A → B　⟺　¬A ∨ B</span><br>
+      A → ¬B　⟺　¬A ∨ ¬B
+    </div>
+    <div class="tip tip-key">
+      <strong>一句话理解</strong>
+      如果A那么B = 非A，或者B。只要满足其中一支成立，整个命题就为真。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">用</span>考场两大用途</h3>
+    <h4>① 真假推理</h4>
+    <p>题干给 A→B，直接换成 ¬A∨B 判断真假。</p>
+    <p>例：如果上岸就刷题 = 不上岸，或者刷题。</p>
+    <div class="tip tip-warn">
+      <strong>什么时候这句话是假话？</strong>
+      只有 <strong>A真且B假</strong>（上岸且不刷题）时，A→B才为假。这就是 A→B 的矛盾命题。
+    </div>
+    <h4>② 归谬推理</h4>
+    <div class="formula">
+      A→B，A→¬B　⇒　<span class="red">¬A</span><br>
+      A推出矛盾的两个结果，说明A一定不成立。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">忌</span>使用禁忌</h3>
+    <div class="tip tip-warn">
+      <strong>鲁滨逊只针对"→"，双向箭头不能直接套！</strong>
+      A↔B 等价于 (A→B)∧(B→A)，要拆开两个假言分别用鲁滨逊。
+    </div>
+    <div class="mnemonic">假言转选言，鲁滨逊上线；A推B等于非A或B；唯有A真B假，命题才完蛋。</div>
+  </div>
+</section>
+
+<!-- ===== 第三章：高频陷阱 ===== -->
+<section id="traps">
+  <h2 class="section-title"><span class="num">3</span>高频错误与文字陷阱清单</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">1</span>"只有"修饰范围陷阱</h3>
+    <p>"只有A去乙地"在不同语境下含义完全不同：</p>
+    <ul>
+      <li><strong>普通条件句</strong>（只有A去乙，周才去丙）：个体必要条件，无排他，乙可以有别人</li>
+      <li><strong>分组分配+否则</strong>（只有A去乙，否则B）：乙地={A}，集合排他命题</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">2</span>否前、肯后无效</h3>
+    <div class="formula">
+      A→B 成立时：<br>
+      <span class="green">A真 → B必真</span>（肯前有效）<br>
+      <span class="green">¬B → ¬A</span>（否后有效）<br>
+      <span class="red">¬A → ？</span>（否前无效，推不出必然结论）<br>
+      <span class="red">B真 → ？</span>（肯后无效，推不出必然结论）
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">3</span>至多 ≠ 要么要么</h3>
+    <p>至多一个：可以都不选；要么要么：必须选且仅选一个。</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">4</span>小题条件继承陷阱（一拖五专属头号大坑）</h3>
+    <div class="tip tip-warn">
+      <strong>铁律</strong>
+      第3题题干写"假设小康买豌豆粉"，这个假设<strong>只在第3题成立</strong>，第4题恢复原始题干。做完一题立刻扔掉附加条件！
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">5</span>主体偷换 / 对象混淆</h3>
+    <ul>
+      <li>人物名字接近：小梅、小迪；小康、小兰</li>
+      <li>物品名称接近：酥油茶、豌豆粉；凉卷粉、鲜花饼</li>
+      <li>选项悄悄偷换主体：题干"小康不买烤乳扇"，选项改成"小迪不买烤乳扇"</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">6</span>排序题：先后 ≠ 紧邻</h3>
+    <p>"A在B之后"只要求顺序在前，不要求挨在一起。题干没写"紧邻"就不要默认相邻。</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">7</span>分组题：默认每组有人</h3>
+    <p>题干没写"每组至少1人"，不要默认两组都必须有人。可能出现某组为空的情况。</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--red)">8</span>"唯一"不等于充要</h3>
+    <p>"唯一能够推出Q的是P"只是 Q→P（必要条件），不是 P↔Q（充要）。要看修饰对象是事件还是集合。</p>
+  </div>
+</section>
+
+<!-- ===== 第四章：固定解题流水线 ===== -->
+<section id="pipeline">
+  <h2 class="section-title"><span class="num">4</span>一拖五固定解题流水线</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">0</span>Step 0：前置准备（读总题干）</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>圈主体、元素，数清楚数量</h4>
+          <p>人物/物品各几个，是否一一对应</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>判断题型</h4>
+          <p>一一匹配 / 分组题 / 排序题</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>翻译全部总条件，写成符号</h4>
+          <p>硬性约束加粗；假言单独标记（前件成立才生效）</p>
+        </div>
+      </div>
+    </div>
+    <div class="tip tip-key">
+      <strong>标注提醒</strong>
+      总条件5道小题全部生效；小题额外假设仅限本题，做完直接丢弃！
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">1</span>Step 1：看提问方式（决定方法）</h3>
+    <table>
+      <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+      <tr><th>提问类型</th><th>固定解法</th></tr>
+      <tr><td>哪一项可能为真</td><td>正向代入，违反任何条件直接排除</td></tr>
+      <tr><td>哪一项必然为真（常为"XX不XX"）</td><td><strong>取反代入（反向假设法）</strong>，推出矛盾则原选项必真</td></tr>
+      <tr><td>附加条件型（如果XXX，则…）</td><td>以附加条件为起点，正向连锁推理</td></tr>
+      <tr><td>哪一项不可能/一定为假</td><td>直接代入，和题干冲突就是答案</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--teal)">2</span>Step 2：提取信息，连锁推导</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>先写硬性约束</h4>
+          <p>谁一定在哪、谁不能在哪，这是锚点</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>再看假言命题</h4>
+          <p>优先找前件能不能激活。前件为真才能推后件；前件假，假言直接作废</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>连锁推导</h4>
+          <p>一条推完看能不能触发下一个条件；假言难推进时用鲁滨逊转换</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--green)">3</span>Step 3：逐项验证，按优先级排错</h3>
+    <ol>
+      <li><strong>优先核对硬性约束</strong>（不能放的、必须放的），一眼错直接排除</li>
+      <li><strong>再核对假言规则</strong>，注意否前、肯后无必然结论，不能用来排选项</li>
+      <li><strong>注意数量限制</strong>：人数上下限、一一对应不能重复</li>
+      <li><strong>陷阱自查</strong>：是否继承上题条件？至多/至少翻译对吗？主体偷换了吗？</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:#7c3aed">4</span>Step 4：验算+收尾</h3>
+    <ul>
+      <li>问【可能】：只要找到1种分配方案不违反条件，即为正确</li>
+      <li>问【必然】：所有可行方案都满足该选项才对；存在1种方案让选项不成立就排除</li>
+      <li>推出矛盾=假设不成立；无矛盾=该情况可以存在</li>
+    </ul>
+    <div class="tip tip-info">
+      <strong>考场取舍</strong>
+      推3步以上还复杂，先标记跳过，优先拿简单小题分数，不要死磕最后1题。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>口袋版速记（写在草稿纸左上角）</h3>
+    <div class="formula">
+【一拖五固定套路】
+0.总题干：列元素，翻译全部条件，区分硬性/假言；小题假设只在本题有效
+1.看提问：可能→正向代入；一定真→反向取反；给附加条件→正向推
+2.先固定信息，再激活假言，连锁推导
+3.排错顺序：硬性约束优先 → 再验假言，注意否前肯后无效
+4.陷阱自查：不继承上题条件；区分至多/至少；看清主体
+5.判定：有矛盾必假；无矛盾即可行
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第五章：题型考点 ===== -->
+<section id="types">
+  <h2 class="section-title"><span class="num">5</span>一拖五题型与考点</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">型</span>三大核心题型</h3>
+    <div class="grid-3">
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:16px">
+        <h4 style="color:var(--blue);margin-bottom:10px">① 一一对应</h4>
+        <p style="font-size:13px">两边元素数量相等，一人一物不可重复</p>
+        <p style="font-size:13px;margin-top:8px"><strong>突破口：</strong>确定一个，双向划掉</p>
+        <p style="font-size:13px;margin-top:8px"><strong>难度：</strong>简单</p>
+      </div>
+      <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:16px">
+        <h4 style="color:var(--accent);margin-bottom:10px">② 分组题（国考最多）</h4>
+        <p style="font-size:13px">一批人分2~3组，同组可多人</p>
+        <p style="font-size:13px;margin-top:8px"><strong>突破口：</strong>人数/名额计算</p>
+        <p style="font-size:13px;margin-top:8px"><strong>难度：</strong>中等~难</p>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px">
+        <h4 style="color:var(--green);margin-bottom:10px">③ 排序题</h4>
+        <p style="font-size:13px">有先后位次，位置唯一</p>
+        <p style="font-size:13px;margin-top:8px"><strong>突破口：</strong>画位置横线，捆绑打包</p>
+        <p style="font-size:13px;margin-top:8px"><strong>难度：</strong>中等</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">比</span>三类题型差异对比</h3>
+    <div style="overflow-x:auto">
+    <table style="min-width:680px">
+      <colgroup><col style="width:16%"><col style="width:22%"><col style="width:22%"><col style="width:22%"><col style="width:18%"></colgroup>
+      <tr><th>题型</th><th>核心特点</th><th>元素规则</th><th>核心突破口</th><th>高频陷阱</th></tr>
+      <tr><td>一一匹配</td><td>两边元素数量相等</td><td>一一对应，不可重复</td><td>确定一个，双向划掉</td><td>忽略一物只能一人</td></tr>
+      <tr><td>分组题</td><td>一堆人分几组</td><td>同组多人，不均等</td><td>人数/名额计算</td><td>默认每组有人；混淆至多至少</td></tr>
+      <tr><td>排序题</td><td>有先后位次</td><td>位置唯一，不重复</td><td>画位置，捆绑打包</td><td>"A在B前"默认相邻</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--teal)">考</span>全部核心考点</h3>
+    <div class="grid-2">
+      <div>
+        <h4>基础匹配约束（必考）</h4>
+        <ul>
+          <li>硬性约束：A必须X / A不能X / 数量限制</li>
+          <li>互斥约束：A、B不同组</li>
+          <li>绑定约束：A、B同组（捆绑）</li>
+        </ul>
+        <h4 style="margin-top:16px">假言命题（最高频难点）</h4>
+        <ul>
+          <li>如果A→B；除非A否则B</li>
+          <li>当且仅当（双向）</li>
+          <li>鲁滨逊定律转换</li>
+        </ul>
+      </div>
+      <div>
+        <h4>数量考点（分组题最爱）</h4>
+        <ul>
+          <li>至少、至多（极易翻译错）</li>
+          <li>每组人数上下限</li>
+          <li>剩余名额计算</li>
+        </ul>
+        <h4 style="margin-top:16px">顺序考点（排序专属）</h4>
+        <ul>
+          <li>A在B前面 / A紧挨着B</li>
+          <li>A和B中间隔X个</li>
+        </ul>
+        <h4 style="margin-top:16px">一拖五专属</h4>
+        <ul>
+          <li>小题附加条件局部生效</li>
+          <li>可能真 / 必然真 / 不可能为假</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>考场快速识别口诀</h3>
+    <div class="mnemonic">
+      两边元素一样多，一人一物 → 一一匹配；<br>
+      一堆人分几组，看名额多少 → 分组；<br>
+      有123先后位次 → 排序。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第六章：反向代入法实战 ===== -->
+<section id="reverse">
+  <h2 class="section-title"><span class="num">6</span>反向代入法（真题实战）</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">法</span>方法原理</h3>
+    <p>选项形式为<strong>"X不买Y"</strong>时，取反 = 假设"X买Y"，代入题干：</p>
+    <ul>
+      <li>如果推出矛盾 → 原选项一定成立（正确答案）</li>
+      <li>如果无矛盾 → 该选项只是可能真，排除</li>
+    </ul>
+    <div class="tip tip-key">
+      <strong>适用场景</strong>
+      题干大量如果…则…，一一匹配；选项简短都是否定句（XX不XX）。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">题</span>真题演示</h3>
+    <div style="background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px">
+      <p style="font-weight:600;margin-bottom:8px">【题干】</p>
+      <p style="font-size:14px">小奇、小兰、小康、小梅、小迪五人，购买凉卷粉、酥油茶、烤乳扇、鲜花饼、豌豆粉五种不同小食，每人只买一种。已知：</p>
+      <ol style="font-size:14px;margin-top:8px">
+        <li>如果小奇购买凉卷粉，则小康购买豌豆粉</li>
+        <li>如果小康不购买酥油茶，则小迪购买凉卷粉</li>
+        <li>如果小迪购买鲜花饼，则小梅购买凉卷粉且小兰购买豌豆粉</li>
+        <li>小兰不购买鲜花饼且小康不购买烤乳扇</li>
+      </ol>
+      <p style="font-size:14px;margin-top:8px"><strong>问：可以推出？</strong></p>
+      <p style="font-size:14px">A. 小奇不购买凉卷粉　B. 小迪不购买烤乳扇　C. 小梅不购买酥油茶　D. 小康不购买豌豆粉</p>
+    </div>
+
+    <h4>条件翻译</h4>
+    <div class="formula">
+① 奇凉 → 康豌<br>
+② ¬康酥 → 迪凉<br>
+③ 迪鲜 → (梅凉 ∧ 兰豌)<br>
+④ ¬兰鲜 ∧ ¬康烤
+    </div>
+
+    <h4>验证A选项（取反代入）</h4>
+    <div class="formula">
+取反假设：<span class="hl">小奇买凉卷粉（奇=凉）</span><br>
+① 奇凉 → 康豌 → <span class="red">小康=豌豆粉</span><br>
+小康=豌 ⇒ 小康≠酥油茶<br>
+② ¬康酥 → 迪凉 → <span class="red">小迪=凉卷粉</span><br>
+<span class="red">矛盾！</span>小奇=凉卷粉 且 小迪=凉卷粉（一物两人）<br>
+⇒ 假设不成立 → <span class="green">小奇一定不买凉卷粉，A正确</span>
+    </div>
+
+    <div class="tip tip-ok">
+      <strong>考场技巧</strong>
+      做到这里可以直接选A走人，其余选项验算均无矛盾，不是必然结论。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>矛盾的两类表现</h3>
+    <div class="grid-2">
+      <div style="background:var(--red-soft);border-radius:8px;padding:14px">
+        <h4 style="color:var(--red)">① 人重复买</h4>
+        <p style="font-size:14px">同一个人被推出买两种不同的东西</p>
+      </div>
+      <div style="background:var(--red-soft);border-radius:8px;padding:14px">
+        <h4 style="color:var(--red)">② 物重复分配</h4>
+        <p style="font-size:14px">同一个物品被分给两个人</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第七章：其他模块 ===== -->
+<section id="other">
+  <h2 class="section-title"><span class="num">7</span>判断推理其他模块极简步骤</h2>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--blue)">定</span>定义判断</h3>
+    <ol>
+      <li>圈出定义要点：主体、客体、时间、目的、方式、结果</li>
+      <li>选项一一匹配要点，不符合任意核心要点直接排除</li>
+      <li>择优：对比择优，不脑补额外信息；警惕范围扩大缩小</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--teal)">类</span>类比推理</h3>
+    <ol>
+      <li>先看逻辑关系（种属/组成、并列、交叉、对应、语法）</li>
+      <li>二级辨析：词性、褒贬、时间先后、人工/自然、必然或然</li>
+      <li>造句辅助，但不能强行造；注意词语顺序不能颠倒</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--accent)">论</span>逻辑论证（加强削弱）</h3>
+    <ol>
+      <li>找论点、论据，圈话题，分清话题是否一致</li>
+      <li><strong>削弱优先级：</strong>否定论点 > 拆桥 > 否定论据</li>
+      <li><strong>加强优先级：</strong>搭桥 > 必要条件 > 解释原因 > 举例子</li>
+      <li>排坑：话题不一致、主体不一致、无关选项、对策类一般不选</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon" style="background:var(--green)">图</span>图形推理固定顺序</h3>
+    <div class="formula">
+对称性 → 一笔画 → 面 → 线 → 点 → 角 → 元素和部分数
+    </div>
+  </div>
+</section>
+
+<!-- ===== 底部 ===== -->
+<div class="footer">
+  <p>行测判断推理 · 一拖五全能笔记 | 固定套路，不慌不忙</p>
+  <p style="margin-top:6px">逻辑词翻译 · 鲁滨逊定律 · 反向代入 · 高频陷阱 · 题型考点</p>
+</div>
+
+</div>
+</body>
+</html>
