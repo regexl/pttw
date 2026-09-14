@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>因果假说 vs 形式逻辑：考场避坑指南</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --danger-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --bg-color: #f4f6f7;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --light-text: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background-color: #e8f4fc;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .danger-box {
+            background-color: #fdedec;
+            border-left: 4px solid var(--danger-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .success-box {
+            background-color: #eafaf1;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comp-col {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .comp-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .logic-header { background-color: var(--accent-color); }
+        .causal-header { background-color: var(--warning-color); }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 20px;
+        }
+
+        .step-list li::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+        }
+
+        .mnemonic {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>因果假说 vs 形式逻辑：考场避坑指南</h1>
+
+    <!-- Section 1: Core Root -->
+    <div class="card">
+        <h2>一、核心根源：混淆的本质</h2>
+        <div class="highlight-box">
+            <strong>混淆的本质 = 分不清题干给的是【固定真假规则】还是【观测相关性 + 人为脑补的因果故事】</strong>
+        </div>
+        <p>很多同学在考场上容易将“如果...那么...”的逻辑规则与“A导致B”的因果推论混为一谈。本手册旨在通过符号隔离和流程化操作，彻底根除这一混淆。</p>
+    </div>
+
+    <!-- Section 2: Two Systems -->
+    <div class="card">
+        <h2>二、先定义两套完全独立的体系</h2>
+        <p><strong>原则：</strong>书写严格分开，从符号就隔离。</p>
+        
+        <div class="comparison-grid">
+            <!-- System 1 -->
+            <div class="comp-col">
+                <div class="comp-header logic-header">体系 1：形式逻辑 | 蕴含命题</div>
+                <ul>
+                    <li><strong>符号强制写：</strong> <span class="formula">B → C</span></li>
+                    <li><strong>题干素材：</strong> 规则、定义、制度、假设条件</li>
+                    <li><strong>典型引导词：</strong> 如果… 那么；只要… 就；所有… 都；若… 则</li>
+                    <li><strong>命题性质：</strong> 给定为真的静态规则，不讨论时间先后、谁造成谁</li>
+                    <li><strong>逻辑规则：</strong> <span class="formula">B → C ⇔ ¬C → ¬B</span> (天然逆否等价)</li>
+                    <li><strong>用途：</strong> 推导必然真假；肯后否前无法推出确定结论</li>
+                    <li><strong>一句话：</strong> 这句话本身就是已知成立的前提，不需要我们去证明它对不对。</li>
+                </ul>
+            </div>
+
+            <!-- System 2 -->
+            <div class="comp-col">
+                <div class="comp-header causal-header">体系 2：论证逻辑 | 因果假说</div>
+                <ul>
+                    <li><strong>符号强制写：</strong> <span class="formula">B ⇒ C</span></li>
+                    <li><strong>题干素材：</strong> 野外调查、实验、统计、对比观察</li>
+                    <li><strong>典型引导词：</strong> 研究发现、对比可见，因此 XX 导致 / 使得 / 降低 / 缓解 XX</li>
+                    <li><strong>命题性质：</strong> 仅仅观测两件事共存（相关性）；<span class="formula">X ⇒ Y</span> 是作者主观猜想的因果，是待证明的结论，不是既定事实</li>
+                    <li><strong>逻辑规则：</strong> <span class="formula">B ⇒ C</span> <strong>不能</strong> 自动等价于 <span class="formula">¬C ⇒ ¬B</span></li>
+                    <li><strong>用途：</strong> 寻找漏洞（倒置、他因）、搭桥、取反验证必要前提</li>
+                    <li><strong>一句话：</strong> 因果箭头描述时间先后 + 作用关系，不是真假绑定。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: 4 Step Process -->
+    <div class="card">
+        <h2>三、做题固定 4 步判定流程</h2>
+        <p>拿到题干立刻执行：</p>
+        <ol class="step-list">
+            <li>
+                <strong>Step 1：识别题干原材料是什么</strong><br>
+                1）原材料是不是一条人为规定的条件语句？<br>
+                ✅ 是 → 形式逻辑，使用 <span class="formula">→</span>，允许逆否运算<br>
+                2）原材料是不是先摆一组观察 / 实验数据，最后得出 “A 造成 B” 的结论？<br>
+                ✅ 是 → 因果论证，使用 <span class="formula">⇒</span>，禁止逆否等价运算
+            </li>
+            <li>
+                <strong>Step 2：区分这句话是【论据】还是【结论】</strong><br>
+                如果 <span class="formula">B → C</span> 放在论据部分，作为已知规则 → 可以逆否<br>
+                如果 <span class="formula">B ⇒ C</span> 放在结尾，是作者推出来的结论 → 这是因果假说，不能默认逆否成立<br>
+                <div class="danger-box">
+                    <strong>致命易错点：</strong> 观测到「¬B 和 ¬C 同时发生」只是事实素材，本身不自带任何箭头！箭头是人自己加上去的猜想。
+                </div>
+            </li>
+            <li>
+                <strong>Step 3：两套箭头严格隔离书写</strong><br>
+                硬性书写习惯（防止大脑混淆）：<br>
+                形式逻辑：<span class="formula">B → C</span><br>
+                因果猜想：<span class="formula">B ⇒ C</span><br>
+                永远不要混用箭头！看到不同符号，大脑自动切换两套规则。
+            </li>
+            <li>
+                <strong>Step 4：分别翻译二者的文字含义</strong><br>
+                <span class="formula">B → C</span>：如果 B 为真，则 C 一定为真（无时间）<br>
+                <span class="formula">B ⇒ C</span>：B 事件先发生，之后导致 C 事件发生（有时间顺序）
+            </li>
+        </ol>
+    </div>
+
+    <!-- Section 4: Comparison Example -->
+    <div class="card">
+        <h2>四、直观对比：同一文字素材的两种解读</h2>
+        <p><strong>素材描述：</strong> 花青素高的植株，不容易被绢蝶捕食</p>
+        
+        <div class="comparison-grid">
+            <div class="comp-col">
+                <div class="comp-header logic-header">情况 A：作为形式逻辑规则</div>
+                <p><strong>题干原文：</strong> 只要花青素含量高 (B)，紫堇就不会被捕食 (C)</p>
+                <p><strong>书写：</strong> <span class="formula">B → C</span></p>
+                <p><strong>逆否有效：</strong> <span class="formula">¬C → ¬B</span></p>
+                <p><strong>含义：</strong> 这是一条既定不变的判定规则，不用纠结先后。</p>
+            </div>
+            <div class="comp-col">
+                <div class="comp-header causal-header">情况 B：作为因果论证（真题真实情况）</div>
+                <p><strong>题干原文：</strong> 观察发现花青素高的植株更少被捕食，因此花青素高使得植株抵御绢蝶</p>
+                <p><strong>书写：</strong> <span class="formula">B ⇒ C</span></p>
+                <p><strong>B ⇒ C：</strong> 先生成高花青素 → 之后防虫（作者假说）</p>
+                <p><strong>¬C ⇒ ¬B：</strong> 先被捕食受伤 → 之后花青素下降（对立倒置假说）</p>
+                <div class="danger-box">
+                    <strong>关键点：</strong> 二者不是等价，是互相竞争、互斥的两套故事。文字句子长得一模一样，放在不同题干结构里，逻辑身份完全不同。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 5: Pitfalls -->
+    <div class="card">
+        <h2>五、实操避坑 5 条铁律</h2>
+        <ul>
+            <li>只要题干出现「调查、实验、野外发现」，结尾出现「因此导致 / 有助于」，<strong>一律禁用逆否等价思维</strong>。</li>
+            <li>因果题里面，<span class="formula">¬C ⇒ ¬B</span> 不是天然推论，它是<strong>削弱项（因果倒置）</strong>。</li>
+            <li>形式逻辑题不存在 “因果倒置” 这个考点；因果论证题不存在 “逆否必然成立”。</li>
+            <li>看到两件事物相关性共存 ≠ 自动生成任何因果箭头；箭头永远是作者的主观假设。</li>
+            <li>不要凭语感判断句子是否等价；先判断题型结构，再选择逻辑规则。</li>
+        </ul>
+
+        <h3>避坑自检问句（做完一道论证题问自己两句）</h3>
+        <div class="highlight-box">
+            <p>① <span class="formula">X ⇒ Y</span> 是题干给定的铁律吗？还是作者猜出来的？</p>
+            <p>② 如果时间顺序反过来写成 <span class="formula">Y ⇒ X</span>，会不会是完全相反的现实故事？</p>
+            <p><strong>判断标准：</strong> 如果回答 “反过来故事完全不一样” → 属于因果假说，不能等价。</p>
+        </div>
+    </div>
+
+    <!-- Section 6: Deep Dive - Equivalence & Negation -->
+    <div class="card">
+        <h2>六、深度辨析：为什么 B⇒C 不等价于 ¬B⇒¬C？</h2>
+        
+        <div class="danger-box">
+            <strong>重要结论：</strong> <span class="formula">B ⇒ C</span> 和 <span class="formula">¬B ⇒ ¬C</span>，本身在逻辑上【根本不是等价关系】！
+        </div>
+
+        <h3>1. 形式逻辑回顾</h3>
+        <p><span class="formula">B → C</span> 唯一等价式：<span class="formula">¬C → ¬B</span>（逆否命题）。</p>
+        <p><span class="formula">¬B → ¬C</span> 是否前，在形式逻辑里：否前推不出任何必然结论，和原式不等价！</p>
+        <p><em>例子：B=是狗，C=是动物。是狗→是动物（真）；不是狗→不是动物（假）。</em></p>
+
+        <h3>2. 回到因果箭头 ⇒ 的真实含义</h3>
+        <p><span class="formula">B ⇒ C</span> = B 这个因素，能够带来 C 这个保护效果（正向作用）。</p>
+        <p>我们直觉上会补一句：花青素低 (<span class="formula">¬B</span>) → 更容易被咬 (<span class="formula">¬C</span>)。</p>
+        <div class="warning-box">
+            <strong>重点：</strong> 这不是逻辑推导出来的必然结论，是我们人为假设了「单一、双向的防御机制」！它只是同一个科学假说附带的配套猜想，不是天然自带的逻辑等价物。
+        </div>
+
+        <h3>3. 反例证明二者可以拆开</h3>
+        <p>假设：只要花青素达到高浓度阈值 B，植物获得防虫能力 C；但是花青素只要低于阈值，不管是中等含量还是极低含量，防虫效果全部失效。</p>
+        <ul>
+            <li><span class="formula">B ⇒ C</span>（高花青素 → 防虫 ✔成立）</li>
+            <li>花青素中等（<span class="formula">¬B</span>）→ 依然不防虫（<span class="formula">¬C</span>）</li>
+            <li>花青素极低（<span class="formula">¬B</span>）→ 不防虫（<span class="formula">¬C</span>）</li>
+        </ul>
+        <p>或者：花青素只是 “锦上添花” 的辅助防御。植物就算花青素很低（<span class="formula">¬B</span>），还可以靠挥发气味来防虫（依然 C）。此时 <span class="formula">B ⇒ C</span> 成立，但 <span class="formula">¬B ⇒ ¬C</span> 不成立。</p>
+
+        <h3>4. 整理四个因果式子准确的定位</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>表达式</th>
+                    <th>性质</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="formula">B ⇒ C</span></td>
+                    <td>作者核心因果猜想</td>
+                </tr>
+                <tr>
+                    <td><span class="formula">¬B ⇒ ¬C</span></td>
+                    <td>作者额外默认的补充预设（可被推翻，非等价）</td>
+                </tr>
+                <tr>
+                    <td><span class="formula">¬C ⇒ ¬B</span></td>
+                    <td>推翻作者的竞争假说（因果倒置，削弱项）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>七、深度辨析：C⇒B 是否为必要前提？</h2>
+        
+        <div class="success-box">
+            <strong>直接给结论：</strong> <span class="formula">C ⇒ B</span>（不被咬 → 花青素变高）<strong>不能</strong>作为本题结论成立的必要前提。
+        </div>
+
+        <h3>1. 翻译 C⇒B 完整故事</h3>
+        <p>C = 不被捕食（安全无虫害），B = 花青素高。</p>
+        <p><strong>含义：</strong> 植株本身先安全、没有绢蝶侵扰（C），这个安全环境刺激植物合成更多花青素（B）。</p>
+
+        <h3>2. 执行前提假设唯一判定工具：取反验证</h3>
+        <p><strong>规则：</strong> 选项取反之后，题干结论必须彻底无法成立。</p>
+        <p><strong>对 C⇒B 取反：</strong> 安全无虫害，并不会催生更高的花青素。（即：就算一直不被咬，植物也不会因此合成更多花青素。）</p>
+        <p><strong>检验：</strong> 作者的逻辑是：基因主动促进花青素，花青素带来防虫效果。即使「安全不会催生花青素」这件事是真的，基因依然可以自己拉高花青素，继续实现防虫。</p>
+        <p>👉 <strong>取反之后，结论完全可以存活。因此：C⇒B 不是必要前提。</strong></p>
+
+        <h3>3. 对比真正的致命倒置：¬C⇒¬B</h3>
+        <p><strong>取反 ¬C⇒¬B：</strong> 捕食不会降低花青素（正好就是选项 B）。</p>
+        <p>如果不取反（即 ¬C⇒¬B 成立）：花青素低不是防御失败的原因，而是被咬受伤带来的副作用。整套 “基因靠花青素防虫” 的因果直接作废。</p>
+        <p>👉 <strong>取反摧毁结论 → 它才是必要前提要排除的风险。</strong></p>
+
+        <h3>4. 因果命题如何取反（非常重要）</h3>
+        <div class="highlight-box">
+            <p><strong>句子：</strong> X 导致 Y</p>
+            <p><strong>它的否定（取反）是：</strong> X 并不会导致 Y</p>
+            <p><strong>注意：</strong> 不是 <span class="formula">X ⇒ ¬Y</span>（X 导致 Y 不发生）❌</p>
+            <p><strong>注意：</strong> 不是 <span class="formula">¬X ⇒ B</span>（没有安全反而花青素高）❌</p>
+            <p>取反只是剥夺 “X 对 Y 的因果作用力”，不要求 X 反向制造相反结果。</p>
+        </div>
+    </div>
+
+    <!-- Section 8: Summary Card -->
+    <div class="card">
+        <h2>八、一张极简对照记忆卡片</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>表格项目</th>
+                    <th>形式逻辑 <span class="formula">B → C</span></th>
+                    <th>因果假说 <span class="formula">B ⇒ C</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>原始材料</td>
+                    <td>规则 / 定义 / 条件句</td>
+                    <td>观测统计，两件事同时出现</td>
+                </tr>
+                <tr>
+                    <td>时间先后</td>
+                    <td>不关心先后</td>
+                    <td>核心就是谁先发生</td>
+                </tr>
+                <tr>
+                    <td><span class="formula">¬C … ¬B</span> 的角色</td>
+                    <td>等价命题，必然成立</td>
+                    <td>对立竞争的倒置假说（削弱）</td>
+                </tr>
+                <tr>
+                    <td>考点</td>
+                    <td>逆否、递推、摩根</td>
+                    <td>因果倒置、他因、搭桥、取反验证</td>
+                </tr>
+                <tr>
+                    <td>能否等价变换</td>
+                    <td>✅ 允许</td>
+                    <td>❌ 禁止</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mnemonic">
+            <p>规则用短箭头，可以逆否算真假；</p>
+            <p>因果用长双箭头，只比先后不比等价。</p>
+            <p>共存不等于因果，猜想不等于公理。</p>
+        </div>
+    </div>
+
+    <!-- Section 9: Training Method -->
+    <div class="card">
+        <h2>九、配套训练方法（彻底根除混淆）</h2>
+        <p>每次做完一道论证逻辑题：</p>
+        <ol>
+            <li>把作者因果写成 <span class="formula">X ⇒ Y</span></li>
+            <li>手动写出倒置版本 <span class="formula">Y ⇒ X</span></li>
+            <li>用大白话分别翻译两个故事，对比是不是两套完全不一样的现实过程</li>
+            <li>只要两个故事不一样，就证明它不是形式逻辑的等价命题。</li>
+        </ol>
+    </div>
+
+</div>
+
+</body>
+</html>
