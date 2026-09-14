@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逻辑学核心概念手册</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f7f3ec;
+    --bg-card:#fffdf8;
+    --ink:#1f2a24;
+    --ink-soft:#4a5750;
+    --ink-mute:#7a8780;
+    --line:#d9d2c4;
+    --line-soft:#e8e2d6;
+    --accent:#1f5c4a;
+    --accent-soft:#e3ede8;
+    --accent-deep:#143d31;
+    --warn:#b45309;
+    --warn-bg:#fef3c7;
+    --danger:#991b1b;
+    --danger-bg:#fee2e2;
+    --info:#1e40af;
+    --info-bg:#dbeafe;
+    --code-bg:#f0ebe0;
+    --shadow:0 1px 3px rgba(31,42,36,.06),0 4px 16px rgba(31,42,36,.05);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.75;
+    font-size:15px;
+  }
+  .layout{display:flex;min-height:100vh}
+
+  /* ===== 侧边导航 ===== */
+  .sidebar{
+    width:260px;
+    flex-shrink:0;
+    background:var(--accent-deep);
+    color:#e8ede9;
+    padding:32px 0;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .sidebar::-webkit-scrollbar{width:4px}
+  .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:2px}
+  .sidebar-brand{
+    padding:0 24px 24px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    margin-bottom:16px;
+  }
+  .sidebar-brand h1{
+    font-family:'Noto Serif SC',serif;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:.5px;
+  }
+  .sidebar-brand p{
+    font-size:12px;
+    color:rgba(255,255,255,.5);
+    margin-top:4px;
+    letter-spacing:1px;
+  }
+  .nav-list{list-style:none}
+  .nav-list li a{
+    display:block;
+    padding:9px 24px;
+    color:rgba(255,255,255,.65);
+    text-decoration:none;
+    font-size:13.5px;
+    border-left:3px solid transparent;
+    transition:all .2s;
+  }
+  .nav-list li a:hover{
+    color:#fff;
+    background:rgba(255,255,255,.06);
+    border-left-color:rgba(255,255,255,.3);
+  }
+  .nav-list li a.active{
+    color:#fff;
+    background:rgba(255,255,255,.1);
+    border-left-color:#a7d7c5;
+  }
+  .nav-section{
+    padding:16px 24px 6px;
+    font-size:11px;
+    letter-spacing:2px;
+    color:rgba(255,255,255,.35);
+    text-transform:uppercase;
+  }
+
+  /* ===== 主内容 ===== */
+  .main{
+    flex:1;
+    padding:48px 56px 80px;
+    max-width:900px;
+  }
+  .hero{
+    margin-bottom:48px;
+    padding-bottom:32px;
+    border-bottom:2px solid var(--line);
+  }
+  .hero-tag{
+    display:inline-block;
+    font-size:11px;
+    letter-spacing:3px;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:4px 12px;
+    border-radius:2px;
+    margin-bottom:16px;
+    font-weight:500;
+  }
+  .hero h2{
+    font-family:'Noto Serif SC',serif;
+    font-size:32px;
+    font-weight:900;
+    color:var(--ink);
+    line-height:1.3;
+    margin-bottom:12px;
+  }
+  .hero p{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+  }
+
+  section{margin-bottom:56px;scroll-margin-top:24px}
+  section h3{
+    font-family:'Noto Serif SC',serif;
+    font-size:22px;
+    font-weight:700;
+    color:var(--accent-deep);
+    margin-bottom:8px;
+    padding-left:14px;
+    border-left:4px solid var(--accent);
+    line-height:1.4;
+  }
+  section h4{
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+    margin:24px 0 10px;
+  }
+  section h5{
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:16px 0 8px;
+  }
+  section p{margin-bottom:12px;color:var(--ink-soft)}
+  section ul,section ol{margin:8px 0 14px 22px;color:var(--ink-soft)}
+  section li{margin-bottom:6px}
+  section strong{color:var(--ink);font-weight:600}
+
+  /* ===== 卡片 ===== */
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:20px 24px;
+    margin:16px 0;
+    box-shadow:var(--shadow);
+  }
+  .card-accent{
+    border-left:4px solid var(--accent);
+    background:var(--accent-soft);
+  }
+  .card-warn{
+    border-left:4px solid var(--warn);
+    background:var(--warn-bg);
+  }
+  .card-danger{
+    border-left:4px solid var(--danger);
+    background:var(--danger-bg);
+  }
+  .card-info{
+    border-left:4px solid var(--info);
+    background:var(--info-bg);
+  }
+  .card-title{
+    font-weight:700;
+    font-size:14.5px;
+    margin-bottom:8px;
+    color:var(--ink);
+  }
+
+  /* ===== 表格 ===== */
+  .tbl-wrap{overflow-x:auto;margin:16px 0;border-radius:6px;border:1px solid var(--line-soft)}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    background:var(--bg-card);
+  }
+  th{
+    background:var(--accent);
+    color:#fff;
+    font-weight:600;
+    text-align:left;
+    padding:10px 14px;
+    font-size:13px;
+    white-space:nowrap;
+  }
+  td{
+    padding:10px 14px;
+    border-bottom:1px solid var(--line-soft);
+    color:var(--ink-soft);
+    vertical-align:top;
+  }
+  tr:last-child td{border-bottom:none}
+  tr:nth-child(even) td{background:#faf7f1}
+  td code{font-size:12.5px}
+
+  /* ===== 代码/公式 ===== */
+  code{
+    font-family:'JetBrains Mono',monospace;
+    background:var(--code-bg);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:13px;
+    color:var(--accent-deep);
+  }
+  .formula{
+    display:block;
+    background:var(--code-bg);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 18px;
+    margin:10px 0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;
+    color:var(--accent-deep);
+    overflow-x:auto;
+  }
+
+  /* ===== AEIO 四宫格 ===== */
+  .aeio-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:16px 0;
+  }
+  .aeio-cell{
+    background:var(--bg-card);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:16px;
+    box-shadow:var(--shadow);
+  }
+  .aeio-cell .letter{
+    display:inline-block;
+    width:32px;height:32px;
+    line-height:32px;
+    text-align:center;
+    border-radius:50%;
+    font-family:'Noto Serif SC',serif;
+    font-weight:700;
+    font-size:16px;
+    color:#fff;
+    margin-bottom:8px;
+  }
+  .aeio-cell.a .letter{background:#1f5c4a}
+  .aeio-cell.e .letter{background:#991b1b}
+  .aeio-cell.i .letter{background:#b45309}
+  .aeio-cell.o .letter{background:#1e40af}
+  .aeio-cell .name{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px}
+  .aeio-cell .desc{font-size:13px;color:var(--ink-soft)}
+
+  /* ===== 文氏图示意 ===== */
+  .venn-demo{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin:16px 0;
+    justify-content:center;
+  }
+  .venn-item{
+    text-align:center;
+    background:var(--bg-card);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:14px;
+    width:180px;
+  }
+  .venn-item svg{display:block;margin:0 auto 8px}
+  .venn-item .label{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .venn-item .sub{font-size:11.5px;color:var(--ink-mute);margin-top:2px}
+
+  /* ===== 对比双栏 ===== */
+  .compare-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin:16px 0;
+  }
+  .compare-col{
+    background:var(--bg-card);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+  .compare-col h5{
+    margin-top:0;
+    font-size:15px;
+    color:var(--accent-deep);
+    border-bottom:2px solid var(--accent-soft);
+    padding-bottom:6px;
+  }
+
+  /* ===== 层级树 ===== */
+  .tree{
+    background:var(--bg-card);
+    border:1px solid var(--line-soft);
+    border-radius:6px;
+    padding:20px 24px;
+    margin:16px 0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13.5px;
+    line-height:2;
+    color:var(--ink-soft);
+    overflow-x:auto;
+  }
+  .tree .lvl1{color:var(--accent-deep);font-weight:700}
+  .tree .lvl2{color:var(--ink)}
+  .tree .lvl3{color:var(--ink-soft)}
+  .tree .note{color:var(--ink-mute);font-family:'Noto Sans SC',sans-serif;font-size:12px}
+
+  /* ===== 引用块 ===== */
+  blockquote{
+    border-left:3px solid var(--accent);
+    padding:8px 18px;
+    margin:14px 0;
+    color:var(--ink-soft);
+    background:rgba(31,92,74,.04);
+    border-radius:0 4px 4px 0;
+    font-size:14px;
+  }
+
+  /* ===== 页脚 ===== */
+  .footer{
+    margin-top:64px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:var(--ink-mute);
+    text-align:center;
+  }
+
+  /* ===== 响应式 ===== */
+  @media(max-width:900px){
+    .layout{flex-direction:column}
+    .sidebar{
+      width:100%;
+      height:auto;
+      position:relative;
+      padding:16px 0;
+    }
+    .sidebar-brand{padding:0 20px 14px;margin-bottom:10px}
+    .nav-list{display:flex;flex-wrap:wrap;padding:0 12px}
+    .nav-list li a{padding:10px 12px;min-height:44px;font-size:12.5px;border-left:none;border-bottom:2px solid transparent;display:flex;align-items:center}
+    .nav-list li a.active{border-left:none;border-bottom-color:#a7d7c5}
+    .nav-section{display:none}
+    .main{padding:28px 20px 60px}
+    .hero h2{font-size:24px}
+    .aeio-grid,.compare-2{grid-template-columns:1fr}
+    section h3{font-size:19px}
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ===== 侧边导航 ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1>逻辑学核心概念</h1>
+      <p>LOGIC HANDBOOK</p>
+    </div>
+    <ul class="nav-list" id="navList">
+      <li class="nav-section">基础命题</li>
+      <li><a href="#aeio-venn">AEIO 与文氏图</a></li>
+      <li><a href="#four-propositions">四大命题与矛盾</a></li>
+      <li><a href="#predicate">Predicate 谓词</a></li>
+      <li class="nav-section">推理与关系</li>
+      <li><a href="#conditional-causal">条件命题与因果</a></li>
+      <li><a href="#truth-vs-cause">真值关系 vs 因果关系</a></li>
+      <li><a href="#concept-clarify">概念辨析：条件/蕴含/演绎</a></li>
+      <li><a href="#aliases">命题别名总表</a></li>
+      <li><a href="#inductive-deductive">归纳 vs 演绎推理</a></li>
+    </ul>
+  </aside>
+
+  <!-- ===== 主内容 ===== -->
+  <main class="main">
+
+    <div class="hero">
+      <span class="hero-tag">知识整理 · 行测逻辑 / 形式逻辑</span>
+      <h2>逻辑学核心概念手册</h2>
+      <p>系统梳理直言命题、复合命题、谓词逻辑、条件推理、因果关系与归纳演绎等核心概念，厘清易混淆术语之间的层级与区别。</p>
+    </div>
+
+    <!-- ========== 1. AEIO 与文氏图 ========== -->
+    <section id="aeio-venn">
+      <h3>一、AEIO 与文氏图</h3>
+
+      <div class="card card-accent">
+        <div class="card-title">核心区别</div>
+        <p><strong>AEIO 是 4 种直言命题</strong>（语言形式，是逻辑陈述本身）；<strong>文氏图是图形工具</strong>，用来可视化表达 AEIO、检验三段论推理有效性。二者不是并列的两套理论，而是<strong>命题</strong>和<strong>命题的图形表示</strong>的关系。</p>
+      </div>
+
+      <h4>AEIO：四种直言命题</h4>
+      <p>直言命题陈述两个类（S 主项、P 谓项）之间的包含/排斥关系：</p>
+      <div class="aeio-grid">
+        <div class="aeio-cell a">
+          <span class="letter">A</span>
+          <div class="name">全称肯定</div>
+          <div class="desc">所有 S 是 P</div>
+        </div>
+        <div class="aeio-cell e">
+          <span class="letter">E</span>
+          <div class="name">全称否定</div>
+          <div class="desc">所有 S 不是 P</div>
+        </div>
+        <div class="aeio-cell i">
+          <span class="letter">I</span>
+          <div class="name">特称肯定</div>
+          <div class="desc">有的 S 是 P</div>
+        </div>
+        <div class="aeio-cell o">
+          <span class="letter">O</span>
+          <div class="name">特称否定</div>
+          <div class="desc">有的 S 不是 P</div>
+        </div>
+      </div>
+      <p>AEIO 负责给出断言，可以用<strong>对当方阵</strong>研究它们之间的真假关系（矛盾、反对、差等）。</p>
+
+      <h4>文氏图：可视化工具</h4>
+      <p>用相交圆圈代表集合：<strong>阴影</strong>表示该区域为空集；<strong>X</strong>表示该区域至少有一个元素。</p>
+
+      <div class="venn-demo">
+        <!-- A: 所有S是P → S独有部分涂黑 -->
+        <div class="venn-item">
+          <svg width="120" height="84" viewBox="0 0 120 84">
+            <defs>
+              <clipPath id="clipA"><circle cx="45" cy="48" r="28"/></clipPath>
+            </defs>
+            <text x="33" y="14" font-size="11" fill="#1f2a24" font-weight="600">S</text>
+            <text x="82" y="14" font-size="11" fill="#1f2a24" font-weight="600">P</text>
+            <rect x="17" y="20" width="56" height="56" fill="#1f5c4a" opacity="0.25" clip-path="url(#clipA)"/>
+            <circle cx="45" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <circle cx="75" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+          </svg>
+          <div class="label">A：所有 S 是 P</div>
+          <div class="sub">S 独有区涂黑</div>
+        </div>
+        <!-- E: 没有S是P → 交集涂黑 -->
+        <div class="venn-item">
+          <svg width="120" height="84" viewBox="0 0 120 84">
+            <defs>
+              <clipPath id="clipE"><circle cx="45" cy="48" r="28"/></clipPath>
+            </defs>
+            <text x="33" y="14" font-size="11" fill="#1f2a24" font-weight="600">S</text>
+            <text x="82" y="14" font-size="11" fill="#1f2a24" font-weight="600">P</text>
+            <circle cx="75" cy="48" r="28" fill="#991b1b" opacity="0.25" clip-path="url(#clipE)"/>
+            <circle cx="45" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <circle cx="75" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+          </svg>
+          <div class="label">E：没有 S 是 P</div>
+          <div class="sub">交集涂黑</div>
+        </div>
+        <!-- I: 有的S是P → 交集放X -->
+        <div class="venn-item">
+          <svg width="120" height="84" viewBox="0 0 120 84">
+            <text x="33" y="14" font-size="11" fill="#1f2a24" font-weight="600">S</text>
+            <text x="82" y="14" font-size="11" fill="#1f2a24" font-weight="600">P</text>
+            <circle cx="45" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <circle cx="75" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <text x="56" y="54" font-size="16" fill="#b45309" font-weight="700">X</text>
+          </svg>
+          <div class="label">I：有的 S 是 P</div>
+          <div class="sub">交集放 X</div>
+        </div>
+        <!-- O: 有的S不是P → S独有区放X -->
+        <div class="venn-item">
+          <svg width="120" height="84" viewBox="0 0 120 84">
+            <text x="33" y="14" font-size="11" fill="#1f2a24" font-weight="600">S</text>
+            <text x="82" y="14" font-size="11" fill="#1f2a24" font-weight="600">P</text>
+            <circle cx="45" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <circle cx="75" cy="48" r="28" fill="none" stroke="#1f2a24" stroke-width="1.5"/>
+            <text x="26" y="54" font-size="16" fill="#1e40af" font-weight="700">X</text>
+          </svg>
+          <div class="label">O：有的 S 不是 P</div>
+          <div class="sub">S 独有区放 X</div>
+        </div>
+      </div>
+
+      <h4>为什么文氏图 ≠ AEIO</h4>
+      <div class="card">
+        <p><strong>AEIO 是命题（判断），本身有真假；文氏图只是图形符号，图形本身没有真假</strong>，只是用来翻译、表示 AEIO 的工具。工具 ≠ 被描述的内容。</p>
+        <ul>
+          <li>同一个 A 命题「所有 S 是 P」，可以用文氏图画，也可以用欧拉图画——命题不变，表示它的图形可以换。</li>
+          <li>文氏图只是圆圈+阴影+X，不懂符号约定就读不出意义。</li>
+        </ul>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>项目</th><th>AEIO</th><th>文氏图</th></tr>
+          <tr><td>本质</td><td>4 种标准直言命题</td><td>图示方法、推理工具</td></tr>
+          <tr><td>载体</td><td>文字、符号语句</td><td>相交圆圈、阴影、X 标记</td></tr>
+          <tr><td>作用</td><td>表达类与类之间的断定，研究对当关系</td><td>把 AEIO 可视化，检验三段论有效性</td></tr>
+          <tr><td>真假</td><td>本身有真假</td><td>图形没有真假，只展示命题含义</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 2. 四大命题与矛盾 ========== -->
+    <section id="four-propositions">
+      <h3>二、四大命题与矛盾命题</h3>
+      <p>命题是可以判断真假的陈述句，分为<strong>简单命题</strong>（直言）和<strong>复合命题</strong>（联言、选言、假言）。</p>
+
+      <h4>1. 直言命题（简单命题，AEIO）</h4>
+      <p>描述某个/某类事物具有或不具有某种性质，只有一个断定。</p>
+      <div class="card card-info">
+        <div class="card-title">直言矛盾（反命题）口诀</div>
+        <p><strong>所有 ↔ 有的，是 ↔ 不是</strong></p>
+        <ul>
+          <li>所有 S 是 P ↔ 有的 S 不是 P</li>
+          <li>所有 S 不是 P ↔ 有的 S 是 P</li>
+        </ul>
+      </div>
+
+      <h4>2. 联言命题（A 且 B）</h4>
+      <p>A 和 B <strong>同时成立</strong>，形式 <code>A ∧ B</code>。</p>
+      <p>真假规则：<strong>全真才真，一假即假</strong>。</p>
+      <p>矛盾命题：<strong>非 A 或 非 B</strong>（至少一个不成立）。</p>
+
+      <h4>3. 选言命题</h4>
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>相容选言：A 或 B</h5>
+          <p>A、B <strong>至少一个成立</strong>（可同时成立），<code>A ∨ B</code>。</p>
+          <p>真假：<strong>一真即真，全假才假</strong>。</p>
+          <p>矛盾：<strong>非 A 且 非 B</strong>。</p>
+        </div>
+        <div class="compare-col">
+          <h5>不相容选言：要么 A 要么 B</h5>
+          <p>A、B <strong>有且只有一个成立</strong>。</p>
+          <p>真假：一真一假才真；同真同假都假。</p>
+          <p>矛盾：<strong>(A 且 B) 或 (非 A 且 非 B)</strong>。</p>
+        </div>
+      </div>
+
+      <h4>4. 假言命题（条件命题）</h4>
+      <p>描述条件关系：如果…那么；只有…才。</p>
+      <ul>
+        <li><strong>充分条件</strong>：如果 A，那么 B → <code>A → B</code>（有 A 一定有 B）</li>
+        <li><strong>必要条件</strong>：只有 A，才 B → <code>B → A</code>（没 A 一定没 B）</li>
+      </ul>
+      <div class="card card-warn">
+        <div class="card-title">翻译口诀 & 真假规则</div>
+        <p><strong>如果就，前推后；只有才，后推前。</strong></p>
+        <p>真假规则：<strong>只有 A 真 B 假时，A→B 才为假；其余情况全部为真。</strong></p>
+        <p>矛盾命题：<strong>A 且 非 B</strong>（不是 A→非 B！）</p>
+      </div>
+
+      <h4>矛盾命题总表</h4>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>命题类型</th><th>原命题</th><th>矛盾命题（反命题）</th></tr>
+          <tr><td>直言 A</td><td>所有 S 是 P</td><td>有的 S 不是 P</td></tr>
+          <tr><td>直言 E</td><td>所有 S 不是 P</td><td>有的 S 是 P</td></tr>
+          <tr><td>直言 I</td><td>有的 S 是 P</td><td>所有 S 不是 P</td></tr>
+          <tr><td>直言 O</td><td>有的 S 不是 P</td><td>所有 S 是 P</td></tr>
+          <tr><td>联言</td><td>A 且 B</td><td>非 A 或 非 B</td></tr>
+          <tr><td>相容选言</td><td>A 或 B</td><td>非 A 且 非 B</td></tr>
+          <tr><td>不相容选言</td><td>要么 A 要么 B</td><td>(A 且 B) 或 (非 A 且 非 B)</td></tr>
+          <tr><td>假言</td><td>A → B</td><td>A 且 非 B</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-danger">
+        <div class="card-title">高频易错点</div>
+        <ul>
+          <li>"有的"在逻辑里 = <strong>至少一个</strong>，≠ 部分，不是"有的是就有的不是"。</li>
+          <li>假言命题矛盾是<strong>联言</strong>，不是另一个假言。</li>
+          <li>矛盾命题：<strong>必有一真一假，不能同真同假</strong>。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 3. Predicate 谓词 ========== -->
+    <section id="predicate">
+      <h3>三、Predicate 谓词</h3>
+
+      <div class="card card-accent">
+        <div class="card-title">一句话定义</div>
+        <p><strong>谓词用来描述个体对象的属性或对象之间的关系，带空位，填上个体才会变成有真假的命题。</strong></p>
+      </div>
+
+      <h4>基础结构</h4>
+      <ul>
+        <li><strong>个体</strong>：对象（x、a、张三、苏格拉底）</li>
+        <li><strong>谓词 P( )</strong>："…是 P"，括号是空位，用来放个体</li>
+      </ul>
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>一元谓词（描述属性）</h5>
+          <p><code>M(x)</code>：x 是人<br><code>D(x)</code>：x 会死</p>
+          <p class="note" style="font-size:12.5px;color:var(--ink-mute)">AEIO 用的就是一元谓词</p>
+        </div>
+        <div class="compare-col">
+          <h5>二元谓词（描述关系）</h5>
+          <p><code>L(x,y)</code>：x 喜欢 y<br><code>G(x,y)</code>：x 大于 y</p>
+          <p class="note" style="font-size:12.5px;color:var(--ink-mute)">传统 AEIO/三段论处理不了关系！</p>
+        </div>
+      </div>
+      <blockquote><code>P(x)</code> 本身不是命题！因为 x 是空变量，没有固定真假；填入具体个体 <code>M(苏格拉底)</code> 才变成命题。</blockquote>
+
+      <h4>把 AEIO 翻译成谓词公式</h4>
+      <p><code>∀</code> = 全称量词「所有」；<code>∃</code> = 存在量词「有的」</p>
+      <span class="formula">A：所有 S 是 P  →  ∀x ( S(x) → P(x) )</span>
+      <span class="formula">E：所有 S 不是 P  →  ∀x ( S(x) → ¬P(x) )</span>
+      <span class="formula">I：有的 S 是 P  →  ∃x ( S(x) ∧ P(x) )</span>
+      <span class="formula">O：有的 S 不是 P  →  ∃x ( S(x) ∧ ¬P(x) )</span>
+      <div class="card card-warn">
+        <div class="card-title">核心考点</div>
+        <p><strong>全称 A/E 用 →（假言）；特称 I/O 用 ∧（联言）。</strong></p>
+      </div>
+
+      <h4>传统 AEIO vs 现代谓词逻辑</h4>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>维度</th><th>传统直言命题（AEIO）</th><th>Predicate 谓词逻辑</th></tr>
+          <tr><td>拆解方式</td><td>量项 + 主项 S + 联项 + 谓项 P</td><td>个体 + 属性/关系 + 量词</td></tr>
+          <tr><td>表达能力</td><td>只研究两个类之间的包含排斥</td><td>既能表达 AEIO，还能表达关系命题、嵌套量词</td></tr>
+          <tr><td>地位</td><td>词项逻辑（亚里士多德）</td><td>现代一阶逻辑，AEIO 是其子集</td></tr>
+        </table>
+      </div>
+
+      <h4>量词的矛盾（德摩根量词律）</h4>
+      <span class="formula">¬∀x F(x)  ⟺  ∃x ¬F(x)</span>
+      <span class="formula">¬∃x F(x)  ⟺  ∀x ¬F(x)</span>
+      <p>即：<strong>∀ 的矛盾是 ∃，再否定后面整个式子。</strong></p>
+    </section>
+
+    <!-- ========== 4. 条件命题与因果 ========== -->
+    <section id="conditional-causal">
+      <h3>四、条件命题与因推果 / 果推因</h3>
+
+      <div class="card card-accent">
+        <div class="card-title">核心区分</div>
+        <p><strong>条件命题（假言）是逻辑蕴含（演绎推理）；因推果、果推因是现实因果推理。</strong>逻辑推出 ≠ 现实因果。</p>
+      </div>
+
+      <h4>条件命题的两类</h4>
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>充分条件：A → B</h5>
+          <p>如果 A，那么 B。<strong>有 A 就一定有 B（因推果）。</strong></p>
+          <p>例：下雨 → 地面湿。</p>
+        </div>
+        <div class="compare-col">
+          <h5>必要条件：B → A</h5>
+          <p>只有 A，才 B。<strong>有 B，则一定有 A（果推因）。</strong></p>
+          <p>例：考试 → 一定报名了。</p>
+        </div>
+      </div>
+
+      <h4>因推果与果推因</h4>
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>因推果（由因预测果）</h5>
+          <p>已知原因 A 成立，推测结果 B 会发生。</p>
+          <p>例：下雨了 → 地面会湿。</p>
+          <p><strong>对应充分条件 A→B，演绎成立。</strong></p>
+        </div>
+        <div class="compare-col">
+          <h5>果推因（溯因推理）</h5>
+          <p>已知结果 B 已发生，反推原因 A 存在。</p>
+          <p>例：地面湿了 → 下雨了？</p>
+          <p><strong>或然推理，结论只是猜想，不是 B→A！</strong></p>
+        </div>
+      </div>
+
+      <div class="card card-danger">
+        <div class="card-title">最大坑点</div>
+        <p>地面湿了，不一定是下雨，可能是洒水车。<strong>普通溯因（看到结果猜原因）≠ 必要条件的 B→A。</strong></p>
+        <p>必要条件里的"果推因"是演绎有效（结果 B 发生 → 必备前提 A 一定存在）；普通溯因只是或然猜想。</p>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>对比项</th><th>条件命题（A→B）</th><th>现实因推果 / 果推因</th></tr>
+          <tr><td>推理类型</td><td>演绎推理，必然真</td><td>因果推理：因推果（预测）、果推因（溯因，或然）</td></tr>
+          <tr><td>时间</td><td>无时间先后要求，只看真假</td><td>一定有时间先后：因在前，果在后</td></tr>
+          <tr><td>含义</td><td>A 真则 B 真，不管谁造成谁</td><td>A 造成 B，是因果作用、产生关系</td></tr>
+          <tr><td>逆命题</td><td>A→B 不能推出 B→A</td><td>看到结果 B 猜测 A 是溯因习惯，逻辑不保证</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 5. 真值关系 vs 因果关系 ========== -->
+    <section id="truth-vs-cause">
+      <h3>五、真值关系 vs 因果关系</h3>
+
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>真值关系（逻辑蕴含）</h5>
+          <p><strong>只看两个语句的真假组合，不管现实世界谁引起谁、时间先后。</strong>属于语言/命题层面。</p>
+          <p><code>A→B</code> 的规则只看 4 种真假组合：</p>
+          <ul>
+            <li>A 真 B 真 → 真</li>
+            <li>A 真 B 假 → <strong>假（唯一假情况）</strong></li>
+            <li>A 假 B 真 → 真</li>
+            <li>A 假 B 假 → 真</li>
+          </ul>
+        </div>
+        <div class="compare-col">
+          <h5>因果关系</h5>
+          <p><strong>现实世界里一件事产生、导致另一件事，有时间先后、作用机制。</strong>属于事实层面。</p>
+          <p>A 是原因，B 是结果：A 发生，造成 B 发生；因一定在时间上先于果。</p>
+          <p>例：下雨 → 地面湿。</p>
+        </div>
+      </div>
+
+      <div class="card card-info">
+        <div class="card-title">实质蕴含悖论</div>
+        <p>例："如果 2+2=5，那么月亮是奶酪做的。" 在逻辑上这个蕴含式为<strong>真</strong>（前件假，整个式子自动为真），但现实完全没有任何因果。</p>
+        <p>这就是为什么逻辑里的"如果…那么…"不是日常语言里的因果。</p>
+      </div>
+
+      <blockquote>一句话：真值是真假配对规则（静态、无时间、不管实际作用）；因果是事件产生作用（动态、时间先后、现实作用）。</blockquote>
+    </section>
+
+    <!-- ========== 6. 概念辨析 ========== -->
+    <section id="concept-clarify">
+      <h3>六、概念辨析：条件 / 蕴含 / 演绎 / 命题</h3>
+
+      <div class="card card-danger">
+        <div class="card-title">结论先行</div>
+        <p><strong>不是同义词，不能互换。</strong>它们是不同维度的概念。</p>
+      </div>
+
+      <div class="tree">
+<span class="lvl1">命题</span> <span class="note">（大类：能判定真假的陈述句）</span>
+└─ <span class="lvl2">条件命题（假言命题）</span> <span class="note">（其中一类复合命题）</span>
+　　└─ 内部使用 <span class="lvl3">蕴含 →</span> <span class="note">（联结词，表达真值关系）</span>
+　　　　└─ 用命题做推导的过程 = <span class="lvl3">演绎推理</span> <span class="note">（推理活动）</span>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>术语</th><th>维度</th><th>含义</th></tr>
+          <tr><td>命题</td><td>大类名称</td><td>能判定真假的陈述句</td></tr>
+          <tr><td>条件命题</td><td>命题种类</td><td>"如果…那么…"这种复合命题，是一个陈述</td></tr>
+          <tr><td>蕴含（→）</td><td>联结词</td><td>条件命题内部表达真值关系的逻辑符号</td></tr>
+          <tr><td>演绎</td><td>推理类型</td><td>从前提必然推出结论的整套推理活动</td></tr>
+        </table>
+      </div>
+
+      <blockquote>类比：句子（命题）里的"如果…那么…"（蕴含连词）；拿这个句子做推导的思考过程叫演绎。四个词在不同层级。</blockquote>
+    </section>
+
+    <!-- ========== 7. 命题别名总表 ========== -->
+    <section id="aliases">
+      <h3>七、命题别名总表</h3>
+
+      <h4>简单命题</h4>
+      <p>内部不含逻辑联结词，不能拆成更小命题。<strong>别名：原子命题。</strong>包含直言命题（性质命题）和关系命题。</p>
+
+      <h4>复合命题</h4>
+      <p>由简单命题 + 联结词拼接而成。</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>中文名称</th><th>别名</th><th>英文</th><th>联结词符号</th></tr>
+          <tr><td>简单命题</td><td>原子命题</td><td>Simple / Atomic proposition</td><td>无</td></tr>
+          <tr><td>直言命题</td><td>性质命题、范畴命题</td><td>Categorical proposition</td><td>AEIO（词项逻辑）</td></tr>
+          <tr><td>联言命题</td><td>合取命题</td><td>Conjunctive proposition</td><td>∧ 合取</td></tr>
+          <tr><td>相容选言</td><td>析取命题</td><td>Disjunctive proposition</td><td>∨ 析取</td></tr>
+          <tr><td>不相容选言</td><td>排斥析取、异或</td><td>Exclusive or</td><td>⊕</td></tr>
+          <tr><td>假言命题</td><td>条件命题</td><td>Conditional proposition</td><td>→ 蕴含</td></tr>
+          <tr><td>负命题</td><td>否定命题</td><td>Negation</td><td>¬ 否定</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-accent">
+        <div class="card-title">注意区分</div>
+        <p>传统 AEIO 里的"谓项 P"（predicate term，名词类如"哺乳动物"）<strong>≠</strong> 现代谓词逻辑的"谓词"（predicate，P(x) 命题函数）。</p>
+      </div>
+    </section>
+
+    <!-- ========== 8. 归纳 vs 演绎 ========== -->
+    <section id="inductive-deductive">
+      <h3>八、归纳推理 vs 演绎推理</h3>
+
+      <div class="card card-accent">
+        <div class="card-title">一句话总纲</div>
+        <p><strong>演绎：前提真 → 结论必然真（必然性推理）</strong><br>
+        <strong>归纳：前提真 → 结论只是大概率真（或然性推理）</strong></p>
+      </div>
+
+      <div class="compare-2">
+        <div class="compare-col">
+          <h5>演绎推理（Deductive）</h5>
+          <p>从一般性大前提，推个别结论；<strong>保真推理</strong>。</p>
+          <p>核心特征：前提蕴含结论。只要前提全部为真、推理形式有效，结论一定为真。</p>
+          <p>本质：结论信息已包含在前提里，没有新增知识。</p>
+          <p>典型工具：三段论、AEIO、假言/联言/选言命题、谓词逻辑。</p>
+        </div>
+        <div class="compare-col">
+          <h5>归纳推理（Inductive）</h5>
+          <p>从多个个别案例，推出一般性结论；<strong>不保真，或然推理</strong>。</p>
+          <p>核心特征：前提都是真，结论仍可能假。结论信息超出前提范围。</p>
+          <p>分类：完全归纳（穷尽全部样本，必然）；不完全归纳（部分样本推广，或然，考试主流）。</p>
+          <p>典型方法：样本统计、枚举、穆勒五法。</p>
+        </div>
+      </div>
+
+      <h4>溯因推理（Abduction）</h4>
+      <p>很多教材单独列出，不属于演绎也不属于归纳：</p>
+      <blockquote>已知结果 + 背景知识，<strong>猜测最合理的原因</strong>（或然猜想）。例：地面湿了 → 猜想下雨了。结论只是最佳假说，不是必然成立。</blockquote>
+
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>项目</th><th>演绎推理</th><th>归纳推理（不完全）</th></tr>
+          <tr><td>推理方向</td><td>一般 → 个别</td><td>个别 → 一般</td></tr>
+          <tr><td>推理性质</td><td>必然性推理（保真）</td><td>或然性推理（不保真）</td></tr>
+          <tr><td>信息增量</td><td>结论不超出前提</td><td>结论超出前提，得到新概括</td></tr>
+          <tr><td>前提真时</td><td>形式有效则结论一定真</td><td>前提全真，结论仍可能假</td></tr>
+          <tr><td>削弱方式</td><td>不能削弱形式有效性，只能攻击前提真假</td><td>可加强（扩大样本）、削弱（举反例）</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-warn">
+        <div class="card-title">高频易错</div>
+        <ul>
+          <li>演绎不一定都是"一般到个别"，现代逻辑核心判定标准是<strong>是否保真</strong>。</li>
+          <li>假言命题做推理：下雨→地湿；下雨了所以地湿（<strong>演绎，必然</strong>）；地湿了所以下雨了（<strong>溯因，猜想，或然</strong>）。</li>
+          <li>演绎只管结构，不管现实因果；归纳/溯因才大量用来研究现实因果。</li>
+        </ul>
+      </div>
+
+      <h4>三者极简区分</h4>
+      <div class="aeio-grid">
+        <div class="aeio-cell a">
+          <div class="name">演绎</div>
+          <div class="desc">前提全对，结论一定对（必然）</div>
+        </div>
+        <div class="aeio-cell i">
+          <div class="name">归纳</div>
+          <div class="desc">看到很多个例，总结普遍规律（大概率，可被反例推翻）</div>
+        </div>
+        <div class="aeio-cell o">
+          <div class="name">溯因</div>
+          <div class="desc">看到结果，倒猜原因（找最合理解释，猜想）</div>
+        </div>
+        <div class="aeio-cell e">
+          <div class="name">配套关系</div>
+          <div class="desc">命题是演绎素材；归纳靠观察样本；真值关系属演绎，因果属归纳/溯因</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      逻辑学核心概念手册 · 整理自对话内容 · 适用于行测逻辑 / 形式逻辑入门
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // 导航高亮
+  const navLinks = document.querySelectorAll('#navList a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  function updateActive(){
+    const scrollY = window.scrollY + 120;
+    let current = sections[0];
+    for(const sec of sections){
+      if(sec.offsetTop <= scrollY) current = sec;
+    }
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current.id);
+    });
+  }
+  window.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+</script>
+</body>
+</html>
