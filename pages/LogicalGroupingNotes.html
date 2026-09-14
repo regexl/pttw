@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测逻辑分组题核心笔记</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-mute: #888;
+    --line: #e5e0d5;
+    --accent: #c0392b;
+    --accent-soft: #fdf0ee;
+    --green: #27ae60;
+    --green-soft: #eafaf1;
+    --blue: #2471a3;
+    --blue-soft: #eaf2f8;
+    --amber: #d68910;
+    --amber-soft: #fef5e7;
+    --purple: #6c3483;
+    --purple-soft: #f4ecf7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    padding: 0 0 60px;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero {
+    padding: 60px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 48px;
+  }
+  .hero .tag {
+    display: inline-block;
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero .subtitle {
+    font-size: 17px;
+    color: var(--ink-soft);
+    font-family: "Noto Sans SC", sans-serif;
+    font-weight: 300;
+  }
+  .hero .meta {
+    margin-top: 24px;
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 13px;
+    color: var(--ink-mute);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hero .meta span::before { content: "· "; color: var(--accent); }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    font-family: "Noto Sans SC", sans-serif;
+  }
+  .toc h3 {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+  }
+  .toc li {
+    counter-increment: toc;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .toc li:hover { color: var(--accent); }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 10px;
+    font-size: 12px;
+  }
+
+  /* Section */
+  section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  .section-num {
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 28px 0 14px;
+    color: var(--ink);
+  }
+  section p { margin-bottom: 14px; font-size: 15.5px; }
+  section ul, section ol { margin: 12px 0 16px 24px; }
+  section li { margin-bottom: 8px; font-size: 15px; }
+
+  /* Callout boxes */
+  .callout {
+    padding: 18px 22px;
+    margin: 20px 0;
+    border-left: 4px solid;
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 14.5px;
+    line-height: 1.75;
+  }
+  .callout.red { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.green { background: var(--green-soft); border-color: var(--green); }
+  .callout.blue { background: var(--blue-soft); border-color: var(--blue); }
+  .callout.amber { background: var(--amber-soft); border-color: var(--amber); }
+  .callout.purple { background: var(--purple-soft); border-color: var(--purple); }
+  .callout .label {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .callout.red .label { color: var(--accent); }
+  .callout.green .label { color: var(--green); }
+  .callout.blue .label { color: var(--blue); }
+  .callout.amber .label { color: var(--amber); }
+  .callout.purple .label { color: var(--purple); }
+
+  /* Formula / code */
+  .formula {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 14px 20px;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 14px;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+  .formula .kw { color: #569cd6; }
+  .formula .var { color: #9cdcfe; }
+  .formula .op { color: #d4d4d4; }
+  .formula .cmt { color: #6a9955; }
+
+  /* Tables */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .compare-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+  .compare-table tr:nth-child(even) td { background: #faf8f3; }
+  .compare-table .dim { color: var(--ink-mute); font-weight: 500; width: 18%; }
+
+  /* Example cards */
+  .example-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .example-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 20px;
+    font-family: "Noto Sans SC", sans-serif;
+  }
+  .example-card .ex-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .example-card.set .ex-title { color: var(--accent); }
+  .example-card.ind .ex-title { color: var(--blue); }
+  .example-card .ex-text { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
+  .example-card .ex-result {
+    font-size: 13px;
+    padding: 8px 12px;
+    background: #f7f5f0;
+    margin-top: 8px;
+  }
+
+  /* Mnemonic */
+  .mnemonic {
+    text-align: center;
+    padding: 28px;
+    margin: 24px 0;
+    background: var(--ink);
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+  .mnemonic .hl { color: #f5b041; }
+
+  /* Priority flow */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 24px 0;
+    font-family: "Noto Sans SC", sans-serif;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    flex: 1;
+    min-width: 180px;
+    padding: 18px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step:nth-child(1) { background: var(--green-soft); border: 2px solid var(--green); }
+  .flow-step:nth-child(2) { background: var(--amber-soft); border: 2px solid var(--amber); }
+  .flow-step:nth-child(3) { background: var(--accent-soft); border: 2px solid var(--accent); }
+  .flow-step .step-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .flow-step:nth-child(1) .step-num { color: var(--green); }
+  .flow-step:nth-child(2) .step-num { color: var(--amber); }
+  .flow-step:nth-child(3) .step-num { color: var(--accent); }
+  .flow-step .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .flow-step .step-desc { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    font-size: 20px;
+    color: var(--ink-mute);
+  }
+  .flow-arrow .arrow-h { display: inline; }
+  .flow-arrow .arrow-v { display: none; }
+
+  /* Error list */
+  .error-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: "Noto Sans SC", sans-serif;
+  }
+  .error-item:last-child { border-bottom: none; }
+  .error-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .error-body { flex: 1; }
+  .error-body h4 { font-size: 15px; margin-bottom: 6px; }
+  .error-body p { font-size: 13.5px; color: var(--ink-soft); margin: 0; line-height: 1.65; }
+  .error-body .fix {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 500;
+  }
+  .error-body .fix::before { content: "✓ 正确做法："; }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 28px; }
+    .toc ol { grid-template-columns: 1fr; }
+    .toc li { padding: 10px 0; min-height: 44px; display: flex; align-items: center; }
+    .example-grid { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; gap: 0; }
+    .flow-arrow {
+      padding: 8px 0;
+      height: auto;
+      min-height: auto;
+      font-size: 18px;
+    }
+    .flow-arrow .arrow-h { display: none; }
+    .flow-arrow .arrow-v { display: inline; }
+    .flow-step { min-width: 100%; }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <span class="tag">判断推理 · 分组分配题</span>
+    <h1>行测逻辑分组题<br>核心语义与解题逻辑笔记</h1>
+    <p class="subtitle">集合唯一性 · 个体事件 · 选言陷阱 · 硬性约束优先级</p>
+    <div class="meta">
+      <span>一拖五专项</span>
+      <span>四大核心考点</span>
+      <span>高频错题避坑</span>
+    </div>
+  </header>
+
+  <!-- ===== TOC ===== -->
+  <nav class="toc">
+    <h3>目录 CONTENTS</h3>
+    <ol>
+      <li onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">集合唯一性 vs 个体事件</li>
+      <li onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth'})">"只有…否则…"判断标准</li>
+      <li onclick="document.getElementById('s3').scrollIntoView({behavior:'smooth'})">并列选言 vs 假言命题陷阱</li>
+      <li onclick="document.getElementById('s4').scrollIntoView({behavior:'smooth'})">硬性约束优先级原则</li>
+      <li onclick="document.getElementById('s5').scrollIntoView({behavior:'smooth'})">高频错误汇总</li>
+      <li onclick="document.getElementById('s6').scrollIntoView({behavior:'smooth'})">标准解题流程</li>
+    </ol>
+  </nav>
+
+  <!-- ===== Section 1 ===== -->
+  <section id="s1">
+    <div class="section-num">考点 01</div>
+    <h2>集合唯一性语义 vs 个体事件</h2>
+
+    <div class="callout red">
+      <span class="label">触发规则</span>
+      当句式为 <strong>"只有 + 对象 + 地点"</strong> 整体作为条件，后面接 <strong>"否则"</strong>，且题型是<strong>分组分配题</strong>时，触发<strong>集合唯一性语义</strong>。
+    </div>
+
+    <h3>一、集合唯一性语义（集合层面）</h3>
+    <p>条件约束的是<strong>整组/整套分配方案</strong>，而不是单个个体。"否则"否定的是<strong>整个分组结果</strong>。</p>
+    <ul>
+      <li>约束主体：分组集合（一整套分配结果）</li>
+      <li>"否则"否定：整套分组方案，方案直接作废</li>
+      <li>唯一性含义：所有合法可行的分组集合必须统一满足这条规则，不满足的集合直接淘汰</li>
+      <li>后果：只要条件破了，所有人的安排一起作废</li>
+    </ul>
+
+    <h3>二、个体事件（个体层面）</h3>
+    <p>条件只描述<strong>某一个单独元素</strong>发生什么事，和其他元素无关。</p>
+    <ul>
+      <li>约束主体：单独某一个对象</li>
+      <li>"否则"否定：仅该个体自身的结果，其他人不受影响</li>
+      <li>后果：这个个体不满足，只是这个个体失效，其余元素仍可正常分配</li>
+    </ul>
+
+    <div class="example-grid">
+      <div class="example-card set">
+        <div class="ex-title">集合唯一性</div>
+        <div class="ex-text">只有甲在A组，否则<strong>分组不成立</strong>。</div>
+        <div class="formula" style="font-size:12px;margin:8px 0;">方案成立 → 甲在A<br>甲不在A → 整套方案×</div>
+        <div class="ex-result">甲不在A → 这一种分组直接排除，不看乙放哪</div>
+      </div>
+      <div class="example-card ind">
+        <div class="ex-title">个体事件</div>
+        <div class="ex-text">只有甲在A组，否则<strong>甲不能参加</strong>。</div>
+        <div class="formula" style="font-size:12px;margin:8px 0;">甲能入选 → 甲在A<br>甲不在A → 甲×，乙丙照常</div>
+        <div class="ex-result">甲不在A → 甲出局，但乙丙仍可正常分组</div>
+      </div>
+    </div>
+
+    <h3>三、对比表</h3>
+    <table class="compare-table">
+      <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+      <thead>
+        <tr><th>对比维度</th><th>集合唯一性</th><th>个体事件</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">约束范围</td><td>整套分组集合/分配方案</td><td>单独某一个个体</td></tr>
+        <tr><td class="dim">否则否定</td><td>否定整套方案，直接无效</td><td>仅否定该个体，他人不受影响</td></tr>
+        <tr><td class="dim">逻辑箭头</td><td>方案成立 → 条件成立</td><td>个体能参与 → 条件成立</td></tr>
+        <tr><td class="dim">破坏后果</td><td>整组全部排除，全部分配作废</td><td>仅该个体失效，剩余元素仍可分配</td></tr>
+        <tr><td class="dim">适用场景</td><td>一拖五、分组匹配，筛整套候选方案</td><td>普通翻译推理，单个人的限制</td></tr>
+      </tbody>
+    </table>
+
+    <div class="mnemonic">
+      集合唯一性：不满足 → <span class="hl">整套方案废掉</span><br>
+      个体事件：不满足 → <span class="hl">只淘汰这个人</span>
+    </div>
+  </section>
+
+  <!-- ===== Section 2 ===== -->
+  <section id="s2">
+    <div class="section-num">考点 02</div>
+    <h2>"只有…否则…"的判断标准</h2>
+
+    <div class="callout amber">
+      <span class="label">常见误区</span>
+      <strong>不能用"前后分句是不是同一个个体"来判断！</strong>这只是表象，会导致误判。
+    </div>
+
+    <h3>真正的判断标准</h3>
+    <p>看<strong>"否则"后面被否定的主体是谁</strong>：</p>
+    <ul>
+      <li><strong>否定整套分组/方案有效</strong> → 集合唯一性事件</li>
+      <li><strong>否定某个人的资格</strong>（甲不能入选、乙不能分配）→ 个体事件</li>
+    </ul>
+
+    <h3>反例验证</h3>
+    <div class="example-grid">
+      <div class="example-card set">
+        <div class="ex-title">前后同一对象，但却是集合事件</div>
+        <div class="ex-text">只有甲在A组，否则<strong>本次分组不成立</strong>。</div>
+        <div class="ex-result">"只有"主体是甲，"否则"否定的是整套分组 → 集合唯一性</div>
+      </div>
+      <div class="example-card ind">
+        <div class="ex-title">前后不同对象，但可以是个体事件</div>
+        <div class="ex-text">只有甲在A组，否则<strong>乙不能参加分配</strong>。</div>
+        <div class="ex-result">"否则"否定的是乙（个体）→ 个体事件，剩下的人还能继续排</div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <span class="label">快速口诀</span>
+      看否则否定的是谁：<strong>否定整套方案 = 集合；否定某个人 = 个体。</strong>
+    </div>
+
+    <div class="callout blue">
+      <span class="label">补充说明</span>
+      原触发规则（分组分配题 + "只有+对象+地点，否则……"）默认"否则"指向整套方案，直接触发集合唯一性。<strong>但如果否则后面明确写的是某个人</strong>，哪怕是分组题，也要回归个体事件。
+    </div>
+  </section>
+
+  <!-- ===== Section 3 ===== -->
+  <section id="s3">
+    <div class="section-num">考点 03</div>
+    <h2>并列选言 vs 假言命题陷阱</h2>
+
+    <div class="callout red">
+      <span class="label">高频陷阱</span>
+      <strong>"如果甲去A或B，乙去C或D"</strong> —— 很多人下意识当成假言（甲→乙），但这句话没有关联词连接前后半句，它只是<strong>两个独立选言命题并列放置</strong>！
+    </div>
+
+    <h3>正确翻译</h3>
+    <div class="formula">
+<span class="cmt">// 两个选言命题的联言，不是假言！</span>
+(甲A ∨ 甲B) <span class="op">∧</span> (乙C ∨ 乙D)
+    </div>
+    <p>含义：两个约束必须<strong>同时满足</strong>——甲只能A或B，乙只能C或D。甲不管分到A还是B，乙永远必须C或D，不存在"甲不在A/B，乙就放开"的情况。</p>
+
+    <h3>假言 vs 并列选言 对比</h3>
+    <table class="compare-table">
+      <colgroup><col style="width:18%"><col style="width:41%"><col style="width:41%"></colgroup>
+      <thead>
+        <tr><th>类型</th><th>句式特征</th><th>逻辑翻译与含义</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dim">假言命题</td>
+          <td>有完整"如果…<strong>那么</strong>…"<br>如果甲去A或B，<strong>那么</strong>乙去C或D</td>
+          <td>(甲A∨甲B) → (乙C∨乙D)<br>甲落在A/B时乙必须C/D；甲不在A/B时规则失效，乙不受约束</td>
+        </tr>
+        <tr>
+          <td class="dim">并列双选言</td>
+          <td>只写"如果甲A或B，乙C或D"<br>无"那么"，单纯并列条件</td>
+          <td>(甲A∨甲B) ∧ (乙C∨乙D)<br>两个约束同时成立，甲去C直接违反第一约束，整套作废；乙永远必须C/D</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mnemonic">
+      有<span class="hl">那么</span>，才是<span class="hl">推</span>；<br>
+      只摆两个限制并列，是<span class="hl">且</span>不是<span class="hl">推</span>。
+    </div>
+
+    <div class="callout purple">
+      <span class="label">联动考点</span>
+      这种并列选言约束属于对<strong>整套分组的硬性规则</strong>，违反直接淘汰整套方案，属于集合层面约束，不是个体事件。
+    </div>
+  </section>
+
+  <!-- ===== Section 4 ===== -->
+  <section id="s4">
+    <div class="section-num">考点 04</div>
+    <h2>硬性约束优先级原则</h2>
+
+    <div class="callout green">
+      <span class="label">核心原则</span>
+      <strong>硬性约束（必须是什么）比"不是什么"（否定约束）更准确，优先利用。</strong><br>
+      先抓必须是，再看不能是；正向硬约束是推理第一序。
+    </div>
+
+    <h3>一、正向硬性约束（必须是什么）</h3>
+    <p>直接给出对象/组别确定归属或可选范围，是"必须满足"的硬规则，优先级最高。</p>
+    <ul>
+      <li>甲只能在A或B → 甲∈{A,B}（正向划定候选池）</li>
+      <li>乙一定在C</li>
+      <li>只有甲在A，否则分组无效（集合唯一性）</li>
+      <li>甲乙必须同组</li>
+    </ul>
+    <p><strong>优势：</strong>直接锁定位置/候选池，可以直接填表，是推理起点。</p>
+
+    <h3>二、反向约束（不能是什么）</h3>
+    <p>只说不能放哪，可选范围依然很大，信息弱。</p>
+    <ul>
+      <li>甲不在A</li>
+      <li>丙不能和丁一组</li>
+      <li>乙不去B</li>
+    </ul>
+    <p><strong>缺点：</strong>只排除一个可能性，单独使用很难得到确定结果，大多后期筛选项。</p>
+
+    <h3>三、三类约束优先级</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">第一优先级</div>
+        <div class="step-title">正向硬性约束</div>
+        <div class="step-desc">必须是什么<br>直接锁定候选池，填表落地</div>
+      </div>
+      <div class="flow-arrow"><span class="arrow-h">→</span><span class="arrow-v">↓</span></div>
+      <div class="flow-step">
+        <div class="step-num">第二优先级</div>
+        <div class="step-title">反向否定约束</div>
+        <div class="step-desc">不能是什么<br>结合正向信息缩小范围</div>
+      </div>
+      <div class="flow-arrow"><span class="arrow-h">→</span><span class="arrow-v">↓</span></div>
+      <div class="flow-step">
+        <div class="step-num">第三优先级</div>
+        <div class="step-title">假言条件</div>
+        <div class="step-desc">如果…那么…<br>条件触发型，前件成立才激活</div>
+      </div>
+    </div>
+
+    <div class="callout amber">
+      <span class="label">为什么假言放最后</span>
+      假言只有前件成立时才生效；前件不成立，这条规则恒真（没用）。<strong>不能把假言当固定事实</strong>，它是条件触发型规则。
+    </div>
+
+    <h3>四、三大考点的约束性质归类</h3>
+    <table class="compare-table">
+      <colgroup><col style="width:35%"><col style="width:25%"><col style="width:40%"></colgroup>
+      <thead>
+        <tr><th>考点</th><th>约束性质</th><th>优先级</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>集合唯一性（只有…否则…分组题）</td><td>正向硬性约束</td><td>高，整套方案必须满足</td></tr>
+        <tr><td>并列选言（甲A或B，乙C或D）</td><td>正向硬性约束</td><td>高，固定必须同时满足</td></tr>
+        <tr><td>如果…那么…假言命题</td><td>条件规则（非事实）</td><td>低，前件成立才激活</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== Section 5 ===== -->
+  <section id="s5">
+    <div class="section-num">避坑指南</div>
+    <h2>高频错误汇总</h2>
+
+    <div class="error-item">
+      <div class="error-num">1</div>
+      <div class="error-body">
+        <h4>用"前后分句是否同一个体"判断集合/个体事件</h4>
+        <p>误以为前后主体相同就是个体事件，不同就是集合事件。实际上主体是否相同只是表象。</p>
+        <div class="fix">看"否则"后面否定的是谁：否定整套方案=集合，否定某个人=个体。</div>
+      </div>
+    </div>
+
+    <div class="error-item">
+      <div class="error-num">2</div>
+      <div class="error-body">
+        <h4>把并列选言误当成假言命题</h4>
+        <p>"如果甲去A或B，乙去C或D"没有"那么"，不是(甲A∨甲B)→(乙C∨乙D)，而是两个选言的联言。</p>
+        <div class="fix">有"那么"才是推，只摆两个限制并列是且不是推。</div>
+      </div>
+    </div>
+
+    <div class="error-item">
+      <div class="error-num">3</div>
+      <div class="error-body">
+        <h4>上来就抓反向约束（不能是什么）反复试错</h4>
+        <p>拿着"甲不在A""乙不去B"一堆否定条件穷举，效率极低且容易漏。</p>
+        <div class="fix">先提取所有正向硬性约束填表锁定候选池，再用反向约束缩小范围。</div>
+      </div>
+    </div>
+
+    <div class="error-item">
+      <div class="error-num">4</div>
+      <div class="error-body">
+        <h4>把假言命题当固定事实使用</h4>
+        <p>看到"如果甲在A，那么乙在B"就直接写乙在B，忽略前件是否成立。</p>
+        <div class="fix">假言是条件规则，只有前件成立时才激活；前件不成立时这条规则无效。</div>
+      </div>
+    </div>
+
+    <div class="error-item">
+      <div class="error-num">5</div>
+      <div class="error-body">
+        <h4>集合唯一性误解为"这个位置只能放这一个人"</h4>
+        <p>以为"只有甲在A"意味着A组不能放别人，实际上它是方案成立的必要条件。</p>
+        <div class="fix">集合唯一性=如果方案要成立就必须满足对象在该地点；不满足则整套方案排除。</div>
+      </div>
+    </div>
+
+    <div class="error-item">
+      <div class="error-num">6</div>
+      <div class="error-body">
+        <h4>个体事件中误以为条件破坏会导致整套分组作废</h4>
+        <p>"只有甲在A，否则甲不能参加"——甲不在A时，误以为乙丙的分组也无效。</p>
+        <div class="fix">个体事件只淘汰该个体，其余元素仍可正常分配，整套框架还能存在。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Section 6 ===== -->
+  <section id="s6">
+    <div class="section-num">实战流程</div>
+    <h2>标准解题流程</h2>
+
+    <h3>第一步：读题标记，分类约束</h3>
+    <p>通读题干，把所有条件按性质分类标记：</p>
+    <ul>
+      <li><span style="color:var(--green);font-weight:700;">【正向硬约束】</span>必须是什么、只能在哪、集合唯一性、并列选言</li>
+      <li><span style="color:var(--amber);font-weight:700;">【反向约束】</span>不能是什么、不和谁一组</li>
+      <li><span style="color:var(--accent);font-weight:700;">【假言条件】</span>如果…那么…（最后处理）</li>
+    </ul>
+
+    <h3>第二步：正向硬约束先填表</h3>
+    <p>把所有正向硬性约束直接写入表格，锁定每个对象的候选池：</p>
+    <ul>
+      <li>"甲只能A或B" → 甲候选池={A,B}</li>
+      <li>"乙一定在C" → 乙=C，同时C排除其他对象</li>
+      <li>集合唯一性条件 → 记录为方案必要条件</li>
+    </ul>
+
+    <h3>第三步：反向约束缩小范围</h3>
+    <p>用反向约束在候选池中做排除，正反结合推出确定结论：</p>
+    <div class="formula">
+<span class="cmt">// 正反结合出确定结论</span>
+甲只能A或B  +  甲不在A  =  甲只能B
+    </div>
+
+    <h3>第四步：假言条件最后激活</h3>
+    <p>当前三步推出确定信息后，检查哪些假言的前件已经成立，激活对应后件；前件不成立的假言暂时搁置。</p>
+
+    <h3>第五步：代入选项验证</h3>
+    <p>用排除法验证选项，注意：违反正向硬约束的选项直接排除，不需要完整推理。</p>
+
+    <div class="mnemonic">
+      <span class="hl">先抓必须是</span>，再看不能是；<br>
+      正向硬约束，推理第一序；<br>
+      假言放最后，触发才启用。
+    </div>
+  </section>
+
+  <footer>
+    行测判断推理 · 分组分配题核心笔记 · 整理自对话要点
+  </footer>
+
+</div>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
