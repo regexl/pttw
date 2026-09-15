@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测逻辑判断 · 直言命题与真假推理完整版笔记</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='4' fill='%231a365d'/%3E%3Ctext x='12' y='17' font-size='14' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'%3E逻%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --primary: #1a365d;
+    --primary-light: #2c5282;
+    --accent: #dd6b20;
+    --accent-light: #f6ad55;
+    --success: #2f855a;
+    --danger: #c53030;
+    --bg: #f7fafc;
+    --card: #ffffff;
+    --text: #1a202c;
+    --text-light: #4a5568;
+    --border: #e2e8f0;
+    --code-bg: #edf2f7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 60px 20px 50px;
+    text-align: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(221,107,32,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.2em;
+    font-weight: 900;
+    margin-bottom: 12px;
+    position: relative;
+    letter-spacing: 2px;
+  }
+  .hero .subtitle {
+    font-size: 1.05em;
+    opacity: 0.85;
+    font-weight: 300;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .hero .meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    position: relative;
+  }
+  .hero .meta svg { width: 16px; height: 16px; }
+
+  /* ===== Layout ===== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 30px;
+  }
+
+  /* ===== TOC ===== */
+  .toc {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 16px;
+    border: 1px solid var(--border);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+  .toc h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1em;
+    color: var(--primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 6px;
+  }
+  .toc a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.88em;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .toc a::before {
+    content: counter(toc) ". ";
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .toc a:hover {
+    background: var(--code-bg);
+    color: var(--primary);
+  }
+
+  /* ===== Content ===== */
+  .content { min-width: 0; }
+  .chapter {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .chapter h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.5em;
+    color: var(--primary);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .chapter h2 .num {
+    background: var(--primary);
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .chapter h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.15em;
+    color: var(--primary-light);
+    margin: 24px 0 12px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  .chapter p { margin-bottom: 12px; color: var(--text); }
+  .chapter ul, .chapter ol {
+    margin: 10px 0 14px 24px;
+  }
+  .chapter li { margin-bottom: 6px; }
+
+  /* ===== Callout boxes ===== */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-left: 4px solid;
+  }
+  .callout.tip {
+    background: #f0fff4;
+    border-color: var(--success);
+  }
+  .callout.warn {
+    background: #fffaf0;
+    border-color: var(--accent);
+  }
+  .callout.danger {
+    background: #fff5f5;
+    border-color: var(--danger);
+  }
+  .callout.info {
+    background: #ebf8ff;
+    border-color: var(--primary-light);
+  }
+  .callout .label {
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .callout.tip .label { color: var(--success); }
+  .callout.warn .label { color: var(--accent); }
+  .callout.danger .label { color: var(--danger); }
+  .callout.info .label { color: var(--primary-light); }
+
+  /* ===== Tables ===== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92em;
+    table-layout: fixed;
+  }
+  th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f7fafc; }
+  tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.82em;
+    font-weight: 600;
+  }
+  .tag-true { background: #c6f6d5; color: #22543d; }
+  .tag-false { background: #fed7d7; color: #742a2a; }
+  .tag-mid { background: #feebc8; color: #7b341e; }
+
+  /* ===== Logic Square ===== */
+  .square-container {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+    padding: 10px;
+  }
+  .logic-square {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 6px 10px;
+    width: 100%;
+    max-width: 560px;
+    align-items: center;
+  }
+  .sq-corner {
+    padding: 14px 10px;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .sq-corner .label {
+    font-size: 0.72em;
+    opacity: 0.75;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .sq-corner .text {
+    font-size: 0.9em;
+    line-height: 1.4;
+  }
+  .sq-a { background: #bee3f8; color: #1a365d; grid-column: 1; grid-row: 1; }
+  .sq-e { background: #fed7d7; color: #742a2a; grid-column: 3; grid-row: 1; }
+  .sq-i { background: #c6f6d5; color: #22543d; grid-column: 1; grid-row: 3; }
+  .sq-o { background: #feebc8; color: #7b341e; grid-column: 3; grid-row: 3; }
+  .sq-relation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 6px 4px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .sq-top { grid-column: 2; grid-row: 1; color: var(--danger); }
+  .sq-bottom { grid-column: 2; grid-row: 3; color: var(--success); }
+  .sq-left { grid-column: 1; grid-row: 2; color: var(--primary-light); justify-content: center; }
+  .sq-right { grid-column: 3; grid-row: 2; color: var(--primary-light); justify-content: center; }
+  .sq-center {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: center;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--accent);
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid var(--accent-light);
+    line-height: 1.5;
+  }
+  .sq-center small {
+    display: block;
+    font-size: 0.8em;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  /* ===== Example box ===== */
+  .example {
+    background: var(--code-bg);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    border-left: 4px solid var(--primary-light);
+  }
+  .example .ex-title {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 0.95em;
+  }
+  .example .step {
+    margin: 6px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 0.93em;
+  }
+  .example .step::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .example .conclusion {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-weight: 600;
+    color: var(--success);
+  }
+
+  /* ===== Formula ===== */
+  .formula {
+    background: #1a202c;
+    color: #e2e8f0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .formula .arrow { color: var(--accent-light); }
+  .formula .not { color: #fc8181; }
+
+  /* ===== Mnemonic card ===== */
+  .mnemonic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .mnemonic-card {
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    border: 2px solid;
+  }
+  .mnemonic-card .icon {
+    font-size: 1.8em;
+    margin-bottom: 8px;
+  }
+  .mnemonic-card .title {
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 6px;
+  }
+  .mnemonic-card .rule {
+    font-size: 0.88em;
+    color: var(--text-light);
+  }
+  .mc-contradiction { border-color: var(--accent); background: #fffaf0; }
+  .mc-contradiction .title { color: var(--accent); }
+  .mc-upper { border-color: var(--danger); background: #fff5f5; }
+  .mc-upper .title { color: var(--danger); }
+  .mc-lower { border-color: var(--success); background: #f0fff4; }
+  .mc-lower .title { color: var(--success); }
+  .mc-sub { border-color: var(--primary-light); background: #ebf8ff; }
+  .mc-sub .title { color: var(--primary-light); }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-light);
+    font-size: 0.85em;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 860px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+    .toc ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .toc li { margin-bottom: 0; }
+    .toc a { white-space: nowrap; font-size: 0.82em; padding: 4px 10px; }
+    .chapter { padding: 22px 18px; }
+    .chapter h2 { font-size: 1.25em; }
+    .hero h1 { font-size: 1.6em; }
+    .sq-diag-1 { left: 28%; }
+    .sq-diag-2 { right: 28%; }
+  }
+  @media (max-width: 480px) {
+    .logic-square { max-width: 100%; }
+    .sq-corner .text { font-size: 0.82em; }
+    .sq-corner { padding: 12px 6px; }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <h1>行测逻辑判断 · 直言命题与真假推理</h1>
+  <p class="subtitle">逻辑方阵 · 矛盾关系 · 上反对 · 下反对 · 差等关系 · 题型解法全攻略</p>
+  <div class="meta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    整理日期：2026 年 9 月 15 日
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ===== TOC ===== -->
+  <nav class="toc">
+    <h3>目 录</h3>
+    <ol>
+      <li><a href="#ch1">直言命题基础</a></li>
+      <li><a href="#ch2">特称命题详解</a></li>
+      <li><a href="#ch3">传统逻辑方阵</a></li>
+      <li><a href="#ch4">矛盾关系</a></li>
+      <li><a href="#ch5">上反对关系</a></li>
+      <li><a href="#ch6">下反对关系</a></li>
+      <li><a href="#ch7">差等关系</a></li>
+      <li><a href="#ch8">真假推理题型</a></li>
+      <li><a href="#ch9">易错点与陷阱</a></li>
+      <li><a href="#ch10">速记口诀汇总</a></li>
+    </ol>
+  </nav>
+
+  <!-- ===== Content ===== -->
+  <main class="content">
+
+    <!-- ===== Chapter 1 ===== -->
+    <section class="chapter" id="ch1">
+      <h2><span class="num">1</span>直言命题基础</h2>
+
+      <h3>什么是直言命题</h3>
+      <p>直言命题（又称<strong>性质命题</strong>）是直接断定对象具有或不具有某种性质的简单命题。它一句话直接判断，不带"如果""或者""并且"等连接词。</p>
+
+      <div class="callout info">
+        <div class="label">核心定义</div>
+        直言命题 = 直接断定 S 和 P 之间是否有关系的命题，是逻辑判断中最基础的命题类型。
+      </div>
+
+      <h3>直言命题的四要素结构</h3>
+      <p>每一句标准直言命题都由四个部分组成：</p>
+      <div class="formula">【量项】 + 【主项 S】 + 【联项】 + 【谓项 P】</div>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:18%"><col style="width:30%"><col style="width:52%"></colgroup>
+          <thead><tr><th>要素</th><th>含义</th><th>示例（所有学生都是努力的）</th></tr></thead>
+          <tbody>
+            <tr><td><strong>量项</strong></td><td>表示数量范围</td><td>所有 / 有的 / 某个</td></tr>
+            <tr><td><strong>主项 S</strong></td><td>被断定的对象</td><td>学生</td></tr>
+            <tr><td><strong>联项</strong></td><td>表示肯定或否定</td><td>是 / 不是</td></tr>
+            <tr><td><strong>谓项 P</strong></td><td>对象的性质</td><td>努力的</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>直言命题的六大分类</h3>
+      <p>按量项（所有/有的/某个）和联项（是/不是）组合，共六种标准形式：</p>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:14%"><col style="width:18%"><col style="width:30%"><col style="width:38%"></colgroup>
+          <thead><tr><th>代号</th><th>类型</th><th>标准形式</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong></td><td>全称肯定</td><td>所有 S 都是 P</td><td>所有同学都及格了</td></tr>
+            <tr><td><strong>E</strong></td><td>全称否定</td><td>所有 S 都不是 P</td><td>所有同学都没及格</td></tr>
+            <tr><td><strong>I</strong></td><td>特称肯定</td><td>有的 S 是 P</td><td>有的同学及格了</td></tr>
+            <tr><td><strong>O</strong></td><td>特称否定</td><td>有的 S 不是 P</td><td>有的同学没及格</td></tr>
+            <tr><td><strong>a</strong></td><td>单称肯定</td><td>某个 S 是 P</td><td>小明及格了</td></tr>
+            <tr><td><strong>e</strong></td><td>单称否定</td><td>某个 S 不是 P</td><td>小明没及格</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <div class="label">记忆口诀</div>
+        全称 = 全部（所有）；特称 = 部分（有的）；单称 = 个体（某个）。A/E/I/O 四个代号来自拉丁语 Affirmo（我肯定）和 Nego（我否定）的元音字母。
+      </div>
+
+      <h3>直言命题 vs 复言命题</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+          <thead><tr><th>类型</th><th>特征</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td><strong>直言命题</strong></td><td>单句直接判断性质，无连接词</td><td>所有学生都努力</td></tr>
+            <tr><td><strong>联言命题</strong></td><td>A 且 B</td><td>小明努力且聪明</td></tr>
+            <tr><td><strong>选言命题</strong></td><td>A 或 B / 要么 A 要么 B</td><td>要么及格，要么不及格</td></tr>
+            <tr><td><strong>假言命题</strong></td><td>如果 A 那么 B（A→B）</td><td>如果努力，那么及格</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 2 ===== -->
+    <section class="chapter" id="ch2">
+      <h2><span class="num">2</span>特称命题详解</h2>
+
+      <h3>"有的"在逻辑中的精确含义</h3>
+      <p>这是行测逻辑中<strong>最容易踩坑</strong>的概念。日常生活中"有的"常被理解为"一部分"，但在形式逻辑中：</p>
+
+      <div class="callout danger">
+        <div class="label">高频易错点</div>
+        逻辑中的"有的" = <strong>至少有一个</strong>，不等于"一部分是、一部分不是"。
+      </div>
+
+      <p>以下三种情况都满足"有的 S 是 P"：</p>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:30%"><col style="width:35%"><col style="width:35%"></colgroup>
+          <thead><tr><th>实际情况</th><th>"有的 S 是 P"</th><th>"有的 S 不是 P"</th></tr></thead>
+          <tbody>
+            <tr><td>只有 1 个 S 是 P</td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-true">真</span></td></tr>
+            <tr><td>一部分是、一部分不是</td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-true">真</span></td></tr>
+            <tr><td><strong>全部 S 都是 P</strong></td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-false">假</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="label">关键推论</div>
+        由"有的同学及格了"<strong>无法推出</strong>"有的同学没及格"！因为可能全部都及格了。
+      </div>
+
+      <h3>特称命题的两种形式</h3>
+      <div class="mnemonic-grid">
+        <div class="mnemonic-card mc-lower">
+          <div class="title">I 命题</div>
+          <div class="rule">有的 S 是 P<br>特称肯定</div>
+        </div>
+        <div class="mnemonic-card mc-upper">
+          <div class="title">O 命题</div>
+          <div class="rule">有的 S 不是 P<br>特称否定</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 3 ===== -->
+    <section class="chapter" id="ch3">
+      <h2><span class="num">3</span>传统逻辑方阵（对当方阵）</h2>
+
+      <h3>什么是逻辑方阵</h3>
+      <p>传统逻辑方阵（又称<strong>对当方阵</strong>）是一张正方形示意图，源自亚里士多德传统逻辑，系统整理了四种标准直言命题（A/E/I/O）之间的真假制约关系。行测真假推理的全部考点都出自这张图。</p>
+
+      <div class="callout info">
+        <div class="label">生效前提</div>
+        方阵中的四个命题必须<strong>主项 S 和谓项 P 完全一致</strong>（同一主体、同一话题），否则不能套用任何关系。
+      </div>
+
+      <h3>方阵结构图</h3>
+      <div class="square-container">
+        <div class="logic-square">
+          <div class="sq-corner sq-a">
+            <div class="label">A · 全称肯定</div>
+            <div class="text">所有 S 都是 P</div>
+          </div>
+          <div class="sq-relation sq-top">上反对<br>必有一假</div>
+          <div class="sq-corner sq-e">
+            <div class="label">E · 全称否定</div>
+            <div class="text">所有 S 都不是 P</div>
+          </div>
+          <div class="sq-relation sq-left">差等</div>
+          <div class="sq-center">
+            对角线 = 矛盾
+            <small>A↔O · E↔I<br>一真一假</small>
+          </div>
+          <div class="sq-relation sq-right">差等</div>
+          <div class="sq-corner sq-i">
+            <div class="label">I · 特称肯定</div>
+            <div class="text">有的 S 是 P</div>
+          </div>
+          <div class="sq-relation sq-bottom">下反对<br>必有一真</div>
+          <div class="sq-corner sq-o">
+            <div class="label">O · 特称否定</div>
+            <div class="text">有的 S 不是 P</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>方阵四条边的关系</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:18%"><col style="width:22%"><col style="width:30%"><col style="width:30%"></colgroup>
+          <thead><tr><th>位置</th><th>关系名称</th><th>涉及命题</th><th>真假规则</th></tr></thead>
+          <tbody>
+            <tr><td>上边</td><td><strong>上反对</strong></td><td>A ↔ E（两个所有）</td><td>不能同真，可以同假，必有一假</td></tr>
+            <tr><td>下边</td><td><strong>下反对</strong></td><td>I ↔ O（两个有的）</td><td>不能同假，可以同真，必有一真</td></tr>
+            <tr><td>对角线</td><td><strong>矛盾</strong></td><td>A↔O、E↔I</td><td>必有一真一假，不能同真同假</td></tr>
+            <tr><td>左右竖边</td><td><strong>差等</strong></td><td>A→I、E→O</td><td>上真下必真，下假上必假</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <div class="label">为什么叫"上/下反对"？</div>
+        传统方阵中"所有"在上方、"有的"在下方。上方一组 = 上反对，下方一组 = 下反对。
+      </div>
+    </section>
+
+    <!-- ===== Chapter 4 ===== -->
+    <section class="chapter" id="ch4">
+      <h2><span class="num">4</span>矛盾关系</h2>
+
+      <h3>矛盾关系的定义</h3>
+      <p>矛盾关系是指两个命题<strong>非此即彼</strong>，没有第三种可能。满足：</p>
+      <div class="formula">不能同真 <span class="arrow">+</span> 不能同假 <span class="arrow">→</span> 必有一真、必有一假</div>
+
+      <div class="callout info">
+        <div class="label">集合视角</div>
+        矛盾 = 互斥（交集为空）+ 并集为全集（穷尽所有情况）。两者加起来 = 全部范围。
+      </div>
+
+      <h3>直言命题中的四组矛盾</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
+          <thead><tr><th>命题一</th><th>命题二</th><th>关系</th><th>真假</th></tr></thead>
+          <tbody>
+            <tr><td>所有 S 是 P（A）</td><td>有的 S 不是 P（O）</td><td><strong>矛盾</strong></td><td>一真一假</td></tr>
+            <tr><td>所有 S 不是 P（E）</td><td>有的 S 是 P（I）</td><td><strong>矛盾</strong></td><td>一真一假</td></tr>
+            <tr><td>某个 S 是 P（a）</td><td>某个 S 不是 P（e）</td><td><strong>矛盾</strong></td><td>一真一假</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>矛盾 ≠ 互斥（反对）</h3>
+      <p>这是最核心的区分。很多人以为"不能同时为真就是矛盾"，这是错误的！</p>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:20%"><col style="width:25%"><col style="width:25%"><col style="width:30%"></colgroup>
+          <thead><tr><th>关系</th><th>能否同真</th><th>能否同假</th><th>有无中间情况</th></tr></thead>
+          <tbody>
+            <tr><td><strong>矛盾</strong></td><td><span class="tag tag-false">不能</span></td><td><span class="tag tag-false">不能</span></td><td>无（非此即彼）</td></tr>
+            <tr><td>上反对</td><td><span class="tag tag-false">不能</span></td><td><span class="tag tag-true">可以</span></td><td>有（部分是部分不是）</td></tr>
+            <tr><td>下反对</td><td><span class="tag tag-true">可以</span></td><td><span class="tag tag-false">不能</span></td><td>有</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="example">
+        <div class="ex-title">生活中的对比</div>
+        <div class="step"><strong>矛盾</strong>：男 vs 非男（包含女及其他，穷尽全部）</div>
+        <div class="step"><strong>反对</strong>：男 vs 女（还有第三种情况，未穷尽）</div>
+        <div class="conclusion">矛盾一定互斥，但互斥不一定是矛盾！</div>
+      </div>
+
+      <h3>矛盾关系在做题中的用法</h3>
+      <p>题干给出几句话，限定"只有一真"或"只有一假"时：</p>
+      <div class="example">
+        <div class="ex-title">解题套路</div>
+        <div class="step">找到矛盾的两句话 → 锁定一真一假在其中</div>
+        <div class="step">若题干"只有一真" → 真话在矛盾中，其余句子全为假</div>
+        <div class="step">若题干"只有一假" → 假话在矛盾中，其余句子全为真</div>
+        <div class="step">由其余句子的真假推出最终答案</div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 5 ===== -->
+    <section class="chapter" id="ch5">
+      <h2><span class="num">5</span>上反对关系</h2>
+
+      <h3>上反对的定义与规则</h3>
+      <p>上反对关系指<strong>两个全称命题</strong>之间的关系：</p>
+      <div class="formula">所有 S 是 P（A） <span class="not">↔</span> 所有 S 不是 P（E）</div>
+
+      <div class="callout danger">
+        <div class="label">核心规则</div>
+        <strong>必有一假</strong> —— 不能同真，可以同假。
+      </div>
+
+      <h3>三种现实情况验证</h3>
+      <p>以"所有同学及格" vs "所有同学不及格"为例：</p>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:30%"><col style="width:23%"><col style="width:23%"><col style="width:24%"></colgroup>
+          <thead><tr><th>实际情况</th><th>所有都及格（A）</th><th>所有都不及格（E）</th><th>特征</th></tr></thead>
+          <tbody>
+            <tr><td>全部及格</td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-false">假</span></td><td>一真一假</td></tr>
+            <tr><td>全部不及格</td><td><span class="tag tag-false">假</span></td><td><span class="tag tag-true">真</span></td><td>一真一假</td></tr>
+            <tr><td>部分及格、部分不及格</td><td><span class="tag tag-false">假</span></td><td><span class="tag tag-false">假</span></td><td>同假</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>三种情况中，A 和 E <strong>从未同时为真</strong>，但可以同时为假 → 必有一假。</p>
+
+      <h3>上反对的做题应用</h3>
+      <div class="callout tip">
+        <div class="label">典型配对</div>
+        上反对（必有一假）最适合题干限定<strong>"只有一句话为真"</strong>的场景。
+      </div>
+      <p>原理：两句中至少一个是假话 → 唯一真话不在这一组 → 剩下的那句话必然为真。</p>
+
+      <div class="example">
+        <div class="ex-title">真题模板示例</div>
+        <p>关于班级考试，三句话：</p>
+        <div class="step">① 所有人都及格了（A）</div>
+        <div class="step">② 所有人都没及格（E）</div>
+        <div class="step">③ 小明及格了</div>
+        <p>已知：三句中<strong>只有 1 句真话</strong></p>
+        <div class="step">①② 构成上反对 → 必有一假</div>
+        <div class="step">总共只有 1 句真话 → 真话不在①② → <strong>③必然为假</strong></div>
+        <div class="step">③假 → 小明没及格</div>
+        <div class="step">小明没及格 → ②"所有人都没及格"为真，①为假</div>
+        <div class="conclusion">结论：全班都没及格</div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 6 ===== -->
+    <section class="chapter" id="ch6">
+      <h2><span class="num">6</span>下反对关系</h2>
+
+      <h3>下反对的定义与规则</h3>
+      <p>下反对关系指<strong>两个特称命题</strong>之间的关系：</p>
+      <div class="formula">有的 S 是 P（I） <span class="not">↔</span> 有的 S 不是 P（O）</div>
+
+      <div class="callout success">
+        <div class="label">核心规则</div>
+        <strong>必有一真</strong> —— 不能同假，可以同真。
+      </div>
+
+      <h3>三种现实情况验证</h3>
+      <p>以"有的同学及格" vs "有的同学不及格"为例：</p>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:30%"><col style="width:23%"><col style="width:23%"><col style="width:24%"></colgroup>
+          <thead><tr><th>实际情况</th><th>有的及格（I）</th><th>有的不及格（O）</th><th>特征</th></tr></thead>
+          <tbody>
+            <tr><td>全部及格</td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-false">假</span></td><td>一真一假</td></tr>
+            <tr><td>全部不及格</td><td><span class="tag tag-false">假</span></td><td><span class="tag tag-true">真</span></td><td>一真一假</td></tr>
+            <tr><td>部分及格、部分不及格</td><td><span class="tag tag-true">真</span></td><td><span class="tag tag-true">真</span></td><td>同真</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>三种情况中，I 和 O <strong>从未同时为假</strong>，但可以同时为真 → 必有一真。</p>
+
+      <h3>下反对的做题应用</h3>
+      <div class="callout tip">
+        <div class="label">典型配对</div>
+        下反对（必有一真）最适合题干限定<strong>"只有一句话为假"</strong>的场景。
+      </div>
+      <p>原理：两句中至少一个是真话 → 唯一假话不在这一组 → 剩下的那句话必然为假。</p>
+
+      <div class="example">
+        <div class="ex-title">真题模板示例</div>
+        <p>关于单位加班，三句话：</p>
+        <div class="step">① 有的人需要加班（I）</div>
+        <div class="step">② 有的人不需要加班（O）</div>
+        <div class="step">③ 主任需要加班</div>
+        <p>已知：三句中<strong>只有 1 句假话</strong></p>
+        <div class="step">①② 构成下反对 → 必有一真</div>
+        <div class="step">总共只有 1 句假话 → 假话不在①② → <strong>③必然为假</strong></div>
+        <div class="step">③假 → 主任不需要加班</div>
+        <div class="step">主任不加 → ②"有的人不需要加班"为真</div>
+        <div class="conclusion">结论：所有人都不用加班</div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 7 ===== -->
+    <section class="chapter" id="ch7">
+      <h2><span class="num">7</span>差等关系（推出关系）</h2>
+
+      <h3>差等关系的定义</h3>
+      <p>差等关系是方阵左右两条竖边的关系，指<strong>全称命题与同质特称命题</strong>之间的推出关系：</p>
+      <div class="formula">A（所有是） <span class="arrow">→</span> I（有的是）　　E（所有非） <span class="arrow">→</span> O（有的非）</div>
+
+      <div class="callout info">
+        <div class="label">核心规则</div>
+        <strong>上真下必真，下假上必假</strong>；反过来（上假/下真）则真假不定。
+      </div>
+
+      <h3>四种情况分析</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
+          <thead><tr><th>已知</th><th>推出</th><th>结论</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td>A 真（所有是）</td><td>I 真（有的是）</td><td><span class="tag tag-true">必真</span></td><td>所有人及格 → 有人及格</td></tr>
+            <tr><td>I 假（有的是为假）</td><td>A 假（所有是为假）</td><td><span class="tag tag-false">必假</span></td><td>没人及格 → 不是所有人及格</td></tr>
+            <tr><td>A 假（所有是为假）</td><td>I 真假不定</td><td><span class="tag tag-mid">不定</span></td><td>并非都及格 → 可能有人及格也可能都没</td></tr>
+            <tr><td>I 真（有的是）</td><td>A 真假不定</td><td><span class="tag tag-mid">不定</span></td><td>有人及格 → 不一定所有人都及格</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="label">注意</div>
+        差等关系在行测中考频相对较低，通常作为矛盾/反对之后的辅助推理工具。
+      </div>
+    </section>
+
+    <!-- ===== Chapter 8 ===== -->
+    <section class="chapter" id="ch8">
+      <h2><span class="num">8</span>真假推理题型解法</h2>
+
+      <h3>题型识别</h3>
+      <p>上反对、下反对、矛盾关系都只出现在<strong>真假推理题</strong>中。题干特征：</p>
+      <ul>
+        <li>给出若干句话（通常 3-4 句）</li>
+        <li>限定真假数量："只有一句真话"或"只有一句假话"</li>
+        <li>要求根据条件推出结论</li>
+      </ul>
+
+      <h3>标准解题三步法</h3>
+      <div class="example">
+        <div class="ex-title">通用解题流程</div>
+        <div class="step"><strong>第一步：找关系</strong> —— 优先找矛盾关系；没有矛盾再找上反对/下反对；都没有再考虑差等（推出）关系</div>
+        <div class="step"><strong>第二步：定范围</strong> —— 根据关系口诀，划定真话/假话所在的范围</div>
+        <div class="step"><strong>第三步：判其余</strong> —— 判断除关系组之外的句子的真假，由此推出答案</div>
+      </div>
+
+      <h3>三种关系的配对使用</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:16%"><col style="width:22%"><col style="width:18%"><col style="width:22%"><col style="width:22%"></colgroup>
+          <thead><tr><th>关系</th><th>句式组合</th><th>核心规则</th><th>高频题干限定</th><th>做题结论</th></tr></thead>
+          <tbody>
+            <tr><td><strong>矛盾</strong></td><td>所有是↔有的非 等</td><td>一真一假</td><td>1真或1假均可</td><td>其余全真/全假</td></tr>
+            <tr><td><strong>上反对</strong></td><td>所有是 & 所有非</td><td>必有一假</td><td>只有 1 真</td><td>其余为真</td></tr>
+            <tr><td><strong>下反对</strong></td><td>有的是 & 有的非</td><td>必有一真</td><td>只有 1 假</td><td>其余为假</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>做题优先级</h3>
+      <div class="mnemonic-grid">
+        <div class="mnemonic-card mc-contradiction">
+          <div class="title">① 矛盾关系</div>
+          <div class="rule">优先使用！对角线<br>一真一假锁定范围</div>
+        </div>
+        <div class="mnemonic-card mc-upper">
+          <div class="title">② 上/下反对</div>
+          <div class="rule">没有矛盾时使用<br>两个所有 / 两个有的</div>
+        </div>
+        <div class="mnemonic-card mc-sub">
+          <div class="title">③ 差等关系</div>
+          <div class="rule">辅助推理<br>所有推有的</div>
+        </div>
+      </div>
+
+      <h3>完整真题演练</h3>
+      <div class="example">
+        <div class="ex-title">例题（上反对题型）</div>
+        <p>某单位共有 20 名员工：①有人是本科学历；②单位负责人不是本科学历；③有人不是本科学历。上述三个判断中只有一个是真的。</p>
+        <p>以下哪项正确表示了该单位具有本科学历的员工人数？</p>
+        <div class="step">①"有人是本科"（I）和 ③"有人不是本科"（O）→ 下反对关系，必有一真</div>
+        <div class="step">题干只有一真 → 真话在①③中 → <strong>②必然为假</strong></div>
+        <div class="step">②假 → 单位负责人<strong>是</strong>本科学历</div>
+        <div class="step">负责人是本科 → ①"有人是本科"为真</div>
+        <div class="step">因为只有一真，①真则③假 → "有人不是本科"为假 → <strong>所有人都是本科</strong></div>
+        <div class="conclusion">结论：20 人都是本科学历</div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter 9 ===== -->
+    <section class="chapter" id="ch9">
+      <h2><span class="num">9</span>易错点与陷阱</h2>
+
+      <h3>陷阱一：混淆矛盾和反对</h3>
+      <div class="callout danger">
+        <div class="label">错误认知</div>
+        "不能同时为真 = 矛盾" —— 错！两个所有不能同真，但可以同假，这是上反对，不是矛盾。
+      </div>
+      <p>矛盾的硬性标准：<strong>不能同真 AND 不能同假</strong>，两者缺一不可。</p>
+
+      <h3>陷阱二：乱用反对口诀</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:30%"><col style="width:35%"><col style="width:35%"></colgroup>
+          <thead><tr><th>关系</th><th>适合题干</th><th>不适合题干</th></tr></thead>
+          <tbody>
+            <tr><td>上反对（必有一假）</td><td>只有 1 真</td><td>只有 1 假（优先找矛盾）</td></tr>
+            <tr><td>下反对（必有一真）</td><td>只有 1 假</td><td>只有 1 真（优先找矛盾）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>陷阱三：主体/话题不一致</h3>
+      <div class="callout danger">
+        <div class="label">无效关系</div>
+        "所有员工迟到"和"有的学生迟到" —— S 不一样（员工≠学生），<strong>不能构成任何反对或矛盾关系</strong>。
+      </div>
+      <p>方阵所有关系的前提是：主项 S 和谓项 P 必须完全相同。</p>
+
+      <h3>陷阱四：误解"有的"的含义</h3>
+      <div class="callout warn">
+        <div class="label">常见错误推理</div>
+        由"有的同学及格了"推出"有的同学没及格" —— 错！因为可能全部都及格了。
+      </div>
+      <p>逻辑中的"有的" = 至少一个，包含"全部"这种极端情况。</p>
+
+      <h3>陷阱五：忽略单称命题</h3>
+      <p>"某个 S 是 P"和"某个 S 不是 P"也是矛盾关系，在做题时不要遗漏。单称命题在真假推理中常作为"其余句子"出现，是推出答案的关键。</p>
+    </section>
+
+    <!-- ===== Chapter 10 ===== -->
+    <section class="chapter" id="ch10">
+      <h2><span class="num">10</span>速记口诀汇总</h2>
+
+      <h3>四大关系口诀卡</h3>
+      <div class="mnemonic-grid">
+        <div class="mnemonic-card mc-contradiction">
+          <div class="title">矛盾关系</div>
+          <div class="rule">一真一假<br>所有是↔有的非<br>所有非↔有的是</div>
+        </div>
+        <div class="mnemonic-card mc-upper">
+          <div class="title">上反对</div>
+          <div class="rule">两个所有<br>必有一假<br>不能同真，可同假</div>
+        </div>
+        <div class="mnemonic-card mc-lower">
+          <div class="title">下反对</div>
+          <div class="rule">两个有的<br>必有一真<br>不能同假，可同真</div>
+        </div>
+        <div class="mnemonic-card mc-sub">
+          <div class="title">差等关系</div>
+          <div class="rule">所有推有的<br>上真下必真<br>下假上必假</div>
+        </div>
+      </div>
+
+      <h3>做题速查表</h3>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:20%"><col style="width:20%"><col style="width:30%"><col style="width:30%"></colgroup>
+          <thead><tr><th>看到什么</th><th>是什么关系</th><th>真假特性</th><th>下一步动作</th></tr></thead>
+          <tbody>
+            <tr><td>所有是 + 有的非</td><td>矛盾</td><td>一真一假</td><td>看其余句子</td></tr>
+            <tr><td>所有非 + 有的是</td><td>矛盾</td><td>一真一假</td><td>看其余句子</td></tr>
+            <tr><td>所有是 + 所有非</td><td>上反对</td><td>必有一假</td><td>题干"只有一真"→其余真</td></tr>
+            <tr><td>有的是 + 有的非</td><td>下反对</td><td>必有一真</td><td>题干"只有一假"→其余假</td></tr>
+            <tr><td>所有是 → 有的是</td><td>差等</td><td>上真下真</td><td>辅助推导</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>一句话终极总结</h3>
+      <div class="callout info">
+        <div class="label">核心心法</div>
+        真假推理三步走：<strong>先找矛盾，再看反对，最后差等</strong>。矛盾锁一真一假，上反对配"只有一真"，下反对配"只有一假"，其余句子定答案。
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="footer">
+  <p>行测逻辑判断 · 直言命题与真假推理完整版笔记 | 整理日期：2026 年 9 月 15 日</p>
+</footer>
+
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
