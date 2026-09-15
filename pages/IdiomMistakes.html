@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测高频·望文生义成语清单（附考点+辨析）</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --bg: #f7f5f0;
+  --card: #ffffff;
+  --ink: #1f2937;
+  --ink-soft: #4b5563;
+  --muted: #6b7280;
+  --line: #e5e1d8;
+  --line-soft: #f1ede4;
+  --accent: #b45309;
+  --accent-soft: #fef3c7;
+  --red: #b91c1c;
+  --red-soft: #fee2e2;
+  --green: #15803d;
+  --green-soft: #dcfce7;
+  --blue: #1d4ed8;
+  --blue-soft: #dbeafe;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.8;
+  font-size: 15px;
+  padding-bottom: 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(247, 245, 240, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+.brand {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-family: 'Noto Serif SC', serif;
+  white-space: nowrap;
+}
+.brand:hover { text-decoration: underline; }
+.brand-sub {
+  color: var(--muted);
+  font-size: 13px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 24px 0;
+}
+
+.hero { text-align: center; margin-bottom: 28px; }
+.hero h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.hero .lead {
+  color: var(--ink-soft);
+  font-size: 15px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.intro-callout {
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 6px;
+  margin-bottom: 36px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.intro-callout .core { font-weight: 600; color: var(--accent); }
+
+.idiom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.idiom {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.idiom:hover {
+  box-shadow: 0 6px 24px rgba(180, 83, 9, 0.08);
+  transform: translateY(-2px);
+}
+
+.idiom-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--line-soft);
+}
+.idiom-head .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.idiom-head .word {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.idiom-head .pinyin {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+  font-family: 'Times New Roman', Georgia, serif;
+  letter-spacing: 0.04em;
+}
+.badge-must {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.panel { padding: 16px 20px; }
+.panel.wrong {
+  background: var(--red-soft);
+  border-right: 1px solid var(--line);
+}
+.panel.right { background: var(--green-soft); }
+
+.panel-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.panel.wrong .panel-label { color: var(--red); }
+.panel.right .panel-label { color: var(--green); }
+.panel-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.panel.wrong .panel-label::before { background: var(--red); }
+.panel.right .panel-label::before { background: var(--green); }
+
+.panel p {
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.75;
+}
+.panel.right p strong { color: var(--green); font-weight: 600; }
+.panel.wrong p strong { color: var(--red); font-weight: 600; }
+
+.meta-row {
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--line-soft);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: baseline;
+}
+.meta-row .meta-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.meta-row .meta-label {
+  font-weight: 600;
+  color: var(--ink);
+  font-family: 'Noto Serif SC', serif;
+}
+
+.tip, .warn {
+  padding: 11px 20px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.tip { background: var(--blue-soft); }
+.tip strong { color: var(--blue); flex-shrink: 0; }
+.warn { background: var(--accent-soft); }
+.warn strong { color: var(--accent); flex-shrink: 0; }
+.warn strong + * strong { color: var(--accent); }
+
+.page-footer {
+  text-align: center;
+  margin-top: 48px;
+  padding: 24px 0;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 600px) {
+  .panels { grid-template-columns: 1fr; }
+  .panel.wrong {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .idiom-head .word { font-size: 19px; }
+  .hero h1 { font-size: 26px; }
+  .container { padding: 24px 16px 0; }
+  .idiom-head { padding: 12px 14px; flex-wrap: wrap; }
+  .panel { padding: 14px 14px; }
+  .meta-row { padding: 10px 14px; }
+  .tip, .warn { padding: 10px 14px; }
+}
+
+@media print {
+  body { background: white; color: black; font-size: 12px; }
+  .topbar { display: none; }
+  .idiom {
+    box-shadow: none;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+    margin-bottom: 12px;
+  }
+  .idiom:hover { transform: none; box-shadow: none; }
+  .panel.wrong, .panel.right {
+    background: white !important;
+    border: 1px solid #ccc;
+  }
+  .panel-label { color: black !important; }
+  .panel-label::before { display: none; }
+  .meta-row, .idiom-head { background: white; }
+  .tip { background: white; }
+  .warn { background: white; }
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes" class="brand">← 返回学习笔记</a>
+  <span class="brand-sub">行测高频 · 望文生义成语</span>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>行测高频 · 望文生义成语清单</h1>
+    <p class="lead">20 个常被字面误读的高频成语：直释对照 + 重点必考标注 + 近义 / 区分 / 搭配提示。</p>
+  </section>
+
+  <div class="intro-callout">
+    <span class="core">✅ 核心提示：</span>不要按字面直接理解，真题最爱挖坑；标注「重点必考」优先记。
+  </div>
+
+  <section class="idiom-list">
+
+    <article class="idiom" id="i1">
+      <div class="idiom-head">
+        <span class="num">1</span>
+        <h2 class="word">空穴来风</h2>
+        <span class="badge-must">重点必考</span>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>空洞来风</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>原义<strong>事出有因，并非毫无来由</strong>；现日常误用为毫无根据。</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>💡</strong>
+        <span>言语题优先考虑古义，除非题干明确是大众误用语境。</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i2">
+      <div class="idiom-head">
+        <span class="num">2</span>
+        <h2 class="word">差强人意<span class="pinyin">chā qiáng rén yì</span></h2>
+        <span class="badge-must">重点必考</span>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>不满意、很差</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>大体上还能让人满意。<strong>差：稍微；强：振奋。</strong></p>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="meta-item"><span class="meta-label">例：</span>这次成绩差强人意，还有提升空间。</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i3">
+      <div class="idiom-head">
+        <span class="num">3</span>
+        <h2 class="word">不刊之论<span class="pinyin">bù kān zhī lùn</span></h2>
+        <span class="badge-must">重点必考</span>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>不能刊登的言论</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>不可修改、不可磨灭的言论。<strong>刊：削除、修改。</strong></p>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="meta-item"><span class="meta-label">近义：</span>不易之论</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i4">
+      <div class="idiom-head">
+        <span class="num">4</span>
+        <h2 class="word">文不加点</h2>
+        <span class="badge-must">重点必考</span>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>写文章不加标点</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>文思敏捷，下笔一气呵成，不需要涂改。<strong>点：涂改。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i5">
+      <div class="idiom-head">
+        <span class="num">5</span>
+        <h2 class="word">不足为训</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>不值得当做教训</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>不值得作为效法的准则。<strong>训：准则、典范。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i6">
+      <div class="idiom-head">
+        <span class="num">6</span>
+        <h2 class="word">首当其冲</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>首先、第一个（去做某事）</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>最先受到冲击、遭遇灾难。</p>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="meta-item"><span class="meta-label">例：</span>洪水来袭，沿河村庄首当其冲。</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i7">
+      <div class="idiom-head">
+        <span class="num">7</span>
+        <h2 class="word">万人空巷</h2>
+        <span class="badge-must">重点必考</span>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>街上没人，大家都在家</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>家家户户人都出来，形容<strong>盛况、庆祝，人很多</strong>。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i8">
+      <div class="idiom-head">
+        <span class="num">8</span>
+        <h2 class="word">屡试不爽</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>多次尝试都不好、不爽快</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>多次试验都没有差错。<strong>爽：差错。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i9">
+      <div class="idiom-head">
+        <span class="num">9</span>
+        <h2 class="word">危言危行</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>危险的言论行为</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>说正直的话，做正直的事。<strong>危：正直。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i10">
+      <div class="idiom-head">
+        <span class="num">10</span>
+        <h2 class="word">细大不捐</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>一点东西都不捐献</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>大小都不抛弃，全部收纳。<strong>捐：舍弃。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i11">
+      <div class="idiom-head">
+        <span class="num">11</span>
+        <h2 class="word">七月流火</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>七月天气很热</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>大火星向西下沉，<strong>天气转凉</strong>（夏去秋来）。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i12">
+      <div class="idiom-head">
+        <span class="num">12</span>
+        <h2 class="word">罪不容诛</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>罪行还不至于处死</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>罪恶极大，杀了都抵偿不了。<strong>诛：处死。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i13">
+      <div class="idiom-head">
+        <span class="num">13</span>
+        <h2 class="word">目无全牛</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>眼光片面，看不到整体</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>技艺极其纯熟。出自庖丁解牛。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i14">
+      <div class="idiom-head">
+        <span class="num">14</span>
+        <h2 class="word">久假不归</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>请假很久不回来</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>长期借用而不归还。<strong>假：借。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i15">
+      <div class="idiom-head">
+        <span class="num">15</span>
+        <h2 class="word">弹冠相庆</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>互相庆祝（中性褒义）</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p><strong>贬义。</strong>一人做官，同伙互相庆贺即将得官。多指坏人得志。</p>
+        </div>
+      </div>
+      <div class="warn">
+        <strong>⚠️ 感情色彩坑：</strong>
+        <span>贬义，不能用于正面场合。</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i16">
+      <div class="idiom-head">
+        <span class="num">16</span>
+        <h2 class="word">不忍卒读</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>文章写得差，读不下去</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>文章悲惨动人，不忍心读完。</p>
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="meta-item"><span class="meta-label">区分：</span>不堪卒读 = 文章质量差，难以读完。</span>
+      </div>
+    </article>
+
+    <article class="idiom" id="i17">
+      <div class="idiom-head">
+        <span class="num">17</span>
+        <h2 class="word">不赞一词</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>不称赞一句话</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>原指文章写极好，别人不能添加一句话；也指一言不发。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i18">
+      <div class="idiom-head">
+        <span class="num">18</span>
+        <h2 class="word">毁家纾难</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>毁了家庭制造灾难</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>捐献全部家产，解救国难。<strong>纾：缓解。</strong></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i19">
+      <div class="idiom-head">
+        <span class="num">19</span>
+        <h2 class="word">登堂入室</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>直接闯入家里</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>学问技艺由浅入深，达到很高境界。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idiom" id="i20">
+      <div class="idiom-head">
+        <span class="num">20</span>
+        <h2 class="word">求全责备</h2>
+      </div>
+      <div class="panels">
+        <div class="panel wrong">
+          <div class="panel-label">字面 / 常见错解</div>
+          <p>责备别人</p>
+        </div>
+        <div class="panel right">
+          <div class="panel-label">正确解释</div>
+          <p>对人对事要求完美无缺。<strong>责、备：要求完备。</strong></p>
+        </div>
+      </div>
+      <div class="warn">
+        <strong>⚠️ 搭配：</strong>
+        <span>后面<strong>不能再加宾语</strong>，不能说"求全责备他人"。</span>
+      </div>
+    </article>
+
+  </section>
+
+  <footer class="page-footer">
+    <p>共 20 条 · 最后整理：2026-09-15</p>
+  </footer>
+
+</main>
+
+</body>
+</html>
