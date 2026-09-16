@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测心理学效应与统计效应</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f7f5f0;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --ink-soft:#4b5563;
+  --muted:#6b7280;
+  --line:#e5e1d8;
+  --line-soft:#f1ede4;
+  --accent:#b45309;
+  --accent-soft:#fef3c7;
+  --accent-soft-2:#fde68a;
+  --red:#b91c1c;
+  --red-soft:#fee2e2;
+  --green:#15803d;
+  --green-soft:#dcfce7;
+  --blue:#1d4ed8;
+  --blue-soft:#dbeafe;
+  --yellow:#ca8a04;
+  --yellow-soft:#fef9c3;
+  --purple:#7c3aed;
+  --purple-soft:#ede9fe;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:15px;
+  padding-bottom:60px;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,245,240,.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:12px 24px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  font-size:14px;
+}
+.brand{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+  font-family:'Noto Serif SC',serif;
+  white-space:nowrap;
+}
+.brand:hover{text-decoration:underline}
+.brand-sub{
+  color:var(--muted);
+  font-size:13px;
+  font-family:'Noto Serif SC',serif;
+}
+
+.container{
+  max-width:880px;
+  margin:0 auto;
+  padding:36px 24px 0;
+}
+
+.hero{text-align:center;margin-bottom:28px}
+.hero h1{
+  font-family:'Noto Serif SC',serif;
+  font-size:32px;
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:12px;
+  letter-spacing:0.02em;
+}
+.hero .lead{
+  color:var(--ink-soft);
+  font-size:15px;
+  max-width:640px;
+  margin:0 auto;
+}
+.hero-note{
+  margin-top:18px;
+  background:var(--accent-soft);
+  border-left:4px solid var(--accent);
+  padding:10px 16px;
+  border-radius:6px;
+  font-size:14px;
+  color:var(--ink);
+  text-align:left;
+  max-width:720px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero-note b{color:var(--accent)}
+
+/* Sticky TOC */
+.toc{
+  position:sticky;
+  top:48px;
+  z-index:90;
+  background:rgba(247,245,240,.92);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:8px 12px;
+  margin:0 0 28px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  font-size:13px;
+}
+.toc a{
+  color:var(--ink-soft);
+  text-decoration:none;
+  padding:4px 10px;
+  border-radius:4px;
+  transition:all .15s;
+  font-weight:500;
+}
+.toc a:hover{
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.section{margin-bottom:36px}
+.section-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--accent);
+  padding-bottom:8px;
+  border-bottom:2px solid var(--accent);
+  margin-bottom:18px;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.section-title .count{
+  font-size:14px;
+  color:var(--muted);
+  font-weight:400;
+  font-family:'Noto Sans SC',sans-serif;
+}
+
+/* Effect card (psychology) */
+.effect-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:14px;
+  transition:box-shadow .15s,transform .15s;
+}
+.effect-card:hover{
+  box-shadow:0 4px 14px rgba(180,83,9,.06);
+}
+.effect-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  padding:14px 18px;
+  background:var(--line-soft);
+  border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.effect-head .num{
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  font-size:18px;
+  color:var(--accent);
+  min-width:24px;
+}
+.effect-head .name{
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  font-size:19px;
+  color:var(--ink);
+  flex:1;
+  min-width:0;
+}
+.effect-head .name .en{
+  font-weight:400;
+  font-size:14px;
+  color:var(--muted);
+  margin-left:6px;
+  font-style:italic;
+}
+.effect-head .badge{
+  font-size:11.5px;
+  font-weight:600;
+  padding:2px 8px;
+  border-radius:999px;
+  background:var(--yellow-soft);
+  color:var(--yellow);
+  letter-spacing:0.04em;
+}
+
+.effect-body{padding:8px 0}
+.row{
+  padding:10px 18px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  font-size:14.5px;
+  line-height:1.85;
+}
+.row+.row{border-top:1px dashed var(--line-soft)}
+.row .label{
+  flex-shrink:0;
+  font-weight:600;
+  color:var(--ink);
+  width:54px;
+  font-size:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.row.principle{
+  background:#fff;
+}
+.row.principle .label{color:var(--accent)}
+.row.example{
+  background:var(--blue-soft);
+  margin:0 12px;
+  border-radius:6px;
+  padding:10px 14px;
+  border-left:3px solid var(--blue);
+}
+.row.example .label{color:var(--blue);width:auto}
+.row.distinction{
+  background:var(--yellow-soft);
+  margin:0 12px 4px;
+  border-radius:6px;
+  padding:10px 14px;
+  border-left:3px solid var(--yellow);
+}
+.row.distinction .label{color:var(--yellow);width:auto}
+.row.distinction+.row.distinction{margin-top:8px}
+
+.keyword-row{
+  margin:0 12px 8px;
+  padding:10px 14px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--accent-soft-2) 100%);
+  border-left:3px solid var(--accent);
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:15px;
+  color:var(--ink);
+  font-weight:600;
+}
+.keyword-row .ico{
+  font-size:16px;
+}
+.keyword-row .word{
+  font-family:'Noto Serif SC',serif;
+  letter-spacing:0.04em;
+}
+
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 14px;
+  padding:10px 18px;
+  font-size:12.5px;
+  color:var(--muted);
+  background:var(--line-soft);
+  border-top:1px solid var(--line);
+}
+.meta-row .meta-item{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.meta-row .meta-item .meta-label{color:var(--ink);font-weight:600;font-size:12px}
+
+/* Stats card (statistics effects) */
+.stats-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-bottom:10px;
+  border-left:3px solid var(--blue);
+  transition:box-shadow .15s;
+}
+.stats-card:hover{box-shadow:0 2px 10px rgba(29,78,216,.06)}
+.stats-card.special{
+  border-left-color:var(--purple);
+  background:linear-gradient(135deg,#fff 0%,var(--purple-soft) 100%);
+}
+.stats-card.special:hover{box-shadow:0 2px 10px rgba(124,58,237,.06)}
+.stats-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:8px;
+  flex-wrap:wrap;
+}
+.stats-head .num{
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  font-size:16px;
+  color:var(--blue);
+  min-width:20px;
+}
+.stats-card.special .stats-head .num{color:var(--purple)}
+.stats-head .name{
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  font-size:17px;
+  color:var(--ink);
+  flex:1;
+}
+.stats-card.special .stats-head .name{color:var(--purple)}
+.stats-head .tag{
+  font-size:11px;
+  font-weight:600;
+  padding:1px 6px;
+  border-radius:4px;
+  background:var(--blue-soft);
+  color:var(--blue);
+}
+.stats-card.special .stats-head .tag{
+  background:var(--purple-soft);
+  color:var(--purple);
+}
+.stats-keyword{
+  font-weight:600;
+  color:var(--accent);
+  font-size:14px;
+  margin-bottom:6px;
+}
+.stats-body{
+  font-size:14px;
+  color:var(--ink);
+  line-height:1.75;
+  margin-bottom:6px;
+}
+.stats-pitfall{
+  font-size:13px;
+  color:var(--red);
+  background:var(--red-soft);
+  padding:4px 10px;
+  border-radius:4px;
+  display:inline-block;
+}
+
+/* Summary table */
+.summary-table{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
+  font-size:14px;
+}
+.summary-table thead{
+  background:var(--accent);
+  color:white;
+}
+.summary-table th{
+  text-align:left;
+  padding:10px 14px;
+  font-weight:600;
+  font-family:'Noto Serif SC',serif;
+}
+.summary-table th:first-child{width:120px}
+.summary-table th:nth-child(2){width:auto}
+.summary-table th:last-child{width:auto}
+.summary-table td{
+  padding:10px 14px;
+  border-top:1px solid var(--line);
+  vertical-align:top;
+}
+.summary-table tbody tr:hover{
+  background:var(--accent-soft);
+}
+.summary-table tbody tr td:first-child{
+  font-weight:600;
+  color:var(--accent);
+  font-family:'Noto Serif SC',serif;
+}
+.summary-table tbody tr td:nth-child(3){
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Normal distribution detail card */
+.norm-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:14px;
+}
+.norm-card .norm-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:19px;
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.norm-formula{
+  font-family:'JetBrains Mono','Courier New',monospace;
+  background:var(--line-soft);
+  padding:14px 18px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  text-align:center;
+  font-size:15px;
+  color:var(--ink);
+  margin:10px 0;
+  overflow-x:auto;
+}
+.norm-desc{
+  font-size:14px;
+  line-height:1.85;
+  color:var(--ink);
+}
+.norm-bars{margin:14px 0 6px}
+.norm-bar-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+  font-family:'JetBrains Mono','Courier New',monospace;
+  font-size:13.5px;
+  color:var(--ink);
+}
+.norm-bar-row .lbl{
+  width:64px;
+  flex-shrink:0;
+  text-align:right;
+  color:var(--ink-soft);
+  font-weight:600;
+}
+.norm-bar-row .bar-wrap{
+  flex:1;
+  height:18px;
+  background:var(--line-soft);
+  border-radius:9px;
+  overflow:hidden;
+  position:relative;
+}
+.norm-bar-row .bar{
+  height:100%;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  padding-right:10px;
+  color:white;
+  font-size:11.5px;
+  font-weight:600;
+}
+.norm-bar-row .bar.b68{background:linear-gradient(90deg,#22c55e,#16a34a);width:68%}
+.norm-bar-row .bar.b95{background:linear-gradient(90deg,#3b82f6,#2563eb);width:95%}
+.norm-bar-row .bar.b997{background:linear-gradient(90deg,#8b5cf6,#7c3aed);width:99.7%}
+.norm-bars-title{
+  font-weight:600;
+  color:var(--ink);
+  font-size:14px;
+  margin:12px 0 8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.example-line{
+  background:var(--blue-soft);
+  border-left:3px solid var(--blue);
+  padding:10px 14px;
+  border-radius:6px;
+  font-size:13.5px;
+  color:var(--ink);
+  margin-top:10px;
+}
+
+.page-footer{
+  text-align:center;
+  margin-top:48px;
+  padding:24px 0;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+
+@media (max-width:600px){
+  .container{padding:24px 16px 0}
+  .hero h1{font-size:24px}
+  .toc{font-size:12px;padding:6px 8px}
+  .toc a{padding:3px 8px}
+  .section-title{font-size:20px}
+  .effect-head .name{font-size:17px}
+  .row{padding:8px 14px;font-size:14px}
+  .row .label{width:48px;font-size:13px}
+  .keyword-row{margin:0 8px 6px;padding:8px 12px;font-size:14px}
+  .row.example,.row.distinction{margin:0 8px;padding:8px 12px}
+  .meta-row{padding:8px 14px;font-size:12px}
+  .norm-formula{font-size:13px;padding:10px 12px}
+  .summary-table{font-size:13px}
+  .summary-table th,.summary-table td{padding:8px 10px}
+  .summary-table th:first-child{width:auto}
+}
+
+@media print{
+  body{background:white;color:black;font-size:12px;padding-bottom:0}
+  .topbar,.toc{display:none}
+  .effect-card,.stats-card,.norm-card,.summary-table{
+    box-shadow:none;
+    page-break-inside:avoid;
+    border:1px solid #999;
+  }
+  .effect-head,.meta-row,.row.example,.row.distinction,.keyword-row,.norm-formula{
+    background:white !important;
+  }
+  .keyword-row{border-left:2px solid #b45309}
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes" class="brand">← 返回学习笔记</a>
+  <span class="brand-sub">行测心理学效应与统计效应</span>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>行测心理学效应与统计效应</h1>
+    <p class="lead">公考类比&常识高频考点：心理学效应 15 个 + 统计学效应 9 个 + 正态分布专题</p>
+    <div class="hero-note">
+      <b>📌 学法提示：</b>公考类比只考<b>核心内涵</b>，人物 / 时间属于锦上添花（用来区分易混概念）。答题优先看【行测速记关键词】。
+    </div>
+  </section>
+
+  <nav class="toc">
+    <a href="#sec1">一、心理学效应（15）</a>
+    <a href="#sec2">二、速记对照表</a>
+    <a href="#sec3">三、统计学效应（9）</a>
+    <a href="#sec4">四、正态分布专题</a>
+  </nav>
+
+  <!-- Section 1: 心理学效应 -->
+  <section class="section" id="sec1">
+    <h2 class="section-title">一、心理学效应 <span class="count">15 个 · 行测类比常考</span></h2>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">1.</span>
+        <span class="name">晕轮效应（光环效应 Halo Effect）</span>
+        <span class="badge">辨析</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：以偏概全；局部推整体</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>桑代克在研究人事评价时发现：人们在知觉他人时，容易从<b>某一个单一特质</b>，直接泛化推导这个人其他所有特质。就像月亮的光晕，放大局部，遮蔽其他特征。<br>简单说：<b>一个点好，就觉得全部都好；一点不好，全盘否定</b>。</span></div>
+        <div class="row example"><span class="label">💭 例</span><span>长得好看，就默认性格、能力都优秀；一次犯错，就认定这个人一无是处。</span></div>
+        <div class="row distinction"><span class="label">⚠️ 辨析</span><span>和刻板效应区分：晕轮=同一个人，局部推整体；刻板=群体标签推个体。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>爱德华·桑代克（Edward Thorndike）</span>
+          <span class="meta-item"><span class="meta-label">📅 1920 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">2.</span>
+        <span class="name">破窗效应（Broken Windows Theory）</span>
+        <span class="badge">辨析</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：放任小问题→持续恶化、变本加厉</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>如果一栋建筑有一扇窗户破碎，没人修理，不久其他窗户也会被打碎。<br>底层逻辑：<b>环境中的微小失序，如果不及时制止，会传递"没人管"的信号，诱发更多人效仿，让不良行为持续扩散、不断恶化</b>。</span></div>
+        <div class="row example"><span class="label">💭 例</span><span>路边垃圾没人清理，很快垃圾越来越多；小错误不惩戒，后续错误会变本加厉。</span></div>
+        <div class="row distinction"><span class="label">⚠️ 辨析</span><span>不是连锁反应！核心是<b>放任带来恶化</b>，区别蝴蝶效应。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>詹姆斯·威尔逊、乔治·凯林</span>
+          <span class="meta-item"><span class="meta-label">📅 1982 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国（犯罪学理论）</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">3.</span>
+        <span class="name">蝴蝶效应（Butterfly Effect）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：微小起因，连锁放大，巨大远期结果</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>属于混沌理论。初始条件下<b>极其微小的变化</b>，在非线性系统不断传导放大，最终造成结果巨大差异。<br>经典描述：巴西一只蝴蝶扇动翅膀，可能在美国德克萨斯引发一场龙卷风。</span></div>
+        <div class="row distinction"><span class="label">⚠️ 注意</span><span>可向好、也可向坏，<b>不一定是坏事，没有"放任恶化"含义，只是连锁传导</b>。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>洛伦兹（Edward Lorenz）</span>
+          <span class="meta-item"><span class="meta-label">📅 1963 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国（气象学→引申社会学）</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">4.</span>
+        <span class="name">墨菲定律（Murphy's Law）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：怕啥来啥；凡是可能出错，终将出错</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>原文：<b>如果事情有变坏的可能，不管可能性多小，它总会发生</b>。<br>起源：火箭测试，技术员墨菲吐槽助手"只要有办法做错，他就一定会做错"。后来引申为：越担心坏事发生，这件坏事就更容易出现。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>爱德华·墨菲（Edward A. Murphy）</span>
+          <span class="meta-item"><span class="meta-label">📅 1949 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国（航空工程）</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">5.</span>
+        <span class="name">增减效应（得失效应 Gain-Loss Effect）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：逐步增加评价更受欢迎</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>人们对他人的好感度，<b>不是由评价绝对值决定，而是评价的变化幅度决定</b>。<br>· 先否定、后逐步夸奖（增益），好感最强；<br>· 先夸奖、后面贬低（减损），好感最低；<br>对比一直夸奖/一直批评，<b>递增式评价最讨人喜欢</b>。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>阿伦森（Elliot Aronson）</span>
+          <span class="meta-item"><span class="meta-label">📅 1965 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国社会心理学实验</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">6.</span>
+        <span class="name">首因效应（第一印象效应）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：第一印象</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>个体第一次接触人/事物获得的信息，会优先占据认知，形成牢固印象，后续信息容易被忽略。<b>第一印象主导后续判断</b>。适用陌生人初次接触场景。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>洛钦斯（A.S.Lochins）</span>
+          <span class="meta-item"><span class="meta-label">📅 1957 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">7.</span>
+        <span class="name">近因效应</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：新近信息，覆盖旧印象</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span><b>最近、最后接收的信息，会冲淡、覆盖之前的旧印象</b>。<br>适用场景：熟人之间，长时间相处，最后发生的一件事，会改变整体看法。</span></div>
+        <div class="row distinction"><span class="label">💡 关联</span><span>洛钦斯实验结论：陌生环境看首因；熟悉环境看近因。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>洛钦斯（A.S.Lochins），与首因效应同一组实验</span>
+          <span class="meta-item"><span class="meta-label">📅 1957 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">8.</span>
+        <span class="name">从众效应 / 羊群效应（Herd Effect）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：随大流，人云亦云</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>个体在群体压力下，放弃自己独立判断，跟随多数人的观点和行为。像羊群，头羊去哪，其余跟着走。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出：</span>多个学者共同研究，无单一发明人；19 世纪开始社会学观察</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">9.</span>
+        <span class="name">登门槛效应（得寸进尺效应）</span>
+        <span class="badge">辨析</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：先小请求，再接受大请求，得寸进尺</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>人一旦同意了一个微小、容易达成的请求，为保持认知一致性，后续更容易接受更大、难度更高的请求。<b>先跨小门槛，再跨大门槛</b>。</span></div>
+        <div class="row distinction"><span class="label">⚠️ 辨析登门槛 VS 门面</span><span><b>登门槛：由小到大 ✅；门面：先超大，再缩小 ✅</b></span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>弗里德曼、弗雷泽</span>
+          <span class="meta-item"><span class="meta-label">📅 1966 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国社会实验</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">10.</span>
+        <span class="name">门面效应（留面子效应）</span>
+        <span class="badge">辨析</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：先大请求被拒，更容易同意后续小请求</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>先提出一个极大、几乎一定会被拒绝的要求；对方拒绝之后，再提出一个相对小的请求，对方答应概率大幅提升。<br>逻辑：拒绝大要求后产生愧疚，愿意答应小要求给你"留面子"。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>西奥迪尼</span>
+          <span class="meta-item"><span class="meta-label">📅 1975 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">11.</span>
+        <span class="name">刻板效应（刻板印象）</span>
+        <span class="badge">辨析</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：群体标签，推个体</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>对某一类群体形成固定笼统标签，直接套用到群体里面每一个个体，忽略个体差异。<br>例：觉得北方人都豪爽，南方人都细腻。</span></div>
+        <div class="row distinction"><span class="label">⚠️ 辨析</span><span>刻板 VS 晕轮：刻板=群体→个体；晕轮=个体局部→个体整体。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 起源：</span>早期社会心理学，无单一提出人</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">12.</span>
+        <span class="name">投射效应</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：以己度人</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>将自己的想法、情绪、喜好强加给别人，默认别人和自己想法一样，<b>以己度人</b>。<br>例：自己喜欢吃辣，默认所有人都爱吃辣。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出：</span>弗洛伊德精神分析理论（19 世纪末）</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">13.</span>
+        <span class="name">鲶鱼效应</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：引入竞争，激活群体</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>船舱沙丁鱼容易缺氧死掉，放入一条鲶鱼，鲶鱼不断游动制造危机感，激活沙丁鱼，提升存活率。引申：<b>引入外部竞争者，激活整个群体活力</b>。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 起源：</span>挪威渔民民间现象，后管理学总结，无单一提出学者</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">14.</span>
+        <span class="name">马太效应（Matthew Effect）</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：强者愈强，弱者愈弱</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>强者资源越来越多，弱者资源持续流失；<b>好的愈好，坏的愈坏，富者愈富，穷者愈穷</b>，两极分化。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>罗伯特·莫顿</span>
+          <span class="meta-item"><span class="meta-label">📅 1968 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国，名字取自圣经《马太福音》</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="effect-card">
+      <div class="effect-head">
+        <span class="num">15.</span>
+        <span class="name">安慰剂效应</span>
+      </div>
+      <div class="effect-body">
+        <div class="keyword-row"><span class="ico">🎯</span><span class="word">行测关键词：主观相信，产生效果</span></div>
+        <div class="row principle"><span class="label">📖 原理</span><span>使用没有药理活性的物质（糖丸），但受试者主观相信它有效，从而出现症状缓解。<b>核心是心理信念带来生理感受改变，不是药物本身作用</b>。</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="meta-label">👤 提出人：</span>亨利·比彻</span>
+          <span class="meta-item"><span class="meta-label">📅 1955 年</span></span>
+          <span class="meta-item"><span class="meta-label">📍 美国医学实验</span></span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Section 2: 速记对照表 -->
+  <section class="section" id="sec2">
+    <h2 class="section-title">二、公考类比终极区分表 <span class="count">10 行速记</span></h2>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>效应</th>
+          <th>核心本质</th>
+          <th>易混辨析</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>晕轮效应</td><td>个体局部特质→整体评价（以偏概全）</td><td>区别刻板：不是群体标签</td></tr>
+        <tr><td>刻板效应</td><td>群体固有标签→个体判断</td><td>—</td></tr>
+        <tr><td>破窗效应</td><td>小问题放任，持续恶化</td><td>≠蝴蝶效应（蝴蝶无恶化）</td></tr>
+        <tr><td>蝴蝶效应</td><td>微小初始事件，连锁放大巨大结果</td><td>可好可坏，重点是连锁传导</td></tr>
+        <tr><td>首因效应</td><td>陌生人，第一印象</td><td>熟人场景用近因效应</td></tr>
+        <tr><td>近因效应</td><td>熟人，最近一件事改变印象</td><td>—</td></tr>
+        <tr><td>登门槛</td><td>先小请求，再答应大请求</td><td>门面效应反过来：先大后小</td></tr>
+        <tr><td>门面效应</td><td>超大请求被拒，更容易答应小请求</td><td>—</td></tr>
+        <tr><td>马太效应</td><td>两极分化，强者越强</td><td>—</td></tr>
+        <tr><td>墨菲定律</td><td>有可能出错，终将出错</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Section 3: 统计学效应 -->
+  <section class="section" id="sec3">
+    <h2 class="section-title">三、统计学效应 <span class="count">9 个 · 含正态分布 / 中心极限定理</span></h2>
+    <div class="hero-note" style="margin-bottom:14px">
+      <b>📌 区分提醒：</b><b>效应=现象规律</b>；<b>分布=数据形态</b>。公考经常混在一起考察。
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">1.</span>
+        <span class="name">幸存者偏差</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 只看活下来的样本</div>
+      <div class="stats-body">只看留存样本，忽略消失样本。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：误以为可见样本就是全部总体</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">2.</span>
+        <span class="name">回归均值（趋均数回归）</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 极值会回归平均</div>
+      <div class="stats-body">极端值后续天然向平均数回落。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：容易把随机回落当成干预有效</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">3.</span>
+        <span class="name">辛普森悖论</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 分组和整体结论相反</div>
+      <div class="stats-body">分组看是 A 结论，合并汇总结论反转。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：不看分层，直接用总量下判断</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">4.</span>
+        <span class="name">伯克森悖论</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 本来无关，抽样后看起来有关</div>
+      <div class="stats-body">筛选样本，制造原本不存在的虚假相关。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：把样本伪相关当成真实因果</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">5.</span>
+        <span class="name">样本选择偏差</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 抽取样本自带偏向</div>
+      <div class="stats-body">抽样不随机，样本无法代表总体。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：幸存者偏差属于它的子类</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">6.</span>
+        <span class="name">霍桑效应</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 被人观察，表现改变</div>
+      <div class="stats-body">被观测、被关注，人的行为发生改变。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：混淆"观测带来的变化"和实验干预效果</div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-head">
+        <span class="num">7.</span>
+        <span class="name">巴纳姆效应（福勒效应）</span>
+        <span class="tag">效应</span>
+      </div>
+      <div class="stats-keyword">🎯 笼统话术，大家都对号入座</div>
+      <div class="stats-body">宽泛笼统描述，人人觉得贴合自己。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：容易和投射效应混淆</div>
+    </div>
+
+    <div class="stats-card special">
+      <div class="stats-head">
+        <span class="num">8.</span>
+        <span class="name">正态分布（高斯分布）</span>
+        <span class="tag">分布</span>
+      </div>
+      <div class="stats-keyword">🎯 中间多、两头少，钟形曲线</div>
+      <div class="stats-body">数据集中在均值附近，两端数据稀少，对称钟形曲线。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：它是分布模型，不是传统意义"效应"</div>
+    </div>
+
+    <div class="stats-card special">
+      <div class="stats-head">
+        <span class="num">9.</span>
+        <span class="name">中心极限定理</span>
+        <span class="tag">定理</span>
+      </div>
+      <div class="stats-keyword">🎯 大量独立随机变量叠加，趋向钟形</div>
+      <div class="stats-body">无论原始数据是什么分布，大样本的样本均值趋近正态分布。</div>
+      <div class="stats-pitfall">⚠️ 公考坑点：不要和正态分布本身概念混淆</div>
+    </div>
+  </section>
+
+  <!-- Section 4: 正态分布详卡 -->
+  <section class="section" id="sec4">
+    <h2 class="section-title">四、正态分布 + 中心极限定理 <span class="count">背诵卡片</span></h2>
+
+    <div class="norm-card">
+      <div class="norm-title">📐 正态分布（高斯分布）</div>
+      <div class="norm-formula">f(x) = (1 / σ√(2π)) · e<sup>−(x−μ)²/(2σ²)</sup></div>
+      <div class="norm-desc">
+        <b>提出：</b>棣莫弗最早推导，高斯推广使用<br>
+        <b>核心特征：</b>对称钟形，中间数据最多，越往两端数量越少
+      </div>
+      <div class="norm-bars-title">📊 68-95-99.7 法则（μ 为均值，σ 为标准差）</div>
+      <div class="norm-bars">
+        <div class="norm-bar-row">
+          <span class="lbl">μ ± 1σ</span>
+          <div class="bar-wrap"><div class="bar b68">68%</div></div>
+        </div>
+        <div class="norm-bar-row">
+          <span class="lbl">μ ± 2σ</span>
+          <div class="bar-wrap"><div class="bar b95">95%</div></div>
+        </div>
+        <div class="norm-bar-row">
+          <span class="lbl">μ ± 3σ</span>
+          <div class="bar-wrap"><div class="bar b997">99.7%</div></div>
+        </div>
+      </div>
+      <div class="example-line">
+        💭 <b>例子：</b>成年人身高、大规模统考成绩、实验测量误差
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>整理日期：2026-09-16 · 公考类比&常识 · 行测心理学效应与统计效应</p>
+  </footer>
+
+</main>
+
+</body>
+</html>
