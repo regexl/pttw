@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测常识 - 物理化学基础</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f7f5f0;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --ink-soft:#4b5563;
+  --muted:#6b7280;
+  --line:#e5e1d8;
+  --line-soft:#f1ede4;
+  --accent:#b45309;
+  --accent-soft:#fef3c7;
+
+  /* 6 主题色 */
+  --mech:#b45309;        /* 力学 - 橙 */
+  --mech-soft:#fef3c7;
+  --heat:#b91c1c;        /* 热学 - 红 */
+  --heat-soft:#fee2e2;
+  --opt:#1d4ed8;         /* 光学 - 蓝 */
+  --opt-soft:#dbeafe;
+  --snd:#7c3aed;         /* 声音 - 紫 */
+  --snd-soft:#ede9fe;
+  --em:#0e7490;          /* 电磁 - 青 */
+  --em-soft:#cffafe;
+  --chem:#15803d;        /* 化学 - 绿 */
+  --chem-soft:#dcfce7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:15px;
+  padding-bottom:60px;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(247,245,240,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;gap:16px;font-size:14px}
+.brand{color:var(--accent);text-decoration:none;font-weight:600;font-family:'Noto Serif SC',serif;white-space:nowrap}
+.brand:hover{text-decoration:underline}
+.brand-sub{color:var(--muted);font-size:13px;font-family:'Noto Serif SC',serif}
+
+.container{max-width:880px;margin:0 auto;padding:36px 24px 0}
+.hero{text-align:center;margin-bottom:24px}
+.hero h1{font-family:'Noto Serif SC',serif;font-size:32px;font-weight:700;color:var(--accent);margin-bottom:10px;letter-spacing:0.02em}
+.hero .lead{color:var(--ink-soft);font-size:15px;max-width:640px;margin:0 auto}
+.hero-note{margin-top:16px;background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 16px;border-radius:6px;font-size:14px;color:var(--ink);text-align:left;max-width:720px;margin-left:auto;margin-right:auto}
+.hero-note b{color:var(--accent)}
+
+.toc{position:sticky;top:48px;z-index:90;background:rgba(247,245,240,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:0 0 28px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:13px}
+.toc a{color:var(--ink-soft);text-decoration:none;padding:4px 10px;border-radius:4px;font-weight:500;transition:all .15s}
+.toc a:hover{background:var(--accent-soft);color:var(--accent)}
+
+.section{margin-bottom:40px}
+.section-title{font-family:'Noto Serif SC',serif;font-size:24px;font-weight:700;color:var(--accent);padding-bottom:8px;border-bottom:2px solid var(--accent);margin-bottom:18px;display:flex;align-items:baseline;gap:10px}
+.section-title.mech{color:var(--mech);border-color:var(--mech)}
+.section-title.heat{color:var(--heat);border-color:var(--heat)}
+.section-title.opt{color:var(--opt);border-color:var(--opt)}
+.section-title.snd{color:var(--snd);border-color:var(--snd)}
+.section-title.em{color:var(--em);border-color:var(--em)}
+.section-title.chem{color:var(--chem);border-color:var(--chem)}
+.section-title .count{font-size:14px;color:var(--muted);font-weight:400;font-family:'Noto Sans SC',sans-serif}
+
+/* Concept card (通用 6 主题) */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:12px}
+.concept-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-left:4px solid var(--accent);
+  border-radius:8px;
+  padding:12px 16px;
+  transition:box-shadow .15s;
+}
+.concept-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.concept-card.mech{border-left-color:var(--mech)}
+.concept-card.heat{border-left-color:var(--heat)}
+.concept-card.opt{border-left-color:var(--opt)}
+.concept-card.snd{border-left-color:var(--snd)}
+.concept-card.em{border-left-color:var(--em)}
+.concept-card.chem{border-left-color:var(--chem)}
+
+.concept-head{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.concept-head .num{font-family:'Noto Serif SC',serif;font-weight:700;font-size:14px;color:var(--accent);min-width:18px}
+.concept-card.mech .concept-head .num{color:var(--mech)}
+.concept-card.heat .concept-head .num{color:var(--heat)}
+.concept-card.opt .concept-head .num{color:var(--opt)}
+.concept-card.snd .concept-head .num{color:var(--snd)}
+.concept-card.em .concept-head .num{color:var(--em)}
+.concept-card.chem .concept-head .num{color:var(--chem)}
+.concept-head .name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:16px;color:var(--ink);flex:1;min-width:0}
+.concept-head .tag{font-size:11px;padding:1px 6px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.concept-card.mech .concept-head .tag{background:var(--mech-soft);color:var(--mech)}
+.concept-card.heat .concept-head .tag{background:var(--heat-soft);color:var(--heat)}
+.concept-card.opt .concept-head .tag{background:var(--opt-soft);color:var(--opt)}
+.concept-card.snd .concept-head .tag{background:var(--snd-soft);color:var(--snd)}
+.concept-card.em .concept-head .tag{background:var(--em-soft);color:var(--em)}
+.concept-card.chem .concept-head .tag{background:var(--chem-soft);color:var(--chem)}
+
+.concept-essence{font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:6px}
+.concept-essence b{color:var(--ink);font-weight:700}
+.concept-card.mech .concept-essence b{color:var(--mech)}
+.concept-card.heat .concept-essence b{color:var(--heat)}
+
+.concept-examples{font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:6px}
+.concept-examples::before{content:'💭 ';font-size:13px}
+.concept-pitfall{font-size:12.5px;color:var(--heat);background:var(--heat-soft);padding:3px 8px;border-radius:3px;display:inline-block;margin-top:2px}
+.concept-pitfall::before{content:'⚠️ ';}
+
+/* Formula box */
+.formula-box{
+  background:var(--line-soft);
+  padding:10px 14px;
+  border-radius:6px;
+  font-family:'JetBrains Mono','Courier New',monospace;
+  font-size:13px;
+  text-align:center;
+  margin:6px 0;
+  color:var(--ink);
+}
+
+/* ============ 杠杆 3 类 ============ */
+.lever-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.lever-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:14px;
+  text-align:center;
+}
+.lever-card .lever-name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:15px;margin-bottom:4px}
+.lever-card.save .lever-name{color:var(--mech)}
+.lever-card.cost .lever-name{color:var(--heat)}
+.lever-card.equal .lever-name{color:var(--opt)}
+.lever-card .lever-tag{font-size:12px;color:var(--muted);margin-bottom:6px}
+.lever-card .lever-eg{font-size:13px;color:var(--ink);line-height:1.6}
+.lever-card .lever-formula{
+  display:inline-block;background:var(--line-soft);
+  padding:2px 8px;border-radius:3px;
+  font-family:'JetBrains Mono','Courier New',monospace;font-size:12px;
+  margin-top:6px;color:var(--ink-soft);
+}
+
+/* ============ 6 种物态变化图 ============ */
+.phase-diagram{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:20px;
+  margin:14px 0;
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  grid-template-rows:repeat(3,1fr);
+  gap:8px;
+  align-items:center;
+  text-align:center;
+}
+.phase-state{
+  background:var(--line-soft);
+  padding:18px 8px;
+  border-radius:8px;
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  font-size:18px;
+  color:var(--ink);
+}
+.phase-arrow{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:11px;
+  color:var(--ink-soft);
+  gap:2px;
+}
+.phase-arrow .label{font-family:'Noto Serif SC',serif;font-weight:600;color:var(--ink);font-size:12px}
+.phase-arrow .heat-tag{
+  font-size:10px;
+  padding:1px 5px;
+  border-radius:3px;
+  font-weight:600;
+}
+.phase-arrow.absorb .heat-tag{background:var(--heat-soft);color:var(--heat)}
+.phase-arrow.release .heat-tag{background:var(--opt-soft);color:var(--opt)}
+.phase-arrow .arrow-icon{font-size:18px;color:var(--heat)}
+.phase-arrow.down .arrow-icon{color:var(--opt);transform:rotate(180deg)}
+
+.phase-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  font-size:13px;
+  color:var(--ink-soft);
+  margin-top:10px;
+}
+.phase-legend .item{display:inline-flex;align-items:center;gap:4px}
+.phase-legend .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.phase-legend .dot.absorb{background:var(--heat-soft);border:1px solid var(--heat)}
+.phase-legend .dot.release{background:var(--opt-soft);border:1px solid var(--opt)}
+
+/* ============ 透镜 vs 面镜 2×2 ============ */
+.mirror-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:6px}
+.mirror-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:14px;
+}
+.mirror-card .m-name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:15px;margin-bottom:2px}
+.mirror-card.lens-convex .m-name{color:var(--opt)}
+.mirror-card.lens-concave .m-name{color:var(--heat)}
+.mirror-card.mirror-convex .m-name{color:var(--snd)}
+.mirror-card.mirror-concave .m-name{color:var(--em)}
+.mirror-card .m-tag{font-size:12px;color:var(--muted);margin-bottom:6px}
+.mirror-card .m-feature{font-size:13.5px;color:var(--ink);line-height:1.7;margin-bottom:4px}
+.mirror-card .m-feature b{font-weight:700;color:var(--ink)}
+.mirror-card .m-eg{font-size:13px;color:var(--ink-soft)}
+.mirror-card .m-eg::before{content:'例：';color:var(--accent);font-weight:600}
+
+/* ============ Heat transfer methods ============ */
+.heat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.heat-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:14px;
+  text-align:center;
+  border-top:3px solid var(--heat);
+}
+.heat-card .h-name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:15px;color:var(--heat);margin-bottom:4px}
+.heat-card .h-tag{font-size:12px;color:var(--muted);margin-bottom:6px}
+.heat-card .h-eg{font-size:13px;color:var(--ink);line-height:1.6}
+
+/* Page footer */
+.page-footer{text-align:center;margin-top:48px;padding:24px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+
+@media (max-width:700px){
+  .concept-grid{grid-template-columns:1fr}
+  .lever-grid{grid-template-columns:1fr}
+  .mirror-grid{grid-template-columns:1fr}
+  .heat-grid{grid-template-columns:1fr}
+  .phase-diagram{grid-template-columns:1fr;gap:6px}
+  .phase-diagram .phase-state{padding:10px}
+  .container{padding:24px 16px 0}
+  .hero h1{font-size:24px}
+  .section-title{font-size:20px}
+  .toc{font-size:12px;padding:6px 8px}
+}
+
+@media print{
+  body{background:white;color:black;font-size:11px;padding-bottom:0}
+  .topbar,.toc{display:none}
+  .concept-card,.lever-card,.mirror-card,.heat-card,.phase-diagram{box-shadow:none;page-break-inside:avoid;border:1px solid #999}
+  .concept-card .concept-essence,.concept-examples{color:#222}
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes" class="brand">← 返回学习笔记</a>
+  <span class="brand-sub">行测常识 - 物理化学基础</span>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>物理化学基础</h1>
+    <p class="lead">力学 · 热学 · 光学补充 · 声音补充 · 电磁生活 · 生活化学</p>
+    <div class="hero-note">
+      <b>📌 重点：</b><b>力学 &gt; 物态变化（热学）&gt; 简单机械 &gt; 热传递 &gt; 电磁小常识 &gt; 少量化学</b>，选择题最爱考现象匹配，坑点很多。
+    </div>
+  </section>
+
+  <nav class="toc">
+    <a href="#mech">一、力学（7）</a>
+    <a href="#heat">二、热学</a>
+    <a href="#opt">三、光学补充</a>
+    <a href="#snd">四、声音补充</a>
+    <a href="#em">五、电磁生活</a>
+    <a href="#chem">六、生活化学</a>
+  </nav>
+
+  <!-- ============ 一、力学 ============ -->
+  <section class="section" id="mech">
+    <h2 class="section-title mech">一、力学 <span class="count">7 个核心概念 · 最高频</span></h2>
+
+    <div class="concept-grid">
+
+      <div class="concept-card mech">
+        <div class="concept-head"><span class="num">1</span><span class="name">惯性（牛顿第一定律）</span><span class="tag">力学</span></div>
+        <div class="concept-essence">物体保持原有运动状态的性质。<b>惯性只和质量有关</b>，不存在"惯性力"。</div>
+        <div class="concept-examples">刹车人前倾 / 拍打衣服除尘 / 甩雨伞水珠 / 跳远助跑 / 车熄火继续滑行</div>
+        <div class="concept-pitfall">速度大 ≠ 惯性大</div>
+      </div>
+
+      <div class="concept-card mech">
+        <div class="concept-head"><span class="num">2</span><span class="name">牛顿第三定律（作用力与反作用力）</span><span class="tag">力学</span></div>
+        <div class="concept-essence">大小相等、方向相反、同时产生消失，作用<b>两个物体</b>之间。</div>
+        <div class="concept-examples">火箭喷气升空 / 划船 / 走路蹬地 / 推墙自己往后退</div>
+      </div>
+
+      <div class="concept-card mech" style="grid-column:1 / -1">
+        <div class="concept-head"><span class="num">3</span><span class="name">压强</span><span class="tag">力学 · 超级高频</span></div>
+        <div class="formula-box">P = F / S</div>
+        <div class="concept-essence"><b>增大压强</b>（减小受力面积）：菜刀磨薄、钉子尖、注射器针头；<b>减小压强</b>（增大受力面积）：书包宽肩带、坦克履带、铁轨枕木。</div>
+        <div class="concept-essence"><b>大气压</b>：吸管喝水、吸盘挂钩、钢笔吸墨水。<b>高压锅</b>：气压越高，沸点越高（<b>高原水不到 100℃ 沸腾</b>）。</div>
+        <div class="concept-essence"><b>伯努利原理（流体压强）</b>：<b>流速越大，压强越小</b>。飞机升力、火车站安全线、两张纸中间吹气互相靠拢。</div>
+      </div>
+
+      <div class="concept-card mech">
+        <div class="concept-head"><span class="num">4</span><span class="name">浮力（阿基米德原理）</span><span class="tag">力学</span></div>
+        <div class="concept-essence"><b>浮力 = 排开液体重力</b></div>
+        <div class="concept-examples">轮船：空心增大排开水体积，漂浮，浮力 = 重力</div>
+        <div class="concept-pitfall"><b>潜水艇：体积不变、浮力不变</b>；靠改变自身重力（注水/排水）上浮下潜（极易挖坑）</div>
+        <div class="concept-examples">热气球：加热空气 → 内部空气密度变小 → 浮力 &gt; 重力升空</div>
+      </div>
+
+      <div class="concept-card mech">
+        <div class="concept-head"><span class="num">5</span><span class="name">摩擦力</span><span class="tag">力学</span></div>
+        <div class="concept-essence"><b>增大</b>：鞋底轮胎花纹、体操镁粉、刹车；<b>减小</b>：润滑油、轴承滚轮、磁悬浮。</div>
+      </div>
+
+      <div class="concept-card mech" style="grid-column:1 / -1">
+        <div class="concept-head"><span class="num">6</span><span class="name">杠杆原理（三类杠杆）</span><span class="tag">力学</span></div>
+        <div class="lever-grid">
+          <div class="lever-card save">
+            <div class="lever-name">✅ 省力杠杆</div>
+            <div class="lever-tag">动力臂 &gt; 阻力臂</div>
+            <div class="lever-eg">撬棍、扳手、开瓶器、钢丝钳</div>
+          </div>
+          <div class="lever-card cost">
+            <div class="lever-name">❌ 费力杠杆</div>
+            <div class="lever-tag">动力臂 &lt; 阻力臂（省距离）</div>
+            <div class="lever-eg">鱼竿、镊子、筷子、船桨、理发剪刀</div>
+          </div>
+          <div class="lever-card equal">
+            <div class="lever-name">⚖️ 等臂杠杆</div>
+            <div class="lever-tag">动力臂 = 阻力臂</div>
+            <div class="lever-eg">天平、定滑轮（旗杆顶部，只改方向不省力）</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-card mech">
+        <div class="concept-head"><span class="num">7</span><span class="name">液体表面张力</span><span class="tag">力学</span></div>
+        <div class="concept-essence">水表面分子拉力，让液面<b>收缩</b>。</div>
+        <div class="concept-examples">荷叶水珠呈球形 / 硬币浮水面 / 水黾在水面行走</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 二、热学 ============ -->
+  <section class="section" id="heat">
+    <h2 class="section-title heat">二、热学 · 物态变化 <span class="count">6 种必考吸放热</span></h2>
+
+    <div class="hero-note" style="margin-bottom:12px">
+      <b>记忆口诀：</b>固态 ⇄ 液态 ⇄ 气态之间转化，<b>吸热向左（向上）</b>、<b>放热向右（向下）</b>。
+    </div>
+
+    <!-- 6 种物态变化 流向图 -->
+    <div class="phase-diagram">
+      <div class="phase-state">① 熔化<br><small style="font-weight:400;font-size:11px;color:var(--muted)">固→液 · 吸热</small></div>
+      <div class="phase-arrow absorb"><span class="arrow-icon">→</span><span class="label">①吸热</span></div>
+      <div class="phase-state">② 凝固<br><small style="font-weight:400;font-size:11px;color:var(--muted)">液→固 · 放热</small></div>
+
+      <div class="phase-state">③ 汽化<br><small style="font-weight:400;font-size:11px;color:var(--muted)">液→气 · 吸热</small></div>
+      <div class="phase-arrow absorb"><span class="arrow-icon">→</span><span class="label">③吸热</span></div>
+      <div class="phase-state">④ 液化<br><small style="font-weight:400;font-size:11px;color:var(--muted)">气→液 · 放热</small></div>
+
+      <div class="phase-state">⑤ 升华<br><small style="font-weight:400;font-size:11px;color:var(--muted)">固→气 · 吸热</small></div>
+      <div class="phase-arrow absorb"><span class="arrow-icon">→</span><span class="label">⑤吸热</span></div>
+      <div class="phase-state">⑥ 凝华<br><small style="font-weight:400;font-size:11px;color:var(--muted)">气→固 · 放热</small></div>
+    </div>
+
+    <div class="phase-legend">
+      <span class="item"><span class="dot absorb"></span>吸热过程：①②④⑤ 中标"吸热"项</span>
+      <span class="item"><span class="dot release"></span>放热过程：②④⑥</span>
+    </div>
+
+    <!-- 6 种变化分别举例 -->
+    <div class="concept-grid" style="margin-top:14px">
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">1</span><span class="name">熔化（固→液，吸热）</span></div>
+        <div class="concept-essence">冰化水</div>
+        <div class="concept-pitfall">化雪冷（<b>熔化吸热</b>）</div>
+      </div>
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">2</span><span class="name">凝固（液→固，放热）</span></div>
+        <div class="concept-essence">水结冰</div>
+      </div>
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">3</span><span class="name">汽化（液→气，吸热）</span></div>
+        <div class="concept-essence">蒸发、沸腾；湿衣服晾干</div>
+      </div>
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">4</span><span class="name">液化（气→液，放热）</span></div>
+        <div class="concept-essence">雾、露、夏天水管"出汗"、冬天哈出白气</div>
+      </div>
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">5</span><span class="name">升华（固→气，吸热）</span></div>
+        <div class="concept-essence">干冰人工降雨、樟脑丸变小、钨丝灯灯丝变细</div>
+      </div>
+
+      <div class="concept-card heat">
+        <div class="concept-head"><span class="num">6</span><span class="name">凝华（气→固，放热）</span></div>
+        <div class="concept-essence">霜、窗户冰花、雾凇</div>
+      </div>
+
+    </div>
+
+    <!-- 热传递 3 种方式 -->
+    <h3 style="font-family:'Noto Serif SC',serif;font-size:18px;color:var(--heat);margin:20px 0 10px">热传递 3 种方式</h3>
+    <div class="heat-grid">
+      <div class="heat-card">
+        <div class="h-name">🔥 热传导</div>
+        <div class="h-tag">接触传热</div>
+        <div class="h-eg">金属传热、热水袋捂手</div>
+      </div>
+      <div class="heat-card">
+        <div class="h-name">💨 热对流</div>
+        <div class="h-tag">流体流动传热</div>
+        <div class="h-eg">暖气片、烧水</div>
+      </div>
+      <div class="heat-card">
+        <div class="h-name">☀️ 热辐射</div>
+        <div class="h-tag"><b>不需要介质</b></div>
+        <div class="h-eg">太阳传热到地球</div>
+      </div>
+    </div>
+
+    <!-- 热胀冷缩 -->
+    <div class="concept-card heat" style="margin-top:14px">
+      <div class="concept-head"><span class="num">📌</span><span class="name">热胀冷缩</span><span class="tag">补充</span></div>
+      <div class="concept-essence">绝大多数物体热胀冷缩；<b>水 4℃ 以下反常膨胀</b>（结冰体积变大）。</div>
+      <div class="concept-examples">电线夏天松冬天紧、铁轨留缝隙</div>
+    </div>
+  </section>
+
+  <!-- ============ 三、光学补充 ============ -->
+  <section class="section" id="opt">
+    <h2 class="section-title opt">三、光学补充 <span class="count">3 个易混区分</span></h2>
+
+    <div class="concept-card opt" style="margin-bottom:12px">
+      <div class="concept-head"><span class="num">📌</span><span class="name">光沿直线传播</span><span class="tag">基础</span></div>
+      <div class="concept-essence">影子、小孔成像、日食月食、排队看齐、坐井观天、皮影戏</div>
+      <div class="concept-pitfall">小孔成像：<b>倒立实像，和小孔形状无关</b></div>
+    </div>
+
+    <h3 style="font-family:'Noto Serif SC',serif;font-size:18px;color:var(--opt);margin:14px 0 10px">透镜 vs 面镜（坑点）</h3>
+
+    <div class="mirror-grid">
+      <div class="mirror-card lens-convex">
+        <div class="m-name">🔍 凸透镜（会聚）</div>
+        <div class="m-tag">折射规律</div>
+        <div class="m-feature"><b>会聚光线</b></div>
+        <div class="m-eg">放大镜、老花镜、相机镜头</div>
+      </div>
+      <div class="mirror-card lens-concave">
+        <div class="m-name">👓 凹透镜（发散）</div>
+        <div class="m-tag">折射规律</div>
+        <div class="m-feature"><b>发散光线</b></div>
+        <div class="m-eg"><b>近视眼镜</b></div>
+      </div>
+      <div class="mirror-card mirror-convex">
+        <div class="m-name">🚗 凸面镜</div>
+        <div class="m-tag"><b>反射</b>规律（非透镜）</div>
+        <div class="m-feature"><b>扩大视野</b></div>
+        <div class="m-eg">汽车后视镜、道路转角镜</div>
+      </div>
+      <div class="mirror-card mirror-concave">
+        <div class="m-name">🔦 凹面镜</div>
+        <div class="m-tag"><b>反射</b>规律（非透镜）</div>
+        <div class="m-feature"><b>聚光</b></div>
+        <div class="m-eg">太阳灶、手电筒聚光</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 四、声音补充 ============ -->
+  <section class="section" id="snd">
+    <h2 class="section-title snd">四、声音补充 <span class="count">信息 + 能量</span></h2>
+
+    <div class="concept-card snd">
+      <div class="concept-head"><span class="num">🔊</span><span class="name">声音的双重作用</span><span class="tag">延伸</span></div>
+      <div class="concept-essence"><b>声音既可传递信息，也可传递能量</b>。</div>
+      <div class="concept-examples"><b>传递信息：</b>B 超、声呐、听声音辨故障<br><b>传递能量：</b>超声波清洗眼镜、超声波碎石</div>
+    </div>
+  </section>
+
+  <!-- ============ 五、电磁生活 ============ -->
+  <section class="section" id="em">
+    <h2 class="section-title em">五、电磁生活 <span class="count">偶尔考</span></h2>
+
+    <div class="concept-grid">
+
+      <div class="concept-card em">
+        <div class="concept-head"><span class="num">1</span><span class="name">红外线</span><span class="tag">不可见光</span></div>
+        <div class="concept-essence">热效应</div>
+        <div class="concept-examples">红外测温、夜视仪、遥控器</div>
+      </div>
+
+      <div class="concept-card em">
+        <div class="concept-head"><span class="num">2</span><span class="name">紫外线</span><span class="tag">不可见光</span></div>
+        <div class="concept-essence">杀菌、验钞</div>
+        <div class="concept-pitfall">过量伤皮肤</div>
+      </div>
+
+      <div class="concept-card em">
+        <div class="concept-head"><span class="num">3</span><span class="name">微波炉</span><span class="tag">高频电磁波</span></div>
+        <div class="concept-essence">微波使水分子振动发热；<b>不是红外线加热</b></div>
+      </div>
+
+      <div class="concept-card em">
+        <div class="concept-head"><span class="num">4</span><span class="name">静电</span><span class="tag">起电</span></div>
+        <div class="concept-essence">摩擦起电</div>
+        <div class="concept-examples">加油站防静电</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 六、生活化学 ============ -->
+  <section class="section" id="chem">
+    <h2 class="section-title chem">六、生活化学 <span class="count">常混在物理题里考</span></h2>
+
+    <div class="concept-grid">
+
+      <div class="concept-card chem">
+        <div class="concept-head"><span class="num">1</span><span class="name">燃烧三要素</span><span class="tag">化学</span></div>
+        <div class="concept-essence"><b>可燃物 + 氧气 + 温度达着火点</b></div>
+        <div class="concept-pitfall">油锅起火 <b>盖锅盖</b>隔绝氧气，<b>不能泼水</b></div>
+      </div>
+
+      <div class="concept-card chem">
+        <div class="concept-head"><span class="num">2</span><span class="name">生石灰（CaO）</span><span class="tag">化学</span></div>
+        <div class="concept-essence">加水<b>放热</b>（干燥剂）</div>
+      </div>
+
+      <div class="concept-card chem">
+        <div class="concept-head"><span class="num">3</span><span class="name">铁锈</span><span class="tag">化学</span></div>
+        <div class="concept-essence">铁 + 氧气 + 水 → 氧化</div>
+      </div>
+
+      <div class="concept-card chem">
+        <div class="concept-head"><span class="num">4</span><span class="name">水垢</span><span class="tag">化学</span></div>
+        <div class="concept-essence">碳酸钙（CaCO₃），可用<b>醋</b>除去</div>
+      </div>
+
+      <div class="concept-card chem" style="grid-column:1 / -1">
+        <div class="concept-head"><span class="num">5</span><span class="name">真金不怕火炼</span><span class="tag">化学性质稳定</span></div>
+        <div class="concept-essence">黄金化学性质稳定，<b>高温不易氧化</b>。这句成语本身是事实陈述，常作为诗词/常识考点。</div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>整理日期：2026-09-17 · 行测常识 · 物理化学基础</p>
+  </footer>
+
+</main>
+
+</body>
+</html>
