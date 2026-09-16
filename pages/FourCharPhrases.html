@@ -206,6 +206,160 @@
     margin-top: 6px;
   }
 
+  /* ===== 创造/构建/创建 实词辨析板块 ===== */
+  .collo-intro {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 16px 0 22px;
+  }
+  .collo-card {
+    background: #f8fafc;
+    border: 1px solid #e8edf3;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .collo-card:nth-child(1) { border-left: 3px solid #f39c12; }
+  .collo-card:nth-child(2) { border-left: 3px solid #2980b9; }
+  .collo-card:nth-child(3) { border-left: 3px solid #27ae60; }
+  .collo-key {
+    display: inline-block;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 2px 10px;
+    border-radius: 4px;
+    color: white;
+    align-self: flex-start;
+    letter-spacing: 0.05em;
+  }
+  .key-chuangzao { background: #f39c12; }
+  .key-goujian { background: #2980b9; }
+  .key-chuangjian { background: #27ae60; }
+
+  .collo-group { margin-top: 18px; }
+  .collo-group-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 14px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #dcdfe6;
+  }
+  .collo-group-title.key-chuangzao { color: #b7650c; }
+  .collo-group-title.key-goujian { color: #1a5276; }
+  .collo-group-title.key-chuangjian { color: #1e7a3e; }
+
+  .collo-tag {
+    display: inline-block;
+    padding: 7px 10px;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: default;
+    user-select: none;
+    color: #2c3e50;
+    background: #ecf0f1;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .collo-tag:hover {
+    background: #fff7ed;
+    border-color: #f39c12;
+  }
+
+  .collo-pitfalls { margin-top: 22px; }
+  .collo-pitfall {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 10px;
+    padding: 10px 12px;
+    background: #fdf6f0;
+    border-left: 3px solid #f39c12;
+    border-radius: 4px;
+    font-size: 13.5px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+  .collo-pitfall s {
+    color: #c0392b;
+    text-decoration: line-through;
+    text-decoration-color: #c0392b;
+    margin: 0 2px;
+  }
+  .collo-pitfall-suffix { color: #606266; }
+
+  .collo-quiz { margin-top: 22px; }
+  .collo-quiz-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 8px 0 0;
+    counter-reset: quiz-counter;
+  }
+  .collo-quiz-list li {
+    counter-increment: quiz-counter;
+    padding: 10px 14px 10px 44px;
+    background: #f8fafc;
+    border: 1px solid #e8edf3;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #2c3e50;
+    position: relative;
+  }
+  .collo-quiz-list li::before {
+    content: counter(quiz-counter);
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 22px;
+    height: 22px;
+    background: #1a5276;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .collo-quiz-list li details {
+    display: inline-block;
+    margin-left: 6px;
+  }
+  .collo-quiz-list li summary {
+    display: inline-block;
+    cursor: pointer;
+    color: #2980b9;
+    font-size: 13px;
+    font-weight: 500;
+    list-style: none;
+    padding: 2px 10px;
+    background: #fff;
+    border: 1px solid #2980b9;
+    border-radius: 4px;
+    user-select: none;
+  }
+  .collo-quiz-list li summary::-webkit-details-marker { display: none; }
+  .collo-quiz-list li summary:hover { background: #2980b9; color: white; }
+  .collo-quiz-list li .quiz-a {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 8px;
+    font-weight: 600;
+    border-radius: 3px;
+    color: white;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
   @media (max-width: 600px) {
     .header h1 { font-size: 22px; }
     .word-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 6px; }
@@ -245,6 +399,175 @@
   <div class="koujue-box">
     <h3>📖 配套速记口诀</h3>
     <p>名词短语多为事物，机制体系优势载体；<br>动宾短语重在行动，夯实补齐激发统筹。</p>
+  </div>
+
+  <!-- 创造/构建/创建 实词辨析 -->
+  <div class="section">
+    <div class="section-title">三、言语行测高频搭配 · 创造 / 构建 / 创建（100 组）</div>
+    <div class="section-desc">实词辨析 + 适用对象 + 易混坑 + 快速自测 · 直接用于逻辑填空 / 申论</div>
+
+    <div class="collo-intro">
+      <div class="collo-card">
+        <span class="collo-key key-chuangzao">创造</span>
+        <span>侧重从无到有产生新事物、成果、价值；多搭配抽象成果、业绩、奇迹。</span>
+      </div>
+      <div class="collo-card">
+        <span class="collo-key key-goujian">构建</span>
+        <span>侧重搭建框架、体系、格局；搭配抽象结构、制度、关系。</span>
+      </div>
+      <div class="collo-card">
+        <span class="collo-key key-chuangjian">创建</span>
+        <span>侧重建立实体组织、机构、平台；搭配单位、团体、实体载体。</span>
+      </div>
+    </div>
+
+    <div class="collo-group">
+      <div class="collo-group-title key-chuangzao">① 创造（34 组）— 抽象成果 · 业绩 · 奇迹</div>
+      <div class="word-grid">
+        <span class="collo-tag">创造成就</span>
+        <span class="collo-tag">创造奇迹</span>
+        <span class="collo-tag">创造价值</span>
+        <span class="collo-tag">创造财富</span>
+        <span class="collo-tag">创造效益</span>
+        <span class="collo-tag">创造机遇</span>
+        <span class="collo-tag">创造机会</span>
+        <span class="collo-tag">创造条件</span>
+        <span class="collo-tag">创造环境</span>
+        <span class="collo-tag">创造氛围</span>
+        <span class="collo-tag">创造空间</span>
+        <span class="collo-tag">创造活力</span>
+        <span class="collo-tag">创造动力</span>
+        <span class="collo-tag">创造红利</span>
+        <span class="collo-tag">创造增长点</span>
+        <span class="collo-tag">创造新供给</span>
+        <span class="collo-tag">创造新需求</span>
+        <span class="collo-tag">创造文明</span>
+        <span class="collo-tag">创造文化</span>
+        <span class="collo-tag">创造历史</span>
+        <span class="collo-tag">创造未来</span>
+        <span class="collo-tag">创造辉煌</span>
+        <span class="collo-tag">创造佳绩</span>
+        <span class="collo-tag">创造纪录</span>
+        <span class="collo-tag">创造品牌</span>
+        <span class="collo-tag">创造特色</span>
+        <span class="collo-tag">创造风格</span>
+        <span class="collo-tag">创造艺术</span>
+        <span class="collo-tag">创造理论</span>
+        <span class="collo-tag">创造思想</span>
+        <span class="collo-tag">创造模式</span>
+        <span class="collo-tag">创造业态</span>
+        <span class="collo-tag">创造就业岗位</span>
+        <span class="collo-tag">创造美好生活</span>
+      </div>
+    </div>
+
+    <div class="collo-group">
+      <div class="collo-group-title key-goujian">② 构建（33 组）— 框架 · 体系 · 格局</div>
+      <div class="word-grid">
+        <span class="collo-tag">构建体系</span>
+        <span class="collo-tag">构建机制</span>
+        <span class="collo-tag">构建制度</span>
+        <span class="collo-tag">构建格局</span>
+        <span class="collo-tag">构建框架</span>
+        <span class="collo-tag">构建架构</span>
+        <span class="collo-tag">构建模式</span>
+        <span class="collo-tag">构建渠道</span>
+        <span class="collo-tag">构建平台</span>
+        <span class="collo-tag">构建网络</span>
+        <span class="collo-tag">构建链条</span>
+        <span class="collo-tag">构建产业链</span>
+        <span class="collo-tag">构建生态圈</span>
+        <span class="collo-tag">构建共同体</span>
+        <span class="collo-tag">构建关系</span>
+        <span class="collo-tag">构建联系</span>
+        <span class="collo-tag">构建纽带</span>
+        <span class="collo-tag">构建桥梁</span>
+        <span class="collo-tag">构建秩序</span>
+        <span class="collo-tag">构建规则</span>
+        <span class="collo-tag">构建标准</span>
+        <span class="collo-tag">构建话语体系</span>
+        <span class="collo-tag">构建治理体系</span>
+        <span class="collo-tag">构建责任体系</span>
+        <span class="collo-tag">构建服务体系</span>
+        <span class="collo-tag">构建保障体系</span>
+        <span class="collo-tag">构建长效机制</span>
+        <span class="collo-tag">构建预警机制</span>
+        <span class="collo-tag">构建风险防控体系</span>
+        <span class="collo-tag">构建城乡融合格局</span>
+        <span class="collo-tag">构建发展新格局</span>
+        <span class="collo-tag">构建信任体系</span>
+        <span class="collo-tag">构建精神家园</span>
+      </div>
+    </div>
+
+    <div class="collo-group">
+      <div class="collo-group-title key-chuangjian">③ 创建（33 组）— 实体组织 · 机构 · 平台</div>
+      <div class="word-grid">
+        <span class="collo-tag">创建组织</span>
+        <span class="collo-tag">创建机构</span>
+        <span class="collo-tag">创建单位</span>
+        <span class="collo-tag">创建企业</span>
+        <span class="collo-tag">创建社团</span>
+        <span class="collo-tag">创建支部</span>
+        <span class="collo-tag">创建党组织</span>
+        <span class="collo-tag">创建示范区</span>
+        <span class="collo-tag">创建试验区</span>
+        <span class="collo-tag">创建先行区</span>
+        <span class="collo-tag">创建试点</span>
+        <span class="collo-tag">创建基地</span>
+        <span class="collo-tag">创建园区</span>
+        <span class="collo-tag">创建景区</span>
+        <span class="collo-tag">创建城市</span>
+        <span class="collo-tag">创建文明城市</span>
+        <span class="collo-tag">创建卫生城市</span>
+        <span class="collo-tag">创建美丽乡村</span>
+        <span class="collo-tag">创建样板</span>
+        <span class="collo-tag">创建品牌</span>
+        <span class="collo-tag">创建工程</span>
+        <span class="collo-tag">创建项目</span>
+        <span class="collo-tag">创建阵地</span>
+        <span class="collo-tag">创建窗口</span>
+        <span class="collo-tag">创建工作室</span>
+        <span class="collo-tag">创建实验室</span>
+        <span class="collo-tag">创建数据库</span>
+        <span class="collo-tag">创建档案库</span>
+        <span class="collo-tag">创建平台（实体载体）</span>
+        <span class="collo-tag">创建机制（较少，多为实体载体配套）</span>
+        <span class="collo-tag">创建特色小镇</span>
+        <span class="collo-tag">创建示范点</span>
+        <span class="collo-tag">创建标杆</span>
+      </div>
+    </div>
+
+    <div class="koujue-box" style="margin-top: 22px;">
+      <h3>🎯 行测辨析口诀（考场快速判断）</h3>
+      <p><strong>成果业绩用创造，框架体系用构建，组织实体用创建。</strong></p>
+    </div>
+
+    <div class="collo-pitfalls">
+      <div class="sub-title">⚠️ 易混辨析补充（言语高频坑）</div>
+      <div class="collo-pitfall">
+        <span class="collo-key key-chuangzao">创造</span>
+        <span><s>❌ 创造体系</s>　<s>❌ 创造组织</s>　<span class="collo-pitfall-suffix">不能搭配体系、机构</span></span>
+      </div>
+      <div class="collo-pitfall">
+        <span class="collo-key key-goujian">构建</span>
+        <span><s>❌ 构建企业</s>　<s>❌ 构建城市</s>　<span class="collo-pitfall-suffix">一般不搭配实体单位</span></span>
+      </div>
+      <div class="collo-pitfall">
+        <span class="collo-key key-chuangjian">创建</span>
+        <span><s>❌ 创建成就</s>　<s>❌ 创建奇迹</s>　<span class="collo-pitfall-suffix">极少搭配抽象成果</span></span>
+      </div>
+    </div>
+
+    <div class="collo-quiz">
+      <div class="sub-title">📝 快速自测小题目（点击展开答案）</div>
+      <ol class="collo-quiz-list">
+        <li>____ 新的发展格局（<details><summary>答案</summary><span class="quiz-a key-goujian">构建</span></details>）</li>
+        <li>____ 文明城市（<details><summary>答案</summary><span class="quiz-a key-chuangjian">创建</span></details>）</li>
+        <li>____ 经济奇迹（<details><summary>答案</summary><span class="quiz-a key-chuangzao">创造</span></details>）</li>
+      </ol>
+    </div>
   </div>
 
   <!-- 名词性短语 -->
