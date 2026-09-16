@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申论1000条四字规范词清单</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: #f5f7fa;
+    color: #2c3e50;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+    color: #fff;
+    padding: 40px 20px 30px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
+  .header p { font-size: 14px; opacity: 0.9; }
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    background: rgba(255,255,255,0.15);
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+  }
+  .stat-item b { font-size: 20px; margin-right: 4px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+  .toolbar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .search-box input:focus { border-color: #2980b9; }
+  .search-box::before {
+    content: "🔍";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 18px;
+    border: 1px solid #dcdfe6;
+    background: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s;
+    color: #606266;
+  }
+  .tab-btn:hover { border-color: #2980b9; color: #2980b9; }
+  .tab-btn.active {
+    background: #2980b9;
+    color: #fff;
+    border-color: #2980b9;
+  }
+  .copy-btn {
+    padding: 8px 18px;
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.3s;
+  }
+  .copy-btn:hover { background: #219a52; }
+
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a5276;
+    margin-bottom: 6px;
+    padding-left: 12px;
+    border-left: 4px solid #2980b9;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: #909399;
+    margin-bottom: 16px;
+    padding-left: 16px;
+  }
+  .sub-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 20px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #dcdfe6;
+  }
+  .word-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+  }
+  .word-tag {
+    background: #ecf0f1;
+    color: #2c3e50;
+    padding: 8px 4px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    border: 1px solid transparent;
+  }
+  .word-tag:hover {
+    background: #d5e8f5;
+    color: #1a5276;
+    transform: translateY(-1px);
+    border-color: #2980b9;
+  }
+  .word-tag.memorized {
+    background: #d4edda;
+    color: #155724;
+    border-color: #28a745;
+  }
+  .word-tag.hidden { display: none; }
+
+  .koujue-box {
+    background: linear-gradient(135deg, #fef9e7 0%, #fdebd0 100%);
+    border-left: 4px solid #f39c12;
+    padding: 20px 24px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .koujue-box h3 {
+    color: #d35400;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  .koujue-box p {
+    font-size: 15px;
+    color: #6e4c1e;
+    line-height: 2;
+    font-weight: 500;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #909399;
+    font-size: 13px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #27ae60, #2ecc71);
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .memo-info {
+    font-size: 12px;
+    color: #909399;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 22px; }
+    .word-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 6px; }
+    .word-tag { font-size: 13px; padding: 7px 2px; }
+    .section { padding: 16px; }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<div class="header">
+  <h1>申论1000条四字规范词清单</h1>
+  <p>名词性短语 + 动宾对策类 · 纯四字 · 可直接背诵</p>
+  <div class="stats">
+    <div class="stat-item"><b id="totalCount">1000</b>条总数</div>
+    <div class="stat-item"><b>500</b>条名词性</div>
+    <div class="stat-item"><b>500</b>条动宾对策</div>
+    <div class="stat-item"><b id="memoCount">0</b>条已标记</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索规范词，如：机制、治理、夯实...">
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-filter="all">全部</button>
+      <button class="tab-btn" data-filter="noun">名词性</button>
+      <button class="tab-btn" data-filter="verb">动宾对策</button>
+      <button class="tab-btn" data-filter="memo">已标记</button>
+    </div>
+    <button class="copy-btn" onclick="copyAll()">📋 复制全部</button>
+  </div>
+
+  <div class="koujue-box">
+    <h3>📖 配套速记口诀</h3>
+    <p>名词短语多为事物，机制体系优势载体；<br>动宾短语重在行动，夯实补齐激发统筹。</p>
+  </div>
+
+  <!-- 名词性短语 -->
+  <div class="section" id="nounSection">
+    <div class="section-title">一、名词性短语（500条）</div>
+    <div class="section-desc">概括、提炼、成果、现状，优先背诵 · 核心最后一字多为名词</div>
+    <div id="nounContent"></div>
+  </div>
+
+  <!-- 动宾对策类 -->
+  <div class="section" id="verbSection">
+    <div class="section-title">二、动宾/对策类短语（500条）</div>
+    <div class="section-desc">提对策、做法、举措 · 申论对策题首选</div>
+    <div id="verbContent"></div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="memo-info">💡 点击词语可标记"已掌握"，进度自动保存到本地</div>
+</div>
+
+<div class="footer">
+  申论规范词背诵工具 · 点击词语标记掌握 · 数据本地保存
+</div>
+
+<script>
+// ============ 名词性短语 500条 ============
+const nounWords = [
+  // 基层治理类
+  "基层阵地","基层根基","基层体系","基层架构","基层短板","基层活力","基层资源","基层载体","基层抓手","基层效能",
+  "治理体系","治理效能","治理格局","治理单元","治理末梢","治理合力","治理短板","治理盲区",
+  "自治基础","共治格局","法治保障","德治支撑",
+  "群众根基","思想共识","群众诉求","群众意愿","群众关切",
+  "民生根基","民生短板","民生资源","民生载体",
+  "服务体系","公共服务","便民载体","配套设施","硬件设施","软件配套",
+  "长效机制","制度优势","制度刚性","权责体系","权责清单",
+  "监管体系","监管短板","监管盲区","考核体系","评价机制","激励机制","容错机制","保障体系",
+  "要素支撑","资源禀赋","区位优势","资源优势","人文底蕴","乡土资源",
+  "人才队伍","人才储备","人才缺口","内生潜力","内生动力","发展动能",
+  "产业集群","产业布局","产业载体","产业链条","业态模式","运营模式","空间布局","流通渠道","供需结构",
+  "市场主体","市场活力","市场短板","行业标准","规范体系",
+  "风险隐患","潜在风险","矛盾焦点","突出难题","薄弱环节",
+  "底层架构","综合体系","核心架构","长远布局","多元载体","根本依托","核心抓手","硬性指标",
+  "存量资源","增量空间","存量短板","配套体系","协同机制","联动格局",
+  "信息壁垒","数据资源","数字底座","智慧平台","网格体系","网格单元",
+  "乡风文明","文化载体","文化根基","文化资源","文化品牌","文化业态",
+  "生态体系","生态屏障","生态短板","资源总量","环境容量","碳汇空间","绿色载体",
+  "营商环境","营商短板","要素成本","成本结构","收益空间",
+  "财政保障","资金缺口","资金渠道","资产存量","集体资产","集体经济",
+  "产权体系","产权归属","土地资源","闲置土地","土地禀赋","耕地资源","耕地红线",
+  "水利设施","路网体系","物流体系","城乡格局","城乡差距","融合格局",
+  "区域布局","区域短板","区域优势","创新载体","创新平台","创新成果",
+  "技术储备","技术短板","专利成果","科创体系","人才梯队",
+  "劳务资源","劳动力库","就业岗位","就业缺口","社保体系","养老体系",
+  "医疗资源","教育资源","师资力量","学位供给","住房保障","基础设施","基建短板",
+  "管网体系","应急体系","应急储备","物资储备","安全底线","安全隐患","治安体系",
+  "矛盾源头","诉求渠道","协商平台","议事机制","公示渠道","监督渠道","公开体系",
+  "信用体系","信用短板","诚信氛围","品牌效应","品牌根基","产品品质","产品供给",
+  "供给结构","需求导向","消费潜力","消费短板","渠道资源","销售网络",
+  "融合业态","跨界模式","转型契机","转型痛点","升级空间","提质成果",
+  "普惠成果","均衡格局","均等水平","普惠资源","可及水平","共享格局",
+  "共建基础","共治基础","自治能力","自治水平","组织架构","组织活力",
+  "队伍短板","作风根基","能力短板","本领缺口","培训体系","实训载体",
+  "考核指标","绩效成果","落实成效","落地成果","长效成效",
+  "试点经验","典型样本","示范样板","标杆案例","经验模式","特色路径",
+  "本土特色","差异化优势","比较优势","核心竞争力","内生优势",
+  "外部机遇","外部挑战","现实瓶颈","现实难题","历史遗留","历史短板",
+  "规划蓝图","实施方案","落地路径","推进节奏","时序安排",
+  "项目载体","项目储备","项目缺口","投资体量","投融资模式","资本渠道","社会资本",
+  "公益资源","志愿力量","志愿体系","社会组织","社会力量","社会载体","社群力量",
+  "舆论阵地","宣传载体","传播渠道","价值导向","价值共识","文明风尚","道德根基",
+  "家风建设","家风载体","健康素养","健康基础","人口结构","老龄群体",
+  "青年群体","弱势群体","特殊群体","帮扶对象","救助体系","兜底保障","兜底底线",
+  "救助资源","帮扶载体","技能体系","技能短板","就业载体","创业平台","创业资源","创业短板",
+  "产权保护","知识产权","合规体系","合规短板","执法体系","执法力量","执法短板",
+  "司法保障","法治根基","普法载体","法治意识","规则意识","契约精神",
+  "程序规范","流程体系","流程短板","闭环体系","闭环机制","台账体系","档案资源","数据台账",
+  "监测体系","监测指标","预警机制","预警指标","研判体系","研判成果",
+  "调度体系","调度机制","统筹格局","统筹力量","协同短板","联动短板",
+  "衔接机制","衔接短板","融合短板","集成体系","集成效能","集约模式","集约水平","节约水平",
+  "能耗指标","排放指标","绿色指标","低碳载体","循环体系","循环模式",
+  "固废存量","污水总量","扬尘指标","水质指标","空气质量","环境指标",
+  "修复成效","修复载体","管护体系","管护短板","管护力量","管护经费","管护机制","管护责任",
+  "河湖体系","河湖载体","山林资源","林地存量","草原资源","湿地资源","生物资源","物种存量",
+  "种质资源","水土资源","水土短板","地质隐患","地质风险","灾害隐患","灾害风险",
+  "防灾体系","减灾载体","救灾储备","救援力量","救援短板","通讯保障","通讯短板",
+  "电力保障","能源体系","能源结构","能源短板","传统能源","能源储备",
+  "粮食储备","粮食安全","粮源供给","种业资源","种质短板","农机装备","装备短板",
+  "农技资源","农技体系","农户主体","经营主体","经营规模","规模效应",
+  "小散短板","集约化水平","标准化水平","品牌溢价","附加值空间",
+  "产业链短板","价值链短板","供应链短板","供应链韧性","供应链风险",
+  "物流短板","仓储资源","冷链体系","冷链短板","电商载体","电商业态",
+  "直播渠道","数字渠道","流量资源","用户群体","需求特征","消费偏好",
+  "市场波动","价格波动","周期特征","行业周期","转型周期","迭代周期",
+  "更新速度","技术迭代","产品迭代","模式迭代","理念更新","认知短板",
+  "观念壁垒","思维局限","认知误区","能力瓶颈","本领恐慌","专业缺口",
+  "专业素养","综合素养","素养短板","人才短板","引才缺口","育才短板","留才短板",
+  "人才生态","人才环境","人才政策","政策红利","政策短板","政策衔接","政策时效",
+  "配套政策","细则体系","落地细则","执行偏差","执行短板","落实偏差","落实盲区",
+  "责任链条","责任盲区","压力传导","传导短板","考核导向","导向偏差",
+  "形式隐患","官僚隐患","作风短板","文风短板","会风短板","调研短板","调研盲区",
+  "基层实情","一线实情","一线诉求","一线难题",
+  // 经济产业类
+  "供需缺口","产能存量","产能过剩","产能不足","转型动能","升级动能",
+  "集聚效应","辐射效应","带动效应","溢出效应","虹吸效应","洼地效应","杠杆效应","乘数效应",
+  "存量盘活","增量培育","变量激活","新业态群","新质产能","科创产能","数字产能","绿色产能","低碳产能",
+  "转型成本","改造成本","运营成本","运维成本","人力成本","物料成本","融资成本","交易成本","制度成本","隐性成本","综合成本",
+  "收益预期","盈利空间","回报周期","资产收益","资本收益","增值空间","保值能力","抗风险力",
+  "韧性水平","弹性空间","市场韧性","产业韧性","链条韧性","主体韧性","区域韧性",
+  "经济底盘","增长潜力","增长动能","增长短板","下行压力","复苏态势","回升态势","平稳态势",
+  "波动特征","周期波动","预期信心","市场信心","消费信心","投资信心","经营信心","创新信心","创业信心","转型信心",
+  "区域活力","城市活力","县域活力","乡村活力","园区载体","园区平台","园区配套","园区短板","园区产业","园区集群",
+  "孵化器载体","加速器平台","研发载体","中试平台","转化载体","转化短板","成果转化","转化效率",
+  "技术溢价","技术壁垒","专利壁垒","标准壁垒","准入门槛","行业门槛","资质门槛","资质短板",
+  "合规门槛","合规成本","贸易渠道","外贸载体","外贸短板","内需潜力","内需短板","外需波动",
+  "内外循环","循环短板","流通瓶颈","流通成本","流通效率","集散体系","集散短板",
+  "枢纽载体","枢纽优势","节点布局","节点短板","口岸资源","口岸优势","跨境载体","跨境通道","跨境短板",
+  "金融载体","金融资源","金融短板","信贷资源","信贷缺口","普惠金融","金融普惠",
+  "资本活水","资本缺口","直接融资","间接融资","融资渠道","融资短板",
+  "担保体系","担保资源","担保短板","风险分担","分担机制","补偿机制","补偿资金",
+  "保险载体","保险资源","保险短板","期货工具","对冲工具","风控体系","风控短板",
+  "资产风控","信贷风控","市场风控","合规风控","内控体系","内控短板",
+  "审计体系","审计资源","审计短板","财会体系","财会规范","财会短板",
+  "税务体系","税务红利","税务短板","税源基础","税源潜力","税源短板",
+  "营收体量","营收结构","利润结构","负债水平","杠杆水平","现金流态","现金流短板",
+  "库存存量","库存周转","周转效率","周转短板","履约能力","信用资质",
+  "合作基础","协作基础","联盟载体","联盟机制","联盟短板","竞合格局","竞争格局","合作格局","分工格局",
+  "分工短板","协作短板","集成短板","整合短板","融合短板","协同短板","联动短板","配套短板","配套缺口",
+  "配套滞后","配套薄弱","配套完善","配套成熟","配套先进","配套落后",
+  "基础配套","公用配套","产业配套","生活配套","服务配套","政务配套","政务载体","政务短板","政务效能","政务效率",
+  "流程短板","审批短板","审批周期","材料成本","办事成本","制度成本","制度红利","制度短板","制度供给",
+  "供给短板","供给总量","供给结构","供给质量","供给效率","供给均衡","供给普惠","供给适配","供给错位","供给过剩","供给不足",
+  "需求总量","需求结构","需求质量","需求潜力","需求释放","需求抑制","需求错位","需求缺口",
+  "供需匹配","供需错配","供需平衡","供需失衡","结构矛盾","结构性短板","结构性机遇",
+  "结构性调整","结构性转型","结构性升级","结构性优化","结构性红利","结构性压力","结构性风险",
+  "周期性风险","趋势性风险","局部风险","系统性风险","区域性风险","行业性风险","主体风险",
+  "微观风险","宏观风险","预期风险","信心风险","流动性风险","债务风险","产能风险","库存风险",
+  "价格风险","成本风险","供应链风险","产业链风险","市场风险","政策风险","技术风险","人才风险",
+  "安全风险","生态风险","社会风险","舆情风险","舆情隐患","舆情苗头","舆情热点","舆情导向",
+  "舆情阵地","舆情渠道","舆情监测","舆情预警","舆情研判","舆情处置","舆情复盘","舆情长效","舆情短板",
+  "舆论环境","舆论氛围","舆论导向","舆论共识","舆论杂音","舆论误区"
+];
+
+// ============ 动宾/对策类短语 500条 ============
+const verbWords = [
+  // 基层治理、综合管理类
+  "夯实根基","筑牢底线","健全体系","完善机制","理顺机制","优化布局","统筹推进","协同联动",
+  "多方共治","多元参与","凝聚合力","汇聚共识","摸清实情","排查隐患","化解矛盾","破解难题",
+  "补齐短板","强化保障","压实责任","落实举措","细化举措","精准施策","分类施策","因地制宜",
+  "因人施策","因势利导","综合施策","系统治理","源头治理","综合治理","专项整治","集中整治",
+  "常态整治","长效管控","闭环管理","精细管理","网格化管","数字化管","智能化管","规范化管",
+  "标准化管","制度化管","清单管理","台账管理","动态监测","实时预警","科学研判","及时调度",
+  "快速响应","高效处置","复盘优化","迭代升级","建强队伍","培育骨干","引进人才","培养人才",
+  "留住人才","淬炼本领","提升素养","强化培训","实训实操","考核激励","正向激励","容错纠错",
+  "典型示范","标杆引领","总结经验","复制推广","试点先行","逐步推开","分步实施","有序推进",
+  "稳步落地","加快落地","狠抓落实","一抓到底","久久为功","持续发力","常态长效","提质增效",
+  "提效赋能","减负增效","降本增效","开源增效","盘活存量","激活增量","挖掘潜力","释放活力",
+  "激发动能","集聚要素","整合资源","统筹资源","调配资源","下沉资源","倾斜资源","整合力量",
+  "统筹力量","下沉力量","充实一线","扎根基层","深入一线","走访调研","倾听民意","汇集民智",
+  "回应诉求","保障权益","维护稳定","防范风险","守住底线","化解风险","消弭隐患","前置防控",
+  "源头预防","前置排查","前置研判","前置预警","健全渠道","畅通渠道","拓宽渠道","搭建载体",
+  "创新载体","丰富载体","完善平台","搭建平台","用好平台","整合平台","共享信息","打通壁垒",
+  "破除壁垒","破除堵点","打通断点","补齐断点","衔接链条","完善链条","健全链条","规范流程",
+  "简化流程","压缩时限","精简材料","优化审批","简化审批","一网通办","跨省通办","就近可办",
+  "自助办理","便民服务","优化服务","升级服务","下沉服务","上门服务","延时服务","暖心服务",
+  "普惠服务","均等服务","共享服务","共建共享","共治共享","自治强基","法治保障","德治润心",
+  "数治赋能","强化监督","日常监督","专项监督","全程监督","社会监督","群众监督","舆论监督",
+  "内部监督","审计监督","公示公开","信息公开","阳光公示","透明运行","规范权责","厘清权责",
+  "权责对等","权责明晰","清单明晰","细化清单","完善制度","修订制度","废止旧规","出台新规",
+  "细化细则","配套细则","强化执行","刚性执行","严格落实","杜绝虚功","力戒虚功","杜绝形式",
+  "力戒形式","精简会议","精简文件","改进文风","改进会风","务实调研","一线调研","实地走访",
+  "蹲点调研","解剖麻雀","靶向攻坚","重点突破","整体推进","均衡推进","协调推进","同步推进",
+  "一体推进","融合推进","集成推进","集约利用","节约利用","高效利用","合理配置","优化配置",
+  "科学配置","动态调配","盘活资产","清核资产","确权登记","规范流转","盘活土地","集约用地",
+  "节约用地","严守红线","保护耕地","改良土壤","兴修水利","修缮管网","完善路网","打通堵路",
+  "畅通物流","完善配套","补齐配套","升级配套","运维管护","长效管护","专人管护","常态化管",
+  "数字化管","健全预案","完善预案","演练预案","储备物资","充实储备","保障储备","应急救援",
+  "快速救援","防灾减灾","防洪排涝","防火防盗","安防建设","治安防控","巡防巡查","排查巡防",
+  "源头控险","矛盾调处","多元调解","人民调解","司法调解","行政调解","诉源治理","减少诉量",
+  "化解积案","清理积案","息诉罢访","信访化解","接访下访","包案化解","源头稳控","舆情管控",
+  "舆情引导","正面引导","澄清辟谣","主动发声","及时发声","凝聚共识","弘扬新风","移风易俗",
+  "培育乡风","涵养家风","文明创建","文明实践","文化惠民","文化供给","文化活化","文脉传承",
+  "文物保护","非遗传承","打造品牌","塑造品牌","宣传推介","扩大影响","价值引领","铸魂育人",
+  "德育浸润","科普宣传","普及知识","提升素养","健康宣教","普惠医疗","优化医卫","分级诊疗",
+  "家庭签约","养老服务","普惠养老","社区养老","居家养老","助老服务","托育服务","普惠托育",
+  "助学帮扶","控辍保学","均衡教育","师资轮岗","学位扩容","校舍修缮","装备升级","住房保障",
+  "安居工程","老旧改造","适老改造","无障碍改","就业帮扶","拓宽渠道","技能培训","创业扶持",
+  "贴息补助","稳岗扩岗","劳务输出","劳务对接","权益保障","薪资保障","社保扩面","参保提质",
+  "兜底救助","临时救助","特困帮扶","低保提质","慈善帮扶","志愿帮扶","助残扶弱","关爱儿童",
+  "关爱老人","关爱残障","关爱困境","普惠帮扶","精准帮扶","分类帮扶","动态帮扶","巩固成果",
+  "防止返贫","监测预警","帮扶干预","产业帮扶","就业帮扶","消费帮扶","金融帮扶","基建帮扶",
+  "人才帮扶","文化帮扶","生态帮扶",
+  // 经济产业、科创生态类
+  "培育产业","壮大产业","转型产业","升级产业","集聚产业","延链补链","强链固链","建链育链",
+  "融链协同","链主带动","集群培育","园区提质","园区扩容","园区增效","招商引智","招商引资",
+  "招大引强","以商招商","产业链招","落地投产","投产达效","技改升级","设备更新","工艺改良",
+  "降本提质","研发攻关","技术突破","自主研发","自研创新","成果转化","中试孵化","孵化培育",
+  "孵化加速","科创赋能","数字赋能","智改数转","上云用数","平台赋能","数据赋能","要素赋能",
+  "业态创新","模式创新","产品创新","管理创新","机制创新","理念创新","品牌培育","品牌打造",
+  "品牌推广","提质创牌","增品提质","丰富供给","优化供给","适配需求","释放内需","激活消费",
+  "提振消费","拓展外需","稳外贸盘","畅通循环","内外联动","流通提质","集散升级","冷链建设",
+  "仓储升级","电商培育","直播赋能","线上拓市","线下拓市","渠道拓展","市场开拓","拓客引流",
+  "提质增收","壮大主体","培育主体","扶持小微","壮大龙头","做强骨干","专精培育","专精特新",
+  "单项冠军","上市培育","融资赋能","信贷支持","普惠信贷","担保增信","风险补偿","保险兜底",
+  "直接融资","资本赋能","盘活资本","资产增值","规范财税","减税降费","惠企纾困","助企解难",
+  "稳企稳产","保链稳链","保供稳价","稳价保供","规范市场","净化市场","整治乱象","公平竞争",
+  "破除垄断","破除壁垒","准入放宽","简化准入","信用监管","信用赋能","信用惩戒","信用激励",
+  "合规引导","合规建设","内控建设","审计提质","财会规范","风险防控","风控提质","债务管控",
+  "压降债务","化解债务","缓释风险","提质经营","提质盈利","盘活库存","加速周转","履约提质",
+  "合作共建","联盟共建","协同共建","区域协同","跨域协同","一体化建","同城共建","城乡融合",
+  "城乡统筹","要素下乡","资源进城","人才下乡","资本下乡","产业下乡","数字下乡","基建下乡",
+  "公共下乡","县域提质","镇域提质","乡村振兴","产业振兴","人才振兴","文化振兴","生态振兴",
+  "组织振兴","和美乡村","人居整治","环境整治","垃圾治理","污水治理","厕所改造","绿化美化",
+  "亮化提升","风貌提升","生态修复","水土治理","矿山修复","湿地修复","林地修复","河湖治理",
+  "流域治理","减排降碳","节能降耗","绿色转型","低碳改造","循环利用","固废资源化","污水资源化",
+  "节水增效","节地增效","节能增效","绿色生产","绿色生活","绿色创建","低碳创建","生态补偿",
+  "生态价值","价值转化","GEP核算","生态产品","产品入市","生态惠民","绿色赋能","持续护绿",
+  "长效治污","蓝天保卫","碧水保卫","净土保卫","污染攻坚","源头减排","过程管控","末端治理",
+  "监测提质","数据提质","统计提质","核算提质","评估提质","考核提质","指标优化","标准完善",
+  "制度完善","机制完善","体系完善","架构完善","流程完善","平台完善","数据完善","台账完善",
+  "监测完善","预警完善","研判完善","调度完善","协同完善","联动完善","衔接完善","融合完善",
+  "集成完善","集约完善","节约完善","绿色完善","低碳完善","循环完善","修复完善","管护完善",
+  "防灾完善","减灾完善","储备完善","救援完善","能源完善","粮食完善","种业完善","农机完善",
+  "农技完善","经营完善","规模完善","品牌完善","附加值完善","价值链完善","供应链完善",
+  "物流完善","仓储完善","冷链完善","电商完善","数字完善","流量完善","用户完善","偏好完善",
+  "波动完善","周期完善","迭代完善","更新完善","专业完善","素养完善","本领完善","人才完善",
+  "引才完善","育才完善","留才完善","生态完善","环境完善","政策完善","红利完善","时效完善",
+  "细则完善","传导完善","压力完善","责任完善","盲区完善","形式完善","调研完善","实情完善",
+  "诉求完善","难题完善"
+];
+
+// 去重并确保数量
+const uniqueNoun = [...new Set(nounWords)];
+const uniqueVerb = [...new Set(verbWords)];
+
+// 渲染函数
+function renderWords(containerId, words, type) {
+  const container = document.getElementById(containerId);
+  const grid = document.createElement('div');
+  grid.className = 'word-grid';
+  words.forEach((word, idx) => {
+    const tag = document.createElement('div');
+    tag.className = 'word-tag';
+    tag.textContent = word;
+    tag.dataset.word = word;
+    tag.dataset.type = type;
+    tag.onclick = function() {
+      this.classList.toggle('memorized');
+      saveMemo();
+      updateProgress();
+    };
+    grid.appendChild(tag);
+  });
+  container.appendChild(grid);
+}
+
+renderWords('nounContent', uniqueNoun, 'noun');
+renderWords('verbContent', uniqueVerb, 'verb');
+
+document.getElementById('totalCount').textContent = uniqueNoun.length + uniqueVerb.length;
+
+// 本地存储 - 已标记
+function saveMemo() {
+  const memorized = [];
+  document.querySelectorAll('.word-tag.memorized').forEach(t => {
+    memorized.push(t.dataset.word);
+  });
+  localStorage.setItem('shenlun_memo', JSON.stringify(memorized));
+}
+function loadMemo() {
+  const saved = localStorage.getItem('shenlun_memo');
+  if (saved) {
+    const arr = JSON.parse(saved);
+    document.querySelectorAll('.word-tag').forEach(t => {
+      if (arr.includes(t.dataset.word)) t.classList.add('memorized');
+    });
+  }
+  updateProgress();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.word-tag').length;
+  const memo = document.querySelectorAll('.word-tag.memorized').length;
+  document.getElementById('memoCount').textContent = memo;
+  document.getElementById('progressFill').style.width = (memo/total*100) + '%';
+}
+loadMemo();
+
+// 搜索
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const kw = e.target.value.trim();
+  document.querySelectorAll('.word-tag').forEach(t => {
+    if (!kw || t.textContent.includes(kw)) {
+      t.classList.remove('hidden');
+    } else {
+      t.classList.add('hidden');
+    }
+  });
+});
+
+// 分类筛选
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const filter = this.dataset.filter;
+    const nounSec = document.getElementById('nounSection');
+    const verbSec = document.getElementById('verbSection');
+    
+    if (filter === 'all') {
+      nounSec.style.display = '';
+      verbSec.style.display = '';
+      document.querySelectorAll('.word-tag').forEach(t => t.classList.remove('hidden'));
+    } else if (filter === 'noun') {
+      nounSec.style.display = '';
+      verbSec.style.display = 'none';
+    } else if (filter === 'verb') {
+      nounSec.style.display = 'none';
+      verbSec.style.display = '';
+    } else if (filter === 'memo') {
+      nounSec.style.display = '';
+      verbSec.style.display = '';
+      document.querySelectorAll('.word-tag').forEach(t => {
+        if (t.classList.contains('memorized')) t.classList.remove('hidden');
+        else t.classList.add('hidden');
+      });
+    }
+  });
+});
+
+// 复制全部
+function copyAll() {
+  const all = [...uniqueNoun, ...uniqueVerb];
+  const text = '【名词性短语 ' + uniqueNoun.length + '条】\n' + uniqueNoun.join('\n') + '\n\n【动宾对策类 ' + uniqueVerb.length + '条】\n' + uniqueVerb.join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const old = btn.textContent;
+    btn.textContent = '✅ 已复制';
+    setTimeout(() => btn.textContent = old, 2000);
+  });
+}
+</script>
+</body>
+</html>
