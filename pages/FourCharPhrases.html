@@ -360,11 +360,157 @@
     font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   }
 
+  /* ===== 100 条名词性成语辨析 ===== */
+  .nn-callout {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #d35400;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.85;
+    color: #2c3e50;
+  }
+  .nn-callout-title {
+    font-weight: 700;
+    color: #b7650c;
+    margin-bottom: 6px;
+    font-size: 14.5px;
+  }
+  .nn-callout-example { margin-top: 8px; }
+  .nn-ex-word {
+    font-weight: 600;
+    background: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #d35400;
+  }
+  .nn-ex-wrong { color: #c0392b; text-decoration: line-through; margin-left: 6px; }
+
+  .nn-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 12px;
+    background: #f5f7fa;
+    border-radius: 8px;
+  }
+  .nn-tab-btn {
+    border: 1px solid #dcdfe6;
+    background: #fff;
+    color: #2c3e50;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .nn-tab-btn:hover { border-color: #2980b9; color: #2980b9; }
+  .nn-tab-btn.active {
+    background: #1a5276;
+    color: white;
+    border-color: #1a5276;
+  }
+  .nn-tab-count {
+    display: inline-block;
+    margin-left: 4px;
+    background: rgba(0,0,0,0.08);
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 11.5px;
+  }
+  .nn-tab-btn.active .nn-tab-count {
+    background: rgba(255,255,255,0.25);
+  }
+
+  .nn-category { margin-bottom: 22px; }
+  .nn-cat-title {
+    font-size: 16px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: white;
+    margin-bottom: 12px;
+    letter-spacing: 0.04em;
+  }
+  .cat-yan   { background: #2c3e50; }
+  .cat-chuan { background: #16a085; }
+  .cat-qing  { background: #e67e22; }
+  .cat-huo   { background: #c0392b; }
+  .cat-neng  { background: #27ae60; }
+
+  .nn-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .nn-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #ecf0f1;
+    border-left: 3px solid transparent;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    transition: all 0.15s;
+  }
+  .nn-list li:hover { background: #f8fafc; }
+  .nn-list li.cat-yan-row   { border-left-color: #2c3e50; }
+  .nn-list li.cat-chuan-row { border-left-color: #16a085; }
+  .nn-list li.cat-qing-row  { border-left-color: #e67e22; }
+  .nn-list li.cat-huo-row   { border-left-color: #c0392b; }
+  .nn-list li.cat-neng-row  { border-left-color: #27ae60; }
+
+  .nn-num {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nn-num.cat-yan   { background: #2c3e50; }
+  .nn-num.cat-chuan { background: #16a085; }
+  .nn-num.cat-qing  { background: #e67e22; }
+  .nn-num.cat-huo   { background: #c0392b; }
+  .nn-num.cat-neng  { background: #27ae60; }
+
+  .nn-body { flex: 1; min-width: 0; }
+  .nn-word {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .nn-def { font-size: 14px; color: #4a5568; line-height: 1.7; }
+  .nn-wrong {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #c0392b;
+    background: #fdf2f2;
+    padding: 2px 8px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
   @media (max-width: 600px) {
     .header h1 { font-size: 22px; }
     .word-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 6px; }
     .word-tag { font-size: 13px; padding: 7px 2px; }
     .section { padding: 16px; }
+    .nn-list li { flex-direction: column; gap: 8px; padding: 10px 12px; }
+    .nn-num { width: 26px; height: 26px; font-size: 13px; }
+    .nn-tabs { padding: 8px; }
+    .nn-tab-btn { padding: 5px 10px; font-size: 12px; }
   }
 </style>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
@@ -567,7 +713,157 @@
         <li>____ 文明城市（<details><summary>答案</summary><span class="quiz-a key-chuangjian">创建</span></details>）</li>
         <li>____ 经济奇迹（<details><summary>答案</summary><span class="quiz-a key-chuangzao">创造</span></details>）</li>
       </ol>
+  <!-- 100 条名词性成语辨析 -->
+  <div class="section">
+    <div class="section-title">四、100 条名词性成语辨析（防「的」字叠套）</div>
+    <div class="section-desc">公考逻辑填空高频考点：本身即名词性成语，自带中心名词，不加「的」修饰同类名词</div>
+
+    <div class="nn-callout">
+      <div class="nn-callout-title">📌 句式禁忌 & 正确用法</div>
+      <p>❌ <s>【成语】 + 的 + 观点 / 言论 / 传闻 / 说法</s>　（语义叠套，重复指代）</p>
+      <p>✅ 主语 + 是 + 【成语】（作宾语，直接陈述）</p>
+      <p class="nn-callout-example">例：此乃<span class="nn-ex-word">不经之谈</span>。（✓）　|　<span class="nn-ex-wrong">不经之谈的观点</span>（✗）</p>
     </div>
+
+    <div class="nn-tabs">
+      <button class="nn-tab-btn active" data-cat="all">全部 <span class="nn-tab-count">100</span></button>
+      <button class="nn-tab-btn" data-cat="yan">言论说辞 <span class="nn-tab-count">26</span></button>
+      <button class="nn-tab-btn" data-cat="chuan">传闻故事 <span class="nn-tab-count">21</span></button>
+      <button class="nn-tab-btn" data-cat="qing">情感心态 <span class="nn-tab-count">18</span></button>
+      <button class="nn-tab-btn" data-cat="huo">祸患弊端 <span class="nn-tab-count">16</span></button>
+      <button class="nn-tab-btn" data-cat="neng">能力才学 <span class="nn-tab-count">19</span></button>
+    </div>
+
+    <div class="nn-category" data-cat="yan">
+      <div class="nn-cat-title cat-yan">一、言论、说辞类（26 条）</div>
+      <ol class="nn-list" start="1">
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>1</div><div class='nn-body'><div class='nn-word'>不经之谈</div><div class='nn-def'>荒诞无稽、没有根据的话。</div><div class='nn-wrong'>❌ 不经之谈的说法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>2</div><div class='nn-body'><div class='nn-word'>流言蜚语</div><div class='nn-def'>毫无根据的闲话、谣言。</div><div class='nn-wrong'>❌ 流言蜚语的传闻</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>3</div><div class='nn-body'><div class='nn-word'>奇谈怪论</div><div class='nn-def'>荒唐不合情理的言论。</div><div class='nn-wrong'>❌ 奇谈怪论的观点</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>4</div><div class='nn-body'><div class='nn-word'>谰言蜚语</div><div class='nn-def'>诬陷不实的话。</div><div class='nn-wrong'>❌ 谰言蜚语的言论</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>5</div><div class='nn-body'><div class='nn-word'>耳食之谈</div><div class='nn-def'>听来的传闻，没有根据。</div><div class='nn-wrong'>❌ 耳食之谈的说法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>6</div><div class='nn-body'><div class='nn-word'>小道消息</div><div class='nn-def'>非官方的传闻。</div><div class='nn-wrong'>❌ 小道消息的传闻</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>7</div><div class='nn-body'><div class='nn-word'>一家之言</div><div class='nn-def'>个人独立的见解、学说。</div><div class='nn-wrong'>❌ 一家之言的看法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>8</div><div class='nn-body'><div class='nn-word'>老生常谈</div><div class='nn-def'>老书生常讲的话，陈旧说辞。</div><div class='nn-wrong'>❌ 老生常谈的观点</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>9</div><div class='nn-body'><div class='nn-word'>刍荛之见</div><div class='nn-def'>浅陋的见解（谦辞）。</div><div class='nn-wrong'>❌ 刍荛之见的看法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>10</div><div class='nn-body'><div class='nn-word'>一孔之见</div><div class='nn-def'>狭隘片面的见解。</div><div class='nn-wrong'>❌ 一孔之见的观点</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>11</div><div class='nn-body'><div class='nn-word'>门户之见</div><div class='nn-def'>派别带来的偏见。</div><div class='nn-wrong'>❌ 门户之见的看法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>12</div><div class='nn-body'><div class='nn-word'>皮相之谈</div><div class='nn-def'>只看表面的肤浅言论。</div><div class='nn-wrong'>❌ 皮相之谈的言论</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>13</div><div class='nn-body'><div class='nn-word'>迂阔之论</div><div class='nn-def'>不切实际的空洞论调。</div><div class='nn-wrong'>❌ 迂阔之论的主张</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>14</div><div class='nn-body'><div class='nn-word'>浮泛之言</div><div class='nn-def'>空洞不实在的话语。</div><div class='nn-wrong'>❌ 浮泛之言的表述</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>15</div><div class='nn-body'><div class='nn-word'>违心之论</div><div class='nn-def'>违背本心的言论。</div><div class='nn-wrong'>❌ 违心之论的说法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>16</div><div class='nn-body'><div class='nn-word'>持平之论</div><div class='nn-def'>公允客观的意见。</div><div class='nn-wrong'>❌ 持平之论的观点</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>17</div><div class='nn-body'><div class='nn-word'>肺腑之言</div><div class='nn-def'>发自内心的话。</div><div class='nn-wrong'>❌ 肺腑之言的话语</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>18</div><div class='nn-body'><div class='nn-word'>金玉良言</div><div class='nn-def'>珍贵有益的忠告。</div><div class='nn-wrong'>❌ 金玉良言的劝告</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>19</div><div class='nn-body'><div class='nn-word'>逆耳之言</div><div class='nn-def'>刺耳但有益的话。</div><div class='nn-wrong'>❌ 逆耳之言的忠告</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>20</div><div class='nn-body'><div class='nn-word'>药石之言</div><div class='nn-def'>规劝改过的良言。</div><div class='nn-wrong'>❌ 药石之言的告诫</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>21</div><div class='nn-body'><div class='nn-word'>由衷之言</div><div class='nn-def'>发自内心的言语。</div><div class='nn-wrong'>❌ 由衷之言的话语</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>22</div><div class='nn-body'><div class='nn-word'>无稽谰言</div><div class='nn-def'>没有根据的虚妄之言。</div><div class='nn-wrong'>❌ 无稽谰言的说法</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>23</div><div class='nn-body'><div class='nn-word'>世俗之论</div><div class='nn-def'>流俗的看法。</div><div class='nn-wrong'>❌ 世俗之论的观点</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>24</div><div class='nn-body'><div class='nn-word'>田父之获</div><div class='nn-def'>传闻不实的故事。</div><div class='nn-wrong'>❌ 田父之获的传闻</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>25</div><div class='nn-body'><div class='nn-word'>流俗之言</div><div class='nn-def'>世俗流传的说法。</div><div class='nn-wrong'>❌ 流俗之言的论调</div></div></li>
+        <li class='cat-yan-row'><div class='nn-num cat-yan'>26</div><div class='nn-body'><div class='nn-word'>狂瞽之言</div><div class='nn-def'>愚妄浅薄的言论（谦辞）。</div><div class='nn-wrong'>❌ 狂瞽之言的看法</div></div></li>
+      </ol>
+    </div>
+
+    <div class="nn-category" data-cat="chuan">
+      <div class="nn-cat-title cat-chuan">二、传闻、故事、记载类（21 条）</div>
+      <ol class="nn-list" start="27">
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>27</div><div class='nn-body'><div class='nn-word'>捕风捉影</div><div class='nn-def'>虚幻不实的传闻。</div><div class='nn-wrong'>❌ 捕风捉影的传闻</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>28</div><div class='nn-body'><div class='nn-word'>海市蜃楼</div><div class='nn-def'>虚幻不存在的事物。</div><div class='nn-wrong'>❌ 海市蜃楼的幻象</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>29</div><div class='nn-body'><div class='nn-word'>空中楼阁</div><div class='nn-def'>脱离现实的构想。</div><div class='nn-wrong'>❌ 空中楼阁的设想</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>30</div><div class='nn-body'><div class='nn-word'>天方夜谭</div><div class='nn-def'>荒诞离奇、不可能实现的说法。</div><div class='nn-wrong'>❌ 天方夜谭的说法</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>31</div><div class='nn-body'><div class='nn-word'>稗官野史</div><div class='nn-def'>民间零散记载、野闻。</div><div class='nn-wrong'>❌ 稗官野史的史料</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>32</div><div class='nn-body'><div class='nn-word'>齐东野语</div><div class='nn-def'>道听途说、不足采信的传闻。</div><div class='nn-wrong'>❌ 齐东野语的传言</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>33</div><div class='nn-body'><div class='nn-word'>道听途说</div><div class='nn-def'>路上听来的传闻。</div><div class='nn-wrong'>❌ 道听途说的消息</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>34</div><div class='nn-body'><div class='nn-word'>街谈巷议</div><div class='nn-def'>街头民众的议论传闻。</div><div class='nn-wrong'>❌ 街谈巷议的议论</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>35</div><div class='nn-body'><div class='nn-word'>传闻异辞</div><div class='nn-def'>说法不一的传言。</div><div class='nn-wrong'>❌ 传闻异辞的消息</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>36</div><div class='nn-body'><div class='nn-word'>纸上空谈</div><div class='nn-def'>书本上空洞的说法。</div><div class='nn-wrong'>❌ 纸上空谈的理论</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>37</div><div class='nn-body'><div class='nn-word'>虚言浮说</div><div class='nn-def'>虚假不实的传言。</div><div class='nn-wrong'>❌ 虚言浮说的传闻</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>38</div><div class='nn-body'><div class='nn-word'>乡壁虚造</div><div class='nn-def'>凭空捏造的说法。</div><div class='nn-wrong'>❌ 乡壁虚造的说辞</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>39</div><div class='nn-body'><div class='nn-word'>向壁虚构</div><div class='nn-def'>凭空杜撰的言论故事。</div><div class='nn-wrong'>❌ 向壁虚构的故事</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>40</div><div class='nn-body'><div class='nn-word'>子虚乌有</div><div class='nn-def'>虚构不存在的事情。</div><div class='nn-wrong'>❌ 子虚乌有的事件</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>41</div><div class='nn-body'><div class='nn-word'>海市蜃楼</div><div class='nn-def'>虚幻的景象/传言。</div><div class='nn-wrong'>❌ 海市蜃楼的幻象</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>42</div><div class='nn-body'><div class='nn-word'>虚无缥缈</div><div class='nn-def'>虚幻渺茫的事物。</div><div class='nn-wrong'>❌ 虚无缥缈的传说</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>43</div><div class='nn-body'><div class='nn-word'>捕影系风</div><div class='nn-def'>同捕风捉影，无根据传闻。</div><div class='nn-wrong'>❌ 捕影系风的传言</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>44</div><div class='nn-body'><div class='nn-word'>寓言十九</div><div class='nn-def'>寄托性故事，不可当真。</div><div class='nn-wrong'>❌ 寓言十九的故事</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>45</div><div class='nn-body'><div class='nn-word'>荒渺无稽</div><div class='nn-def'>荒诞无从考证的传说。</div><div class='nn-wrong'>❌ 荒渺无稽的传说</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>46</div><div class='nn-body'><div class='nn-word'>野叟曝言</div><div class='nn-def'>村野之人的浅陋言论。</div><div class='nn-wrong'>❌ 野叟曝言的观点</div></div></li>
+        <li class='cat-chuan-row'><div class='nn-num cat-chuan'>47</div><div class='nn-body'><div class='nn-word'>传闻之辞</div><div class='nn-def'>辗转传来的说法。</div><div class='nn-wrong'>❌ 传闻之辞的消息</div></div></li>
+      </ol>
+    </div>
+
+    <div class="nn-category" data-cat="qing">
+      <div class="nn-cat-title cat-qing">三、情感、心态、认知类（18 条）</div>
+      <ol class="nn-list" start="48">
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>48</div><div class='nn-body'><div class='nn-word'>先入之见</div><div class='nn-def'>事先形成的成见。</div><div class='nn-wrong'>❌ 先入之见的看法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>49</div><div class='nn-body'><div class='nn-word'>成见之见</div><div class='nn-def'>固有的偏见。</div><div class='nn-wrong'>❌ 成见之见的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>50</div><div class='nn-body'><div class='nn-word'>私心杂念</div><div class='nn-def'>个人私欲的念头。</div><div class='nn-wrong'>❌ 私心杂念的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>51</div><div class='nn-body'><div class='nn-word'>一厢情愿</div><div class='nn-def'>单方面的主观愿望。</div><div class='nn-wrong'>❌ 一厢情愿的愿望</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>52</div><div class='nn-body'><div class='nn-word'>一己之私</div><div class='nn-def'>个人的私利。</div><div class='nn-wrong'>❌ 一己之私的诉求</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>53</div><div class='nn-body'><div class='nn-word'>恻隐之心</div><div class='nn-def'>同情怜悯的本心。</div><div class='nn-wrong'>❌ 恻隐之心的情感</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>54</div><div class='nn-body'><div class='nn-word'>赤子之心</div><div class='nn-def'>纯真质朴的心。</div><div class='nn-wrong'>❌ 赤子之心的本心</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>55</div><div class='nn-body'><div class='nn-word'>是非之心</div><div class='nn-def'>辨别对错的本心。</div><div class='nn-wrong'>❌ 是非之心的认知</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>56</div><div class='nn-body'><div class='nn-word'>好胜之心</div><div class='nn-def'>争强好胜的念头。</div><div class='nn-wrong'>❌ 好胜之心的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>57</div><div class='nn-body'><div class='nn-word'>侥幸心理</div><div class='nn-def'>企图意外成功的心态。</div><div class='nn-wrong'>❌ 侥幸心理的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>58</div><div class='nn-body'><div class='nn-word'>忧患之思</div><div class='nn-def'>忧虑祸患的思虑。</div><div class='nn-wrong'>❌ 忧患之思的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>59</div><div class='nn-body'><div class='nn-word'>愤懑之情</div><div class='nn-def'>郁积的愤慨情绪。</div><div class='nn-wrong'>❌ 愤懑之情的情绪</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>60</div><div class='nn-body'><div class='nn-word'>爱慕之心</div><div class='nn-def'>喜爱倾慕的心意。</div><div class='nn-wrong'>❌ 爱慕之心的情感</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>61</div><div class='nn-body'><div class='nn-word'>贪鄙之心</div><div class='nn-def'>贪婪鄙俗的念头。</div><div class='nn-wrong'>❌ 贪鄙之心的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>62</div><div class='nn-body'><div class='nn-word'>苟且之心</div><div class='nn-def'>得过且过的想法。</div><div class='nn-wrong'>❌ 苟且之心的念头</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>63</div><div class='nn-body'><div class='nn-word'>是非之念</div><div class='nn-def'>计较对错的念头。</div><div class='nn-wrong'>❌ 是非之念的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>64</div><div class='nn-body'><div class='nn-word'>自大之心</div><div class='nn-def'>妄自尊大的心态。</div><div class='nn-wrong'>❌ 自大之心的想法</div></div></li>
+        <li class='cat-qing-row'><div class='nn-num cat-qing'>65</div><div class='nn-body'><div class='nn-word'>疑惧之念</div><div class='nn-def'>疑虑恐惧的想法。</div><div class='nn-wrong'>❌ 疑惧之念的念头</div></div></li>
+      </ol>
+    </div>
+
+    <div class="nn-category" data-cat="huo">
+      <div class="nn-cat-title cat-huo">四、祸患、弊端、局面类（16 条）</div>
+      <ol class="nn-list" start="66">
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>66</div><div class='nn-body'><div class='nn-word'>心腹之患</div><div class='nn-def'>内部致命的祸患。</div><div class='nn-wrong'>❌ 心腹之患的灾祸</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>67</div><div class='nn-body'><div class='nn-word'>肘腋之患</div><div class='nn-def'>身边近处的隐患。</div><div class='nn-wrong'>❌ 肘腋之患的危机</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>68</div><div class='nn-body'><div class='nn-word'>燃眉之急</div><div class='nn-def'>十分紧迫的危难。</div><div class='nn-wrong'>❌ 燃眉之急的危机</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>69</div><div class='nn-body'><div class='nn-word'>灭顶之灾</div><div class='nn-def'>毁灭性的灾祸。</div><div class='nn-wrong'>❌ 灭顶之灾的灾难</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>70</div><div class='nn-body'><div class='nn-word'>无妄之灾</div><div class='nn-def'>意外无故的灾祸。</div><div class='nn-wrong'>❌ 无妄之灾的灾难</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>71</div><div class='nn-body'><div class='nn-word'>覆舟之戒</div><div class='nn-def'>失败覆灭的教训。</div><div class='nn-wrong'>❌ 覆舟之戒的教训</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>72</div><div class='nn-body'><div class='nn-word'>前车之鉴</div><div class='nn-def'>前人失败的教训。</div><div class='nn-wrong'>❌ 前车之鉴的教训</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>73</div><div class='nn-body'><div class='nn-word'>后顾之忧</div><div class='nn-def'>后方的隐患忧虑。</div><div class='nn-wrong'>❌ 后顾之忧的隐患</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>74</div><div class='nn-body'><div class='nn-word'>丘山之罪</div><div class='nn-def'>极大深重的罪过。</div><div class='nn-wrong'>❌ 丘山之罪的罪责</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>75</div><div class='nn-body'><div class='nn-word'>滔天之罪</div><div class='nn-def'>极大的罪行。</div><div class='nn-wrong'>❌ 滔天之罪的罪责</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>76</div><div class='nn-body'><div class='nn-word'>池鱼之殃</div><div class='nn-def'>无辜连带遭受的灾祸。</div><div class='nn-wrong'>❌ 池鱼之殃的灾难</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>77</div><div class='nn-body'><div class='nn-word'>蚌鹬之祸</div><div class='nn-def'>双方相争引来的祸患。</div><div class='nn-wrong'>❌ 蚌鹬之祸的危机</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>78</div><div class='nn-body'><div class='nn-word'>霜露之病</div><div class='nn-def'>轻微的病痛。</div><div class='nn-wrong'>❌ 霜露之病的病症</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>79</div><div class='nn-body'><div class='nn-word'>疥癣之疾</div><div class='nn-def'>轻微、次要的弊病。</div><div class='nn-wrong'>❌ 疥癣之疾的弊病</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>80</div><div class='nn-body'><div class='nn-word'>心腹之疾</div><div class='nn-def'>体内要害重病，喻大隐患。</div><div class='nn-wrong'>❌ 心腹之疾的隐患</div></div></li>
+        <li class='cat-huo-row'><div class='nn-num cat-huo'>81</div><div class='nn-body'><div class='nn-word'>萧墙之祸</div><div class='nn-def'>内部产生的祸乱。</div><div class='nn-wrong'>❌ 萧墙之祸的动乱</div></div></li>
+      </ol>
+    </div>
+
+    <div class="nn-category" data-cat="neng">
+      <div class="nn-cat-title cat-neng">五、能力、才学、事物本体类（19 条）</div>
+      <ol class="nn-list" start="82">
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>82</div><div class='nn-body'><div class='nn-word'>雕虫小技</div><div class='nn-def'>微不足道的小技艺。</div><div class='nn-wrong'>❌ 雕虫小技的技艺</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>83</div><div class='nn-body'><div class='nn-word'>一得之愚</div><div class='nn-def'>自己一点浅薄心得（谦辞）。</div><div class='nn-wrong'>❌ 一得之愚的心得</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>84</div><div class='nn-body'><div class='nn-word'>一得之见</div><div class='nn-def'>一点粗浅见解。</div><div class='nn-wrong'>❌ 一得之见的看法</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>85</div><div class='nn-body'><div class='nn-word'>管窥之见</div><div class='nn-def'>从管中看物，片面见解。</div><div class='nn-wrong'>❌ 管窥之见的观点</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>86</div><div class='nn-body'><div class='nn-word'>管中窥豹</div><div class='nn-def'>片面狭隘的认识。</div><div class='nn-wrong'>❌ 管中窥豹的认知</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>87</div><div class='nn-body'><div class='nn-word'>杯水车薪</div><div class='nn-def'>力量微小的救助手段。</div><div class='nn-wrong'>❌ 杯水车薪的办法</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>88</div><div class='nn-body'><div class='nn-word'>绵薄之力</div><div class='nn-def'>微薄的力量（谦辞）。</div><div class='nn-wrong'>❌ 绵薄之力的力量</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>89</div><div class='nn-body'><div class='nn-word'>涓滴之功</div><div class='nn-def'>微小的功劳。</div><div class='nn-wrong'>❌ 涓滴之功的功绩</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>90</div><div class='nn-body'><div class='nn-word'>尺寸之功</div><div class='nn-def'>微小的功劳。</div><div class='nn-wrong'>❌ 尺寸之功的功绩</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>91</div><div class='nn-body'><div class='nn-word'>刍荛之助</div><div class='nn-def'>微小浅陋的帮助。</div><div class='nn-wrong'>❌ 刍荛之助的助力</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>92</div><div class='nn-body'><div class='nn-word'>囊中物</div><div class='nn-def'>唾手可得的事物。</div><div class='nn-wrong'>❌ 囊中物的东西</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>93</div><div class='nn-body'><div class='nn-word'>身外之物</div><div class='nn-def'>自身以外的财物。</div><div class='nn-wrong'>❌ 身外之物的财物</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>94</div><div class='nn-body'><div class='nn-word'>膏腴之地</div><div class='nn-def'>肥沃富饶的土地。</div><div class='nn-wrong'>❌ 膏腴之地的土地</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>95</div><div class='nn-body'><div class='nn-word'>不毛之地</div><div class='nn-def'>不长草木的土地。</div><div class='nn-wrong'>❌ 不毛之地的土地</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>96</div><div class='nn-body'><div class='nn-word'>弹丸之地</div><div class='nn-def'>狭小的地域。</div><div class='nn-wrong'>❌ 弹丸之地的地域</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>97</div><div class='nn-body'><div class='nn-word'>一隅之地</div><div class='nn-def'>狭小局部的地方。</div><div class='nn-wrong'>❌ 一隅之地的区域</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>98</div><div class='nn-body'><div class='nn-word'>立锥之地</div><div class='nn-def'>极小的容身地方。</div><div class='nn-wrong'>❌ 立锥之地的地方</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>99</div><div class='nn-body'><div class='nn-word'>漏网之鱼</div><div class='nn-def'>侥幸逃脱的人。</div><div class='nn-wrong'>❌ 漏网之鱼的犯人</div></div></li>
+        <li class='cat-neng-row'><div class='nn-num cat-neng'>100</div><div class='nn-body'><div class='nn-word'>惊弓之鸟</div><div class='nn-def'>受过惊吓、惶恐的人。</div><div class='nn-wrong'>❌ 惊弓之鸟的人</div></div></li>
+      </ol>
+    </div>
+
   </div>
 
   <!-- 名词性短语 -->
@@ -907,6 +1203,20 @@ function copyAll() {
     setTimeout(() => btn.textContent = old, 2000);
   });
 }
+</script>
+
+<script>
+// ===== 100 条名词性成语 - 分类筛选 =====
+document.querySelectorAll('.nn-tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.nn-tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const cat = this.dataset.cat;
+    document.querySelectorAll('.nn-category').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+});
 </script>
 </body>
 </html>
