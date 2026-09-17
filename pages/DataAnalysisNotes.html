@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行测资料分析笔记</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #fff;
+            color: #222;
+            line-height: 1.65;
+        }
+        h1 {
+            text-align: center;
+            color: #2b5797;
+            border-bottom: 2px solid #2b5797;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2b5797;
+            margin-top: 30px;
+            border-left: 5px solid #2b5797;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #333;
+            margin-top:20px;
+        }
+        .warn {
+            background-color: #fff2f2;
+            border-left:4px solid #e53935;
+            padding:10px 14px;
+            margin:12px 0;
+        }
+        .tip {
+            background-color: #edf7ff;
+            border-left:4px solid #2196f3;
+            padding:10px 14px;
+            margin:12px 0;
+        }
+        table {
+            width:100%;
+            border-collapse: collapse;
+            margin:16px 0;
+        }
+        th,td {
+            border:1px solid #ccc;
+            padding:8px 10px;
+        }
+        th {
+            background:#e9f1fc;
+        }
+        .formula {
+            font-family: serif;
+            font-size:1.1em;
+            margin:8px 0;
+        }
+    </style>
+    <!-- umami 统计 -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+    <p style="max-width:1100px;margin:0 auto;padding:0 20px;"><a href="../index.html#notes" style="color:#2b5797;text-decoration:none;">&larr; 返回学习笔记</a></p>
+    <h1>行测资料分析｜公式+原理+高频易错点</h1>
+
+    <h2>一、增长量百化分估算误差原理</h2>
+    <p>公式：<span class="formula">增长量 = A/(1+r) × r</span>，百化分：<span class="formula">r=1/n，增长量≈A/(n+1)</span>；下降量≈A/(n−1)</p>
+    <div class="tip">
+        <p>规律：<strong>增长率估大 → n估小 → 分母n+1偏小 → 估算增长量偏大</strong></p>
+        <p>例：真实r=24.8%，当成25%（1/4，n=4）估算，算出增长量＞真实增长量。</p>
+        <p>增长率估小 → n估大 → 分母n+1偏大 → 估算增长量偏小</p>
+    </div>
+    <div class="warn">
+        <p>负增长（减少量）：|r|估大 → n估小 → n−1偏小 → 估算减少量偏大</p>
+    </div>
+
+    <h2>二、分子分母同放缩（分数比较底层原理）</h2>
+    <h3>原理</h3>
+    <p>比较两个分数，看<strong>分子增速、分母增速（相对变化率，不是绝对增量）</strong></p>
+    <ul>
+        <li>分子增速＞分母增速 → 分数变大</li>
+        <li>分子增速＜分母增速 → 分数变小</li>
+    </ul>
+    <div class="warn">
+        <p>坑1：禁止用分子分母<strong>增加的绝对数值</strong>判断，必须是增长率！</p>
+        <p>坑2：仅适用于分子分母同增/同减；一增一减可直接秒杀：分子↑分母↓，分数变大；分子↓分母↑，分数变小。</p>
+    </div>
+    <p>关联知识点：两期比重判断（a＞b比重上升，本质就是分子增速＞分母增速）</p>
+
+    <h2>三、核心公式汇总（极易混淆4组）</h2>
+    <p>符号约定：A=分子现期，a=分子增速；B=分母现期，b=分母增速</p>
+    <table>
+        <tr>
+            <th>考点名称</th>
+            <th>公式</th>
+            <th>题干识别关键词</th>
+        </tr>
+        <tr>
+            <td>基期比重 / 基期平均数</td>
+            <td class="formula">A/B × (1+b)/(1+a)</td>
+            <td>上一年的比重、上年平均XX</td>
+        </tr>
+        <tr>
+            <td>两期比重差 / 平均数增长量</td>
+            <td class="formula">A/B × (a−b)/(1+a)</td>
+            <td>比重上升/下降多少百分点；平均XX增加多少（带单位）</td>
+        </tr>
+        <tr>
+            <td>平均数增长率</td>
+            <td class="formula">(a−b)/(1+b)</td>
+            <td>平均XX同比增长百分之几（带%）</td>
+        </tr>
+    </table>
+    <div class="warn">
+        <p>秒杀规则：两期比重差结果绝对值一定＜|a−b|，选项大于|a−b>直接排除。</p>
+        <p>一句话区分：<strong>百分点→比重差；%→平均数增长率；带单位差值→平均数增长量</strong></p>
+    </div>
+
+    <h2>四、间隔增长率</h2>
+    <p class="formula">r<sub>间</sub> = r₁ + r₂ + r₁r₂</p>
+    <ul>
+        <li>r₁、r₂均＜10%：乘积项很小，可以忽略；忽略后结果偏小</li>
+        <li>任意一个≥10%：乘积项不能省略</li>
+    </ul>
+
+    <h2>五、混合增长率（线段法）</h2>
+    <div class="tip">
+        <p>口诀：<strong>混合增速，居中不正中，偏向基期量大的一方</strong></p>
+        <p>线段距离之比 = 基期量反比；做题估算可以近似用现期代替基期。</p>
+    </div>
+
+    <h2>六、年均增长率</h2>
+    <p class="formula">(1+r)<sup>n</sup> = 末期 ÷ 初期</p>
+    <ul>
+        <li>n = 年份差：普通时间段：末期−初期；五年规划：n固定=5，初期往前推一年</li>
+        <li>近似公式：(1+r)<sup>n</sup>≈1+n·r，仅适合r＜5%；近似解出来的r<strong>偏大</strong></li>
+        <li>末期/初期固定，n越大，年均r越小；n固定，末期/初期越大，年均r越大</li>
+        <li>r＞5%不能用近似，优先代入选项验证</li>
+    </ul>
+
+    <h2>七、除法估算误差通用规则（直除）</h2>
+    <p>分数 A/B</p>
+    <ul>
+        <li>分母估大 → 计算结果偏小；分母估小 → 计算结果偏大</li>
+        <li>分子估大 → 计算结果偏大；分子估小 → 计算结果偏小</li>
+    </ul>
+    <p>应用场景：基期量 A/(1+r)，r估大 → 分母1+r变大 → 估算基期偏小；r估小则基期偏大。</p>
+
+    <h2>八、必背幂次数（平方、立方、四次方）</h2>
+    <h3>平方数</h3>
+    <p>11²=121，12²=144，13²=169，14²=196，15²=225<br>
+    16²=256，17²=289，18²=324，19²=361，20²=400<br>
+    21²=441，22²=484，23²=529，24²=576，25²=625<br>
+    26²=676，27²=729，28²=784，29²=841，30²=900<br>
+    31²=961，32²=1024，33²=1089，34²=1156，35²=1225</p>
+
+    <h3>立方数</h3>
+    <p>1³=1，2³=8，3³=27，4³=64，5³=125<br>
+    6³=216，7³=343，8³=512，9³=729，10³=1000<br>
+    11³=1331，12³=1728，13³=2197，14³=2744，15³=3375</p>
+
+    <h3>四次方（x⁴=(x²)²）</h3>
+    <p>1⁴=1，2⁴=16，3⁴=81，4⁴=256，5⁴=625<br>
+    6⁴=1296，7⁴=2401，8⁴=4096，9⁴=6561，10⁴=10000</p>
+
+    <h2>九、百化分（增长量核心）</h2>
+    <p>1/2=50%，1/3≈33.3%，1/4=25%，1/5=20%，1/6≈16.7%<br>
+    1/7≈14.3%，1/8=12.5%，1/9≈11.1%，1/10=10%<br>
+    1/11≈9.1%，1/12≈8.3%，1/13≈7.7%，1/14≈7.1%，1/15≈6.7%<br>
+    1/16=6.25%，1/17≈5.9%，1/18≈5.6%，1/19≈5.3%，1/20=5%</p>
+
+    <h2>十、高频错误汇总</h2>
+    <div class="warn">
+        <ol>
+            <li>混淆平均数增长量、平均数增长率：看题干是%还是单位！</li>
+            <li>年均增长率年份差n算错；五年规划n=5，初期要往前推一年</li>
+            <li>分子分母同放缩，误用绝对增量对比，不是增长率对比</li>
+            <li>两期比重差，误选大于|a−b|的选项</li>
+            <li>百化分下降量公式：A/(n−1)，很多人继续用n+1</li>
+            <li>间隔增长率，两个增速都小于10%以外，漏算r₁r₂乘积项</li>
+            <li>估算误差方向搞反，题目问“偏大/偏小”判断失误</li>
+        </ol>
+    </div>
+
+    <h2>十一、解题逻辑总思路</h2>
+    <ol>
+        <li>读题干：识别问法，判断是基期、增长量、比重差、平均数增长率等；圈关键词（% / 百分点 / 单位）</li>
+        <li>定位数据，标记A、B、a、b</li>
+        <li>优先使用秒杀结论排除选项，不要一上来精算</li>
+        <li>估算时，预判误差方向，防止估算选反答案</li>
+        <li>最后剩余选项再少量计算</li>
+    </ol>
+
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
