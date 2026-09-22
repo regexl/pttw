@@ -5,198 +5,619 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>行测资料分析笔记</title>
     <style>
-        * {
-            box-sizing: border-box;
+        /* ===== Design System ===== */
+        :root {
+            --primary: #2b5797;
+            --primary-light: #3d6cb0;
+            --accent: #dd6b20;
+            --accent-light: #f6ad55;
+            --success: #2f855a;
+            --danger: #c53030;
+            --bg: #f7f8fa;
+            --card: #ffffff;
+            --text: #1a202c;
+            --text-light: #4a5568;
+            --border: #e2e8f0;
+            --code-bg: #edf2f7;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: "Microsoft YaHei", sans-serif;
-            max-width: 1100px;
-            margin: 20px auto;
-            padding: 0 20px;
-            background-color: #fff;
-            color: #222;
-            line-height: 1.65;
+            font-family: "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            font-size: 16px;
         }
-        h1 {
+
+        /* ===== Topbar ===== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .topbar a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .topbar a:hover { color: var(--accent); }
+        .topbar .brand-sub {
+            color: var(--text-light);
+            font-size: 0.88em;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 50px 20px 40px;
             text-align: center;
-            color: #2b5797;
-            border-bottom: 2px solid #2b5797;
-            padding-bottom: 10px;
+            position: relative;
+            overflow: hidden;
         }
-        h2 {
-            color: #2b5797;
-            margin-top: 30px;
-            border-left: 5px solid #2b5797;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(221, 107, 32, .18) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        .hero .subtitle {
+            opacity: .85;
+            font-weight: 300;
+            margin-bottom: 18px;
+            position: relative;
+            font-size: 1.05em;
+        }
+        .hero .meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, .12);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            position: relative;
+        }
+
+        /* ===== Layout ===== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        /* ===== TOC (sticky capsule bar) ===== */
+        .toc {
+            position: sticky;
+            top: 52px;
+            z-index: 90;
+            background: rgba(247, 248, 250, .92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 0 0 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            font-size: 13px;
+        }
+        .toc a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toc a:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* ===== Chapter card ===== */
+        .chapter {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+            scroll-margin-top: 64px;
+        }
+        .chapter h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+            color: var(--primary);
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+        }
+        .chapter h2 .num {
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .chapter h3 {
+            color: var(--primary-light);
+            margin: 20px 0 10px;
             padding-left: 10px;
+            border-left: 4px solid var(--accent);
+            font-size: 1.1em;
         }
-        h3 {
-            color: #333;
-            margin-top:20px;
+        .chapter p { margin-bottom: 10px; }
+        .chapter ul, .chapter ol { margin: 8px 0 12px 24px; }
+        .chapter li { margin-bottom: 5px; }
+
+        /* ===== Callout boxes ===== */
+        .callout {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 14px 0;
+            border-left: 4px solid;
         }
-        .warn {
-            background-color: #fff2f2;
-            border-left:4px solid #e53935;
-            padding:10px 14px;
-            margin:12px 0;
+        .callout .label {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 0.95em;
         }
-        .tip {
-            background-color: #edf7ff;
-            border-left:4px solid #2196f3;
-            padding:10px 14px;
-            margin:12px 0;
-        }
+        .callout.tip    { background: #f0fff4; border-color: var(--success); }
+        .callout.tip .label    { color: var(--success); }
+        .callout.warn   { background: #fffaf0; border-color: var(--accent); }
+        .callout.warn .label   { color: var(--accent); }
+        .callout.danger { background: #fff5f5; border-color: var(--danger); }
+        .callout.danger .label { color: var(--danger); }
+        .callout.info   { background: #ebf8ff; border-color: var(--primary-light); }
+        .callout.info .label   { color: var(--primary-light); }
+        .callout a { color: var(--primary); font-weight: 600; }
+        .callout a:hover { color: var(--accent); }
+
+        /* ===== Tables ===== */
         table {
-            width:100%;
+            width: 100%;
             border-collapse: collapse;
-            margin:16px 0;
-        }
-        th,td {
-            border:1px solid #ccc;
-            padding:8px 10px;
+            margin: 14px 0;
+            font-size: 0.92em;
         }
         th {
-            background:#e9f1fc;
+            background: var(--primary);
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
         }
-        .formula {
-            font-family: serif;
-            font-size:1.1em;
-            margin:8px 0;
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        tr:nth-child(even) td { background: #f7fafc; }
+        tr:last-child td { border-bottom: none; }
+
+        /* ===== Inline code (replaces old .formula span) ===== */
+        .code-inline {
+            background: var(--code-bg);
+            color: var(--danger);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.95em;
+        }
+
+        /* ===== New-chapter derived namespace (d-formula etc.) ===== */
+        .d-formula {
+            background: #edf2fc;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: Consolas, 'Courier New', monospace;
+            margin: 10px 0;
+            color: #c82423;
+            font-size: 16px;
+            text-align: center;
+        }
+        .d-tip {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 12px 0;
+        }
+        .d-warn {
+            background: #fff1f0;
+            border: 1px solid #ffa39e;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 12px 0;
+        }
+        .d-cross {
+            background: #f0f7ff;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 17px;
+            white-space: pre;
+            overflow-x: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            line-height: 1.4;
+        }
+        .d-memory {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        /* ===== Back to top button ===== */
+        #back-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+            z-index: 99;
+            transition: all 0.2s;
+        }
+        #back-top:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+        #back-top.show { display: block; }
+
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center;
+            padding: 24px 20px;
+            color: var(--text-light);
+            font-size: 0.85em;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 700px) {
+            .chapter { padding: 20px 18px; }
+            .chapter h2 { font-size: 1.2em; }
+            .hero h1 { font-size: 1.5em; }
+            .topbar { flex-direction: column; gap: 4px; align-items: flex-start; }
+            #back-top { bottom: 80px; }
+            .toc { font-size: 12px; padding: 8px 10px; }
+            .toc a { padding: 4px 8px; }
+        }
+
+        /* ===== Print ===== */
+        @media print {
+            body { background: white; }
+            .topbar, .toc, #back-top { display: none; }
+            .chapter { box-shadow: none; page-break-inside: avoid; }
         }
     </style>
     <!-- umami 统计 -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
 </head>
 <body>
-    <p style="max-width:1100px;margin:0 auto;padding:0 20px;"><a href="../index.html#notes" style="color:#2b5797;text-decoration:none;">&larr; 返回学习笔记</a></p>
+
+<!-- ===== Topbar ===== -->
+<header class="topbar">
+    <a href="../index.html#notes">← 返回学习笔记</a>
+    <span class="brand-sub">行测资料分析 · 公式+原理+高频易错点</span>
+</header>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
     <h1>行测资料分析｜公式+原理+高频易错点</h1>
+    <p class="subtitle">12 章速查手册 · 含混合增长率 / 混合比重严格推导</p>
+    <div class="meta">📅 整理日期：2026 年 9 月 23 日</div>
+</header>
 
-    <h2>一、增长量百化分估算误差原理</h2>
-    <p>公式：<span class="formula">增长量 = A/(1+r) × r</span>，百化分：<span class="formula">r=1/n，增长量≈A/(n+1)</span>；下降量≈A/(n−1)</p>
-    <div class="tip">
-        <p>规律：<strong>增长率估大 → n估小 → 分母n+1偏小 → 估算增长量偏大</strong></p>
-        <p>例：真实r=24.8%，当成25%（1/4，n=4）估算，算出增长量＞真实增长量。</p>
-        <p>增长率估小 → n估大 → 分母n+1偏大 → 估算增长量偏小</p>
-    </div>
-    <div class="warn">
-        <p>负增长（减少量）：|r|估大 → n估小 → n−1偏小 → 估算减少量偏大</p>
-    </div>
+<div class="container">
 
-    <h2>二、分子分母同放缩（分数比较底层原理）</h2>
-    <h3>原理</h3>
-    <p>比较两个分数，看<strong>分子增速、分母增速（相对变化率，不是绝对增量）</strong></p>
-    <ul>
-        <li>分子增速＞分母增速 → 分数变大</li>
-        <li>分子增速＜分母增速 → 分数变小</li>
-    </ul>
-    <div class="warn">
-        <p>坑1：禁止用分子分母<strong>增加的绝对数值</strong>判断，必须是增长率！</p>
-        <p>坑2：仅适用于分子分母同增/同减；一增一减可直接秒杀：分子↑分母↓，分数变大；分子↓分母↑，分数变小。</p>
-    </div>
-    <p>关联知识点：两期比重判断（a＞b比重上升，本质就是分子增速＞分母增速）</p>
+    <!-- ===== TOC ===== -->
+    <nav class="toc">
+        <a href="#ch1">一·增长量估算</a>
+        <a href="#ch2">二·分子分母同放缩</a>
+        <a href="#ch3">三·核心公式汇总</a>
+        <a href="#ch4">四·间隔增长率</a>
+        <a href="#ch5">五·混合增长率</a>
+        <a href="#ch6">六·年均增长率</a>
+        <a href="#ch7">七·除法估算误差</a>
+        <a href="#ch8">八·必背幂次数</a>
+        <a href="#ch9">九·百化分</a>
+        <a href="#ch10">十·高频错误</a>
+        <a href="#ch11">十一·解题总思路</a>
+        <a href="#ch12">十二·严格推导</a>
+    </nav>
 
-    <h2>三、核心公式汇总（极易混淆4组）</h2>
-    <p>符号约定：A=分子现期，a=分子增速；B=分母现期，b=分母增速</p>
-    <table>
-        <tr>
-            <th>考点名称</th>
-            <th>公式</th>
-            <th>题干识别关键词</th>
-        </tr>
-        <tr>
-            <td>基期比重 / 基期平均数</td>
-            <td class="formula">A/B × (1+b)/(1+a)</td>
-            <td>上一年的比重、上年平均XX</td>
-        </tr>
-        <tr>
-            <td>两期比重差 / 平均数增长量</td>
-            <td class="formula">A/B × (a−b)/(1+a)</td>
-            <td>比重上升/下降多少百分点；平均XX增加多少（带单位）</td>
-        </tr>
-        <tr>
-            <td>平均数增长率</td>
-            <td class="formula">(a−b)/(1+b)</td>
-            <td>平均XX同比增长百分之几（带%）</td>
-        </tr>
-    </table>
-    <div class="warn">
-        <p>秒杀规则：两期比重差结果绝对值一定＜|a−b|，选项大于|a−b>直接排除。</p>
-        <p>一句话区分：<strong>百分点→比重差；%→平均数增长率；带单位差值→平均数增长量</strong></p>
-    </div>
+    <main>
 
-    <h2>四、间隔增长率</h2>
-    <p class="formula">r<sub>间</sub> = r₁ + r₂ + r₁r₂</p>
-    <ul>
-        <li>r₁、r₂均＜10%：乘积项很小，可以忽略；忽略后结果偏小</li>
-        <li>任意一个≥10%：乘积项不能省略</li>
-    </ul>
+        <!-- ===== Chapter 1 ===== -->
+        <section class="chapter" id="ch1">
+            <h2><span class="num">1</span>增长量百化分估算误差原理</h2>
+            <p>公式：<code class="code-inline">增长量 = A/(1+r) × r</code>，百化分：<code class="code-inline">r=1/n，增长量 ≈ A/(n+1)</code>；下降量 ≈ <code class="code-inline">A/(n−1)</code></p>
+            <div class="callout tip">
+                <div class="label">提示</div>
+                <p>规律：<strong>增长率估大 → n 估小 → 分母 n+1 偏小 → 估算增长量偏大</strong></p>
+                <p>例：真实 r = 24.8%，当成 25%（1/4，n = 4）估算，算出增长量＞真实增长量。</p>
+                <p>增长率估小 → n 估大 → 分母 n+1 偏大 → 估算增长量偏小</p>
+            </div>
+            <div class="callout warn">
+                <div class="label">注意</div>
+                <p>负增长（减少量）：|r| 估大 → n 估小 → n−1 偏小 → 估算减少量偏大</p>
+            </div>
+        </section>
 
-    <h2>五、混合增长率（线段法）</h2>
-    <div class="tip">
-        <p>口诀：<strong>混合增速，居中不正中，偏向基期量大的一方</strong></p>
-        <p>线段距离之比 = 基期量反比；做题估算可以近似用现期代替基期。</p>
-    </div>
+        <!-- ===== Chapter 2 ===== -->
+        <section class="chapter" id="ch2">
+            <h2><span class="num">2</span>分子分母同放缩（分数比较底层原理）</h2>
+            <h3>原理</h3>
+            <p>比较两个分数，看<strong>分子增速、分母增速（相对变化率，不是绝对增量）</strong></p>
+            <ul>
+                <li>分子增速＞分母增速 → 分数变大</li>
+                <li>分子增速＜分母增速 → 分数变小</li>
+            </ul>
+            <div class="callout warn">
+                <div class="label">注意</div>
+                <p>坑 1：禁止用分子分母<strong>增加的绝对数值</strong>判断，必须是增长率！</p>
+                <p>坑 2：仅适用于分子分母同增/同减；一增一减可直接秒杀：分子↑分母↓，分数变大；分子↓分母↑，分数变小。</p>
+            </div>
+            <p>关联知识点：两期比重判断（a＞b 比重上升，本质就是分子增速＞分母增速）</p>
+        </section>
 
-    <h2>六、年均增长率</h2>
-    <p class="formula">(1+r)<sup>n</sup> = 末期 ÷ 初期</p>
-    <ul>
-        <li>n = 年份差：普通时间段：末期−初期；五年规划：n固定=5，初期往前推一年</li>
-        <li>近似公式：(1+r)<sup>n</sup>≈1+n·r，仅适合r＜5%；近似解出来的r<strong>偏大</strong></li>
-        <li>末期/初期固定，n越大，年均r越小；n固定，末期/初期越大，年均r越大</li>
-        <li>r＞5%不能用近似，优先代入选项验证</li>
-    </ul>
+        <!-- ===== Chapter 3 ===== -->
+        <section class="chapter" id="ch3">
+            <h2><span class="num">3</span>核心公式汇总（极易混淆 4 组）</h2>
+            <p>符号约定：A = 分子现期，a = 分子增速；B = 分母现期，b = 分母增速</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>考点名称</th>
+                        <th>公式</th>
+                        <th>题干识别关键词</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>基期比重 / 基期平均数</td>
+                        <td><code class="code-inline">A/B × (1+b)/(1+a)</code></td>
+                        <td>上一年的比重、上年平均 XX</td>
+                    </tr>
+                    <tr>
+                        <td>两期比重差 / 平均数增长量</td>
+                        <td><code class="code-inline">A/B × (a−b)/(1+a)</code></td>
+                        <td>比重上升/下降多少百分点；平均 XX 增加多少（带单位）</td>
+                    </tr>
+                    <tr>
+                        <td>平均数增长率</td>
+                        <td><code class="code-inline">(a−b)/(1+b)</code></td>
+                        <td>平均 XX 同比增长百分之几（带 %）</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="callout warn">
+                <div class="label">注意</div>
+                <p>秒杀规则：两期比重差结果绝对值一定＜|a−b|，选项大于 |a−b| 直接排除。</p>
+                <p>一句话区分：<strong>百分点 → 比重差；% → 平均数增长率；带单位差值 → 平均数增长量</strong></p>
+            </div>
+        </section>
 
-    <h2>七、除法估算误差通用规则（直除）</h2>
-    <p>分数 A/B</p>
-    <ul>
-        <li>分母估大 → 计算结果偏小；分母估小 → 计算结果偏大</li>
-        <li>分子估大 → 计算结果偏大；分子估小 → 计算结果偏小</li>
-    </ul>
-    <p>应用场景：基期量 A/(1+r)，r估大 → 分母1+r变大 → 估算基期偏小；r估小则基期偏大。</p>
+        <!-- ===== Chapter 4 ===== -->
+        <section class="chapter" id="ch4">
+            <h2><span class="num">4</span>间隔增长率</h2>
+            <p><code class="code-inline">r<sub>间</sub> = r₁ + r₂ + r₁r₂</code></p>
+            <ul>
+                <li>r₁、r₂ 均＜10%：乘积项很小，可以忽略；忽略后结果偏小</li>
+                <li>任意一个 ≥ 10%：乘积项不能省略</li>
+            </ul>
+        </section>
 
-    <h2>八、必背幂次数（平方、立方、四次方）</h2>
-    <h3>平方数</h3>
-    <p>11²=121，12²=144，13²=169，14²=196，15²=225<br>
-    16²=256，17²=289，18²=324，19²=361，20²=400<br>
-    21²=441，22²=484，23²=529，24²=576，25²=625<br>
-    26²=676，27²=729，28²=784，29²=841，30²=900<br>
-    31²=961，32²=1024，33²=1089，34²=1156，35²=1225</p>
+        <!-- ===== Chapter 5 ===== -->
+        <section class="chapter" id="ch5">
+            <h2><span class="num">5</span>混合增长率（线段法）</h2>
+            <div class="callout tip">
+                <div class="label">提示</div>
+                <p>口诀：<strong>混合增速，居中不正中，偏向基期量大的一方</strong></p>
+                <p>线段距离之比 = 基期量反比；做题估算可以近似用现期代替基期。</p>
+            </div>
+            <div class="callout info">
+                <div class="label">深入学习</div>
+                线段法口诀背后的<strong>严格数学推导</strong>（十字交叉、基期量与差值成反比）以及混合比重的等价结构见 → <a href="#ch12">第十二章</a>
+            </div>
+        </section>
 
-    <h3>立方数</h3>
-    <p>1³=1，2³=8，3³=27，4³=64，5³=125<br>
-    6³=216，7³=343，8³=512，9³=729，10³=1000<br>
-    11³=1331，12³=1728，13³=2197，14³=2744，15³=3375</p>
+        <!-- ===== Chapter 6 ===== -->
+        <section class="chapter" id="ch6">
+            <h2><span class="num">6</span>年均增长率</h2>
+            <p><code class="code-inline">(1+r)<sup>n</sup> = 末期 ÷ 初期</code></p>
+            <ul>
+                <li>n = 年份差：普通时间段：末期 − 初期；五年规划：n 固定 = 5，初期往前推一年</li>
+                <li>近似公式：<code class="code-inline">(1+r)<sup>n</sup> ≈ 1+n·r</code>，仅适合 r＜5%；近似解出来的 r <strong>偏大</strong></li>
+                <li>末期/初期固定，n 越大，年均 r 越小；n 固定，末期/初期越大，年均 r 越大</li>
+                <li>r＞5% 不能用近似，优先代入选项验证</li>
+            </ul>
+        </section>
 
-    <h3>四次方（x⁴=(x²)²）</h3>
-    <p>1⁴=1，2⁴=16，3⁴=81，4⁴=256，5⁴=625<br>
-    6⁴=1296，7⁴=2401，8⁴=4096，9⁴=6561，10⁴=10000</p>
+        <!-- ===== Chapter 7 ===== -->
+        <section class="chapter" id="ch7">
+            <h2><span class="num">7</span>除法估算误差通用规则（直除）</h2>
+            <p>分数 A/B</p>
+            <ul>
+                <li>分母估大 → 计算结果偏小；分母估小 → 计算结果偏大</li>
+                <li>分子估大 → 计算结果偏大；分子估小 → 计算结果偏小</li>
+            </ul>
+            <p>应用场景：基期量 <code class="code-inline">A/(1+r)</code>，r 估大 → 分母 1+r 变大 → 估算基期偏小；r 估小则基期偏大。</p>
+        </section>
 
-    <h2>九、百化分（增长量核心）</h2>
-    <p>1/2=50%，1/3≈33.3%，1/4=25%，1/5=20%，1/6≈16.7%<br>
-    1/7≈14.3%，1/8=12.5%，1/9≈11.1%，1/10=10%<br>
-    1/11≈9.1%，1/12≈8.3%，1/13≈7.7%，1/14≈7.1%，1/15≈6.7%<br>
-    1/16=6.25%，1/17≈5.9%，1/18≈5.6%，1/19≈5.3%，1/20=5%</p>
+        <!-- ===== Chapter 8 ===== -->
+        <section class="chapter" id="ch8">
+            <h2><span class="num">8</span>必背幂次数（平方、立方、四次方）</h2>
+            <h3>平方数</h3>
+            <p>11²=121，12²=144，13²=169，14²=196，15²=225<br>
+            16²=256，17²=289，18²=324，19²=361，20²=400<br>
+            21²=441，22²=484，23²=529，24²=576，25²=625<br>
+            26²=676，27²=729，28²=784，29²=841，30²=900<br>
+            31²=961，32²=1024，33²=1089，34²=1156，35²=1225</p>
 
-    <h2>十、高频错误汇总</h2>
-    <div class="warn">
-        <ol>
-            <li>混淆平均数增长量、平均数增长率：看题干是%还是单位！</li>
-            <li>年均增长率年份差n算错；五年规划n=5，初期要往前推一年</li>
-            <li>分子分母同放缩，误用绝对增量对比，不是增长率对比</li>
-            <li>两期比重差，误选大于|a−b|的选项</li>
-            <li>百化分下降量公式：A/(n−1)，很多人继续用n+1</li>
-            <li>间隔增长率，两个增速都小于10%以外，漏算r₁r₂乘积项</li>
-            <li>估算误差方向搞反，题目问“偏大/偏小”判断失误</li>
-        </ol>
-    </div>
+            <h3>立方数</h3>
+            <p>1³=1，2³=8，3³=27，4³=64，5³=125<br>
+            6³=216，7³=343，8³=512，9³=729，10³=1000<br>
+            11³=1331，12³=1728，13³=2197，14³=2744，15³=3375</p>
 
-    <h2>十一、解题逻辑总思路</h2>
-    <ol>
-        <li>读题干：识别问法，判断是基期、增长量、比重差、平均数增长率等；圈关键词（% / 百分点 / 单位）</li>
-        <li>定位数据，标记A、B、a、b</li>
-        <li>优先使用秒杀结论排除选项，不要一上来精算</li>
-        <li>估算时，预判误差方向，防止估算选反答案</li>
-        <li>最后剩余选项再少量计算</li>
-    </ol>
+            <h3>四次方（x⁴=(x²)²）</h3>
+            <p>1⁴=1，2⁴=16，3⁴=81，4⁴=256，5⁴=625<br>
+            6⁴=1296，7⁴=2401，8⁴=4096，9⁴=6561，10⁴=10000</p>
+        </section>
+
+        <!-- ===== Chapter 9 ===== -->
+        <section class="chapter" id="ch9">
+            <h2><span class="num">9</span>百化分（增长量核心）</h2>
+            <p>1/2=50%，1/3≈33.3%，1/4=25%，1/5=20%，1/6≈16.7%<br>
+            1/7≈14.3%，1/8=12.5%，1/9≈11.1%，1/10=10%<br>
+            1/11≈9.1%，1/12≈8.3%，1/13≈7.7%，1/14≈7.1%，1/15≈6.7%<br>
+            1/16=6.25%，1/17≈5.9%，1/18≈5.6%，1/19≈5.3%，1/20=5%</p>
+        </section>
+
+        <!-- ===== Chapter 10 ===== -->
+        <section class="chapter" id="ch10">
+            <h2><span class="num">10</span>高频错误汇总</h2>
+            <div class="callout warn">
+                <div class="label">注意</div>
+                <ol>
+                    <li>混淆平均数增长量、平均数增长率：看题干是 % 还是单位！</li>
+                    <li>年均增长率年份差 n 算错；五年规划 n=5，初期要往前推一年</li>
+                    <li>分子分母同放缩，误用绝对增量对比，不是增长率对比</li>
+                    <li>两期比重差，误选大于 |a−b| 的选项</li>
+                    <li>百化分下降量公式：A/(n−1)，很多人继续用 n+1</li>
+                    <li>间隔增长率，两个增速都小于 10% 以外，漏算 r₁r₂ 乘积项</li>
+                    <li>估算误差方向搞反，题目问"偏大/偏小"判断失误</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ===== Chapter 11 ===== -->
+        <section class="chapter" id="ch11">
+            <h2><span class="num">11</span>解题逻辑总思路</h2>
+            <ol>
+                <li>读题干：识别问法，判断是基期、增长量、比重差、平均数增长率等；圈关键词（% / 百分点 / 单位）</li>
+                <li>定位数据，标记 A、B、a、b</li>
+                <li>优先使用秒杀结论排除选项，不要一上来精算</li>
+                <li>估算时，预判误差方向，防止估算选反答案</li>
+                <li>最后剩余选项再少量计算</li>
+            </ol>
+        </section>
+
+        <!-- ===== Chapter 12 ===== -->
+        <section class="chapter" id="ch12">
+            <h2><span class="num">12</span>混合增长率 / 混合比重 · 严格推导</h2>
+
+            <div class="callout info">
+                <div class="label">承接第五章</div>
+                第五章线段法口诀"居中不正中，偏向基期量大的一方"给出了<strong>速算直觉</strong>；本章给出<strong>严格的数学推导</strong>与混合比重的等价结构。
+            </div>
+
+            <h3>一、混合增长率严格推导</h3>
+            <p>设两部分：</p>
+            <p>部分 1：基期 A，增速 r₁；部分 2：基期 B，增速 r₂；整体混合增速 R</p>
+            <div class="d-formula">A(1+r₁) + B(1+r₂) = (A+B)(1+R)</div>
+            <p>展开化简得到核心等式：</p>
+            <div class="d-formula">A(r₁ − R) = B(R − r₂)</div>
+            <div class="d-formula">A / B = (R − r₂) / (r₁ − R)</div>
+
+            <h3>二、十字交叉形式</h3>
+            <div class="d-cross">A ：    r₁         R−r₂
+                  R
+    B ：    r₂         r₁−R</div>
+            <p>比例含义：<strong>基期量之比 = 增速差值之比</strong></p>
+            <p>反比关系：体量越大，混合值离它越近，差值就越小。</p>
+
+            <h3>三、混合比重（数学结构完全一致）</h3>
+            <p>组 1 总量 A，比重 p₁；组 2 总量 B，比重 p₂；混合比重 P</p>
+            <div class="d-formula">A·p₁ + B·p₂ = P(A+B)</div>
+            <div class="d-formula">A(p₁ − P) = B(P − p₂)</div>
+            <div class="d-formula">A / B = (P − p₂) / (p₁ − P)</div>
+            <p>权重依旧是<strong>分母对应的真实基期总量</strong>。</p>
+
+            <h3>四、行测易错警示</h3>
+            <div class="d-warn">
+                <strong>坑点：十字交叉得到的比值 ≠ 现期之比，是基期之比</strong><br>
+                只有粗略估算时，才可以用现期近似代替基期判断偏向；精算必须使用基期。
+            </div>
+
+            <h3>五、底层本质</h3>
+            <p>混合增长率、混合比重本质都是<strong>加权平均数</strong>：权重为基期量；数学变形之后天然得到：权重和交叉差值成反比。</p>
+
+            <div class="d-memory">
+                <strong>考场背诵口诀：</strong><br>
+                1. 混合 = 加权平均<br>
+                2. 十字交叉：基期量之比 = 差值之比<br>
+                3. 基数越大，离混合中心越近 → 量越大，差值越小，二者成反比
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- ===== Back to top button ===== -->
+<button id="back-top" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+    <p>行测资料分析 · 公式+原理+高频易错点 ｜ 整理日期：2026 年 9 月 23 日</p>
+</footer>
+
+<script>
+    (function () {
+        var bt = document.getElementById('back-top');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 400) {
+                bt.classList.add('show');
+            } else {
+                bt.classList.remove('show');
+            }
+        });
+    })();
+</script>
 
 </body>
 </html>
