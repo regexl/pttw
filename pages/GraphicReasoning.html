@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测图形推理 · 翻转与旋转深度辨析</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231a365d'/%3E%3Ctext x='32' y='46' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='%23fbbf24'%3Eb%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#1a2332;
+  --ink-soft:#3a4a5e;
+  --ink-mute:#6b7a8f;
+  --paper:#faf8f5;
+  --paper-warm:#f3efe8;
+  --line:#d9d2c7;
+  --line-soft:#e8e2d8;
+  --primary:#1a365d;
+  --primary-deep:#0f2440;
+  --accent:#c2410c;
+  --accent-soft:#fde8d8;
+  --good:#15803d;
+  --good-soft:#dcfce7;
+  --warn:#b45309;
+  --warn-soft:#fef3c7;
+  --bad:#b91c1c;
+  --bad-soft:#fee2e2;
+  --info:#1d4ed8;
+  --info-soft:#dbeafe;
+  --shadow:0 1px 3px rgba(26,35,50,.08),0 4px 12px rgba(26,35,50,.06);
+  --shadow-lg:0 4px 16px rgba(26,35,50,.1),0 12px 32px rgba(26,35,50,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.8;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+/* ===== Hero ===== */
+.hero{
+  background:linear-gradient(135deg,var(--primary-deep) 0%,var(--primary) 60%,#234876 100%);
+  color:#fff;
+  padding:72px 0 64px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),
+    radial-gradient(circle at 80% 70%,rgba(194,65,12,.15) 0%,transparent 40%);
+}
+.hero-inner{position:relative;z-index:1}
+.hero-tag{
+  display:inline-block;
+  font-size:13px;letter-spacing:.15em;
+  color:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.25);
+  padding:4px 14px;border-radius:2px;
+  margin-bottom:24px;
+  font-weight:500;
+}
+.hero h1{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;
+  line-height:1.3;
+  margin-bottom:20px;
+  letter-spacing:-.01em;
+}
+.hero h1 em{
+  font-style:normal;
+  color:#fbbf24;
+  border-bottom:3px solid rgba(251,191,36,.4);
+  padding-bottom:2px;
+}
+.hero-sub{
+  font-size:18px;
+  color:rgba(255,255,255,.82);
+  max-width:640px;
+  line-height:1.7;
+}
+.hero-meta{
+  margin-top:32px;
+  display:flex;gap:32px;flex-wrap:wrap;
+  font-size:14px;color:rgba(255,255,255,.6);
+}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;display:inline-block}
+
+/* ===== Topbar ===== */
+.topbar{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:10px 0;
+  position:sticky;top:0;z-index:60;
+}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.topbar a{
+  color:var(--primary);
+  text-decoration:none;font-weight:600;font-size:14px;
+}
+.topbar a:hover{color:var(--accent)}
+.topbar .brand-sub{color:var(--ink-soft);font-size:13px}
+
+/* ===== Back-to-top ===== */
+#back-top{
+  position:fixed;bottom:24px;right:24px;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--primary);color:#fff;border:none;
+  cursor:pointer;font-size:20px;font-family:inherit;
+  display:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  z-index:99;
+  transition:all .2s;
+}
+#back-top:hover{background:var(--accent);transform:translateY(-2px)}
+#back-top.show{display:block}
+@media(max-width:640px){#back-top{bottom:80px}}
+
+/* ===== Nav ===== */
+.toc{
+  background:var(--paper-warm);
+  border-bottom:1px solid var(--line);
+  padding:16px 0;
+  position:sticky;top:44px;z-index:50;
+  backdrop-filter:blur(8px);
+}
+.toc-list{
+  display:flex;gap:8px;flex-wrap:wrap;
+  list-style:none;
+}
+.toc-list a{
+  text-decoration:none;
+  color:var(--ink-soft);
+  font-size:13px;
+  padding:5px 12px;
+  border-radius:3px;
+  transition:all .2s;
+  font-weight:500;
+}
+.toc-list a:hover{background:var(--primary);color:#fff}
+
+/* ===== Section ===== */
+section{padding:56px 0}
+section + section{border-top:1px solid var(--line-soft)}
+.sec-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--accent);
+  font-weight:700;letter-spacing:.1em;
+  margin-bottom:8px;
+}
+.sec-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(24px,3.5vw,32px);
+  font-weight:700;
+  color:var(--primary-deep);
+  margin-bottom:8px;
+  line-height:1.4;
+}
+.sec-lead{
+  font-size:16px;color:var(--ink-mute);
+  margin-bottom:32px;
+  max-width:720px;
+}
+h3.sub{
+  font-family:'Noto Serif SC',serif;
+  font-size:20px;font-weight:600;
+  color:var(--primary);
+  margin:36px 0 16px;
+  padding-left:14px;
+  border-left:4px solid var(--accent);
+  line-height:1.5;
+}
+h4.mini{
+  font-size:16px;font-weight:700;
+  color:var(--ink);
+  margin:24px 0 10px;
+}
+p{margin-bottom:14px}
+p:last-child{margin-bottom:0}
+
+/* ===== 核心结论卡 ===== */
+.verdict{
+  background:var(--primary-deep);
+  color:#fff;
+  border-radius:6px;
+  padding:28px 32px;
+  margin:24px 0;
+  position:relative;
+  overflow:hidden;
+}
+.verdict::before{
+  content:'核心结论';
+  position:absolute;top:12px;right:16px;
+  font-size:11px;letter-spacing:.2em;
+  color:rgba(255,255,255,.35);
+  font-weight:700;
+}
+.verdict p{font-size:17px;line-height:1.9;margin:0}
+.verdict strong{color:#fbbf24;font-weight:700}
+
+/* ===== 对比表 ===== */
+.cmp-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:20px 0;
+  font-size:15px;
+  background:#fff;
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.cmp-table th{
+  background:var(--primary);
+  color:#fff;
+  font-weight:600;
+  padding:14px 16px;
+  text-align:left;
+  font-size:14px;
+}
+.cmp-table td{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line-soft);
+  vertical-align:top;
+}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table tr:hover td{background:var(--paper-warm)}
+.cmp-table .label{font-weight:700;color:var(--primary);white-space:nowrap}
+.cmp-table .yes{color:var(--good);font-weight:700}
+.cmp-table .no{color:var(--bad);font-weight:700}
+
+/* ===== 图形变换演示 ===== */
+.demo-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin:24px 0;
+}
+.demo-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:20px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.demo-card .glyph{
+  font-family:'Noto Serif SC',serif;
+  font-size:64px;
+  font-weight:700;
+  line-height:1;
+  color:var(--primary-deep);
+  margin-bottom:12px;
+  height:80px;
+  display:flex;align-items:center;justify-content:center;
+}
+.demo-card .op-name{
+  font-size:13px;
+  color:var(--ink-mute);
+  font-weight:500;
+  margin-bottom:4px;
+  letter-spacing:.05em;
+}
+.demo-card .op-result{
+  font-size:15px;
+  font-weight:700;
+  color:var(--ink);
+}
+.demo-card.origin{border-color:var(--accent);background:var(--accent-soft)}
+.demo-card.origin .op-name{color:var(--accent)}
+
+/* 变换箭头 */
+.transform-flow{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;flex-wrap:wrap;
+  margin:24px 0;padding:24px;
+  background:#fff;border:1px solid var(--line);
+  border-radius:6px;
+}
+.tf-node{
+  font-family:'Noto Serif SC',serif;
+  font-size:42px;font-weight:700;
+  color:var(--primary-deep);
+  width:72px;height:72px;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--line);
+  border-radius:6px;
+  background:var(--paper);
+}
+.tf-node.accent{border-color:var(--accent);background:var(--accent-soft)}
+.tf-arrow{
+  font-size:20px;color:var(--ink-mute);
+  display:flex;flex-direction:column;align-items:center;
+  gap:2px;
+}
+.tf-arrow .arrow-label{
+  font-size:11px;font-family:'Noto Sans SC',sans-serif;
+  color:var(--accent);font-weight:700;
+  letter-spacing:.05em;
+}
+
+/* ===== 提示框 ===== */
+.callout{
+  border-radius:6px;
+  padding:18px 22px;
+  margin:20px 0;
+  font-size:15px;
+  line-height:1.8;
+}
+.callout-title{
+  font-weight:700;font-size:14px;
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.callout.tip{background:var(--info-soft);border-left:4px solid var(--info)}
+.callout.tip .callout-title{color:var(--info)}
+.callout.warn{background:var(--warn-soft);border-left:4px solid var(--warn)}
+.callout.warn .callout-title{color:var(--warn)}
+.callout.good{background:var(--good-soft);border-left:4px solid var(--good)}
+.callout.good .callout-title{color:var(--good)}
+.callout.bad{background:var(--bad-soft);border-left:4px solid var(--bad)}
+.callout.bad .callout-title{color:var(--bad)}
+.callout p{margin-bottom:8px}
+.callout p:last-child{margin-bottom:0}
+
+/* ===== 口诀卡 ===== */
+.mnemonic{
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  border:2px solid var(--accent);
+  border-radius:8px;
+  padding:24px 28px;
+  margin:24px 0;
+  text-align:center;
+}
+.mnemonic .quote{
+  font-family:'Noto Serif SC',serif;
+  font-size:22px;font-weight:700;
+  color:var(--accent);
+  line-height:1.8;
+  letter-spacing:.05em;
+}
+.mnemonic .explain{
+  margin-top:12px;
+  font-size:14px;color:var(--ink-soft);
+}
+
+/* ===== 坐标示意 ===== */
+.coord-demo{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin:24px 0;
+}
+@media(max-width:640px){.coord-demo{grid-template-columns:1fr}}
+.coord-box{
+  background:#fff;border:1px solid var(--line);
+  border-radius:6px;padding:20px;
+  text-align:center;
+}
+.coord-box h5{
+  font-size:14px;font-weight:700;
+  color:var(--primary);margin-bottom:12px;
+}
+.coord-svg{width:100%;max-width:240px;height:auto;margin:0 auto}
+
+/* ===== 步骤列表 ===== */
+.steps{
+  counter-reset:step;
+  list-style:none;
+  margin:20px 0;
+}
+.steps li{
+  counter-increment:step;
+  position:relative;
+  padding:14px 0 14px 48px;
+  border-bottom:1px dashed var(--line);
+  font-size:15px;
+}
+.steps li:last-child{border-bottom:none}
+.steps li::before{
+  content:counter(step);
+  position:absolute;left:0;top:14px;
+  width:32px;height:32px;
+  background:var(--primary);
+  color:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;
+  font-family:'JetBrains Mono',monospace;
+}
+.steps li strong{color:var(--primary-deep)}
+
+/* ===== 自测题 ===== */
+.quiz{
+  background:#fff;border:1px solid var(--line);
+  border-radius:8px;padding:24px;
+  margin:20px 0;
+  box-shadow:var(--shadow);
+}
+.quiz-q{
+  font-weight:700;font-size:16px;
+  color:var(--primary-deep);
+  margin-bottom:14px;
+}
+.quiz-options{
+  display:grid;gap:10px;
+  margin-bottom:14px;
+}
+.quiz-opt{
+  padding:10px 16px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all .2s;
+  background:var(--paper);
+}
+.quiz-opt:hover{border-color:var(--primary);background:var(--info-soft)}
+.quiz-opt.correct{border-color:var(--good);background:var(--good-soft);color:var(--good);font-weight:700}
+.quiz-opt.wrong{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.quiz-answer{
+  display:none;
+  padding:12px 16px;
+  background:var(--paper-warm);
+  border-radius:4px;
+  font-size:14px;
+  color:var(--ink-soft);
+  line-height:1.7;
+}
+.quiz-answer.show{display:block}
+.quiz-answer strong{color:var(--good)}
+.quiz-btn{
+  display:inline-block;
+  padding:6px 16px;
+  background:var(--primary);
+  color:#fff;border:none;border-radius:4px;
+  font-size:13px;cursor:pointer;
+  font-family:inherit;
+  transition:background .2s;
+}
+.quiz-btn:hover{background:var(--primary-deep)}
+
+/* ===== 组合变换矩阵 ===== */
+.matrix{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  margin:24px 0;
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  background:#fff;
+  font-size:14px;
+}
+@media(max-width:640px){
+  .matrix{grid-template-columns:repeat(2,1fr)}
+}
+.matrix-cell{
+  padding:14px 12px;
+  border-right:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  text-align:center;
+}
+.matrix-cell:nth-child(4n){border-right:none}
+.matrix-cell.head{
+  background:var(--primary);
+  color:#fff;font-weight:700;
+  font-size:13px;
+}
+.matrix-cell.row-head{
+  background:var(--paper-warm);
+  font-weight:700;
+  color:var(--primary);
+  text-align:left;
+  padding-left:16px;
+}
+.matrix-cell .g{
+  font-family:'Noto Serif SC',serif;
+  font-size:28px;font-weight:700;
+  color:var(--primary-deep);
+  display:block;
+  margin-bottom:4px;
+}
+
+/* ===== Footer ===== */
+footer{
+  background:var(--primary-deep);
+  color:rgba(255,255,255,.6);
+  padding:40px 0;
+  text-align:center;
+  font-size:13px;
+  line-height:1.8;
+}
+footer strong{color:rgba(255,255,255,.9)}
+
+/* ===== 响应式 ===== */
+@media(max-width:640px){
+  .hero{padding:48px 0 40px}
+  section{padding:40px 0}
+  .verdict{padding:20px}
+  .cmp-table{font-size:13px}
+  .cmp-table th,.cmp-table td{padding:10px 8px}
+  .demo-row{grid-template-columns:repeat(2,1fr)}
+  .transform-flow{padding:16px;gap:8px}
+  .tf-node{width:56px;height:56px;font-size:32px}
+  .toc-list a{padding:8px 12px;min-height:40px;display:inline-flex;align-items:center}
+  .quiz-btn{padding:10px 18px;min-height:44px;font-size:14px}
+  .quiz-opt{padding:12px 16px;min-height:44px;display:flex;align-items:center}
+}
+</style>
+    <!-- umami 统计 -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<!-- ==================== Topbar ==================== -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="../index.html#notes">← 返回学习笔记</a>
+    <span class="brand-sub">行测图形推理 · 翻转与旋转深度辨析</span>
+  </div>
+</header>
+
+<!-- ==================== Hero ==================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <span class="hero-tag">图形推理 · 核心易混点</span>
+    <h1>翻转 ≠ 旋转180°<br><em>一篇搞懂行测图形变换</em></h1>
+    <p class="hero-sub">上下翻转、左右翻转、旋转90°、旋转180°、中心对称——这些概念在考场上看似相似，实则差之毫厘谬以千里。本笔记从坐标本质、经典案例、组合规律到解题口诀，逐层拆解，彻底消除混淆。</p>
+    <div class="hero-meta">
+      <span><span class="dot"></span>适用：公务员 / 事业单位 / 选调行测</span>
+      <span><span class="dot"></span>模块：图形推理 · 位置类</span>
+      <span><span class="dot"></span>难度：基础到进阶</span>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== 目录 ==================== -->
+<nav class="toc">
+  <div class="wrap">
+    <ul class="toc-list">
+      <li><a href="#core">核心结论</a></li>
+      <li><a href="#essence">坐标本质</a></li>
+      <li><a href="#cases">经典案例</a></li>
+      <li><a href="#symmetry">中心对称辨析</a></li>
+      <li><a href="#combo">组合变换</a></li>
+      <li><a href="#method">解题方法</a></li>
+      <li><a href="#pitfall">避坑指南</a></li>
+      <li><a href="#quiz">自测练习</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ==================== 1. 核心结论 ==================== -->
+<section id="core">
+  <div class="sec-num">01 / CORE</div>
+  <h2 class="sec-title">先记住一句话：翻转是镜像，旋转是转动</h2>
+  <p class="sec-lead">所有混淆都源于没有抓住本质区别。翻转改变的是"手性"（左右/上下方向），旋转改变的是"朝向"（角度）。二者属于完全不同的变换类别。</p>
+
+  <div class="verdict">
+    <p><strong>上下翻转（垂直翻转）</strong>：沿水平对称轴翻折 → <strong>上下颠倒，左右不变</strong>，属于<strong>轴对称变换</strong>。</p>
+    <p style="margin-top:10px"><strong>旋转180°</strong>：绕中心转半圈 → <strong>上下、左右同时颠倒</strong>，属于<strong>中心对称变换</strong>。</p>
+    <p style="margin-top:10px">结论：<strong>二者效果不同</strong>，仅在图形本身同时具备上下对称和左右对称时（如数字0、字母O、正方形）才恰好重合。</p>
+  </div>
+
+  <h3 class="sub">四种基本变换全景对比</h3>
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:18%">
+      <col style="width:22%">
+      <col style="width:20%">
+      <col style="width:20%">
+      <col style="width:20%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>变换类型</th>
+        <th>操作方式</th>
+        <th>上下方向</th>
+        <th>左右方向</th>
+        <th>对称类别</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">上下翻转</td>
+        <td>沿水平中线对折</td>
+        <td class="no">颠倒</td>
+        <td class="yes">不变</td>
+        <td>轴对称（横轴）</td>
+      </tr>
+      <tr>
+        <td class="label">左右翻转</td>
+        <td>沿竖直中线对折</td>
+        <td class="yes">不变</td>
+        <td class="no">颠倒</td>
+        <td>轴对称（纵轴）</td>
+      </tr>
+      <tr>
+        <td class="label">旋转180°</td>
+        <td>绕中心转半圈</td>
+        <td class="no">颠倒</td>
+        <td class="no">颠倒</td>
+        <td>中心对称</td>
+      </tr>
+      <tr>
+        <td class="label">旋转90°</td>
+        <td>绕中心转四分之一圈</td>
+        <td colspan="2" style="text-align:center;color:var(--warn)">横竖互换（顺/逆时针）</td>
+        <td>旋转变换</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-title">记忆锚点</div>
+    <p>翻转 = 拿镜子照（镜像），只翻一个轴；旋转180° = 把纸倒过来看（两头都翻）。</p>
+    <p>考场上最实用的判断法：<strong>看左右有没有变</strong>。左右没变 → 是上下翻转；左右也变了 → 是旋转180°。</p>
+  </div>
+</section>
+
+<!-- ==================== 2. 坐标本质 ==================== -->
+<section id="essence">
+  <div class="sec-num">02 / ESSENCE</div>
+  <h2 class="sec-title">从坐标变换看本质：一个公式彻底分清</h2>
+  <p class="sec-lead">设图形上任意一点坐标为 (x, y)，以图形中心为原点。不同变换对坐标的影响完全不同，这是区分一切的底层逻辑。</p>
+
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:22%">
+      <col style="width:28%">
+      <col style="width:25%">
+      <col style="width:25%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>变换</th>
+        <th>坐标映射</th>
+        <th>x（左右）</th>
+        <th>y（上下）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">上下翻转</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:14px">(x, y) → (x, −y)</td>
+        <td class="yes">不变</td>
+        <td class="no">取反</td>
+      </tr>
+      <tr>
+        <td class="label">左右翻转</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:14px">(x, y) → (−x, y)</td>
+        <td class="no">取反</td>
+        <td class="yes">不变</td>
+      </tr>
+      <tr>
+        <td class="label">旋转180°</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:14px">(x, y) → (−x, −y)</td>
+        <td class="no">取反</td>
+        <td class="no">取反</td>
+      </tr>
+      <tr>
+        <td class="label">顺时针90°</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:14px">(x, y) → (y, −x)</td>
+        <td colspan="2" style="text-align:center;color:var(--warn)">横竖坐标互换</td>
+      </tr>
+      <tr>
+        <td class="label">逆时针90°</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:14px">(x, y) → (−y, x)</td>
+        <td colspan="2" style="text-align:center;color:var(--warn)">横竖坐标互换</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout good">
+    <div class="callout-title">关键推论</div>
+    <p><strong>旋转180° = 上下翻转 + 左右翻转</strong>（顺序无关）。这就是为什么旋转180°后上下和左右都颠倒了——它等价于两次翻转的叠加。</p>
+    <p>反过来，<strong>上下翻转 ≠ 旋转180°</strong>，因为上下翻转只做了一次翻转，缺少左右翻转那一步。</p>
+  </div>
+
+  <h3 class="sub">视觉化理解：翻折 vs 转动</h3>
+  <div class="coord-demo">
+    <div class="coord-box">
+      <h5>上下翻转（沿横轴对折）</h5>
+      <svg class="coord-svg" viewBox="0 0 200 160">
+        <line x1="10" y1="80" x2="190" y2="80" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="192" y="84" font-size="10" fill="#c2410c">横轴</text>
+        <circle cx="70" cy="50" r="14" fill="none" stroke="#1a365d" stroke-width="2.5"/>
+        <line x1="70" y1="50" x2="84" y2="50" stroke="#1a365d" stroke-width="2.5"/>
+        <text x="56" y="38" font-size="11" fill="#1a365d" font-weight="700">原</text>
+        <circle cx="70" cy="110" r="14" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="3,2"/>
+        <line x1="70" y1="110" x2="84" y2="110" stroke="#15803d" stroke-width="2.5" stroke-dasharray="3,2"/>
+        <text x="56" y="134" font-size="11" fill="#15803d" font-weight="700">翻后</text>
+        <path d="M 130 50 Q 145 65 130 80" fill="none" stroke="#6b7a8f" stroke-width="1.5" marker-end="url(#arr1)"/>
+        <defs><marker id="arr1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#6b7a8f"/></marker></defs>
+        <text x="148" y="68" font-size="10" fill="#6b7a8f">x不变</text>
+      </svg>
+      <p style="font-size:13px;color:var(--ink-mute);margin-top:8px">左右方向（开口朝右）保持不变</p>
+    </div>
+    <div class="coord-box">
+      <h5>旋转180°（绕中心转动）</h5>
+      <svg class="coord-svg" viewBox="0 0 200 160">
+        <circle cx="100" cy="80" r="3" fill="#c2410c"/>
+        <text x="106" y="76" font-size="10" fill="#c2410c">中心</text>
+        <circle cx="70" cy="50" r="14" fill="none" stroke="#1a365d" stroke-width="2.5"/>
+        <line x1="70" y1="50" x2="84" y2="50" stroke="#1a365d" stroke-width="2.5"/>
+        <text x="56" y="38" font-size="11" fill="#1a365d" font-weight="700">原</text>
+        <circle cx="130" cy="110" r="14" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="3,2"/>
+        <line x1="130" y1="110" x2="116" y2="110" stroke="#15803d" stroke-width="2.5" stroke-dasharray="3,2"/>
+        <text x="138" y="134" font-size="11" fill="#15803d" font-weight="700">转后</text>
+        <path d="M 84 50 A 40 40 0 0 1 116 110" fill="none" stroke="#6b7a8f" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="140" y="60" font-size="10" fill="#6b7a8f">x、y都变</text>
+      </svg>
+      <p style="font-size:13px;color:var(--ink-mute);margin-top:8px">左右方向（开口朝左）也反转了</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 经典案例 ==================== -->
+<section id="cases">
+  <div class="sec-num">03 / CASES</div>
+  <h2 class="sec-title">经典案例：用字母和数字一眼看穿区别</h2>
+  <p class="sec-lead">抽象的坐标公式不如具体的图形直观。下面用最经典的测试字符——字母 b 和数字 6——把四种变换的结果全部摆出来对比。</p>
+
+  <h3 class="sub">案例一：字母 b（最标准的测试字符）</h3>
+  <p>字母 b 是区分翻转与旋转的"黄金测试字符"，因为它的四种变换结果恰好是四个不同的字母，一目了然。</p>
+
+  <div class="demo-row">
+    <div class="demo-card origin">
+      <div class="glyph">b</div>
+      <div class="op-name">原图</div>
+      <div class="op-result">竖线在左，圈在右下</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">p</div>
+      <div class="op-name">上下翻转</div>
+      <div class="op-result">竖线在左，圈在右上</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">d</div>
+      <div class="op-name">左右翻转</div>
+      <div class="op-result">竖线在右，圈在左下</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">q</div>
+      <div class="op-name">旋转180°</div>
+      <div class="op-result">竖线在右，圈在左上</div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">b 的变换口诀</div>
+    <p><strong>b 上下翻 → p</strong>（竖线还在左边，只是圈翻到上面）</p>
+    <p><strong>b 左右翻 → d</strong>（圈还在下面，只是竖线翻到右边）</p>
+    <p><strong>b 转180° → q</strong>（竖线和圈的位置全变了）</p>
+    <p>记住：<strong>上下翻转只动上下，左右翻转只动左右，旋转180°上下左右全动</strong>。</p>
+  </div>
+
+  <h3 class="sub">案例二：数字 6（最容易出错的案例）</h3>
+  <p>数字 6 是高频易错点。很多人误以为"6 上下翻转 = 9"，实际上并非如此。</p>
+
+  <div class="transform-flow">
+    <div class="tf-node accent">6</div>
+    <div class="tf-arrow">
+      <span class="arrow-label">上下翻转</span>
+      <span>→</span>
+    </div>
+    <div class="tf-node" style="transform:scaleX(-1)">9</div>
+    <div class="tf-arrow">
+      <span class="arrow-label">旋转180°</span>
+      <span>→</span>
+    </div>
+    <div class="tf-node">9</div>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点纠正</div>
+    <p><strong>6 上下翻转 ≠ 9</strong>。上下翻转后，圈从下方跑到上方，但开口方向仍然朝右（左右不变），得到的是一个"反向的9"（开口朝右的9），而不是正常的9。</p>
+    <p><strong>6 旋转180° = 9</strong>。旋转后圈到上方、开口朝左，正好是正常的9。</p>
+    <p>这就是为什么不能用"看起来差不多"来判断——必须看<strong>左右方向是否改变</strong>。</p>
+  </div>
+
+  <h3 class="sub">案例三：对称图形的"巧合"</h3>
+  <p>有些图形上下翻转和旋转180°的结果看起来一样，但这只是因为图形本身具有特殊对称性，<strong>不代表两种变换等价</strong>。</p>
+
+  <div class="demo-row">
+    <div class="demo-card origin">
+      <div class="glyph">0</div>
+      <div class="op-name">数字 0</div>
+      <div class="op-result">既上下对称又左右对称</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">S</div>
+      <div class="op-name">字母 S</div>
+      <div class="op-result">中心对称，转180°不变</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">H</div>
+      <div class="op-name">字母 H</div>
+      <div class="op-result">双轴对称+中心对称</div>
+    </div>
+    <div class="demo-card">
+      <div class="glyph">△</div>
+      <div class="op-name">正三角形</div>
+      <div class="op-result">仅上下轴对称</div>
+    </div>
+  </div>
+
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:20%">
+      <col style="width:26%">
+      <col style="width:27%">
+      <col style="width:27%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>图形</th>
+        <th>上下翻转后</th>
+        <th>旋转180°后</th>
+        <th>是否相同</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">0 / O / 正方形</td>
+        <td>与原图相同</td>
+        <td>与原图相同</td>
+        <td class="yes">相同（巧合）</td>
+      </tr>
+      <tr>
+        <td class="label">S / Z / N</td>
+        <td>与原图不同</td>
+        <td>与原图相同</td>
+        <td class="no">不同</td>
+      </tr>
+      <tr>
+        <td class="label">A / T / △</td>
+        <td>与原图不同（倒三角）</td>
+        <td>与原图不同（倒三角）</td>
+        <td class="yes">相同（巧合）</td>
+      </tr>
+      <tr>
+        <td class="label">b / 6 / p</td>
+        <td>与原图不同</td>
+        <td>与原图不同</td>
+        <td class="no">不同（关键测试）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-title">重要提醒</div>
+    <p>即使某些图形的上下翻转和旋转180°结果相同，也<strong>不能认为两种变换等价</strong>。换一个非对称图形（如 b、6、箭头、手指方向）立刻就能区分。行测题目专门用非对称图形来考这个点。</p>
+  </div>
+</section>
+
+<!-- ==================== 4. 中心对称辨析 ==================== -->
+<section id="symmetry">
+  <div class="sec-num">04 / SYMMETRY</div>
+  <h2 class="sec-title">中心对称 = 旋转180°吗？两个概念必须分清</h2>
+  <p class="sec-lead">"中心对称"和"旋转180°"经常被混为一谈，但它们一个是图形的<strong>属性</strong>，一个是图形的<strong>变换操作</strong>，属于不同层面的概念。</p>
+
+  <div class="cmp-table" style="margin-bottom:24px">
+    <colgroup>
+      <col style="width:22%">
+      <col style="width:39%">
+      <col style="width:39%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>中心对称（图形属性）</th>
+        <th>旋转180°（变换操作）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">本质</td>
+        <td>描述<strong>一个图形自身</strong>的性质</td>
+        <td>描述<strong>从图A到图B</strong>的动作</td>
+      </tr>
+      <tr>
+        <td class="label">定义</td>
+        <td>绕中心旋转180°后能与<strong>自身</strong>重合</td>
+        <td>将任意图形绕中心转半圈得到新图形</td>
+      </tr>
+      <tr>
+        <td class="label">对象</td>
+        <td>一个图形（判断"是不是"）</td>
+        <td>两个图形（判断"怎么变的"）</td>
+      </tr>
+      <tr>
+        <td class="label">例子</td>
+        <td>S、Z、N、平行四边形是中心对称图形</td>
+        <td>b 旋转180°得到 q；6 旋转180°得到 9</td>
+      </tr>
+    </tbody>
+  </div>
+
+  <h3 class="sub">两者的关系</h3>
+  <div class="callout good">
+    <div class="callout-title">准确表述</div>
+    <p><strong>如果一个图形是中心对称图形 ⇔ 它旋转180°后与原图完全重合。</strong></p>
+    <p>也就是说，"中心对称"这个属性的<strong>判定方法</strong>就是"旋转180°看是否重合"，但属性本身不等于操作。</p>
+  </div>
+
+  <h3 class="sub">轴对称 vs 中心对称：行测必考对比</h3>
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:20%">
+      <col style="width:40%">
+      <col style="width:40%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>对比项</th>
+        <th>轴对称</th>
+        <th>中心对称</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">操作方式</td>
+        <td>沿一条直线<strong>对折</strong>（翻转）</td>
+        <td>绕一个点<strong>旋转180°</strong></td>
+      </tr>
+      <tr>
+        <td class="label">重合条件</td>
+        <td>直线两侧部分完全重合</td>
+        <td>旋转后与自身完全重合</td>
+      </tr>
+      <tr>
+        <td class="label">典型图形</td>
+        <td>A、T、M、等腰三角形、五角星</td>
+        <td>S、Z、N、平行四边形、∞</td>
+      </tr>
+      <tr>
+        <td class="label">既是轴又是中心</td>
+        <td colspan="2" style="text-align:center">H、I、O、X、正方形、圆、线段</td>
+      </tr>
+      <tr>
+        <td class="label">行测考法</td>
+        <td>对称轴数量、方向、是否重合</td>
+        <td>是否中心对称、与轴对称组合分类</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="mnemonic">
+    <div class="quote">轴对称：折一下，两边一模一样<br>中心对称：转半圈，和自己一模一样</div>
+    <div class="explain">翻转对应轴对称，旋转180°对应中心对称——这是一一对应的关系</div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">两个图的中心对称 ≠ 一个图的中心对称</div>
+    <p>行测中还有一种考法：<strong>两个图形构成中心对称</strong>，即图A旋转180°得到图B。这是图形间的变换关系，和"单个图形是中心对称图形"是两个不同的考点，不要混淆。</p>
+    <p>例如：b 和 q 两个图构成中心对称关系（b 转180°= q），但 b 本身不是中心对称图形。</p>
+  </div>
+</section>
+
+<!-- ==================== 5. 组合变换 ==================== -->
+<section id="combo">
+  <div class="sec-num">05 / COMBO</div>
+  <h2 class="sec-title">举一反三：变换组合与等价关系</h2>
+  <p class="sec-lead">掌握了基本变换后，进一步理解变换之间的组合和等价关系，能在考场上快速识别复杂图形的变化路径。</p>
+
+  <h3 class="sub">核心等价关系</h3>
+  <div class="callout tip">
+    <div class="callout-title">三大等价公式</div>
+    <p><strong>公式1：上下翻转 + 左右翻转 = 旋转180°</strong>（顺序无关）</p>
+    <p><strong>公式2：上下翻转 + 旋转180° = 左右翻转</strong>（因为转180°已经含左右翻转，叠加上下翻转后抵消了上下，只剩左右）</p>
+    <p><strong>公式3：左右翻转 + 旋转180° = 上下翻转</strong>（同理）</p>
+  </div>
+
+  <h3 class="sub">变换组合全表（以字母 b 为例）</h3>
+  <p>下表展示了对 b 依次执行两种变换后的结果，验证上述等价关系。</p>
+
+  <div class="matrix">
+    <div class="matrix-cell head">第二次 \ 第一次</div>
+    <div class="matrix-cell head">不操作（b）</div>
+    <div class="matrix-cell head">上下翻转（p）</div>
+    <div class="matrix-cell head">左右翻转（d）</div>
+
+    <div class="matrix-cell row-head">不操作</div>
+    <div class="matrix-cell"><span class="g">b</span>原图</div>
+    <div class="matrix-cell"><span class="g">p</span>上下翻</div>
+    <div class="matrix-cell"><span class="g">d</span>左右翻</div>
+
+    <div class="matrix-cell row-head">上下翻转</div>
+    <div class="matrix-cell"><span class="g">p</span>上下翻</div>
+    <div class="matrix-cell"><span class="g">b</span>回到原图</div>
+    <div class="matrix-cell"><span class="g">q</span>= 转180°</div>
+
+    <div class="matrix-cell row-head">左右翻转</div>
+    <div class="matrix-cell"><span class="g">d</span>左右翻</div>
+    <div class="matrix-cell"><span class="g">q</span>= 转180°</div>
+    <div class="matrix-cell"><span class="g">b</span>回到原图</div>
+
+    <div class="matrix-cell row-head">旋转180°</div>
+    <div class="matrix-cell"><span class="g">q</span>转180°</div>
+    <div class="matrix-cell"><span class="g">d</span>= 左右翻</div>
+    <div class="matrix-cell"><span class="g">p</span>= 上下翻</div>
+  </div>
+
+  <div class="callout good">
+    <div class="callout-title">从组合表得到的推论</div>
+    <p>1. <strong>同一种翻转做两次 = 回到原图</strong>（上下翻两次 = 原图，左右翻两次 = 原图）。翻转是"自逆"变换。</p>
+    <p>2. <strong>旋转180°做两次 = 回到原图</strong>。转两圈半等于没转。</p>
+    <p>3. <strong>上下翻 + 左右翻 = 旋转180°</strong>，无论先做哪个，结果一样（交换律）。</p>
+    <p>4. 这四种操作（不操作、上下翻、左右翻、转180°）构成一个数学上的<strong>克莱因四元群</strong>，行测不会考群论，但理解这个结构能帮你快速推算复杂变换。</p>
+  </div>
+
+  <h3 class="sub">旋转90°的组合规律</h3>
+  <p>旋转90°是另一个高频考点，它的组合规律更简单：</p>
+  <ul class="steps">
+    <li><strong>顺时针90° + 顺时针90° = 旋转180°</strong>（转两次四分之一圈 = 半圈）</li>
+    <li><strong>顺时针90° × 4 = 回到原图</strong>（转一整圈）</li>
+    <li><strong>顺时针90° + 逆时针90° = 回到原图</strong>（方向相反，抵消）</li>
+    <li><strong>翻转 + 旋转90°</strong>：结果取决于顺序，不满足交换律。例如 b 先上下翻再顺时针转90°，和先转再翻的结果不同。</li>
+  </ul>
+
+  <div class="callout warn">
+    <div class="callout-title">注意：翻转和90°旋转不交换</div>
+    <p>上下翻转和左右翻转的顺序可以交换（都得到旋转180°），但<strong>翻转和90°旋转的顺序不能交换</strong>。考场上遇到"先翻后转"和"先转后翻"的题目，要分别计算，不能想当然。</p>
+  </div>
+</section>
+
+<!-- ==================== 6. 解题方法 ==================== -->
+<section id="method">
+  <div class="sec-num">06 / METHOD</div>
+  <h2 class="sec-title">考场实战：三步判断法与实操技巧</h2>
+  <p class="sec-lead">理论懂了不等于会做题。行测图形推理的位置类题目，需要在30秒内快速判断变换类型。下面是经过实战验证的判断流程和技巧。</p>
+
+  <h3 class="sub">三步判断法（位置类通用）</h3>
+  <ol class="steps">
+    <li><strong>看元素是否相同</strong>：如果前后两图的组成元素完全相同（只是位置/方向变了），属于位置类，考虑平移、旋转、翻转。如果元素不同，考虑样式类或数量类。</li>
+    <li><strong>看是整体变还是局部变</strong>：整个图形一起变 → 旋转或翻转；部分元素动 → 平移或局部旋转。</li>
+    <li><strong>看左右方向是否改变</strong>：这是区分翻转和旋转180°的关键。左右方向没变 → 上下翻转；左右方向变了 → 旋转180°或左右翻转（再看上下是否变）。</li>
+  </ol>
+
+  <h3 class="sub">翻转 vs 旋转180°：一秒判断法</h3>
+  <div class="cmp-table">
+    <colgroup>
+      <col style="width:30%">
+      <col style="width:35%">
+      <col style="width:35%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>判断维度</th>
+        <th>上下翻转</th>
+        <th>旋转180°</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">左右方向</td>
+        <td class="yes">不变</td>
+        <td class="no">改变</td>
+      </tr>
+      <tr>
+        <td class="label">上下方向</td>
+        <td class="no">改变</td>
+        <td class="no">改变</td>
+      </tr>
+      <tr>
+        <td class="label">卷子操作</td>
+        <td>沿水平线对折看背面</td>
+        <td>把卷子直接倒过来看</td>
+      </tr>
+      <tr>
+        <td class="label">镜像特征</td>
+        <td>是镜像（手性改变）</td>
+        <td>不是镜像（手性不变）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-title">最实用的考场技巧：转卷子</div>
+    <p><strong>判断旋转180°</strong>：把试卷/草稿纸倒过来（旋转180°），看倒过来的图和选项是否一致。一致就是旋转180°。</p>
+    <p><strong>判断上下翻转</strong>：把纸沿着图形的水平中线向后对折，从背面透光看（或想象背面），看到的就是上下翻转的结果。</p>
+    <p><strong>判断左右翻转</strong>：把纸沿着竖直中线对折，从背面看。</p>
+    <p>这个方法零思考成本，在考场上极其高效，尤其是面对复杂图形时。</p>
+  </div>
+
+  <h3 class="sub">时针法：判断旋转还是翻转的专业方法</h3>
+  <p>当图形比较复杂、难以直接观察左右方向时，使用<strong>时针法</strong>：</p>
+  <ol class="steps">
+    <li>在原图中选取三个特征点（如起点、拐点、终点），按顺序画一个箭头方向（顺时针或逆时针）。</li>
+    <li>在变换后的图中，按<strong>相同的对应点</strong>画箭头方向。</li>
+    <li><strong>时针方向不变 → 旋转</strong>（旋转不改变手性）。</li>
+    <li><strong>时针方向改变 → 翻转</strong>（翻转改变手性/镜像）。</li>
+  </ol>
+  <div class="callout good">
+    <div class="callout-title">时针法原理</div>
+    <p>旋转是刚体运动，不改变图形的"手性"（左手还是右手），所以时针方向不变。翻转是镜像反射，会把左手变成右手，所以时针方向反转。</p>
+    <p>注意：时针法只能区分"旋转"和"翻转"，不能区分是上下翻转还是左右翻转，也不能区分旋转了多少度。需要结合其他特征进一步判断。</p>
+  </div>
+
+  <h3 class="sub">特征箭头法</h3>
+  <p>在图形中找一个有明确方向的局部特征（如箭头、尖角、缺口、手指方向），观察它在变换前后的指向变化：</p>
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:25%">
+      <col style="width:25%">
+      <col style="width:25%">
+      <col style="width:25%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>原指向</th>
+        <th>上下翻转后</th>
+        <th>左右翻转后</th>
+        <th>旋转180°后</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">↑ 向上</td>
+        <td>↓ 向下</td>
+        <td>↑ 向上</td>
+        <td>↓ 向下</td>
+      </tr>
+      <tr>
+        <td class="label">→ 向右</td>
+        <td>→ 向右</td>
+        <td>← 向左</td>
+        <td>← 向左</td>
+      </tr>
+      <tr>
+        <td class="label">↗ 右上</td>
+        <td>↘ 右下</td>
+        <td>↖ 左上</td>
+        <td>↙ 左下</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:14px;color:var(--ink-mute);margin-top:8px">从表中可以看出：向上的箭头在上下翻转和旋转180°后都变成向下（无法区分），但向右的箭头在上下翻转后仍向右、在旋转180°后变成向左（可以区分）。所以<strong>要选水平方向的特征来判断</strong>。</p>
+</section>
+
+<!-- ==================== 7. 避坑指南 ==================== -->
+<section id="pitfall">
+  <div class="sec-num">07 / PITFALL</div>
+  <h2 class="sec-title">避坑指南：行测高频易错点全收录</h2>
+  <p class="sec-lead">命题人专门在这些地方设坑。把以下易错点吃透，就能避开绝大多数错误。</p>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点1：把上下翻转等同于旋转180°</div>
+    <p><strong>错误表现</strong>：看到图形上下颠倒了，就直接选旋转180°，忽略检查左右方向是否也颠倒了。</p>
+    <p><strong>正确做法</strong>：必须同时检查上下和左右两个方向。只有上下颠倒 → 上下翻转；上下左右都颠倒 → 旋转180°。</p>
+    <p><strong>典型错题</strong>：题干图形是一个开口朝右的"P"，选项中一个是开口朝右的"b"（上下翻转），一个是开口朝左的"q"（旋转180°）。很多人看到上下翻了就选q，实际上应该选b。</p>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点2：用对称图形判断变换类型</div>
+    <p><strong>错误表现</strong>：用0、O、正方形等双对称图形来验证"上下翻转=旋转180°"，得出错误结论。</p>
+    <p><strong>正确做法</strong>：必须用非对称图形（如b、6、箭头、手指）来测试变换效果。对称图形的结果相同只是巧合，不代表变换等价。</p>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点3：混淆"中心对称图形"和"两图中心对称"</div>
+    <p><strong>错误表现</strong>：看到两个图旋转180°后重合，就说"这个图形是中心对称图形"。</p>
+    <p><strong>正确做法</strong>："中心对称图形"描述单个图形自身的性质；"两个图构成中心对称"描述两个图之间的变换关系。前者是属性判断，后者是位置类推理。</p>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点4：数字6/9的翻转判断错误</div>
+    <p><strong>错误表现</strong>：认为6上下翻转=9。</p>
+    <p><strong>正确做法</strong>：6上下翻转后开口仍朝右（左右不变），是"反向9"；6旋转180°后开口朝左，才是正常的9。记住：<strong>看开口方向</strong>。</p>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点5：翻转和旋转90°的顺序混淆</div>
+    <p><strong>错误表现</strong>：认为"先翻后转"和"先转后翻"结果一样。</p>
+    <p><strong>正确做法</strong>：翻转和90°旋转不满足交换律，顺序不同结果不同。遇到组合变换必须按题目给出的顺序逐步计算。</p>
+  </div>
+
+  <div class="callout bad">
+    <div class="callout-title">易错点6：把翻转当成平移</div>
+    <p><strong>错误表现</strong>：看到图形位置变了就以为是平移，忽略了方向也变了。</p>
+    <p><strong>正确做法</strong>：平移只改变位置不改变方向；翻转和旋转既改变位置（可能）也改变方向。先看方向变没变，方向变了就不是平移。</p>
+  </div>
+
+  <h3 class="sub">易错点速查表</h3>
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:30%">
+      <col style="width:35%">
+      <col style="width:35%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>易错概念</th>
+        <th>错误理解</th>
+        <th>正确理解</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">上下翻转</td>
+        <td>= 旋转180°</td>
+        <td>≠ 旋转180°，只颠倒上下</td>
+      </tr>
+      <tr>
+        <td class="label">翻转</td>
+        <td>属于旋转的一种</td>
+        <td>翻转是镜像，旋转是转动，本质不同</td>
+      </tr>
+      <tr>
+        <td class="label">中心对称</td>
+        <td>= 旋转180°这个动作</td>
+        <td>是图形属性，判定方法是旋转180°看是否自重合</td>
+      </tr>
+      <tr>
+        <td class="label">6上下翻转</td>
+        <td>= 9</td>
+        <td>≠ 9，是开口朝右的反向9</td>
+      </tr>
+      <tr>
+        <td class="label">翻转+90°旋转</td>
+        <td>顺序无关</td>
+        <td>顺序有关，不满足交换律</td>
+      </tr>
+      <tr>
+        <td class="label">轴对称图形</td>
+        <td>翻转后不变</td>
+        <td>仅沿其对称轴翻转才不变，沿其他轴翻转会变</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ==================== 8. 自测练习 ==================== -->
+<section id="quiz">
+  <div class="sec-num">08 / QUIZ</div>
+  <h2 class="sec-title">自测练习：检验你的掌握程度</h2>
+  <p class="sec-lead">以下题目覆盖核心考点，点击选项即可作答并查看解析。建议先独立思考，再看答案。</p>
+
+  <div class="quiz">
+    <div class="quiz-q">第1题：字母 "d" 上下翻转后得到什么？</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false">A. b</div>
+      <div class="quiz-opt" data-correct="true">B. q</div>
+      <div class="quiz-opt" data-correct="false">C. p</div>
+      <div class="quiz-opt" data-correct="false">D. d</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：B. q</strong><br>
+      d 的竖线在右、圈在左下。上下翻转后竖线仍在右（左右不变），圈翻到左上 → q。<br>
+      验证：d 左右翻转 = b；d 旋转180° = p。注意区分。
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">第2题：一个箭头 "→" 经过下列哪种变换后变成 "←"？</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false">A. 上下翻转</div>
+      <div class="quiz-opt" data-correct="false">B. 顺时针旋转90°</div>
+      <div class="quiz-opt" data-correct="true">C. 旋转180°</div>
+      <div class="quiz-opt" data-correct="false">D. 以上都可以</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：C. 旋转180°</strong><br>
+      → 上下翻转后仍然是 →（左右不变，水平箭头上下翻转不变）。<br>
+      → 顺时针转90°后变成 ↓。<br>
+      → 旋转180°后变成 ←（上下左右都颠倒，水平箭头表现为左右颠倒）。<br>
+      左右翻转也能得到 ←，但选项中没有，所以选 C。
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">第3题：下列哪个图形是中心对称图形？</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false">A. 等腰三角形</div>
+      <div class="quiz-opt" data-correct="true">B. 平行四边形</div>
+      <div class="quiz-opt" data-correct="false">C. 五角星</div>
+      <div class="quiz-opt" data-correct="false">D. 等边三角形</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：B. 平行四边形</strong><br>
+      平行四边形绕中心旋转180°后与自身重合，是中心对称图形（但不是轴对称图形）。<br>
+      等腰三角形、等边三角形、五角星都是轴对称图形，但旋转180°后不与自身重合，不是中心对称图形。<br>
+      注意：矩形、菱形、正方形既是轴对称也是中心对称，但普通平行四边形只是中心对称。
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">第4题：图形 A 先上下翻转，再左右翻转，最终效果等同于？</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false">A. 上下翻转</div>
+      <div class="quiz-opt" data-correct="false">B. 左右翻转</div>
+      <div class="quiz-opt" data-correct="true">C. 旋转180°</div>
+      <div class="quiz-opt" data-correct="false">D. 回到原图</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：C. 旋转180°</strong><br>
+      上下翻转 + 左右翻转 = 旋转180°（核心等价公式）。上下翻转颠倒y坐标，左右翻转颠倒x坐标，两者叠加后x、y都取反，正好是旋转180°的坐标映射。<br>
+      且顺序无关：先左右再上下，结果一样。
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">第5题：数字 "9" 旋转180°后得到什么？</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="true">A. 6</div>
+      <div class="quiz-opt" data-correct="false">B. 9</div>
+      <div class="quiz-opt" data-correct="false">C. 反向6（开口朝右）</div>
+      <div class="quiz-opt" data-correct="false">D. 以上都不对</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：A. 6</strong><br>
+      9 的圈在上方、开口朝左。旋转180°后圈到下方、开口朝右 → 正好是6。<br>
+      对比：9 上下翻转后圈到下方但开口仍朝左，是反向6，不是正常的6。<br>
+      这再次验证了上下翻转 ≠ 旋转180°。
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="quiz-q">第6题（进阶）：字母 "b" 先顺时针旋转90°，再上下翻转，最终结果是？（提示：b顺时针转90°后，竖线在上、圈在右上，形状类似开口朝下的 "P" 横放）</div>
+    <div class="quiz-options">
+      <div class="quiz-opt" data-correct="false">A. d</div>
+      <div class="quiz-opt" data-correct="false">B. p</div>
+      <div class="quiz-opt" data-correct="true">C. q 逆时针转90°的形态</div>
+      <div class="quiz-opt" data-correct="false">D. b</div>
+    </div>
+    <button class="quiz-btn">查看解析</button>
+    <div class="quiz-answer">
+      <strong>正确答案：C</strong><br>
+      分步计算：b 顺时针转90° → 竖线在上、圈在右（横放的P，开口朝下）。<br>
+      再上下翻转 → 竖线在下、圈仍在右（左右不变），开口朝上。<br>
+      这个形态等价于 q 逆时针转90°（或 d 顺时针转90°）。<br>
+      关键启示：翻转和90°旋转不满足交换律，如果先上下翻转再顺时针转90°，结果会不同。考场上遇到组合变换必须逐步算。
+    </div>
+  </div>
+
+  <div class="callout good">
+    <div class="callout-title">做完自测后的建议</div>
+    <p>如果6题全对：核心概念已经掌握，接下来需要在真题中练习速度，目标是每道位置类题目30秒内解决。</p>
+    <p>如果错了1-2题：回顾对应易错点，重点强化薄弱环节。</p>
+    <p>如果错了3题以上：重新阅读坐标本质和经典案例部分，用 b 和 6 反复手动推演四种变换，直到能不假思索地说出结果。</p>
+  </div>
+</section>
+
+<!-- ==================== 总结 ==================== -->
+<section>
+  <div class="sec-num">FINAL / SUMMARY</div>
+  <h2 class="sec-title">全文总结：一张图记住所有要点</h2>
+  <p class="sec-lead">最后，用最凝练的方式把全文核心收束起来，方便考前快速回顾。</p>
+
+  <div class="mnemonic">
+    <div class="quote">翻转是镜像，只翻一个轴<br>旋转是转动，180°两头都翻<br>上下翻转看左右，左右不变才是翻<br>中心对称看自身，转半圈重合才算数</div>
+    <div class="explain">四句口诀覆盖全文核心考点</div>
+  </div>
+
+  <table class="cmp-table">
+    <colgroup>
+      <col style="width:18%">
+      <col style="width:20%">
+      <col style="width:20%">
+      <col style="width:21%">
+      <col style="width:21%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>变换</th>
+        <th>坐标映射</th>
+        <th>左右</th>
+        <th>上下</th>
+        <th>对称类型</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">上下翻转</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:13px">(x,y)→(x,−y)</td>
+        <td class="yes">不变</td>
+        <td class="no">颠倒</td>
+        <td>轴对称</td>
+      </tr>
+      <tr>
+        <td class="label">左右翻转</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:13px">(x,y)→(−x,y)</td>
+        <td class="no">颠倒</td>
+        <td class="yes">不变</td>
+        <td>轴对称</td>
+      </tr>
+      <tr>
+        <td class="label">旋转180°</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:13px">(x,y)→(−x,−y)</td>
+        <td class="no">颠倒</td>
+        <td class="no">颠倒</td>
+        <td>中心对称</td>
+      </tr>
+      <tr>
+        <td class="label">旋转90°</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:13px">(x,y)→(y,−x)</td>
+        <td colspan="2" style="text-align:center;color:var(--warn)">横竖互换</td>
+        <td>旋转变换</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-title">考前30秒速览</div>
+    <p>1. 上下翻转 ≠ 旋转180°，区别在左右方向变没变。</p>
+    <p>2. 旋转180° = 上下翻转 + 左右翻转（等价公式）。</p>
+    <p>3. 中心对称是图形属性，判定方法是旋转180°自重合。</p>
+    <p>4. 6上下翻转≠9，6旋转180°=9（看开口方向）。</p>
+    <p>5. 考场技巧：转卷子判断旋转180°，对折判断翻转。</p>
+    <p>6. 翻转和90°旋转顺序不能交换，组合变换要逐步算。</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== Back to top ===== -->
+<button id="back-top" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<footer>
+  <div class="wrap">
+    <p><strong>行测图形推理 · 翻转与旋转深度辨析</strong></p>
+    <p>翻转是镜像，旋转是转动 · 抓住左右方向变化，一招制胜</p>
+  </div>
+</footer>
+
+<script>
+// 返回顶部按钮
+(function(){
+  var bt = document.getElementById('back-top');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 400){ bt.classList.add('show'); }
+    else { bt.classList.remove('show'); }
+  });
+})();
+
+// 自测题交互
+document.querySelectorAll('.quiz').forEach(function(quiz){
+  var btn = quiz.querySelector('.quiz-btn');
+  var answer = quiz.querySelector('.quiz-answer');
+  if(btn && answer){
+    btn.addEventListener('click',function(){
+      answer.classList.toggle('show');
+      btn.textContent = answer.classList.contains('show') ? '收起解析' : '查看解析';
+    });
+  }
+  // 选项点击
+  quiz.querySelectorAll('.quiz-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var isCorrect = opt.dataset.correct === 'true';
+      quiz.querySelectorAll('.quiz-opt').forEach(function(o){o.classList.remove('correct','wrong')});
+      opt.classList.add(isCorrect ? 'correct' : 'wrong');
+      if(answer) answer.classList.add('show');
+      if(btn) btn.textContent = '收起解析';
+    });
+  });
+});
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
