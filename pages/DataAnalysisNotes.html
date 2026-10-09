@@ -348,7 +348,7 @@
 <!-- ===== Hero ===== -->
 <header class="hero">
     <h1>行测资料分析｜公式+原理+高频易错点</h1>
-    <p class="subtitle">12 章速查手册 · 含混合增长率 / 混合比重严格推导</p>
+    <p class="subtitle">13 章速查手册 · 含混合/贡献率/拉动增长率严格推导</p>
     <div class="meta">📅 整理日期：2026 年 9 月 23 日</div>
 </header>
 
@@ -368,6 +368,7 @@
         <a href="#ch10">十·高频错误</a>
         <a href="#ch11">十一·解题总思路</a>
         <a href="#ch12">十二·严格推导</a>
+        <a href="#ch13">十三·贡献率/拉动增长</a>
     </nav>
 
     <main>
@@ -592,6 +593,81 @@
                 1. 混合 = 加权平均<br>
                 2. 十字交叉：基期量之比 = 差值之比<br>
                 3. 基数越大，离混合中心越近 → 量越大，差值越小，二者成反比
+            </div>
+        </section>
+
+        <!-- ===== Chapter 13 ===== -->
+        <section class="chapter" id="ch13">
+            <h2><span class="num">13</span>增长贡献率 / 拉动增长率 · 严格推导</h2>
+
+            <div class="callout info">
+                <div class="label">本章定位</div>
+                配合第三章「核心公式」与第十二章「混合加权」。本章给出"增长贡献率 / 拉动增长率"的<strong>严格定义 + 互推证明</strong>，并给出两个等价公式的<strong>考场速算优先级</strong>。
+            </div>
+
+            <h3>一、四个核心定义</h3>
+            <p>设整体由若干部分组成，记：</p>
+            <ul>
+                <li>整体基期 = G₀，整体现期 = G₁，整体增量 ΔG = G₁ − G₀，<strong>整体增速 r = ΔG / G₀</strong></li>
+                <li>第 i 部分基期 = gᵢ₀，部分现期 = gᵢ₁，部分增量 Δgᵢ = gᵢ₁ − gᵢ₀，<strong>部分增速 rᵢ = Δgᵢ / gᵢ₀</strong></li>
+            </ul>
+            <p><strong>两个核心定义</strong>：</p>
+            <ol>
+                <li><strong>增长贡献率</strong> = 部分增量 ÷ 整体增量（结果单位 <code class="code-inline">%</code>，所有部分贡献率合计 = 100%）</li>
+                <li><strong>拉动增长率</strong>（简称<strong>拉动增长</strong>）= 部分增量 ÷ 整体基期（结果单位 <code class="code-inline">百分点</code>，所有部分拉动增长合计 = 总增速）</li>
+            </ol>
+
+            <h3>二、两个等价公式（推导）</h3>
+            <p><strong>推导 ①：总增速 × 增长贡献率</strong></p>
+            <div class="d-formula">拉动增长率 = 部分增量 / 整体基期</div>
+            <div class="d-formula">          = (部分增量 / 整体增量) × (整体增量 / 整体基期)</div>
+            <div class="d-formula">          = 增长贡献率 × 总增速</div>
+
+            <p><strong>推导 ②：部分增速 × 基期比重</strong></p>
+            <div class="d-formula">部分增量 = 部分基期 × 部分增速</div>
+            <div class="d-formula">拉动增长率 = (部分基期 × 部分增速) / 整体基期</div>
+            <div class="d-formula">          = (部分基期 / 整体基期) × 部分增速</div>
+            <div class="d-formula">          = 基期比重 × 部分增速</div>
+
+            <p>故有<strong>等价式</strong>（考场二选一）：</p>
+            <div class="d-formula">拉动增长率 = 总增速 × 增长贡献率 = 部分增速 × 基期比重</div>
+
+            <h3>三、为什么是基期比重，不是现期比重</h3>
+            <p>"比重"必须与"增速"在同一时点对齐。代入推导 ② 的分子展开：</p>
+            <div class="d-formula">部分增量 = 部分基期 × 部分增速</div>
+            <div class="d-formula">拉动增长率 = 部分增量 / 整体基期</div>
+            <div class="d-formula">          = (部分基期 × 部分增速) / 整体基期</div>
+            <div class="d-formula">          = (部分基期 / 整体基期) × 部分增速</div>
+            <p>比重项里出现的是<strong>部分基期 / 整体基期</strong>，这就是"基期比重"。</p>
+            <div class="d-warn">
+                <strong>坑点：</strong>若错用现期比重，结果会偏离。<br>
+                例：某部分现期比重 30%、基期比重 25%、总增速 10%、部分增速 14%：<br>
+                · 用基期比重：25% × 14% = <strong>3.5 百分点</strong> ✔<br>
+                · 用现期比重：30% × 14% = 4.2 百分点 ✘（差 0.7pp）
+            </div>
+
+            <h3>四、单位与合计（速判）</h3>
+            <p>两个核心结论（合计验证）：</p>
+            <ul>
+                <li><strong>增长贡献率之和 = 100%</strong>（每个部分贡献率即权重，权重相加为整体）</li>
+                <li><strong>拉动增长率之和 = 整体总增速</strong>（每个部分拉动即对总增量的分解）</li>
+            </ul>
+            <p>若题目问"哪部分对增长的<strong>贡献</strong>最大"，比较<strong>贡献率</strong>；若问"哪部分<strong>拉动</strong>整体增长 X 个百分点"，比较<strong>拉动增长率</strong>。</p>
+
+            <h3>五、考场速算优先级</h3>
+            <div class="d-tip">
+                <strong>优先级一：</strong>用「总增速 × 贡献率」—— 当贡献率或总增速已直接给出。<br>
+                <strong>优先级二：</strong>用「部分增速 × 基期比重」—— 当基期比重直接给出。<br>
+                <strong>优先级三：</strong>若基期比重未给，必须用现期比重近似；或退回"部分增量 ÷ 整体基期"严格计算。
+            </div>
+
+            <h3>六、底层逻辑（一句话）</h3>
+            <div class="d-memory">
+                <strong>增长贡献率 = 部分在"整体增量蛋糕"里切了多少；</strong><br>
+                <strong>拉动增长率 = 部分的增量在"整体基期池"里占了几分。</strong><br>
+                前者是相对<strong>总增量</strong>的占比（无单位，%）；后者是相对<strong>总基期</strong>的占比（百分点）。<br>
+                两者通过"总增速"这座桥互通：
+                <code class="code-inline">贡献率 × 总增速 = 拉动增长率</code>。
             </div>
         </section>
 
