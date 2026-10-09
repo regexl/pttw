@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《三十六计》完整版</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "PingFang SC", "Microsoft YaHei", "SimSun", serif; background: #f5f0e8; color: #3d2b1f; line-height: 1.9; }
+
+header { background: linear-gradient(135deg, #8b4513, #5c2d0a); color: #fff8e7; padding: 40px 20px; text-align: center; }
+header h1 { font-size: 32px; font-weight: 700; letter-spacing: 8px; margin-bottom: 8px; }
+header p { font-size: 14px; opacity: 0.8; }
+
+.search-bar { padding: 14px 20px; background: #fff8e7; border-bottom: 2px solid #d4a96a; position: sticky; top: 49px; z-index: 100; }
+.search-bar input { width: 100%; max-width: 600px; margin: 0 auto; display: block; padding: 9px 16px; border: 2px solid #d4a96a; border-radius: 6px; font-size: 15px; background: #fff; outline: none; }
+.search-bar input:focus { border-color: #8b4513; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 28px 20px; }
+
+.meta { display: flex; gap: 20px; padding: 12px 20px; background: #fdf5e6; font-size: 13px; color: #8b7355; flex-wrap: wrap; border-radius: 8px; margin-bottom: 20px; }
+.meta span { color: #c0392b; font-weight: 600; }
+
+.suit { background: #fff8e7; border-radius: 12px; margin-bottom: 28px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.suit-header { padding: 16px 24px; color: #fff; font-size: 18px; font-weight: 700; letter-spacing: 3px; }
+.suit-1 .suit-header { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+.suit-2 .suit-header { background: linear-gradient(90deg, #e67e22, #f39c12); }
+.suit-3 .suit-header { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+.suit-4 .suit-header { background: linear-gradient(90deg, #2980b9, #3498db); }
+.suit-5 .suit-header { background: linear-gradient(90deg, #8e44ad, #9b59b6); }
+.suit-6 .suit-header { background: linear-gradient(90deg, #2c3e50, #34495e); }
+
+.stratagem { border-bottom: 1px dashed #e8d5b7; padding: 18px 24px; }
+.stratagem:last-child { border-bottom: none; }
+.stratagem:hover { background: #fdf5e6; }
+
+.stratagem-title { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.stratagem-num { font-size: 11px; font-weight: 700; color: #fff; background: #c0392b; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+.stratagem-name { font-size: 20px; font-weight: 700; color: #5c2d0a; letter-spacing: 4px; }
+
+.stratagem-original { background: #f9f0e3; border-left: 4px solid #c0392b; padding: 10px 14px; margin-bottom: 10px; border-radius: 0 6px 6px 0; }
+.stratagem-original-label { font-size: 11px; color: #c0392b; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; }
+.stratagem-original-text { font-size: 15px; color: #4a2c0a; line-height: 1.8; }
+
+.stratagem-trans { background: #f0f7f0; border-left: 4px solid #27ae60; padding: 10px 14px; border-radius: 0 6px 6px 0; }
+.stratagem-trans-label { font-size: 11px; color: #27ae60; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; }
+.stratagem-trans-text { font-size: 14px; color: #2d5016; line-height: 1.8; }
+
+footer { text-align: center; padding: 28px; color: #b09070; font-size: 13px; border-top: 1px solid #e8d5b7; margin-top: 32px; }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes" class="brand">← 返回学习笔记</a>
+  <span class="brand-sub">三十六计完整版</span>
+</header>
+
+<header>
+    <h1>三 十 六 计</h1>
+    <p>《三十六计》完整版 · 值得收藏</p>
+</header>
+
+<div class="search-bar">
+    <input type="text" id="search" placeholder="搜索计谋名称或编号..." oninput="filterAll()">
+</div>
+
+<div class="container">
+
+    <div class="meta">
+        <span>📚 36条计谋</span>
+        <span>🏷️ 6大计套</span>
+        <span>📖 原文 + 译文</span>
+        <span>📅 来源：人民日报/新华视点</span>
+    </div>
+
+    <!-- 第一套：胜战计 -->
+    <div class="suit suit-1">
+        <div class="suit-header">第一套　胜战计</div>
+        <div class="stratagem" data-k="瞒天过海 1">
+            <div class="stratagem-title"><span class="stratagem-num">第1计</span><span class="stratagem-name">瞒天过海</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">备周而意怠，常见则不疑，阴在阳之内，不在阳之对。太阳，太阴。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">认为准备万分周到，就容易松劲；平时看惯了的，就往往不再怀疑了。秘计隐藏在暴露的事物中，非常公开的往往蕴藏着非常机密的。</div></div>
+        </div>
+        <div class="stratagem" data-k="围魏救赵 2">
+            <div class="stratagem-title"><span class="stratagem-num">第2计</span><span class="stratagem-name">围魏救赵</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">共敌不如分敌，敌阳不如敌阴。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">树敌不可过多，对敌要各个击破；对现在还不忙于消灭的，要隐藏我们的意图。</div></div>
+        </div>
+        <div class="stratagem" data-k="借刀杀人 3">
+            <div class="stratagem-title"><span class="stratagem-num">第3计</span><span class="stratagem-name">借刀杀人</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">敌已明，友未定，引友杀敌，不出自力，以损推演。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">作战的对象已经确定，而朋友的态度还不稳定，要诱导朋友去消灭敌人，避免消耗自己。</div></div>
+        </div>
+        <div class="stratagem" data-k="以逸待劳 4">
+            <div class="stratagem-title"><span class="stratagem-num">第4计</span><span class="stratagem-name">以逸待劳</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">困敌之势，不以战，损刚益柔。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">控制敌方力量发展的命脉来扼杀他，而不采取进攻的形势，这就是"损刚益柔"原理的演用。</div></div>
+        </div>
+        <div class="stratagem" data-k="趁火打劫 5">
+            <div class="stratagem-title"><span class="stratagem-num">第5计</span><span class="stratagem-name">趁火打劫</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">敌之害大，就势取利，刚决柔也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">敌方的危机很大，就乘机取利，用优势力量攻击软弱的。</div></div>
+        </div>
+        <div class="stratagem" data-k="声东击西 6">
+            <div class="stratagem-title"><span class="stratagem-num">第6计</span><span class="stratagem-name">声东击西</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">乱志乱萃，不虞"坤下兑上"之象；利其不自主而取之。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">敌人乱撞瞎碰，摸不清情况，这是《易经》"萃"封上所说的"坤下兑上"的混乱征状。必须利用敌方失去控制力的时机加以消灭。</div></div>
+        </div>
+    </div>
+
+    <!-- 第二套：敌战计 -->
+    <div class="suit suit-2">
+        <div class="suit-header">第二套　敌战计</div>
+        <div class="stratagem" data-k="无中生有 7">
+            <div class="stratagem-title"><span class="stratagem-num">第7计</span><span class="stratagem-name">无中生有</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">诳也，非诳也，实其所诳也。少阴，太阴，太阳。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">无中生有是运用假象，但不是弄假到底。而是使假象变真相，大小假象，掩护真相。</div></div>
+        </div>
+        <div class="stratagem" data-k="暗渡陈仓 8">
+            <div class="stratagem-title"><span class="stratagem-num">第8计</span><span class="stratagem-name">暗渡陈仓</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">示之以动，利其静而有主，"益动而巽"。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">故意暴露行动，利用敌方固守的时机，便主动偷袭。</div></div>
+        </div>
+        <div class="stratagem" data-k="隔岸观火 9">
+            <div class="stratagem-title"><span class="stratagem-num">第9计</span><span class="stratagem-name">隔岸观火</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">阳乖序乱，阴以待逆，暴戾恣睢，其势自毙。顺以动豫，豫顺以动。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">敌人内部分裂，秩序混乱，我便等待他发生暴乱，那时敌人穷凶极恶，翻目仇杀，势必自行灭亡。我要根据敌人变动作好准备；作好准备之后，还要根据敌人的变动而行动。</div></div>
+        </div>
+        <div class="stratagem" data-k="笑里藏刀 10">
+            <div class="stratagem-title"><span class="stratagem-num">第10计</span><span class="stratagem-name">笑里藏刀</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">信而安之，阴以图之，备而后动，勿使有变：刚中柔外也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">使敌人相信我方，并使其麻痹松懈，我则暗中策划，充分准备，一有机会，立即动手，使他来不及应变，这是暗中厉害，表面柔和的策略。</div></div>
+        </div>
+        <div class="stratagem" data-k="李代桃僵 11">
+            <div class="stratagem-title"><span class="stratagem-num">第11计</span><span class="stratagem-name">李代桃僵</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">势必有损，损阴以益阳。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">当局势发展有所损失的时候，要舍得局部的损失，以换取全局的优势。</div></div>
+        </div>
+        <div class="stratagem" data-k="顺手牵羊 12">
+            <div class="stratagem-title"><span class="stratagem-num">第12计</span><span class="stratagem-name">顺手牵羊</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">微隙在所必乘，微利在所必得。少阴，少阳。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">微小的漏洞必须利用，微小的利益也必须获得。变敌人小的疏忽，为我方小的胜利。</div></div>
+        </div>
+    </div>
+
+    <!-- 第三套：攻战计 -->
+    <div class="suit suit-3">
+        <div class="suit-header">第三套　攻战计</div>
+        <div class="stratagem" data-k="打草惊蛇 13">
+            <div class="stratagem-title"><span class="stratagem-num">第13计</span><span class="stratagem-name">打草惊蛇</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">疑为叩实，察而后动，复者，阴之媒也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">有怀疑的就要侦察实情，完全掌握了实情再行动。反复侦察，是发现暗藏敌人的因素。</div></div>
+        </div>
+        <div class="stratagem" data-k="借尸还魂 14">
+            <div class="stratagem-title"><span class="stratagem-num">第14计</span><span class="stratagem-name">借尸还魂</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">有用者不可借，不能用者，求借，借不能用者而用之。匪我求童蒙，童蒙求我。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">有用的不可以利用，怕的是我不能控制它；不能利用的却要去利用，因为我完全可以控制它。利用不能用的而控制它，这不是我受别人的支配，而是我支配别人。</div></div>
+        </div>
+        <div class="stratagem" data-k="调虎离山 15">
+            <div class="stratagem-title"><span class="stratagem-num">第15计</span><span class="stratagem-name">调虎离山</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">待天以困之，用人以诱之，"往蹇来返"。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">等待天时对敌方不利时再去围困他，用人假象去诱骗他。"往前有危险，就返身离开"。</div></div>
+        </div>
+        <div class="stratagem" data-k="欲擒故纵 16">
+            <div class="stratagem-title"><span class="stratagem-num">第16计</span><span class="stratagem-name">欲擒故纵</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">逼则反兵，走则减势，紧随勿迫。累其气力，消其斗志，散而后擒。兵不血刃，需，有孚光。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">逼得敌人无路可走，就会遭到坚决的反扑；让他逃走，就会消灭敌人的气势，所以要紧紧地跟踪敌人，但不要逼迫他，借以消耗他的体力，瓦解他的士气，等他的兵力分散了，再行捕捉。这样用兵可以避免流血，不逼迫敌人，并让他相信，这对战争是有利的。</div></div>
+        </div>
+        <div class="stratagem" data-k="抛砖引玉 17">
+            <div class="stratagem-title"><span class="stratagem-num">第17计</span><span class="stratagem-name">抛砖引玉</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">类以诱之，击蒙也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">用类似的东西去迷惑敌人，使敌人遭懵上当。</div></div>
+        </div>
+        <div class="stratagem" data-k="擒贼擒王 18">
+            <div class="stratagem-title"><span class="stratagem-num">第18计</span><span class="stratagem-name">擒贼擒王</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">摧其坚，夺其魁，以解其体；龙战于野，其道穷也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">彻底地摧毁敌人的主力，抓住他的首领，借以粉碎他的战争机构，这是一场激烈的总决战。</div></div>
+        </div>
+    </div>
+
+    <!-- 第四套：混战计 -->
+    <div class="suit suit-4">
+        <div class="suit-header">第四套　混战计</div>
+        <div class="stratagem" data-k="釜底抽薪 19">
+            <div class="stratagem-title"><span class="stratagem-num">第19计</span><span class="stratagem-name">釜底抽薪</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">不敌其力，而消其势，兑下乾上之象。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">力量上不能战胜敌人，可以瓦解他的气势，这就是《易经》兑下乾上的《履卦》上所说的"柔履刚"的办法。</div></div>
+        </div>
+        <div class="stratagem" data-k="浑水摸鱼 20">
+            <div class="stratagem-title"><span class="stratagem-num">第20计</span><span class="stratagem-name">浑水摸鱼</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">乘其阴乱，利其弱而无主，随，以向晦入宴息。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">乘着敌人内部混乱，利用他还是弱小而没有主见，他随从我，像人随着天时吃饭、休息一样。</div></div>
+        </div>
+        <div class="stratagem" data-k="金蝉脱壳 21">
+            <div class="stratagem-title"><span class="stratagem-num">第21计</span><span class="stratagem-name">金蝉脱壳</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">存其形，完其势；友不疑，敌不动；巽而上蛊。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">保存阵地的原形，造成强大的声势，使友军不怀疑，敌人也不敢贸然进犯，而我却可以隐蔽地击破另一支敌军。</div></div>
+        </div>
+        <div class="stratagem" data-k="关门捉贼 22">
+            <div class="stratagem-title"><span class="stratagem-num">第22计</span><span class="stratagem-name">关门捉贼</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">小敌困之，剥，不利有攸往。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">对弱小的敌人，要加以包围歼灭；对垂死挣扎的敌人，如果从后面急追远赶，那是很不利的。</div></div>
+        </div>
+        <div class="stratagem" data-k="远交近攻 23">
+            <div class="stratagem-title"><span class="stratagem-num">第23计</span><span class="stratagem-name">远交近攻</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">形禁势格，利以近取。害以远隔，上火下泽。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">处于（扭转）不利的形势（局面），要考虑（阻止）它发展的方向（趋势），（利于）攻取附近的地方，就有利；（不利于）攻击远隔的地方，就有害。《易经·聧》卦说："火苗向上冒，池水向下流，志向不同，也可以结交。"</div></div>
+        </div>
+        <div class="stratagem" data-k="假途待虢 24">
+            <div class="stratagem-title"><span class="stratagem-num">第24计</span><span class="stratagem-name">假途待虢</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">两大之间，敌胁以从，我假以势，困，有言不信。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">对处的两个强大敌人中间的国家，敌人胁迫它时，我方却作援求它，立即出兵。《易经·困》卦说："对处在困迫状况下的国家，光空谈而没有行动，是不会被他信任的。"</div></div>
+        </div>
+    </div>
+
+    <!-- 第五套：并战计 -->
+    <div class="suit suit-5">
+        <div class="suit-header">第五套　并战计</div>
+        <div class="stratagem" data-k="偷梁换柱 25">
+            <div class="stratagem-title"><span class="stratagem-num">第25计</span><span class="stratagem-name">偷梁换柱</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">频更其阵，抽其劲旅，待其自败，而后乘之，曳其轮也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">多次变动敌人的阵容，把他的兵力调开，等待他自己败阵，然后用谋进攻他。《易经·既济》卦说："先拖住敌人，然后再替换他。"</div></div>
+        </div>
+        <div class="stratagem" data-k="指桑骂槐 26">
+            <div class="stratagem-title"><span class="stratagem-num">第26计</span><span class="stratagem-name">指桑骂槐</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">大凌小者，警以诱之。刚中而应，行险而顺。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">强大的慑服弱小的，要用警戒的方法来诱导它。《易经·师》卦说：适当的强硬，可以得到拥护；施用险诈，可以得到顺从。</div></div>
+        </div>
+        <div class="stratagem" data-k="假痴不癫 27">
+            <div class="stratagem-title"><span class="stratagem-num">第27计</span><span class="stratagem-name">假痴不癫</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">宁伪作不知不为，不伪作假知妄为，静不露机，云雷屯也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">宁可假装不知道的，不行动，不可假装知道而轻举妄动。要沉着，不要泄露一点机密，就像迅猛激烈的云雷，在冬季藏入地下般的平静。</div></div>
+        </div>
+        <div class="stratagem" data-k="上屋抽梯 28">
+            <div class="stratagem-title"><span class="stratagem-num">第28计</span><span class="stratagem-name">上屋抽梯</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">假之以便，唆之使前，断其援应，陷之死地，遇毒，位不当也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">故意露出破绽，引诱敌人深入我方，然后选择有利时机，断绝敌人的前应和后援，使他完全处于死地。敌人这样的下场，《易经·嗑》上说得好：抢吃腊肉的嗑掉了牙，怪自己的动作不当。</div></div>
+        </div>
+        <div class="stratagem" data-k="树上开花 29">
+            <div class="stratagem-title"><span class="stratagem-num">第29计</span><span class="stratagem-name">树上开花</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">借局布势，力小势大；鸿渐于陆，其羽可用为仪也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">借别人的局面布成阵势，兵力弱小的看来阵容也显得强大。《易经·渐》卦说：鸿雁飞向大陆，全凭它的羽毛丰满助长气势。</div></div>
+        </div>
+        <div class="stratagem" data-k="反客为主 30">
+            <div class="stratagem-title"><span class="stratagem-num">第30计</span><span class="stratagem-name">反客为主</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">乘隙插足，扼其主机，渐之进也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">有空子就要插脚进去，扼住他的主脑机关。《易经·渐》卦说："循序而进"就是这个意思。</div></div>
+        </div>
+    </div>
+
+    <!-- 第六套：败战计 -->
+    <div class="suit suit-6">
+        <div class="suit-header">第六套　败战计</div>
+        <div class="stratagem" data-k="美人计 31">
+            <div class="stratagem-title"><span class="stratagem-num">第31计</span><span class="stratagem-name">美人计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">兵强者，攻其将。将智者，伐其情。将弱兵颓，其势自萎。利用御寇，顺相保也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">兵力强大的，就要攻打他的将帅；将帅明智的，就打击他的情绪。将帅斗志衰弱、部队士气消沉，他的气势必定自行萎缩。《易经·渐》卦说：利用敌人内部的严重弱点来控制敌人，可以有把握地保存自己的实力。</div></div>
+        </div>
+        <div class="stratagem" data-k="空城计 32">
+            <div class="stratagem-title"><span class="stratagem-num">第32计</span><span class="stratagem-name">空城计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">虚者虚之，疑中生疑；刚柔之际，奇而复奇。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">空虚的就让它空虚，使人更加难以揣测；在进攻和防御中运用空虚的战术来隐蔽自己的空虚，越发显得用兵出奇。</div></div>
+        </div>
+        <div class="stratagem" data-k="反间计 33">
+            <div class="stratagem-title"><span class="stratagem-num">第33计</span><span class="stratagem-name">反间计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">疑中之疑，比之向内，不自失也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">在疑阵中再布置一层疑阵。《易经·比》卦说：来自敌方内部的援助，自己不会受到损失。</div></div>
+        </div>
+        <div class="stratagem" data-k="苦肉计 34">
+            <div class="stratagem-title"><span class="stratagem-num">第34计</span><span class="stratagem-name">苦肉计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文<div class="stratagem-original-text">人不自害，受害必真。假真真假，间以得行。童蒙之吉，顺以巽也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">人不自己迫害自己，受迫害必然是真的；真的变假，间谍便乘机活动。《易经·蒙》卦说：把他骗得乖乖的，顺着他活动。</div></div>
+        </div>
+        <div class="stratagem" data-k="连环计 35">
+            <div class="stratagem-title"><span class="stratagem-num">第35计</span><span class="stratagem-name">连环计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">将多兵众，不可以敌，使其自累，以杀其势。在师中吉，承天宠也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">敌方兵力强大，不能硬打，应当运用谋略，使仓储自相牵制，借以削弱他的力量。《易经·师》卦说：将帅靠指军不偏不倚，惯打胜仗的就是用兵如神。</div></div>
+        </div>
+        <div class="stratagem" data-k="走为上计 36">
+            <div class="stratagem-title"><span class="stratagem-num">第36计</span><span class="stratagem-name">走为上计</span></div>
+            <div class="stratagem-original"><div class="stratagem-original-label">■ 原文</div><div class="stratagem-original-text">全师避敌，在次无咎，未失常也。</div></div>
+            <div class="stratagem-trans"><div class="stratagem-trans-label">◆ 译文</div><div class="stratagem-trans-text">全军退却，甩开敌人，以退为进，待机破败，这是不违背正常的法则的。</div></div>
+        </div>
+    </div>
+</div>
+<footer><p>来源：人民日报/新华视点 · 《三十六计》完整版</p></footer>
+<script>
+function filterAll() {
+    var q = document.getElementById('search').value.trim().toLowerCase();
+    var items = document.querySelectorAll('.stratagem');
+    var suits = document.querySelectorAll('.suit');
+    items.forEach(function(el) {
+        el.style.display = (!q || el.dataset.k.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+    });
+    suits.forEach(function(s) {
+        var hasVisible = Array.from(s.querySelectorAll('.stratagem')).some(function(e) { return e.style.display !== 'none'; });
+        s.style.display = hasVisible ? '' : 'none';
+    });
+}
+</script>
+</body>
+</html>
