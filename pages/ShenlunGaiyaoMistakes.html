@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>申论概括题错题复盘与方法笔记</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231a2b4a'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c0552a' font-family='serif' font-weight='bold'>申</text></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+<style>
+:root{
+  --ink:#1a2b4a;
+  --ink-soft:#2c3e5e;
+  --paper:#f7f4ed;
+  --paper-card:#fffdf7;
+  --accent:#c0552a;
+  --accent-soft:#e8a07a;
+  --sage:#4a6b5a;
+  --sage-soft:#a8c4b0;
+  --line:#d9d2c3;
+  --text:#2a2a2a;
+  --text-soft:#5a5a5a;
+  --warn:#b8432f;
+  --good:#3d7a52;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--paper);
+  color:var(--text);
+  line-height:1.8;
+  font-size:16px;
+}
+/* ===== 顶部导航 ===== */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,244,237,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding:10px 0;
+}
+.topbar-inner{
+  max-width:960px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.topbar-title{
+  font-family:"Noto Serif SC",serif;font-weight:700;font-size:15px;color:var(--ink);
+}
+.topbar-nav{display:flex;gap:16px;flex-wrap:wrap}
+.topbar-nav a{
+  font-size:13px;color:var(--text-soft);text-decoration:none;
+  border-bottom:1px solid transparent;transition:.2s;
+}
+.topbar-nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ===== Hero ===== */
+.hero{
+  max-width:960px;margin:0 auto;padding:64px 24px 48px;
+  border-bottom:2px solid var(--ink);
+}
+.hero-eyebrow{
+  font-size:13px;letter-spacing:.15em;color:var(--accent);
+  font-weight:500;margin-bottom:16px;
+}
+.hero h1{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(28px,5vw,44px);
+  font-weight:900;color:var(--ink);
+  line-height:1.3;margin-bottom:20px;
+}
+.hero-sub{
+  font-size:17px;color:var(--text-soft);max-width:680px;line-height:1.9;
+}
+.hero-meta{
+  margin-top:28px;display:flex;gap:24px;flex-wrap:wrap;
+  font-size:13px;color:var(--text-soft);
+}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* ===== 通用区块 ===== */
+.section{
+  max-width:960px;margin:0 auto;padding:48px 24px;
+  border-bottom:1px solid var(--line);
+}
+.section-num{
+  font-family:"Noto Serif SC",serif;
+  font-size:13px;letter-spacing:.2em;color:var(--accent);
+  font-weight:700;margin-bottom:8px;
+}
+.section-title{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(22px,3.5vw,30px);
+  font-weight:700;color:var(--ink);
+  margin-bottom:8px;
+}
+.section-desc{
+  font-size:15px;color:var(--text-soft);margin-bottom:32px;max-width:720px;
+}
+
+/* ===== 错题卡片 ===== */
+.mistake-card{
+  background:var(--paper-card);
+  border:1px solid var(--line);
+  border-left:4px solid var(--accent);
+  border-radius:4px;
+  padding:24px 28px;
+  margin-bottom:20px;
+}
+.mistake-head{
+  display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap;
+}
+.mistake-tag{
+  background:var(--accent);color:#fff;
+  font-size:12px;font-weight:700;padding:3px 10px;border-radius:2px;
+  letter-spacing:.05em;
+}
+.mistake-title{
+  font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700;color:var(--ink);
+}
+.mistake-body p{margin-bottom:10px;font-size:15px}
+.mistake-label{
+  display:inline-block;font-size:12px;font-weight:700;
+  padding:2px 8px;border-radius:2px;margin-right:6px;
+}
+.label-problem{background:#fbe5df;color:var(--warn)}
+.label-tip{background:#e6efe9;color:var(--sage)}
+.label-answer{background:#e8e0d0;color:var(--ink)}
+.mistake-quote{
+  background:#f0ebe0;border-left:3px solid var(--sage-soft);
+  padding:10px 16px;margin:10px 0;font-size:14px;color:var(--text-soft);
+  border-radius:0 3px 3px 0;
+}
+.mistake-answer{
+  background:#f5f0e4;border:1px dashed var(--accent-soft);
+  padding:12px 18px;margin-top:12px;border-radius:3px;
+  font-size:15px;color:var(--ink);font-weight:500;
+}
+.mistake-answer strong{color:var(--accent)}
+
+/* ===== 学员答案批改 ===== */
+.review-block{
+  background:var(--paper-card);border:1px solid var(--line);
+  border-radius:4px;margin-bottom:24px;overflow:hidden;
+}
+.review-original{
+  background:#f5f0e4;padding:16px 24px;
+  border-bottom:1px solid var(--line);
+  font-size:15px;color:var(--text);
+}
+.review-original .label{font-size:12px;font-weight:700;color:var(--accent);margin-right:8px}
+.review-issues{padding:16px 24px}
+.review-issues h4{font-size:14px;color:var(--warn);margin-bottom:10px;font-weight:700}
+.review-issues ul{padding-left:20px;margin-bottom:14px}
+.review-issues li{font-size:14px;margin-bottom:6px;color:var(--text)}
+.review-fixed{
+  background:#eef3ee;padding:14px 20px;border-radius:3px;
+  font-size:15px;color:var(--ink);
+}
+.review-fixed .label{font-size:12px;font-weight:700;color:var(--good);margin-right:8px}
+
+/* ===== 方法步骤 ===== */
+.method-step{
+  display:flex;gap:20px;margin-bottom:28px;
+  padding-bottom:24px;border-bottom:1px dashed var(--line);
+}
+.method-step:last-child{border-bottom:none;margin-bottom:0}
+.step-num{
+  flex-shrink:0;width:40px;height:40px;border-radius:50%;
+  background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif SC",serif;font-weight:700;font-size:16px;
+}
+.step-content h4{
+  font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700;
+  color:var(--ink);margin-bottom:8px;
+}
+.step-content p{font-size:15px;color:var(--text);margin-bottom:8px}
+.step-content ul{padding-left:20px}
+.step-content li{font-size:14px;margin-bottom:5px;color:var(--text-soft)}
+
+/* ===== 公式/口诀框 ===== */
+.formula-box{
+  background:var(--ink);color:var(--paper);
+  padding:20px 28px;border-radius:4px;margin:24px 0;
+  text-align:center;
+}
+.formula-box .formula{
+  font-family:"Noto Serif SC",serif;font-size:18px;font-weight:700;
+  letter-spacing:.05em;
+}
+.formula-box .formula-note{font-size:13px;color:var(--accent-soft);margin-top:8px}
+
+/* ===== 高频错误表 ===== */
+.error-table{
+  width:100%;border-collapse:collapse;font-size:14px;
+  background:var(--paper-card);border-radius:4px;overflow:hidden;
+  table-layout:fixed;
+}
+.error-table th{
+  background:var(--ink);color:var(--paper);
+  padding:12px 16px;text-align:left;font-weight:700;font-size:13px;
+}
+.error-table td{
+  padding:12px 16px;border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+.error-table tr:last-child td{border-bottom:none}
+.error-table .err-type{
+  font-weight:700;color:var(--warn);white-space:nowrap;
+}
+.error-table .err-fix{color:var(--good)}
+
+/* ===== 训练卡片 ===== */
+.train-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+@media(max-width:640px){
+  .train-grid{grid-template-columns:1fr}
+}
+.train-card{
+  background:var(--paper-card);border:1px solid var(--line);
+  border-radius:4px;padding:20px;
+  border-top:3px solid var(--sage);
+}
+.train-card h4{
+  font-family:"Noto Serif SC",serif;font-size:16px;font-weight:700;
+  color:var(--ink);margin-bottom:10px;
+}
+.train-card p{font-size:14px;color:var(--text-soft);line-height:1.8}
+
+/* ===== 底部 ===== */
+.footer{
+  max-width:960px;margin:0 auto;padding:40px 24px 60px;
+  text-align:center;font-size:13px;color:var(--text-soft);
+}
+.footer .core{
+  font-family:"Noto Serif SC",serif;font-size:16px;color:var(--ink);
+  font-weight:700;margin-bottom:12px;
+}
+
+/* ===== 响应式 ===== */
+@media(max-width:640px){
+  .hero{padding:40px 20px 32px}
+  .section{padding:36px 20px}
+  .mistake-card{padding:18px 18px}
+  .method-step{flex-direction:column;gap:12px}
+  .topbar-nav{gap:10px}
+  .topbar-nav a{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title">申论概括题 · 错题复盘笔记</div>
+    <nav class="topbar-nav">
+      <a href="#mistakes">错题精批</a>
+      <a href="#review">答案批改</a>
+      <a href="#extract">摘抄方法</a>
+      <a href="#summarize">概括方法</a>
+      <a href="#errors">高频错误</a>
+      <a href="#logic">解题逻辑</a>
+      <a href="#train">训练方法</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-eyebrow">SHENLUN · 概括题专项</div>
+  <h1>申论概括题错题复盘<br>与摘抄概括能力提升笔记</h1>
+  <p class="hero-sub">
+    以 H 市新能源汽车产业材料为蓝本，逐题精批 7 处失分点，对照学员答案拆解扣分原因，
+    系统梳理摘抄技巧、概括方法、高频错误与考场解题逻辑，帮助零基础备考者建立
+    "找总括词—抓采分词—压缩成文"的完整思维链条。
+  </p>
+  <div class="hero-meta">
+    <span><span class="dot"></span>材料主题：H市新能源汽车智造高地</span>
+    <span><span class="dot"></span>题型：对策概括题</span>
+    <span><span class="dot"></span>核心考点：总括词提炼 + 规范词摘抄</span>
+  </div>
+</header>
+
+<!-- ===== 第一部分：错题精批 ===== -->
+<section class="section" id="mistakes">
+  <div class="section-num">PART 01</div>
+  <h2 class="section-title">七处错题逐题精批</h2>
+  <p class="section-desc">
+    每道错题包含三个层次：<strong>问题定位</strong>（你哪里丢分了）、
+    <strong>能力点拨</strong>（材料哪句话提示了采分点）、
+    <strong>标准要点</strong>（阅卷答案怎么写）。
+  </p>
+
+  <!-- 错题1 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ①</span>
+      <span class="mistake-title">攻坚核心技术 · 缺少总结性总括词</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>没有概括出"攻坚核心技术"这一总结性要点，直接写具体对策，缺少一级总括词。</p>
+      <p><span class="mistake-label label-tip">点拨</span>资料1段2段首"核心技术是拉开行业差距的关键"和段尾"技术的突破才是新能源汽车发展的'灵魂'"，提示构建智造高地就要突破核心技术。</p>
+      <div class="mistake-quote">识别信号：段首/段尾的观点句、"关键""核心""灵魂"等词，优先提取为总括词。</div>
+      <div class="mistake-answer"><strong>总括词：</strong>攻坚核心技术</div>
+    </div>
+  </div>
+
+  <!-- 错题2 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ②</span>
+      <span class="mistake-title">攻坚核心技术 · 共性技术+揭榜挂帅要点不全</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"聚焦芯片等共性基础技术，采用'揭榜挂帅''赛马'等方式，对技术取得突破的企业给予支持"写得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段2原文："通过'揭榜挂帅''赛马'等方式，把新能源汽车产业中车规级芯片、检测装备等共性基础技术列出来，哪家企业能有所突破，政府就会给予相应的支持。""列出来""给予"等动词提示对策。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>聚焦芯片等共性基础技术，采用"揭榜挂帅""赛马"等方式，对技术取得突破的企业给予支持。
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题3 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ③</span>
+      <span class="mistake-title">攻坚核心技术 · 公共实验室要点不全</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"遴选新型研发机构，建设公共实验室，向车企提供技术、人才和设备"写得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段4原文："H市科技局遴选出8家新型研发机构，首批试点建设了6个公共实验室""公共实验室对外开放的不仅是科研设备，还包括技术和人才"。"遴选""建设"等动词提示对策。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>遴选新型研发机构，建设公共实验室，向车企提供技术、人才和设备。
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题4 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ④</span>
+      <span class="mistake-title">提升综合产能 · 智能工厂+工业机器人要点不全</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"鼓励车企打造智能制造工厂，应用工业机器人"写得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段5原文："W车企多款车型的产能正在爬坡""工业机器人的运用是完成产能爬坡的关键""生产线上到处是机器人""这正是H市鼓励新能源汽车企业打造智能制造工厂带来的成果"。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>鼓励车企打造智能制造工厂，应用工业机器人。
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题5 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ⑤</span>
+      <span class="mistake-title">提升综合产能 · 柔性化生产+定制化需求概括不准</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"依托车辆柔性化生产，满足客户定制化需求"概括得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段6原文："车辆的柔性化生产能实现不同颜色、不同型号、不同配置的新能源车在同一条生产线上完成组装""客户可以根据个人喜好选择车身颜色、内饰、座椅材质、轮毂样式等，他们的需求现在都能得到满足"。去掉举例细节，保留核心做法+成效。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>依托车辆柔性化生产，满足客户定制化需求。
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题6 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ⑥</span>
+      <span class="mistake-title">打造完整产业链 · 整车引领+上下游招引概括不全</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"发挥整车企业引领作用，招引上下游配套企业，加速产业集群成型"概括得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段8原文："整车企业产能规模大、订单体量足，能够吸引各类零部件厂商主动就近布局""围绕这6家整车企业，H市不断招引，集聚了包括国轩高科、中创新航、巨一科技等500多家上下游配套企业""大家共同跑出产业集群发展'加速度'"。"吸引""招引""集聚"提示对策。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>发挥整车企业引领作用，招引上下游配套企业，加速产业集群成型。
+        <br><span style="font-size:13px;color:var(--text-soft)">注意："加速产业集群成型"已在"打造完整产业链"处赋分，此处不重复。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题7 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mistake-tag">错题 ⑦</span>
+      <span class="mistake-title">打造完整产业链 · 整零对接会要点不全</span>
+    </div>
+    <div class="mistake-body">
+      <p><span class="mistake-label label-problem">问题</span>对"常态化举办新能源汽车整零对接会，打通供需信息壁垒，缩短产业配套半径，增加供应链稳定性"写得不够全面、准确。</p>
+      <p><span class="mistake-label label-tip">点拨</span>段9原文："H市工信局每季度组织的新能源汽车整零对接会""整车企业亮出'家底'与'门槛'……零部件企业则争相'亮技术''求合作'""把供需两边的'窗户纸'捅破，让产业配套的'半径'越来越短，这对供应链稳定性来说至关重要"。比喻句转化为书面规范表达。</p>
+      <div class="mistake-answer">
+        <strong>要点：</strong>常态化举办新能源汽车整零对接会，打通供需信息壁垒，缩短产业配套半径，增加供应链稳定性。
+        <br><span style="font-size:13px;color:var(--text-soft)">注意："打通供需信息壁垒"和"缩短产业配套半径"任写其一，即可得分。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第二部分：学员答案批改 ===== -->
+<section class="section" id="review">
+  <div class="section-num">PART 02</div>
+  <h2 class="section-title">学员答案逐句批改</h2>
+  <p class="section-desc">
+    以下是学员实际作答的三条要点，逐条对比<strong>原文 → 扣分问题 → 满分改写</strong>，
+    直观展示"自己编总括词、漏专有名词、主观脑补"三大典型问题。
+  </p>
+
+  <!-- 批改1 -->
+  <div class="review-block">
+    <div class="review-original">
+      <span class="label">学员原文</span>
+      1、提高企业核心竞争力。支持企业突破基础技术；搭建新型研发机构，试点建设多个公共实验室，提供科研技术、人才全方位服务。
+    </div>
+    <div class="review-issues">
+      <h4>扣分问题</h4>
+      <ul>
+        <li><strong>总括词错误</strong>：材料标准总括词是"攻坚核心技术"，自行改成"提高企业核心竞争力"，不贴合材料，不算采分点。</li>
+        <li><strong>漏核心对策</strong>："揭榜挂帅、赛马机制、支持共性基础技术突破、设备支撑"全部漏掉，大额丢分。</li>
+        <li><strong>表述笼统</strong>，没有精准贴合材料动词和名词。</li>
+      </ul>
+      <div class="review-fixed">
+        <span class="label">满分改写</span>
+        <strong>攻坚核心技术：</strong>聚焦芯片等共性基础技术，采用"揭榜挂帅""赛马"方式，对技术突破企业予以扶持；遴选新型研发机构，试点建设公共实验室，为车企提供技术、人才、设备全方位支撑。
+      </div>
+    </div>
+  </div>
+
+  <!-- 批改2 -->
+  <div class="review-block">
+    <div class="review-original">
+      <span class="label">学员原文</span>
+      2、鼓励企业打造智能制造工厂。满足多种个性化配置需求，提升综合产能，利用AI算法在制造全过程进行实时分析动态决策，减少人工干预和人为误差。
+    </div>
+    <div class="review-issues">
+      <h4>扣分问题</h4>
+      <ul>
+        <li><strong>总括词缺失标准层级</strong>：标准总括词为"提升综合产能"。</li>
+        <li><strong>漏关键采分词</strong>："应用工业机器人、柔性化生产"核心得分点完全没写。</li>
+        <li><strong>主观脑补</strong>：材料无"AI算法、减少人为误差"，属于自行添加，无效。</li>
+      </ul>
+      <div class="review-fixed">
+        <span class="label">满分改写</span>
+        <strong>提升综合产能：</strong>鼓励车企打造智能制造工厂，普及应用工业机器人；依托柔性化生产模式，实现多品类车型共线组装，满足客户定制化、个性化配置需求。
+      </div>
+    </div>
+  </div>
+
+  <!-- 批改3 -->
+  <div class="review-block">
+    <div class="review-original">
+      <span class="label">学员原文</span>
+      3、全产业链布局，完善产业体系。集聚上下游配套企业，促成供应链端合作，实现供应链稳定。
+    </div>
+    <div class="review-issues">
+      <h4>扣分问题</h4>
+      <ul>
+        <li><strong>总括词不标准</strong>：标准为"打造完整产业链"。</li>
+        <li><strong>漏两大核心采分点</strong>："发挥整车企业引领作用、常态化举办整零对接会、打通供需壁垒、缩短配套半径"。</li>
+        <li><strong>概括太粗</strong>，没有材料精准动词。</li>
+      </ul>
+      <div class="review-fixed">
+        <span class="label">满分改写</span>
+        <strong>打造完整产业链：</strong>依托整车企业引领优势，招引集聚上下游配套企业；常态化举办整零对接会，打通供需信息壁垒，缩短产业配套半径，稳固供应链体系。
+      </div>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">学员三大核心问题：总括词自己编 · 专有对策词全漏 · 主观脑补加戏</div>
+    <div class="formula-note">所有错题根源可归结为这三点，训练时逐一攻克</div>
+  </div>
+</section>
+
+<!-- ===== 第三部分：摘抄能力 ===== -->
+<section class="section" id="extract">
+  <div class="section-num">PART 03</div>
+  <h2 class="section-title">摘抄能力提升方法</h2>
+  <p class="section-desc">
+    摘抄不是整句抄，而是<strong>只抄"要素词"：主体、动词、宾语、限定词</strong>。
+    材料里的规范表达优先直接摘抄，解决"要点写不全、写不准"的问题。
+  </p>
+
+  <div class="method-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>优先锁定提示词（看到就圈画）</h4>
+      <p><strong>对策提示动词</strong>：遴选、建设、聚焦、举办、鼓励、招引、给予、搭建、完善、出台</p>
+      <p><strong>总起/总结提示</strong>：关键、核心、灵魂、为此、通过、由此、实现</p>
+      <div class="mistake-quote">
+        例：材料"通过'揭榜挂帅''赛马'等方式，把车规级芯片、检测装备等共性基础技术列出来，哪家企业能突破，政府就给予相应支持"<br>
+        抓动词+名词 → 聚焦共性基础技术，采用揭榜挂帅、赛马机制，对技术突破企业予以支持。
+      </div>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>摘抄三条规则</h4>
+      <ul>
+        <li><strong>规范表述直接抄</strong>：政府专有名词、政策机制、专业术语（揭榜挂帅、公共实验室、整零对接会、柔性化生产），不要自己同义改写，改了容易丢分。</li>
+        <li><strong>口语化描述不抄，提炼成书面语</strong>：如"把供需两边的'窗户纸'捅破" → 转化为"打通供需信息壁垒"。</li>
+        <li><strong>修饰性、举例性内容选择性删减</strong>：举例企业名称（国轩高科、W车企）一般不写进要点，除非题干要求。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>摘抄 vs 概括的使用时机</h4>
+      <ul>
+        <li>材料是<strong>简洁、规范的对策句</strong> → 直接摘抄，微调精简即可。</li>
+        <li>材料是<strong>案例、故事、场景描述、比喻句</strong> → 需要自己概括转化。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第四部分：概括能力 ===== -->
+<section class="section" id="summarize">
+  <div class="section-num">PART 04</div>
+  <h2 class="section-title">概括能力提升方法</h2>
+  <p class="section-desc">
+    概括分两层：<strong>高层总括词（前置总起句）+ 下层具体要点</strong>。
+    核心是两件事：①分层，给每一层找总括词；②压缩，把长故事提炼成"动词+名词"短句。
+  </p>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:19px;color:var(--ink);margin:0 0 20px;padding-left:12px;border-left:4px solid var(--accent)">
+    一、总括词三级来源优先级
+  </h3>
+
+  <div class="method-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>一级（最优）：段落首尾句、观点句的原词</h4>
+      <p>材料经常在段首/段尾放中心句，看到"关键、核心、根本、灵魂、目标、重点、为此、旨在"等信号词，先圈名词短语，优先拿来做总括词。</p>
+      <div class="mistake-quote">
+        材料："核心技术是拉开行业差距的关键，技术突破是新能源汽车发展的灵魂"<br>
+        直接提取 → <strong>攻坚核心技术</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>二级：同组多个小点，提炼共性</h4>
+      <p>材料没有现成总括词时，把同一段所有要点拿出来，找这些做法共同服务的目标。</p>
+      <div class="mistake-quote">
+        要点①建智能工厂；②使用工业机器人；③柔性生产满足定制需求<br>
+        共同点：都是为了扩大产能、提升生产水平 → <strong>提升综合产能</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>三级：规范词兜底（极少用）</h4>
+      <p>积累申论高频总括词库（产业类：延链补链强链、产业集群、数字化转型；科技类：攻克核心技术、创新平台建设；营商环境类：要素保障、供需对接等）。</p>
+      <p style="color:var(--warn);font-weight:500">禁忌：不要上来直接套词库！很多人踩坑，看到产业就写完善产业体系，忽略材料本身有没有这句话。</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">总括词口诀：首尾找原词 · 多点找共性 · 最后才用规范词</div>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:19px;color:var(--ink);margin:32px 0 20px;padding-left:12px;border-left:4px solid var(--accent)">
+    二、分层法：先划分层次，再概括
+  </h3>
+  <div class="method-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>合并同类信息，不要逐句硬写</h4>
+      <ul>
+        <li>读材料，在段落旁边简单标注主题词（技术/产能/产业链）。</li>
+        <li>把讲<strong>同一件事</strong>的段落打包为一组；讲不同事情的分开。</li>
+        <li>一组只写1个总括词，后面跟本组的所有小点。</li>
+      </ul>
+      <div class="mistake-quote">
+        本篇材料分层：<br>
+        · 段2-4 全部围绕核心技术攻关 → 攻坚核心技术<br>
+        · 段5-6 全部围绕生产、产能 → 提升综合产能<br>
+        · 段8-9 全部围绕上下游配套、产业集群 → 打造完整产业链
+      </div>
+      <p style="color:var(--warn)">避坑：不要一段一个总括词，很多小段是同一个主题，强行拆分要点会零散。</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:19px;color:var(--ink);margin:32px 0 20px;padding-left:12px;border-left:4px solid var(--accent)">
+    三、缩句公式：保留主体+动词+宾语
+  </h3>
+  <div class="method-step">
+    <div class="step-num">缩</div>
+    <div class="step-content">
+      <h4>砍掉三类废话</h4>
+      <ul>
+        <li><strong>场景描写</strong>（工厂画面、客户挑选内饰、生产线景象）</li>
+        <li><strong>举例内容</strong>（企业名字、具体产品型号）</li>
+        <li><strong>比喻句</strong>（捅破窗户纸、跑出加速度 → 转化为书面规范表达）</li>
+      </ul>
+      <div class="mistake-quote">
+        原文：客户可以根据个人喜好选择车身颜色、内饰、座椅材质、轮毂样式等，他们的需求现在都能得到满足。<br>
+        提取：依托柔性化生产，满足客户定制化需求。<br>
+        （删掉：颜色、内饰、座椅、轮毂这些举例细节）
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:19px;color:var(--ink);margin:32px 0 20px;padding-left:12px;border-left:4px solid var(--accent)">
+    四、区分做法与成效
+  </h3>
+  <div class="method-step">
+    <div class="step-num">!</div>
+    <div class="step-content">
+      <h4>对策类概括题：动词最重要</h4>
+      <p>常见对策动词：遴选、搭建、举办、招引、聚焦、鼓励、试点、给予、对接。读材料时直接圈动词，动词后面的名词大概率是采分词。</p>
+      <p>成效可以酌情简写，不要把大段效果当成主要要点；<strong>不要自己新增材料不存在的做法</strong>（如学员写的"AI算法"就是典型脑补）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第五部分：高频错误清单 ===== -->
+<section class="section" id="errors">
+  <div class="section-num">PART 05</div>
+  <h2 class="section-title">高频错误清单</h2>
+  <p class="section-desc">
+    概括题最容易踩的五类雷区，对照自查，每一条都对应本次错题中的实际失分点。
+  </p>
+
+  <table class="error-table">
+    <colgroup>
+      <col style="width:22%">
+      <col style="width:38%">
+      <col style="width:40%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th style="width:22%">错误类型</th>
+        <th style="width:38%">具体表现</th>
+        <th style="width:40%">纠正方法</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="err-type">总括词自创</td>
+        <td>只写具体做法，缺少一级总括词；或总括词自己主观创造，不用材料原文。</td>
+        <td class="err-fix">优先从段落首尾句提取原词；同组要点提炼共性；绝不凭空自创。</td>
+      </tr>
+      <tr>
+        <td class="err-type">专有名词漏写</td>
+        <td>随意替换专有名词，改写材料规范词；关键政策术语（揭榜挂帅、柔性生产、整零对接会）全部漏掉。</td>
+        <td class="err-fix">政府专有名词、政策机制、专业术语直接摘抄，不同义改写。</td>
+      </tr>
+      <tr>
+        <td class="err-type">要点过于笼统</td>
+        <td>只有大方向，丢掉关键限定词和细节，如只写"支持技术突破"不写"共性基础技术"。</td>
+        <td class="err-fix">抓动词+核心名词+限定词，保留"聚焦芯片等共性基础技术"这类精准表述。</td>
+      </tr>
+      <tr>
+        <td class="err-type">堆砌例子废话</td>
+        <td>大量抄写案例、场景描写、比喻句，要点冗长，采分词淹没在废话里。</td>
+        <td class="err-fix">删掉场景、举例、比喻；比喻句转化为书面规范表达。</td>
+      </tr>
+      <tr>
+        <td class="err-type">主观脑补加戏</td>
+        <td>添加材料没有提到的对策（如"AI算法""减少人为误差"），写了也不给分，浪费格子。</td>
+        <td class="err-fix">所有要点必须有材料原文依据，无依据的内容一律不写。</td>
+      </tr>
+      <tr>
+        <td class="err-type">要点重复赋分</td>
+        <td>总括词已有"打造完整产业链"，子要点又重复写"加速产业集群成型"。</td>
+        <td class="err-fix">同一层意思只写一次，总括词已涵盖的内容子要点不重复。</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 第六部分：考场解题逻辑 ===== -->
+<section class="section" id="logic">
+  <div class="section-num">PART 06</div>
+  <h2 class="section-title">考场解题逻辑（四步流程）</h2>
+  <p class="section-desc">
+    对策概括题的标准做题流程，从读材料到写答案，每一步都有明确动作和产出。
+  </p>
+
+  <div class="method-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>通读材料，预判主题</h4>
+      <p>读段落，<strong>先判断本段主题</strong>，看首尾观点句，在段落旁边标注主题词（技术/产能/产业链）。</p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>圈画采分要素</h4>
+      <p>圈画：主体、动词、名词、政策术语；划掉例子、背景、纯效果描述（除非题干要求写成效）。</p>
+      <p>重点圈对策动词：遴选、建设、聚焦、举办、鼓励、招引、给予、搭建。</p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>合并同类，前置总括词</h4>
+      <p>同主题段落合并打包，一层配1个总括词（优先原文原词，其次提炼共性）。</p>
+      <p>不要一段一个总括词，讲同一件事的段落要归为一组。</p>
+    </div>
+  </div>
+
+  <div class="method-step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <h4>压缩成文，规范书写</h4>
+      <p>去掉场景、举例、比喻，保留"动作+对象"，写成标准句式。</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">答案句式模板：总括词：+ 具体对策（做法+对象）</div>
+    <div class="formula-note">示例：攻坚核心技术：聚焦芯片等共性基础技术，采用"揭榜挂帅"方式，对技术突破企业予以支持</div>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:19px;color:var(--ink);margin:32px 0 20px;padding-left:12px;border-left:4px solid var(--accent)">
+    本篇材料完整参考答案
+  </h3>
+  <div class="mistake-card" style="border-left-color:var(--sage)">
+    <div class="mistake-body">
+      <p style="margin-bottom:14px"><strong style="color:var(--accent)">一、攻坚核心技术。</strong>聚焦芯片等共性基础技术，采用"揭榜挂帅""赛马"方式，对技术取得突破的企业给予支持；遴选新型研发机构，建设公共实验室，向车企提供技术、人才和设备。</p>
+      <p style="margin-bottom:14px"><strong style="color:var(--accent)">二、提升综合产能。</strong>鼓励车企打造智能制造工厂，应用工业机器人；依托车辆柔性化生产，满足客户定制化需求。</p>
+      <p><strong style="color:var(--accent)">三、打造完整产业链。</strong>发挥整车企业引领作用，招引上下游配套企业；常态化举办新能源汽车整零对接会，打通供需信息壁垒，缩短产业配套半径，增加供应链稳定性。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 第七部分：日常训练方法 ===== -->
+<section class="section" id="train">
+  <div class="section-num">PART 07</div>
+  <h2 class="section-title">日常训练方法</h2>
+  <p class="section-desc">
+    每天20分钟，四个专项训练针对性提升，见效最快。
+  </p>
+
+  <div class="train-grid">
+    <div class="train-card">
+      <h4>训练一：总括词专项</h4>
+      <p>材料只看每一组段落，<strong>只写总括词，不写具体要点</strong>。做完对照答案，回答：①参考答案的总括词来自材料哪句话？②我写的词和标准答案差异在哪？强迫自己优先找原文中心词，改掉"凭感觉编总括词"的习惯。</p>
+    </div>
+    <div class="train-card">
+      <h4>训练二：一句话压缩</h4>
+      <p>拿材料长句，限时压缩到15字以内，<strong>只保留动词+核心名词</strong>。例："H市工信局每季度组织整零对接会，捅破供需窗户纸，缩短配套半径" → "常态化举办整零对接会，打通供需壁垒，缩短配套半径"。</p>
+    </div>
+    <div class="train-card">
+      <h4>训练三：错题三问复盘</h4>
+      <p>每次概括题复盘固定三问：①哪个采分词漏掉了？在材料哪个位置？②总括词错了：是没看首尾句还是强行自创？③有没有主观添加材料不存在的信息？脑补内容一律划掉。</p>
+    </div>
+    <div class="train-card">
+      <h4>训练四：规范词归类积累</h4>
+      <p>把产业、科技、基层治理、生态等主题的<strong>规范总括词</strong>单独记，只记总括词，不大段摘抄。产业类高频：攻坚核心技术、搭建创新平台、提升综合产能、推动智能制造、打造完整产业链、促进产业集聚、强化供需对接。</p>
+    </div>
+  </div>
+
+  <div class="formula-box" style="margin-top:32px">
+    <div class="formula">限时训练法：一段材料，1分钟圈画，30秒写出总括词+要点</div>
+    <div class="formula-note">强迫精简语言，培养考场节奏感</div>
+  </div>
+</section>
+
+<!-- ===== 底部 ===== -->
+<footer class="footer">
+  <div class="core">摘抄抓动词，概括找总括，忠于材料不脑补</div>
+  <p>申论概括题错题复盘与方法笔记 · 基于 H 市新能源汽车产业材料整理</p>
+</footer>
+
+</body>
+</html>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
