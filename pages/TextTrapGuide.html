@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测文字陷阱大全 — 介词/语序/主动被动</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f7fa;
+    color: #2c3e50;
+    line-height: 1.8;
+    padding: 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* 头部 */
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  }
+  .header h1 { font-size: 28px; margin-bottom: 10px; }
+  .header p { font-size: 15px; opacity: 0.9; }
+
+  /* 卡片通用 */
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #667eea;
+    display: inline-block;
+  }
+  .card h3 {
+    font-size: 18px;
+    color: #34495e;
+    margin: 20px 0 12px;
+    padding-left: 12px;
+    border-left: 4px solid #764ba2;
+  }
+  .card h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 16px 0 8px;
+  }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid #e1e8ed;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th {
+    background: #f0f3ff;
+    color: #4a5568;
+    font-weight: 600;
+  }
+  tr:nth-child(even) { background: #fafbfc; }
+
+  /* 公式/符号高亮 */
+  .formula {
+    display: inline-block;
+    background: #f0f3ff;
+    color: #667eea;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-family: "Cambria Math", "Times New Roman", serif;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* 重点框 */
+  .highlight-box {
+    background: #fff8e1;
+    border-left: 4px solid #ffa726;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+  }
+  .highlight-box.green {
+    background: #e8f5e9;
+    border-left-color: #66bb6a;
+  }
+  .highlight-box.red {
+    background: #ffebee;
+    border-left-color: #ef5350;
+  }
+  .highlight-box.blue {
+    background: #e3f2fd;
+    border-left-color: #42a5f5;
+  }
+
+  /* 口诀 */
+  .mnemonic {
+    background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+    color: #5d4037;
+    padding: 16px 22px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  /* 列表 */
+  ul, ol { margin: 10px 0 10px 24px; }
+  li { margin: 6px 0; }
+
+  /* 对比块 */
+  .compare-row {
+    display: flex;
+    gap: 16px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .compare-item {
+    flex: 1;
+    min-width: 250px;
+    background: #f8f9fc;
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .compare-item .label {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 6px;
+  }
+
+  /* 错误标记 */
+  .wrong { color: #e53935; text-decoration: line-through; }
+  .correct { color: #43a047; font-weight: 600; }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    padding: 20px;
+  }
+
+  /* 导航 */
+  .nav {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .nav h3 { font-size: 16px; margin-bottom: 10px; color: #667eea; }
+  .nav a {
+    display: inline-block;
+    color: #555;
+    text-decoration: none;
+    margin: 4px 12px 4px 0;
+    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .nav a:hover { background: #f0f3ff; color: #667eea; }
+
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 18px; }
+    .header { padding: 24px 18px; }
+    .header h1 { font-size: 22px; }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes" class="brand">← 返回学习笔记</a>
+  <span class="brand-sub">行测文字陷阱大全</span>
+</header>
+
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <h1>📚 行测文字陷阱大全</h1>
+    <p>介词 / 语序 / 主动被动 — 看懂一个"于"字，避开一类坑</p>
+  </div>
+
+  <!-- 导航 -->
+  <div class="nav">
+    <h3>📑 目录</h3>
+    <a href="#part1">一、包含 vs 包含于</a>
+    <a href="#part2">二、"于"字原理</a>
+    <a href="#part3">三、集合推理同源坑</a>
+    <a href="#part4">四、翻译推理介词坑</a>
+    <a href="#part5">五、资料分析语序坑</a>
+    <a href="#part6">六、类比推理主次坑</a>
+    <a href="#part7">七、言语理解主客体坑</a>
+    <a href="#part8">八、统一原理与口诀</a>
+  </div>
+
+  <!-- 第一部分 -->
+  <div class="card" id="part1">
+    <h2>一、包含 ⊇ 与 包含于 ⊂ 的区别</h2>
+
+    <h3>1. 符号一眼分清</h3>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="label">A ⊇ B：A 包含 B</div>
+        <div>A 是<strong>大集合</strong>，B 是小的，B 的全部元素都在 A 里面</div>
+      </div>
+      <div class="compare-item">
+        <div class="label">A ⊆ B：A 包含于 B</div>
+        <div>A 是<strong>小集合</strong>，A 的全部元素都在 B 里面</div>
+      </div>
+    </div>
+
+    <div class="mnemonic">💡 口诀：开口对着大集合 — ⊃ 开口朝左 → 左边大；⊂ 开口朝右 → 右边大</div>
+
+    <h3>2. 举例子</h3>
+    <p>设 A = {1,2,3}，B = {1,2}</p>
+    <ul>
+      <li><span class="formula">A ⊇ B</span> — A <strong>包含</strong> B（A更大）</li>
+      <li><span class="formula">B ⊆ A</span> — B <strong>包含于</strong> A（B被装在A里面）</li>
+    </ul>
+
+    <h3>3. 严格版（真包含 / 真包含于）</h3>
+    <ul>
+      <li><span class="formula">A ⊋ B</span> — <strong>A真包含B</strong>，B在A里，而且A还有多余元素，两者不相等</li>
+      <li><span class="formula">A ⊊ B</span> — <strong>A真包含于B</strong>，A在B里，两者不相等</li>
+    </ul>
+
+    <div class="highlight-box green">
+      <strong>一句话总结：</strong><br>
+      X 包含 Y → X ⊇ Y，X包住Y，X大<br>
+      X 包含于 Y → X ⊆ Y，X被Y包住，Y大
+    </div>
+  </div>
+
+  <!-- 第二部分 -->
+  <div class="card" id="part2">
+    <h2>二、"于"字怎么理解？原理是什么？</h2>
+
+    <div class="highlight-box blue">
+      <strong>核心本质：于 = 在……之中 / 被……容纳 — 自带被动含义</strong>
+    </div>
+
+    <h3>1. 词语拆开看</h3>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="label">包含（主动）</div>
+        <div>动词：A去包住B<br>A 包含 B → A是容器，主动装着B<br><span class="formula">A ⊇ B</span></div>
+      </div>
+      <div class="compare-item">
+        <div class="label">包含于（被动）</div>
+        <div>于 = 介词：被 / 在…里面<br>A 包含于 B → A被B包含<br><span class="formula">A ⊆ B</span></div>
+      </div>
+    </div>
+
+    <h3>2. 文言文中的"于"（被动标记）</h3>
+    <ul>
+      <li>受制<strong>于</strong>人 = 被人制约</li>
+      <li>见笑<strong>于</strong>大方之家 = 被行家笑话</li>
+    </ul>
+    <div class="highlight-box">
+      <strong>通用公式：X + 动词 + 于 + Y = X 被 Y 怎么样</strong><br>
+      套回去：A 包含 于 B = A 被 B 包含
+    </div>
+
+    <h3>3. 语序陷阱原理</h3>
+    <p>汉语语序：主语在前。同一个关系有两种说法：</p>
+    <ul>
+      <li>主动说法：<strong>B 包含 A</strong>（B是主语，B大）</li>
+      <li>被动说法：<strong>A 包含于 B</strong>（A是主语，但A小！）</li>
+    </ul>
+    <p>动作还是"包含"，加一个<strong>于</strong>，主语和宾语直接调换主次。</p>
+
+    <div class="mnemonic">💡 后面带于，前面变小；开口永远向着大那一边。</div>
+  </div>
+
+  <!-- 第三部分 -->
+  <div class="card" id="part3">
+    <h2>三、集合推理 — 和"包含/包含于"同源的坑</h2>
+
+    <h3>同义替换词总结（直接背）</h3>
+    <table>
+      <tr><th>语句</th><th>逻辑关系</th><th>谁大</th></tr>
+      <tr><td>A是B的一种 / A属于B</td><td><span class="formula">A ⊊ B</span></td><td>B大</td></tr>
+      <tr><td>B包括A / B包含A</td><td><span class="formula">A ⊊ B</span></td><td>B大</td></tr>
+      <tr><td>A包含于B / A被B包含</td><td><span class="formula">A ⊊ B</span></td><td>B大</td></tr>
+      <tr><td>B容纳A = A被B容纳</td><td><span class="formula">A ⊊ B</span></td><td>B大</td></tr>
+    </table>
+
+    <div class="highlight-box red">
+      <strong>⚠️ 经典坑：</strong>读句子只看先后，忽略动词。<br>
+      "B被A包含" = B ⊆ A，很多人直接写成 A ⊆ B，错！
+    </div>
+  </div>
+
+  <!-- 第四部分 -->
+  <div class="card" id="part4">
+    <h2>四、逻辑判断·翻译推理 — 介词大坑</h2>
+
+    <h3>1. 取决于 / 依赖于 / 有赖于</h3>
+    <div class="highlight-box">
+      A取决于B → <span class="formula">A ⇒ B</span>（A的成立，必须要有B）<br>
+      例：成功取决于努力 → 成功→努力<br>
+      <span class="wrong">努力→成功</span> <span class="correct">← 很多人反过来，错！</span>
+    </div>
+
+    <h3>2. 以A为前提 / 以A为基础</h3>
+    <div class="highlight-box">
+      B以A为基础 → <span class="formula">B ⇒ A</span><br>
+      核心规律：<strong>X以Y为前提 ⇒ X→Y</strong>
+    </div>
+
+    <h3>3. 必要条件大坑：只有…才；除非…否则不</h3>
+    <table>
+      <tr><th>句式</th><th>翻译</th><th>方向</th></tr>
+      <tr><td>如果A，那么B</td><td><span class="formula">A → B</span></td><td>前推后</td></tr>
+      <tr><td>只有A，才B</td><td><span class="formula">B → A</span></td><td>后推前 ⚠️</td></tr>
+      <tr><td>除非A，否则不B</td><td><span class="formula">B → A</span></td><td>后推前 ⚠️</td></tr>
+    </table>
+    <div class="highlight-box red">
+      <strong>⚠️ 超级高频坑：</strong>看到"只有"直接前推后，必错！
+    </div>
+
+    <h3>4. 来源于</h3>
+    <p>A来源于B：A的前提是B，不要随便逆推（B不一定推出A）。</p>
+  </div>
+
+  <!-- 第五部分 -->
+  <div class="card" id="part5">
+    <h2>五、资料分析 — 文字语序坑（每年必考）</h2>
+
+    <h3>1. A是B的几倍 vs A比B多几倍</h3>
+    <table>
+      <tr><th>表述</th><th>公式</th><th>注意</th></tr>
+      <tr><td>A是B的n倍</td><td>A ÷ B = n</td><td>直接除</td></tr>
+      <tr><td>A比B多n倍</td><td>A ÷ B − 1 = n</td><td>要减1 ⚠️</td></tr>
+      <tr><td>A高出B3倍</td><td>A ÷ B = 4</td><td>"高出"=多几倍，实际是4倍</td></tr>
+    </table>
+
+    <h3>2. 占比主语陷阱（和包含于逻辑一模一样！）</h3>
+    <table>
+      <tr><th>表述</th><th>分子</th><th>分母</th></tr>
+      <tr><td>A占B的比重</td><td>A</td><td>B</td></tr>
+      <tr><td>B中A的占比</td><td>A</td><td>B</td></tr>
+      <tr><td>B占A的比重</td><td>B</td><td>A ⚠️ 语序一变直接颠倒</td></tr>
+    </table>
+
+    <h3>3. 降幅扩大/收窄</h3>
+    <div class="highlight-box">
+      去年降幅3%，今年降幅<strong>扩大</strong>到5% → 去年：-3%，今年：-5%<br>
+      去年降幅3%，今年降幅<strong>收窄</strong>到1% → 去年：-3%，今年：-1%
+    </div>
+
+    <h3>4. 平均数：A平均每个B</h3>
+    <div class="mnemonic">💡 口诀：每字后面做分母！<br>
+    人均GDP = GDP ÷ 人数<br>
+    单位面积产量 = 产量 ÷ 面积</div>
+  </div>
+
+  <!-- 第六部分 -->
+  <div class="card" id="part6">
+    <h2>六、类比推理 — 最容易搞反先后、主次</h2>
+
+    <table>
+      <tr><th>关系类型</th><th>示例（前→后）</th><th>坑点</th></tr>
+      <tr><td>原材料对应</td><td>木材：家具</td><td>选项反过来：家具：木材，直接掉坑</td></tr>
+      <tr><td>功能关系</td><td>手机：通讯（主要）</td><td>手机：拍照（次要），注意主次</td></tr>
+      <tr><td>因果关系</td><td>下雨：地湿（原因→结果）</td><td>反过来：地湿：下雨，错</td></tr>
+      <tr><td>方式目的</td><td>植树：绿化（方式→目的）</td><td>注意方向</td></tr>
+    </table>
+
+    <h3>和"于"相关的类比词</h3>
+    <ul>
+      <li><strong>作用于</strong>：A作用于B（A施加给B）</li>
+      <li><strong>适用于</strong>：A适用于B（A的适用对象是B）</li>
+    </ul>
+  </div>
+
+  <!-- 第七部分 -->
+  <div class="card" id="part7">
+    <h2>七、言语理解 — 介词造成主客体颠倒（细节判断题）</h2>
+
+    <div class="highlight-box red">
+      <strong>⚠️ 经典错误选项：偷换主客体</strong><br>
+      原文：<strong>A对B产生影响</strong><br>
+      错误选项：<strong>B对A产生影响</strong>
+    </div>
+
+    <h3>关键词识别</h3>
+    <p>看到以下词，立刻警觉主客体是否被调换：</p>
+    <ul>
+      <li><strong>对、对于</strong>：A对B ≠ B对A</li>
+      <li><strong>于、被</strong>：A被B改变 ≠ A改变B</li>
+      <li><strong>为…所</strong>：A为B所改变 = A被B改变</li>
+    </ul>
+
+    <p>和"包含于"本质完全一致：<strong>"被""于"直接反转两者关系</strong>。</p>
+  </div>
+
+  <!-- 第八部分 -->
+  <div class="card" id="part8">
+    <h2>八、统一底层原理 + 考场口诀</h2>
+
+    <h3>所有坑通用的底层原理</h3>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="label">没有介词（主动）</div>
+        <div>A作用B → A主动，A是施加方</div>
+      </div>
+      <div class="compare-item">
+        <div class="label">带上「于 / 被」</div>
+        <div>A被B作用 / A作用于B → <strong>B才是施加动作的一方</strong></div>
+      </div>
+    </div>
+
+    <h3>🎯 考场默念四口诀</h3>
+    <div class="mnemonic">
+      ① <strong>带于带被，前后反转</strong>（集合、逻辑、言语通用）<br>
+      ② <strong>只有才，后推前；如果就，前推后</strong>（翻译推理）<br>
+      ③ <strong>占谁谁分母，每字后面做分母</strong>（资料分析）<br>
+      ④ <strong>多几倍要−1，是几倍不用减</strong>（资料分析）
+    </div>
+
+    <div class="highlight-box green">
+      <strong>最终心法：</strong>行测文字题，不要按"谁在前谁大"的直觉走。<br>
+      先找动词/介词，再定主被动，最后画箭头方向。<br>
+      一个"于"字，就是一个反转信号。
+    </div>
+  </div>
+
+  <div class="footer">
+    行测文字陷阱大全 · 整理自备考笔记 · 祝上岸 🎯
+  </div>
+
+</div>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
