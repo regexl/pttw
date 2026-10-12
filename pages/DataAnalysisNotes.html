@@ -333,6 +333,226 @@
             .topbar, .toc, #back-top { display: none; }
             .chapter { box-shadow: none; page-break-inside: avoid; }
         }
+
+        /* ===== Ch14 — 年均增长率深度讲义（融合自独立讲义，作用域限定 .d14-block） ===== */
+        .d14-block { font-size: 15px; }
+        .d14-block h4 {
+            color: var(--ink);
+            margin: 18px 0 8px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+            font-size: 1.02em;
+        }
+        .d14-block h5 {
+            color: var(--text-light);
+            margin: 14px 0 6px;
+            font-size: 0.98em;
+            font-weight: 700;
+        }
+        .d14-block p { margin-bottom: 10px; color: var(--text); }
+
+        /* 公式盒 */
+        .d14-block .formula {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+            overflow-x: auto;
+        }
+        .d14-block .formula .main {
+            font-size: 1.18em;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 6px 0;
+        }
+        .d14-block .formula .note {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+        .d14-block .formula u {
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 3px;
+        }
+
+        /* 例题卡 */
+        .d14-block .example {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+        .d14-block .example-head {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 0.95em;
+        }
+        .d14-block .example-body { padding: 16px 20px; }
+        .d14-block .q {
+            background: var(--hl);
+            border-left: 3px solid var(--accent-light);
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 0.94em;
+        }
+        .d14-block .step {
+            margin: 6px 0;
+            padding-left: 18px;
+            position: relative;
+            color: var(--text);
+            font-size: 0.94em;
+        }
+        .d14-block .step::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        .d14-block .ans {
+            background: #f0fff4;
+            border-left: 4px solid var(--success);
+            padding: 8px 14px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #1b5e20;
+            font-size: 0.95em;
+        }
+
+        /* 推导区块（等宽代码风） */
+        .d14-block .derive {
+            background: var(--code-bg);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 10px 0;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.94em;
+            line-height: 1.9;
+            overflow-x: auto;
+        }
+        .d14-block .derive .line { display: block; }
+        .d14-block .derive .cmt { color: var(--text-light); font-size: 0.92em; }
+
+        /* 决策流程图节点 */
+        .d14-block .flow {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            margin: 16px 0;
+        }
+        .d14-block .flow-node {
+            background: var(--primary);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9em;
+            margin: 6px auto;
+            max-width: 320px;
+            font-weight: 600;
+        }
+        .d14-block .flow-node.alt   { background: var(--accent); }
+        .d14-block .flow-node.good  { background: var(--success); }
+        .d14-block .flow-node.warn  { background: var(--danger); }
+        .d14-block .flow-node.purple { background: #8e44ad; }
+        .d14-block .flow-node.teal   { background: #16a085; }
+        .d14-block .flow-arrow {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1em;
+            margin: 2px 0;
+        }
+        .d14-block .flow-branch {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+        .d14-block .flow-branch .flow-node {
+            flex: 1;
+            min-width: 130px;
+            max-width: 220px;
+            font-size: 0.82em;
+            margin: 0;
+        }
+
+        /* 源讲义表格 */
+        .d14-block table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.9em;
+            background: var(--card);
+            border-radius: 6px;
+            overflow: hidden;
+            table-layout: auto;
+        }
+        .d14-block table th {
+            background: var(--primary);
+            color: white;
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.92em;
+        }
+        .d14-block table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.92em;
+            vertical-align: top;
+        }
+        .d14-block table tr:last-child td { border-bottom: none; }
+        .d14-block table tr:nth-child(even) td { background: var(--code-bg); }
+        .d14-block table.err-table th { background: var(--danger); }
+        .d14-block table.err-table td:first-child {
+            font-weight: 600;
+            color: var(--danger);
+        }
+        .d14-block table th strong { color: white; }
+
+        /* 源讲义 .key 高亮框（黄色） */
+        .d14-block .key {
+            background: var(--hl);
+            border-left: 4px solid #f5a623;
+            padding: 10px 16px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 0.93em;
+        }
+
+        /* 源讲义 .tip/.warn 框（避开与现有 .callout 的样式冲突，独立保留视觉） */
+        .d14-block .tip {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 10px 16px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 0.93em;
+        }
+        .d14-block .warn {
+            background: var(--warn-bg, #fff1f0);
+            border-left: 4px solid var(--danger);
+            padding: 10px 16px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 0.93em;
+        }
+
+        @media (max-width: 700px) {
+            .d14-block .flow-branch { flex-direction: column; align-items: stretch; }
+            .d14-block .flow-branch .flow-node { max-width: 100%; }
+        }
     </style>
     <!-- umami 统计 -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
@@ -369,6 +589,7 @@
         <a href="#ch11">十一·解题总思路</a>
         <a href="#ch12">十二·严格推导</a>
         <a href="#ch13">十三·贡献率/拉动增长</a>
+        <a href="#ch14">十四·年均增长率深度讲义</a>
     </nav>
 
     <main>
@@ -668,6 +889,354 @@
                 前者是相对<strong>总增量</strong>的占比（无单位，%）；后者是相对<strong>总基期</strong>的占比（百分点）。<br>
                 两者通过"总增速"这座桥互通：
                 <code class="code-inline">贡献率 × 总增速 = 拉动增长率</code>。
+            </div>
+        </section>
+
+        <!-- ===== Chapter 14 — 年均增长率深度讲义（合并自独立讲义） ===== -->
+        <section class="chapter" id="ch14">
+            <h2><span class="num">14</span>年均增长率 · 深度讲义</h2>
+            <div class="callout info">
+                <div class="label">本章定位</div>
+                第六章给出年均增长率的「公式 + 一句话原则」。本章展开<strong>严格推导 + 三大策略 + 4 道例题 + 比较题型 + 高频错误 + 解题流程图 + 速查表</strong>，对应国考 / 联考年均增长率全部题型，可单独成讲义复习。
+            </div>
+
+            <div class="d14-block">
+
+            <h3 id="ch14-1"><span class="num">14.1</span>核心公式的本质推导</h3>
+
+            <h4>14.1.1 从逐年增长推导出公式</h4>
+            <p>设基期量为 <strong>A</strong>，年均增长率为 <strong>r</strong>，经过 <strong>n</strong> 年后到达现期量 <strong>B</strong>。</p>
+
+            <div class="derive">
+                <span class="line">第1年末：A × (1+r)</span>
+                <span class="line">第2年末：A × (1+r) × (1+r) = A(1+r)²</span>
+                <span class="line">第3年末：A(1+r)² × (1+r) = A(1+r)³</span>
+                <span class="line">……</span>
+                <span class="line">第n年末：<strong>A(1+r)ⁿ = B</strong></span>
+            </div>
+
+            <div class="formula">
+                <div class="main">(1+r)ⁿ = 现期量 / 基期量</div>
+                <div class="note">r = 年均增长率，n = 增长年份差（现期年 − 基期年）</div>
+            </div>
+
+            <div class="key">本质：年均增长率就是"复利利率"。每年以上一年的总量为基数增长，而不是以最初的基期量为基数。这就是为什么不能用"总增长率÷n"。</div>
+
+            <h4>14.1.2 为什么不能用"总增长率÷n"？</h4>
+            <p>假设基期100，两年后变为144，总增长率44%。</p>
+            <div class="derive">
+                <span class="line">❌ 错误：44% ÷ 2 = 22%</span>
+                <span class="line">✅ 正确：(1+r)² = 1.44 → r = 20%</span>
+                <span class="line cmt">验证：100 →(+20%)→ 120 →(+20%)→ 144 ✓</span>
+            </div>
+            <div class="warn">用总增长率÷n算出来的值<strong>偏大</strong>，因为忽略了"利滚利"效应。</div>
+
+            <h3 id="ch14-2"><span class="num">14.2</span>二项式定理展开的完整推导</h3>
+
+            <h4>14.2.1 二项式定理</h4>
+            <div class="formula">
+                <div class="main">(a+b)ⁿ = Cₙ⁰aⁿ + Cₙ¹aⁿ⁻¹b + Cₙ²aⁿ⁻²b² + … + Cₙⁿbⁿ</div>
+            </div>
+            <p>令 a=1, b=r，代入得：</p>
+            <div class="formula">
+                <div style="font-size:1.05em;text-align:center;line-height:2.2">
+                    (1+r)ⁿ = 1 + nr + <u>n(n-1)/2</u>·r² + <u>n(n-1)(n-2)/6</u>·r³ + … + rⁿ
+                </div>
+            </div>
+
+            <h4>14.2.2 逐项分析（以 n=3 为例）</h4>
+            <div class="formula">
+                <div class="main">(1+r)³ = 1 + 3r + 3r² + r³</div>
+            </div>
+
+            <table>
+                <tr><th>项</th><th>表达式</th><th>r=5% 时值</th><th>占比</th></tr>
+                <tr><td>常数项</td><td>1</td><td>1.000</td><td>86.4%</td></tr>
+                <tr><td>一次项</td><td>3r</td><td>0.150</td><td>13.0%</td></tr>
+                <tr><td>二次项</td><td>3r²</td><td>0.0075</td><td>0.65%</td></tr>
+                <tr><td>三次项</td><td>r³</td><td>0.000125</td><td>0.01%</td></tr>
+            </table>
+
+            <div class="key">当 r 很小时（≤5%），二次项及以上贡献不到1%，可以忽略，因此 (1+r)ⁿ ≈ 1+nr。</div>
+
+            <h4>14.2.3 近似公式的误差量化</h4>
+            <table>
+                <tr><th>r</th><th>n=3 真实值</th><th>1+nr 近似值</th><th>绝对误差</th><th>相对误差</th></tr>
+                <tr><td>1%</td><td>1.030301</td><td>1.03</td><td>0.0003</td><td>0.03%</td></tr>
+                <tr><td>3%</td><td>1.092727</td><td>1.09</td><td>0.0027</td><td>0.25%</td></tr>
+                <tr><td>5%</td><td>1.157625</td><td>1.15</td><td>0.0076</td><td>0.66%</td></tr>
+                <tr><td>10%</td><td>1.331</td><td>1.30</td><td>0.031</td><td>2.33%</td></tr>
+                <tr><td>20%</td><td>1.728</td><td>1.60</td><td>0.128</td><td>7.41%</td></tr>
+            </table>
+            <div class="tip">r≤5%时误差&lt;1%，资料分析选项通常差距≥5%，可放心用近似；r&gt;5%时误差迅速放大，必须用不等式排除或精确代入。</div>
+
+            <h4>14.2.4 不等式 (1+r)ⁿ &gt; 1+nr 的严格证明</h4>
+            <div class="derive">
+                <span class="line">(1+r)ⁿ = 1 + nr + [Cₙ²r² + Cₙ³r³ + … + rⁿ]</span>
+                <span class="line">                ↑ 每一项都 &gt; 0（∵ r&gt;0, n≥2）</span>
+                <span class="line">∴ (1+r)ⁿ &gt; 1+nr</span>
+            </div>
+            <div class="key">用法：先用 1+nr 算出"偏小的估算值"，真实值一定比它大。若某选项代入 1+nr 后已≥现期/基期，那真实的 (1+r)ⁿ 只会更大，该选项必然偏大，直接排除。</div>
+
+            <h3 id="ch14-3"><span class="num">14.3</span>三大计算策略深度解析</h3>
+
+            <h4>策略① 居中代入法（选项差距大时）</h4>
+            <div class="derive">
+                <span class="line">Step1：计算 k = 现期/基期</span>
+                <span class="line">Step2：取选项中间值 r₀，计算 (1+r₀)ⁿ</span>
+                <span class="line">Step3：(1+r₀)ⁿ &gt; k → r₀偏大，选更小的；反之选更大的</span>
+            </div>
+
+            <h5>常用幂次数速记表</h5>
+            <table>
+                <tr><th>r</th><th>(1+r)²</th><th>(1+r)³</th><th>(1+r)⁴</th><th>(1+r)⁵</th></tr>
+                <tr><td>10%</td><td>1.21</td><td>1.331</td><td>1.464</td><td>1.611</td></tr>
+                <tr><td>15%</td><td>1.3225</td><td>1.521</td><td>1.749</td><td>2.011</td></tr>
+                <tr><td>20%</td><td>1.44</td><td>1.728</td><td>2.074</td><td><strong>2.488</strong></td></tr>
+                <tr><td>25%</td><td>1.5625</td><td>1.953</td><td>2.441</td><td>3.052</td></tr>
+                <tr><td>30%</td><td>1.69</td><td>2.197</td><td>2.856</td><td>3.713</td></tr>
+            </table>
+            <div class="tip">(1.2)⁵ ≈ 2.488 几乎等于2.5，考到5年翻2.5倍直接选20%！</div>
+
+            <h4>策略② 近似公式法（r≤5%时）</h4>
+            <div class="formula">
+                <div class="main">(1+r)ⁿ ≈ 1+nr  ⇒  r ≈ (k−1)/n</div>
+                <div class="note">k = 现期/基期；算出来的 r 偏大，真实值略小一点点</div>
+            </div>
+
+            <h4>策略③ 不等式排除法（r&gt;5%且选项接近时）</h4>
+            <div class="derive">
+                <span class="line">【第一步·粗筛】用 1+nr 估算，排除明显偏大的选项</span>
+                <span class="line">【第二步·精算】对剩余选项用二项式前三项</span>
+                <span class="line">         1 + nr + Cₙ²r² 精确计算，或直接代入验证</span>
+            </div>
+
+            <h3 id="ch14-4"><span class="num">14.4</span>典型例题精讲</h3>
+
+            <div class="example">
+                <div class="example-head">例题1 · r≤5%，近似公式法</div>
+                <div class="example-body">
+                    <div class="q">2018年某省GDP为3.5万亿元，2023年达到3.9万亿元。问2018-2023年该省GDP年均增长率约为？<br>A. 1.8% &nbsp; B. 2.2% &nbsp; C. 2.8% &nbsp; D. 3.5%</div>
+                    <div class="step">n = 2023 − 2018 = 5</div>
+                    <div class="step">k = 3.9 / 3.5 ≈ 1.114</div>
+                    <div class="step">近似：r ≈ (1.114−1)/5 = 0.114/5 = 2.28%</div>
+                    <div class="step">真实值略小，最接近 B 选项</div>
+                    <div class="step">验证：(1.022)⁵ ≈ 1 + 5×0.022 + 10×0.022² = 1.1148 ≈ 1.114 ✓</div>
+                    <div class="ans">答案：B. 2.2%</div>
+                </div>
+            </div>
+
+            <div class="example">
+                <div class="example-head">例题2 · 选项差距大，居中代入</div>
+                <div class="example-body">
+                    <div class="q">某企业2015年营收2亿元，2020年营收5亿元。问2015-2020年年均增长率约为？<br>A. 15% &nbsp; B. 20% &nbsp; C. 25% &nbsp; D. 30%</div>
+                    <div class="step">n = 5，k = 5/2 = 2.5</div>
+                    <div class="step">居中代入B选项20%：(1.2)⁵ = 2.488 ≈ 2.5 ✓</div>
+                    <div class="ans">答案：B. 20%（背的常用数，(1.2)⁵≈2.488 几乎等于2.5）</div>
+                </div>
+            </div>
+
+            <div class="example">
+                <div class="example-head">例题3 · r&gt;5%，选项接近，不等式排除</div>
+                <div class="example-body">
+                    <div class="q">2016年某市常住人口1000万人，2021年达到1350万人。问年均增长率约为？<br>A. 5.8% &nbsp; B. 6.2% &nbsp; C. 6.7% &nbsp; D. 7.1%</div>
+                    <div class="step">n = 5，k = 1350/1000 = 1.35</div>
+                    <div class="step"><strong>第一步（不等式粗筛）</strong>：用 1+5r 估算</div>
+                    <div class="step">r=6.2%：1+5×0.062 = 1.31 &lt; 1.35，真实值&gt;1.31，可能</div>
+                    <div class="step">r=5.8%：1+5×0.058 = 1.29 &lt; 1.35，真实值&gt;1.29，可能</div>
+                    <div class="step">两个都不能直接排除，需精算</div>
+                    <div class="step"><strong>第二步（二项式前三项精算）</strong>：</div>
+                    <div class="step">r=6.2%：1 + 5×0.062 + 10×0.062² = 1 + 0.31 + 0.0384 = 1.3484 ≈ 1.35 ✓</div>
+                    <div class="step">r=6.7%：1 + 5×0.067 + 10×0.067² = 1 + 0.335 + 0.0449 = 1.3799 &gt; 1.35，偏大</div>
+                    <div class="ans">答案：B. 6.2%</div>
+                </div>
+            </div>
+
+            <div class="example">
+                <div class="example-head">例题4 · 五年规划的基期确定（国考经典）</div>
+                <div class="example-body">
+                    <div class="q">"十二五"期间（2011-2015年），我国某指标从2010年的500增长到2015年的800。问"十二五"期间年均增长率？</div>
+                    <div class="step">⚠️ 关键："十二五"期间的增长，基期是 <strong>2010年</strong>（前一年），不是2011年！</div>
+                    <div class="step">n = 2015 − 2010 = 5</div>
+                    <div class="step">k = 800/500 = 1.6</div>
+                    <div class="step">居中代入10%：(1.1)⁵ = 1.611 ≈ 1.6 ✓</div>
+                    <div class="ans">答案：约 10%</div>
+                </div>
+            </div>
+
+            <div class="key">基期规则总结：<br>
+                • "2011-2015年"：基期2011，n=4<br>
+                • "2011-2015这五年"：基期2010，n=5<br>
+                • "十二五期间"：基期2010，n=5<br>
+                • 题干说"从XX年到XX年"：基期是前一个年份</div>
+
+            <h3 id="ch14-5"><span class="num">14.5</span>年均增长率比较/排序题型</h3>
+
+            <h4>14.5.1 n 相同时：直接比比值</h4>
+            <div class="example">
+                <div class="example-head">例题5 · n相同的比较</div>
+                <div class="example-body">
+                    <div class="q">以下四个时间段（均为5年），某指标年均增速最快的是？<br>
+                        A. 从120增长到240 &nbsp; B. 从150增长到330<br>
+                        C. 从200增长到400 &nbsp; D. 从250增长到520</div>
+                    <div class="step">都是5年（n=5），直接比 现期/基期：</div>
+                    <div class="step">A：240/120 = 2.0 &nbsp; B：330/150 = 2.2</div>
+                    <div class="step">C：400/200 = 2.0 &nbsp; D：520/250 = 2.08</div>
+                    <div class="step">B最大</div>
+                    <div class="ans">答案：B</div>
+                </div>
+            </div>
+            <div class="key">秒杀技巧：n相同时，年均增速排序 = 现期/基期比值排序，完全不用开方！</div>
+
+            <h4>14.5.2 n 不同时：不能直接比比值</h4>
+            <div class="example">
+                <div class="example-head">例题6 · n不同的比较陷阱</div>
+                <div class="example-body">
+                    <div class="q">甲：2010-2015年（5年），从100到180<br>乙：2012-2018年（6年），从100到210<br>谁的年均增速更快？</div>
+                    <div class="step">甲：(1+r甲)⁵ = 1.8，r甲 ≈ (1.8−1)/5 = 16%（近似），实际约12.5%</div>
+                    <div class="step">乙：(1+r乙)⁶ = 2.1，r乙 ≈ (2.1−1)/6 = 18.3%（近似），实际约13.2%</div>
+                    <div class="step">乙更快</div>
+                    <div class="ans">答案：乙的年均增速更快</div>
+                </div>
+            </div>
+            <div class="warn">陷阱：n不同时，总增长率大的 ≠ 年均增速快，必须除以n（近似）或精确计算！</div>
+
+            <h3 id="ch14-6"><span class="num">14.6</span>高频错误与陷阱汇总</h3>
+
+            <table class="err-table">
+                <tr><th style="width:18%">陷阱类型</th><th style="width:32%">错误做法</th><th style="width:50%">正确做法</th></tr>
+                <tr>
+                    <td>总增长率÷n</td>
+                    <td>把 r=(k−1)/n 当精确值</td>
+                    <td>仅 r≤5% 时可近似，否则结果偏大</td>
+                </tr>
+                <tr>
+                    <td>n 的确定</td>
+                    <td>直接年份相减+1</td>
+                    <td>现期年−基期年；注意"五年规划"基期前移一年</td>
+                </tr>
+                <tr>
+                    <td>n不同直接比</td>
+                    <td>只看现期/基期比值大小</td>
+                    <td>必须考虑n的差异，分别计算或除以n近似</td>
+                </tr>
+                <tr>
+                    <td>近似公式滥用</td>
+                    <td>r=15%还用 1+nr</td>
+                    <td>r&gt;5% 必须用不等式排除或精确代入</td>
+                </tr>
+                <tr>
+                    <td>基期找错</td>
+                    <td>"期间"的第一年当基期</td>
+                    <td>"期间"类（如十二五）基期是前一年</td>
+                </tr>
+                <tr>
+                    <td>比较题开方</td>
+                    <td>n相同还去硬算开方</td>
+                    <td>n相同直接比现期/基期，秒杀</td>
+                </tr>
+                <tr>
+                    <td>不等式方向搞反</td>
+                    <td>以为 (1+r)ⁿ &lt; 1+nr</td>
+                    <td>(1+r)ⁿ &gt; 1+nr，1+nr是偏小的下界</td>
+                </tr>
+            </table>
+
+            <h4>错误思路详细分析</h4>
+
+            <h5>错误1：手误把 n 算错</h5>
+            <div class="warn">最常见的低级错误。比如"2016-2021年"，有人算成 n=6（2021−2016+1），实际上 n=5。<br><strong>纠正</strong>：n = 现期年 − 基期年，不加1。增长了几年就是几。</div>
+
+            <h5>错误2：近似公式算出后不验证</h5>
+            <div class="warn">r≈(k−1)/n 算出来后直接选最接近的，但当 r 在5%边界附近时误差可能超过选项差距。<br><strong>纠正</strong>：算完后用 (1+r)ⁿ ≈ 1+nr+Cₙ²r² 回代验证一下。</div>
+
+            <h5>错误3：比较题想当然</h5>
+            <div class="warn">看到"甲从100到200（翻1倍），乙从100到180（涨80%）"，就以为甲快，没注意n不同。<br><strong>纠正</strong>：先看n是否相同，相同比比值，不同分别算。</div>
+
+            <h3 id="ch14-7"><span class="num">14.7</span>解题逻辑流程图</h3>
+
+            <div class="flow">
+                <div class="flow-node">拿到题目 → 识别"年均增长/排序"题型</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node alt">确定基期年、现期年、计算 n</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node">计算 k = 现期量 / 基期量</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node alt">判断题型分支</div>
+
+                <div class="flow-branch">
+                    <div>
+                        <div class="flow-node purple">排序/比较题</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node" style="background:#9b59b6;font-size:.8em">n相同？</div>
+                        <div class="flow-branch" style="margin-top:4px">
+                            <div class="flow-node good" style="font-size:.78em;min-width:100px">是→直接比比值</div>
+                            <div class="flow-node warn" style="font-size:.78em;min-width:100px">否→分别算(1+r)ⁿ</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flow-node teal">计算具体值</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node" style="background:#1abc9c;font-size:.8em">k−1 ≤ n×5%？</div>
+                        <div class="flow-branch" style="margin-top:4px">
+                            <div class="flow-node good" style="font-size:.78em;min-width:100px">是→r≈(k−1)/n</div>
+                            <div class="flow-node warn" style="font-size:.78em;min-width:100px">否→进入下一步</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow" style="margin-top:12px">↓（r&gt;5%的计算分支）</div>
+                <div class="flow-node alt">选项差距大？</div>
+                <div class="flow-branch">
+                    <div class="flow-node good" style="font-size:.85em">是→居中代入，背常用幂次数</div>
+                    <div class="flow-node warn" style="font-size:.85em">否→先用1+nr排除偏大项</div>
+                </div>
+                <div class="flow-arrow">↓（选项接近时）</div>
+                <div class="flow-node">二项式前三项 1+nr+Cₙ²r² 精算剩余项</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node good">锁定答案</div>
+            </div>
+
+            <h3 id="ch14-8"><span class="num">14.8</span>考场速查表</h3>
+
+            <h4>必背幂次数</h4>
+            <table>
+                <tr><th>增长率</th><th>2年</th><th>3年</th><th>4年</th><th>5年</th><th>记忆口诀</th></tr>
+                <tr><td>10%</td><td>1.21</td><td>1.331</td><td>1.464</td><td>1.611</td><td>5年约1.6</td></tr>
+                <tr><td>15%</td><td>1.32</td><td>1.52</td><td>1.75</td><td>2.01</td><td>5年约翻2倍</td></tr>
+                <tr><td><strong>20%</strong></td><td>1.44</td><td>1.73</td><td>2.07</td><td><strong>2.49</strong></td><td>5年约2.5（高频）</td></tr>
+                <tr><td>25%</td><td>1.56</td><td>1.95</td><td>2.44</td><td>3.05</td><td>5年约3倍</td></tr>
+                <tr><td>30%</td><td>1.69</td><td>2.20</td><td>2.86</td><td>3.71</td><td>—</td></tr>
+            </table>
+
+            <h4>判断决策树（文字版）</h4>
+            <div class="derive">
+                <span class="line">【排序题】</span>
+                <span class="line">  n相同 → 比现期/基期，大的快</span>
+                <span class="line">  n不同 → 分别用 (k−1)/n 近似比较</span>
+                <span class="line"></span>
+                <span class="line">【计算题】</span>
+                <span class="line">  k−1 ≤ 0.05n → r ≈ (k−1)/n，选最接近的</span>
+                <span class="line">  k−1 &gt; 0.05n 且选项散 → 居中代入常用数</span>
+                <span class="line">  k−1 &gt; 0.05n 且选项近 → 1+nr排除 + 前三项精算</span>
+            </div>
+
+            <h4>一眼识别基期</h4>
+            <table>
+                <tr><th>题干表述</th><th>基期</th><th>n</th><th>示例</th></tr>
+                <tr><td>2011-2015年</td><td>2011年</td><td>4</td><td>2011到2015增长了4年</td></tr>
+                <tr><td>2011-2015这五年</td><td>2010年</td><td>5</td><td>"这五年"暗示包含完整5个增长期</td></tr>
+                <tr><td>十二五期间</td><td>2010年</td><td>5</td><td>规划期基期永远是前一年</td></tr>
+                <tr><td>从2010年到2015年</td><td>2010年</td><td>5</td><td>"从…到…"前一个是基期</td></tr>
+            </table>
+
+            </div><!-- /d14-block -->
+
+            <div class="d-memory">
+                <strong>第十四章心法：</strong>年均增长率是资料分析的"复利题"，三件事必须做对：<br>
+                ① <strong>基期找对</strong>（五年规划前移一年）；<br>
+                ② <strong>n 数对</strong>（现期年 − 基期年，不加 1）；<br>
+                ③ <strong>策略选对</strong>（r≤5% 用近似公式；r&gt;5% 选项散用居中代入，选项近用二项式前三项精算）。
             </div>
         </section>
 
