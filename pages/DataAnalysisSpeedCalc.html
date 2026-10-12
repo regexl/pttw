@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>资料分析速算技巧大全</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<style>
+:root{
+  --primary:#1e3a5f;
+  --primary-light:#2c5282;
+  --accent:#c05621;
+  --accent-light:#dd6b20;
+  --success:#276749;
+  --warning:#975a16;
+  --danger:#9b2c2c;
+  --bg:#f7fafc;
+  --card:#ffffff;
+  --text:#1a202c;
+  --text-light:#4a5568;
+  --border:#e2e8f0;
+  --code-bg:#edf2f7;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  font-size:15px;
+}
+/* ===== Hero ===== */
+.hero{
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+  color:#fff;
+  padding:48px 24px 40px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  top:-50%;right:-20%;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);
+  border-radius:50%;
+}
+.hero h1{
+  font-size:clamp(24px,5vw,36px);
+  font-weight:800;
+  margin-bottom:8px;
+  position:relative;
+  letter-spacing:1px;
+}
+.hero p{
+  font-size:clamp(13px,2.5vw,16px);
+  opacity:.85;
+  position:relative;
+}
+.hero .badges{
+  margin-top:16px;
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  position:relative;
+}
+.hero .badge{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(4px);
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  border:1px solid rgba(255,255,255,.2);
+}
+/* ===== 导航 ===== */
+.nav-wrap{
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:var(--shadow);
+}
+.nav{
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  gap:4px;
+  padding:8px 16px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  color:var(--text-light);
+  text-decoration:none;
+  font-size:13px;
+  padding:6px 12px;
+  border-radius:6px;
+  white-space:nowrap;
+  transition:all .2s;
+  font-weight:500;
+}
+.nav a:hover{background:var(--code-bg);color:var(--primary)}
+.nav a.active{background:var(--primary);color:#fff}
+/* ===== 容器 ===== */
+.container{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+/* ===== 章节 ===== */
+.section{
+  background:var(--card);
+  border-radius:12px;
+  padding:28px 24px;
+  margin-bottom:24px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.section-title{
+  font-size:22px;
+  font-weight:700;
+  color:var(--primary);
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-title .num{
+  background:var(--primary);
+  color:#fff;
+  width:32px;height:32px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  flex-shrink:0;
+}
+.section-sub{
+  color:var(--text-light);
+  font-size:13px;
+  margin-bottom:20px;
+  padding-bottom:14px;
+  border-bottom:1px dashed var(--border);
+}
+/* ===== 方法卡片 ===== */
+.method-card{
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:18px;
+  overflow:hidden;
+  transition:box-shadow .2s;
+}
+.method-card:hover{box-shadow:var(--shadow-lg)}
+.method-header{
+  background:linear-gradient(90deg,#f0f4f8,#e2e8f0);
+  padding:12px 16px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  user-select:none;
+}
+.method-header h3{
+  font-size:16px;
+  font-weight:600;
+  color:var(--primary);
+}
+.method-header .tag{
+  font-size:11px;
+  background:var(--accent);
+  color:#fff;
+  padding:2px 8px;
+  border-radius:10px;
+  margin-left:8px;
+}
+.method-header .arrow{
+  color:var(--text-light);
+  transition:transform .3s;
+  font-size:12px;
+}
+.method-card.open .arrow{transform:rotate(180deg)}
+.method-body{
+  padding:16px;
+  display:none;
+}
+.method-card.open .method-body{display:block}
+/* ===== 通用元素 ===== */
+.formula{
+  background:var(--code-bg);
+  border-left:3px solid var(--accent);
+  padding:10px 14px;
+  border-radius:0 6px 6px 0;
+  font-family:"Courier New",monospace;
+  font-size:14px;
+  margin:10px 0;
+  overflow-x:auto;
+}
+.case-box{
+  background:#f0fff4;
+  border:1px solid #c6f6d5;
+  border-radius:8px;
+  padding:12px 14px;
+  margin:12px 0;
+}
+.case-box .case-title{
+  font-weight:600;
+  color:var(--success);
+  font-size:13px;
+  margin-bottom:6px;
+}
+.tip-box{
+  background:#fffbeb;
+  border:1px solid #f6e05e;
+  border-radius:8px;
+  padding:12px 14px;
+  margin:12px 0;
+}
+.tip-box .tip-title{
+  font-weight:600;
+  color:var(--warning);
+  font-size:13px;
+  margin-bottom:6px;
+}
+.warn-box{
+  background:#fff5f5;
+  border:1px solid #feb2b2;
+  border-radius:8px;
+  padding:12px 14px;
+  margin:12px 0;
+}
+.warn-box .warn-title{
+  font-weight:600;
+  color:var(--danger);
+  font-size:13px;
+  margin-bottom:6px;
+}
+/* ===== 表格 ===== */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:12px 0;
+  font-size:13px;
+}
+th,td{
+  border:1px solid var(--border);
+  padding:8px 10px;
+  text-align:center;
+}
+th{
+  background:var(--primary);
+  color:#fff;
+  font-weight:600;
+}
+tr:nth-child(even){background:#f7fafc}
+td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
+/* ===== 列表 ===== */
+.steps{list-style:none;counter-reset:step;margin:12px 0}
+.steps li{
+  counter-increment:step;
+  padding:8px 0 8px 36px;
+  position:relative;
+  border-bottom:1px dashed var(--border);
+}
+.steps li:last-child{border-bottom:none}
+.steps li::before{
+  content:counter(step);
+  position:absolute;
+  left:0;top:8px;
+  width:24px;height:24px;
+  background:var(--accent);
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:700;
+}
+/* ===== 两栏 ===== */
+.two-col{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+  margin:12px 0;
+}
+@media(min-width:768px){
+  .two-col{grid-template-columns:1fr 1fr}
+}
+/* ===== 速查卡 ===== */
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:12px;
+  margin:16px 0;
+}
+.quick-card{
+  background:linear-gradient(135deg,#f0f4f8,#e6edf3);
+  border-radius:8px;
+  padding:14px;
+  border-left:3px solid var(--primary);
+}
+.quick-card h4{
+  font-size:14px;
+  color:var(--primary);
+  margin-bottom:6px;
+}
+.quick-card p{font-size:12px;color:var(--text-light);line-height:1.6}
+/* ===== 流程图 ===== */
+.flow{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:16px 0;
+  padding:16px;
+  background:var(--code-bg);
+  border-radius:8px;
+}
+.flow-node{
+  background:var(--card);
+  border:2px solid var(--primary);
+  color:var(--primary);
+  padding:8px 14px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
+}
+.flow-node.accent{border-color:var(--accent);color:var(--accent)}
+.flow-node.success{border-color:var(--success);color:var(--success)}
+.flow-arrow{color:var(--text-light);font-size:18px}
+/* ===== 页脚 ===== */
+.footer{
+  text-align:center;
+  padding:24px;
+  color:var(--text-light);
+  font-size:12px;
+  border-top:1px solid var(--border);
+  margin-top:20px;
+}
+/* ===== 回到顶部 ===== */
+.back-top{
+  position:fixed;
+  bottom:24px;right:24px;
+  width:44px;height:44px;
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+  box-shadow:var(--shadow-lg);
+  display:none;
+  z-index:99;
+  transition:transform .2s;
+}
+.back-top:hover{transform:scale(1.1)}
+.back-top.show{display:block}
+/* ===== 打印 ===== */
+@media print{
+  .nav-wrap,.back-top{display:none}
+  .section{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  .method-body{display:block!important}
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<div class="hero">
+  <h1>资料分析速算技巧大全</h1>
+  <p>八大核心方法 · 放缩法专项 · 等差求和 · 高频错误避坑 · 解题逻辑</p>
+  <div class="badges">
+    <span class="badge">截位直除</span>
+    <span class="badge">百化分</span>
+    <span class="badge">放缩法</span>
+    <span class="badge">等差求和</span>
+    <span class="badge">分数比较</span>
+    <span class="badge">错位加减</span>
+  </div>
+</div>
+
+<!-- ===== 导航 ===== -->
+<div class="nav-wrap">
+  <nav class="nav" id="nav">
+    <a href="#overview" class="active">总览</a>
+    <a href="#method1">截位直除</a>
+    <a href="#method2">百化分</a>
+    <a href="#method3">分数比较</a>
+    <a href="#method4">错位加减</a>
+    <a href="#method5">首数尾数</a>
+    <a href="#fangsuo">放缩法</a>
+    <a href="#dengcha">等差求和</a>
+    <a href="#errors">高频错误</a>
+    <a href="#logic">解题逻辑</a>
+    <a href="#quick">速查表</a>
+  </nav>
+</div>
+
+<div class="container">
+
+<!-- ===== 总览 ===== -->
+<div class="section" id="overview">
+  <div class="section-title"><span class="num">0</span>方法体系总览</div>
+  <div class="section-sub">资料分析速算八大核心方法，按使用频率排序</div>
+  <div class="quick-grid">
+    <div class="quick-card">
+      <h4>① 截位直除法</h4>
+      <p>最常用，除法运算首选。看选项差距决定截几位，只截分母。</p>
+    </div>
+    <div class="quick-card">
+      <h4>② 百化分法</h4>
+      <p>增长量计算神器。r=1/n 时，增长量=A/(n+1)，减少量=A/(n-1)。</p>
+    </div>
+    <div class="quick-card">
+      <h4>③ 分数比较法</h4>
+      <p>同位比较看倍数，差分法处理接近值，大小比较秒出结果。</p>
+    </div>
+    <div class="quick-card">
+      <h4>④ 错位加减法</h4>
+      <p>乘除混合运算，把增长率拆成整十整五零头，分步累加。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑤ 首数/尾数法</h4>
+      <p>除法算首位匹配选项，加减法看末位快速排除。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑥ 放缩法</h4>
+      <p>分母凑整成1/10/100，分子同乘，移位得结果，增长量独门技巧。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑦ 等差求和法</h4>
+      <p>累计值秒算：奇数项=项数×中位数，年均增长量=公差。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑧ 有效数字法</h4>
+      <p>乘除混合保留前两位有效数字，大幅简化运算量。</p>
+    </div>
+  </div>
+  <div class="tip-box">
+    <div class="tip-title">方法选择优先级</div>
+    <p>增长量题：能百化分 → 放缩法 → 截位直除 ｜ 比较题：同位比较 → 差分法 ｜ 累计题：先判等差 → 中位数速算</p>
+  </div>
+</div>
+
+<!-- ===== 方法1：截位直除 ===== -->
+<div class="section" id="method1">
+  <div class="section-title"><span class="num">1</span>截位直除法</div>
+  <div class="section-sub">最常用的除法速算，适用于比重、平均数、基期量计算</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>核心规则 <span class="tag">必考</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <ul class="steps">
+        <li><strong>选项首位不同</strong> → 分母保留2位有效数字</li>
+        <li><strong>选项首位相同、第二位不同</strong> → 分母保留3位有效数字</li>
+        <li><strong>分子不动</strong>，分母四舍五入截位</li>
+        <li>截位后直接做除法，算到能区分选项即可停</li>
+      </ul>
+      <div class="formula">89532 / 31247 → 分母截2位 → 89532 / 31000 ≈ 2.88（实际2.866）</div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>实战案例</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">案例：求基期量</div>
+        <p>现期量 56789，增长率 8.3%，求基期量</p>
+        <p>基期 = 56789 / 1.083</p>
+        <p>选项差距大 → 分母截2位：56789 / 1.1 ≈ 51626</p>
+        <p>精确值 = 52437，方向正确，可匹配最近选项</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">经验总结</div>
+        <p>只截分母不截分子——分子截位对结果影响小但增加计算量。截位时四舍五入，不是直接去尾。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 方法2：百化分 ===== -->
+<div class="section" id="method2">
+  <div class="section-title"><span class="num">2</span>百化分法</div>
+  <div class="section-sub">增长量计算的第一神器，必须熟记常用分数对应表</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>核心公式 <span class="tag">必考</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="formula">
+        已知现期量 A，增长率 r = 1/n<br>
+        正增长：增长量 = A / (n + 1)<br>
+        负增长：减少量 = A / (n - 1)
+      </div>
+      <table>
+        <tr><th>增长率</th><th>分数</th><th>n</th><th>增长率</th><th>分数</th><th>n</th></tr>
+        <tr><td>50%</td><td>1/2</td><td>2</td><td>11.1%</td><td>1/9</td><td>9</td></tr>
+        <tr><td>33.3%</td><td>1/3</td><td>3</td><td>10%</td><td>1/10</td><td>10</td></tr>
+        <tr><td>25%</td><td>1/4</td><td>4</td><td>9.1%</td><td>1/11</td><td>11</td></tr>
+        <tr><td>20%</td><td>1/5</td><td>5</td><td>8.3%</td><td>1/12</td><td>12</td></tr>
+        <tr><td>16.7%</td><td>1/6</td><td>6</td><td>7.7%</td><td>1/13</td><td>13</td></tr>
+        <tr><td>14.3%</td><td>1/7</td><td>7</td><td>7.1%</td><td>1/14</td><td>14</td></tr>
+        <tr><td>12.5%</td><td>1/8</td><td>8</td><td>6.7%</td><td>1/15</td><td>15</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>实战案例与非标准处理</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">标准案例</div>
+        <p>现期量 12345，增长率 12.5%</p>
+        <p>12.5% = 1/8 → n=8 → 增长量 = 12345 / 9 ≈ 1372</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">非标准增长率：就近取整</div>
+        <p>增长率 13.4%，介于 14.3%(1/7) 和 12.5%(1/8) 之间</p>
+        <p>取中间值 n ≈ 7.5，增长量 ≈ A / 8.5</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">易错点</div>
+        <p>负增长用 n-1 不是 n+1！增长率为 -12.5% 时，减少量 = A/(8-1) = A/7</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 方法3：分数比较 ===== -->
+<div class="section" id="method3">
+  <div class="section-title"><span class="num">3</span>分数比较法</div>
+  <div class="section-sub">比重比较、增长率比较、平均数比较的核心工具</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>同位比较法 <span class="tag">最常用</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <ul class="steps">
+        <li>分子大、分母小 → 分数值直接大</li>
+        <li>分子分母同大同小 → 分别算倍数</li>
+        <li>分子倍数 &gt; 分母倍数 → 前者大</li>
+        <li>分子倍数 &lt; 分母倍数 → 后者大</li>
+      </ul>
+      <div class="formula">
+        比较 345/678 和 234/567<br>
+        分子倍数：345/234 ≈ 1.47 ｜ 分母倍数：678/567 ≈ 1.20<br>
+        1.47 &gt; 1.20 → 345/678 大
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>差分法（分子分母极接近时）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <ul class="steps">
+        <li>大分数 - 小分数 = 差分数（分子减分子，分母减分母）</li>
+        <li>差分数 &gt; 小分数 → 大分数大</li>
+        <li>差分数 &lt; 小分数 → 大分数小</li>
+      </ul>
+      <div class="case-box">
+        <div class="case-title">案例</div>
+        <p>比较 325/789 和 318/782</p>
+        <p>差分数 = (325-318)/(789-782) = 7/7 = 1</p>
+        <p>小分数 318/782 ≈ 0.407 &lt; 1 → 大分数 325/789 大</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 方法4：错位加减 ===== -->
+<div class="section" id="method4">
+  <div class="section-title"><span class="num">4</span>错位加减法</div>
+  <div class="section-sub">乘除混合运算利器，现期×增长率类题目秒杀</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>核心原理</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p>把增长率拆成<strong>整十 + 整五 + 零头</strong>三部分，分别相乘后累加。</p>
+      <div class="formula">
+        A × (1 + r) = A + A×r₁ + A×r₂ + A×r₃<br>
+        其中 r = r₁ + r₂ + r₃（整十、整五、零头）
+      </div>
+      <div class="case-box">
+        <div class="case-title">案例：54321 × 1.087</div>
+        <p>1.087 = 1 + 0.08 + 0.007</p>
+        <p>54321 × 0.08 = 4345.68</p>
+        <p>54321 × 0.007 = 380.25</p>
+        <p>结果 ≈ 54321 + 4346 + 380 = 59047</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 方法5：首数尾数 ===== -->
+<div class="section" id="method5">
+  <div class="section-title"><span class="num">5</span>首数法 / 尾数法</div>
+  <div class="section-sub">快速排除选项的辅助技巧</div>
+  <div class="two-col">
+    <div class="method-card open">
+      <div class="method-header" onclick="toggleCard(this)">
+        <h3>首数法</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="method-body">
+        <p>除法算到第一位或前两位，直接匹配选项。</p>
+        <div class="formula">3456 / 1.23 ≈ 28xx → 选项首位为2的才可能对</div>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px">适用于选项首位不同的除法题</p>
+      </div>
+    </div>
+    <div class="method-card open">
+      <div class="method-header" onclick="toggleCard(this)">
+        <h3>尾数法</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="method-body">
+        <p>加减法看末位数字，快速排除错误选项。</p>
+        <div class="formula">1234 + 5678 = ...xx12 → 末位为2</div>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px">资料分析用得少，数量关系常用</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 放缩法专项 ===== -->
+<div class="section" id="fangsuo">
+  <div class="section-title"><span class="num">6</span>放缩法专项（重点）</div>
+  <div class="section-sub">把分母放成1/10/100等整数基准，增长量计算独门技巧</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>核心思想 <span class="tag">重点补充</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p><strong>把分母通过放缩变成 1、10、100、1000 等整数基准，分子同步放缩，将除法转化为简单的小数点移位。</strong></p>
+      <div class="formula">
+        增长量 = A × r / (1 + r)<br>
+        令 k 使 (1+r) × k ≈ 10^n<br>
+        则 增长量 = A × (r×k) / 10^n → 直接移位得结果
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>方法一：分母放成 1（求基期量）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p>当 |r| &lt; 10% 时，利用近似公式：</p>
+      <div class="formula">
+        1/(1+r) ≈ 1 - r<br>
+        1/(1-r) ≈ 1 + r
+      </div>
+      <div class="case-box">
+        <div class="case-title">案例：现期5678，增长率3.5%，求基期</div>
+        <p>基期 = 5678 / 1.035 ≈ 5678 × (1 - 0.035)</p>
+        <p>= 5678 - 5678×0.035 = 5678 - 198.7 = 5479.3</p>
+        <p>精确值 = 5486，误差仅 0.1%</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">注意</div>
+        <p>r &gt; 10% 时需二阶修正：1/(1+r) ≈ 1 - r + r²</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>方法二：分母放成 10（经典案例）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">案例：现期8765，增长率25%，求增长量</div>
+        <p>增长量 = 8765 × 0.25 / 1.25</p>
+        <p>1.25 × 8 = 10 → 分母放成10</p>
+        <p>分子同步：0.25 × 8 = 2</p>
+        <p>增长量 = 8765 × 2 / 10 = 8765 / 5 = <strong>1753</strong>（完全准确）</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>方法三：分母放成 100（通用场景）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">案例：现期2468，增长率23.4%</div>
+        <p>增长量 = 2468 × 0.234 / 1.234</p>
+        <p>1.234 × 81 ≈ 100 → 分母放成100</p>
+        <p>分子同步：0.234 × 81 ≈ 18.95</p>
+        <p>增长量 ≈ 2468 × 18.95 / 100 ≈ 2468 × 0.1895 ≈ <strong>467.7</strong></p>
+        <p>精确值 = 467.5，误差 &lt; 0.05%</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>方法四：分母放成 1000（大数字）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">案例：现期34567，增长率8.7%</div>
+        <p>增长量 = 34567 × 0.087 / 1.087</p>
+        <p>1.087 × 920 ≈ 1000</p>
+        <p>分子同步：0.087 × 920 = 80.04</p>
+        <p>增长量 ≈ 34567 × 80.04 / 1000 ≈ <strong>2766.7</strong></p>
+        <p>精确值 = 2766.5，误差 &lt; 0.01%</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>凑整放缩速查表 <span class="tag">必背</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>分母范围</th><th>凑整目标</th><th>常用系数k</th><th>示例</th></tr>
+        <tr><td>1.0 ~ 1.1</td><td>1</td><td>近似公式</td><td>1.05→用1-r</td></tr>
+        <tr><td class="highlight">1.25</td><td class="highlight">10</td><td class="highlight">×8</td><td class="highlight">1.25×8=10</td></tr>
+        <tr><td class="highlight">1.43</td><td class="highlight">10</td><td class="highlight">×7</td><td class="highlight">1.43×7≈10</td></tr>
+        <tr><td class="highlight">1.67</td><td class="highlight">10</td><td class="highlight">×6</td><td class="highlight">1.67×6≈10</td></tr>
+        <tr><td class="highlight">2.5</td><td class="highlight">10</td><td class="highlight">×4</td><td class="highlight">2.5×4=10</td></tr>
+        <tr><td class="highlight">3.33</td><td class="highlight">10</td><td class="highlight">×3</td><td class="highlight">3.33×3≈10</td></tr>
+        <tr><td>2.0 ~ 10</td><td>100</td><td>找k使×k≈100</td><td>1.234×81≈100</td></tr>
+        <tr><td>10 ~ 100</td><td>1000</td><td>找k使×k≈1000</td><td>1.087×920≈1000</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-title">联动技巧</div>
+        <p>这些系数其实就是百化分的倒数关系！r=1/n 时，1+r=(n+1)/n，放缩法和百化分本质相通。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>放缩法 + 百化分联动（终极技巧）</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="formula">
+        r = 1/n → 1+r = (n+1)/n<br>
+        增长量 = A × (1/n) / [(n+1)/n] = A/(n+1)<br>
+        本质：分母放成(n+1)，分子放成1！
+      </div>
+      <p>当增长率可以百化分时，放缩法自动成立，两种方法殊途同归。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 等差求和 ===== -->
+<div class="section" id="dengcha">
+  <div class="section-title"><span class="num">7</span>等差求和法专项</div>
+  <div class="section-sub">累计值、年均增长量题目的秒杀工具</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>基本公式 <span class="tag">必考</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="formula">
+        S_n = n × (a₁ + a_n) / 2 = n × 平均数<br>
+        n为奇数时：S_n = n × 中位数（中间项）
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">核心推论</div>
+        <p>项数为奇数时，中位数 = 平均数，求和 = 项数 × 中间项。不需要逐项相加！</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>四大应用场景</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">场景1：累计值快速求和</div>
+        <p>1-6月产量：230、250、270、290、310、330（公差20）</p>
+        <p>S = 6 × (230+330)/2 = 6 × 280 = <strong>1680</strong> 吨</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">场景2：多年累计求平均（最常考）</div>
+        <p>2018-2022年：120、150、180、210、240（n=5奇数）</p>
+        <p>中位数=180 → 累计 = 5 × 180 = <strong>900</strong></p>
+        <p>年均值 = 中位数 = 180（直接等于中间项）</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">场景3：增长率等差 → 增长量近似等差</div>
+        <p>连续5年增长率：5%、7%、9%、11%、13%，基期1000</p>
+        <p>增长量 ≈ 50、70、90、110、130（近似等差）</p>
+        <p>五年总增量 ≈ 5 × 90 = 450 → 末期 ≈ 1450（实际1454）</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">场景4：年均增长量 = 公差（秒杀）</div>
+        <p>等差数列中，年均增长量 = 公差，不需要算总增量再除年数！</p>
+        <p>2018-2022年营收：1.2、1.5、1.8、2.1、2.4（公差0.3）</p>
+        <p>年均增长量 = 0.3亿元 ｜ 累计增量 = 4 × 0.3 = 1.2</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>非标准等差处理技巧</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="case-box">
+        <div class="case-title">凑等差放缩</div>
+        <p>数据：102、119、141、158、180</p>
+        <p>近似公差20，理想等差：100、120、140、160、180</p>
+        <p>理想和 = 5 × 140 = 700</p>
+        <p>偏差：+2、-1、+1、-2、0 → 偏差和=0</p>
+        <p>实际和 = 700 + 0 = <strong>700</strong></p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">偶数项分组配对</div>
+        <p>6项：a1,a2,a3,a4,a5,a6</p>
+        <p>和 = (a1+a6)+(a2+a5)+(a3+a4) = 3 × (a1+a6)</p>
+        <p>等差时每对和相等，直接首尾和×组数</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>考场识别信号 <span class="tag">必看</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>题干特征</th><th>应用方法</th></tr>
+        <tr><td>"20XX-20XX年累计/总和"</td><td>先看是否等差</td></tr>
+        <tr><td>"逐年增加X"</td><td>直接等差，公差=X</td></tr>
+        <tr><td>数据项数为奇数（3/5/7年）</td><td>中位数×项数</td></tr>
+        <tr><td>求"年均增长量"</td><td>等差数列中=公差</td></tr>
+        <tr><td>柱状图逐年等高度递增</td><td>视觉上等差</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 高频错误 ===== -->
+<div class="section" id="errors">
+  <div class="section-title"><span class="num">8</span>高频错误与避坑指南</div>
+  <div class="section-sub">考场最容易丢分的十大易错点，逐条对照排查</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>增长量计算类错误 <span class="tag">高频</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>错误类型</th><th>错误表现</th><th>正确做法</th></tr>
+        <tr>
+          <td>正负搞混</td>
+          <td>负增长用了 n+1 法则</td>
+          <td>负增长是 n-1：减少量 = A/(n-1)</td>
+        </tr>
+        <tr>
+          <td>百化分n值错</td>
+          <td>12.5% 记成 1/7</td>
+          <td>12.5%=1/8，背熟对应表</td>
+        </tr>
+        <tr>
+          <td>放缩不同步</td>
+          <td>只改分母不改分子</td>
+          <td>分子分母必须同乘系数k</td>
+        </tr>
+        <tr>
+          <td>小数点错位</td>
+          <td>放成100后忘了÷100</td>
+          <td>放成10^n，结果小数点左移n位</td>
+        </tr>
+        <tr>
+          <td>近似过度</td>
+          <td>r=20%还用1-r近似</td>
+          <td>r&gt;10%不用一阶近似，用二阶或截位</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>等差求和类错误 <span class="tag">高频</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>错误类型</th><th>错误表现</th><th>正确做法</th></tr>
+        <tr>
+          <td>年数差vs项数</td>
+          <td>2018-2022年年均增长除以5</td>
+          <td>5项数据，间隔4年，年均增长除以4</td>
+        </tr>
+        <tr>
+          <td>中位数找错</td>
+          <td>n=5时取第2或第4项</td>
+          <td>n=5中位数是第3项，(n+1)/2项</td>
+        </tr>
+        <tr>
+          <td>非等差强套</td>
+          <td>不验证公差就用中位数</td>
+          <td>先验证a2-a1=a3-a2，不等就别用</td>
+        </tr>
+        <tr>
+          <td>增长率等差混淆</td>
+          <td>增长率等差=末期值等差</td>
+          <td>增长率等差时末期值是等比变形，仅r小时可近似</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>通用概念性错误</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="warn-box">
+        <div class="warn-title">① 同比 vs 环比</div>
+        <p>同比：与上年同期比 ｜ 环比：与上一个统计周期比。看错直接全错。</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">② 百分数 vs 百分点</div>
+        <p>增长率相减结果用"百分点"，不能用"%"。如从8%升到10%，升了2个百分点。</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">③ 翻番 vs 翻倍</div>
+        <p>翻一番=原来的2倍，翻两番=4倍，翻n番=2^n倍。不是n倍！</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">④ 顺差 vs 逆差</div>
+        <p>顺差=出口&gt;进口 ｜ 逆差=进口&gt;出口。公式别记反。</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">⑤ 利润率口径</div>
+        <p>资料分析中利润率=利润/收入（营收利润率），不是利润/成本。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>计算手误类错误</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <ul class="steps">
+        <li><strong>除法移位错</strong>：5678/1.1 算成5162（实际5161.8，方向对但精度不够时选错）</li>
+        <li><strong>乘法进位错</strong>：多位数乘法中间步骤进位漏加</li>
+        <li><strong>抄错数据</strong>：表格中行列看错，把A行数据抄成B行</li>
+        <li><strong>单位换算漏</strong>：亿元 vs 万元，% vs ‰，题目问"多少万"算成"亿"</li>
+        <li><strong>基期现期搞反</strong>：求基期用了现期公式，求现期用了基期公式</li>
+      </ul>
+      <div class="tip-box">
+        <div class="tip-title">防手误三原则</div>
+        <p>① 读题时圈出关键词（同比/环比、基期/现期、单位）② 计算前先估量级 ③ 算完反向验证（增长量&lt;现期量×增长率）</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 解题逻辑 ===== -->
+<div class="section" id="logic">
+  <div class="section-title"><span class="num">9</span>解题逻辑与决策流程</div>
+  <div class="section-sub">拿到题目后如何快速选择最优速算方法</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>通用解题四步流程 <span class="tag">核心</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="flow">
+        <div class="flow-node">① 读题<br>圈关键词</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">② 列式<br>确定公式</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node">③ 选法<br>看选项差距</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">④ 速算<br>匹配选项</div>
+      </div>
+      <table>
+        <tr><th>步骤</th><th>关键动作</th><th>注意事项</th></tr>
+        <tr><td>① 读题</td><td>圈时间、主体、指标、问法</td><td>同比/环比、基期/现期、单位</td></tr>
+        <tr><td>② 列式</td><td>确定是求增长量/基期/比重/平均数</td><td>公式不能列错，列错全错</td></tr>
+        <tr><td>③ 选法</td><td>看选项差距决定精度</td><td>差距大用粗算，差距小用精算</td></tr>
+        <tr><td>④ 速算</td><td>用对应方法计算，算到能区分选项即停</td><td>不要过度计算，浪费时间</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>增长量题目决策树</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="flow">
+        <div class="flow-node">求增长量？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">r能百化分？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">n+1法则<br>（最快）</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">r不能百化分</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">分母好凑整？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">放缩法<br>（次快）</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">都不行</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">看选项差距</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">截位直除<br>（保底）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>比较大小题目决策树</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="flow">
+        <div class="flow-node">比较分数大小</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">分子分母<br>一大一小？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">直接判断<br>分子大分母小则大</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">同大同小</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">倍数差距明显？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">同位比较法<br>看倍数</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">非常接近</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">差分法</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">差分数vs小分数</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>累计/年均题目决策树</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="flow">
+        <div class="flow-node">求累计/年均</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">数据等差？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">中位数×项数<br>年均增长=公差</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">非等差</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">近似等差？</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">凑等差+偏差修正</div>
+      </div>
+      <div class="flow">
+        <div class="flow-node">差距大</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node accent">逐项加/截位</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-node success">硬算保底</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>考场时间分配策略 <span class="tag">实战</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>题型</th><th>建议用时</th><th>策略</th></tr>
+        <tr><td>文字材料</td><td>7分钟/篇</td><td>先标段落关键词，再做题</td></tr>
+        <tr><td>表格材料</td><td>6分钟/篇</td><td>先看表头单位，再定位数据</td></tr>
+        <tr><td>图形材料</td><td>6分钟/篇</td><td>先看图例坐标，再读数值</td></tr>
+        <tr><td>综合材料</td><td>8分钟/篇</td><td>理清各材料关系，避免跨材料找错</td></tr>
+        <tr><td>综合判断题（最后一题）</td><td>2分钟</td><td>时间紧优先看C、D选项，遇难跳过</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-title">救命原则</div>
+        <p>每篇资料分析控制在7分钟内，单题超过1.5分钟立刻跳过，最后回来蒙。综合判断题如果时间不够，直接蒙C或D。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 速查表 ===== -->
+<div class="section" id="quick">
+  <div class="section-title"><span class="num">10</span>终极速查对照表</div>
+  <div class="section-sub">考前最后一眼，所有公式和技巧一表打尽</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>核心公式速查</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>考点</th><th>公式</th><th>速算方法</th></tr>
+        <tr><td>基期量</td><td>现期/(1+r)</td><td>截位直除 / 放缩成1</td></tr>
+        <tr><td>现期量</td><td>基期×(1+r)</td><td>错位加减</td></tr>
+        <tr><td class="highlight">增长量</td><td class="highlight">现期×r/(1+r)</td><td class="highlight">百化分 / 放缩法</td></tr>
+        <tr><td>增长率</td><td>增长量/基期 = (现期-基期)/基期</td><td>截位直除</td></tr>
+        <tr><td>比重</td><td>部分/整体</td><td>截位直除 / 分数比较</td></tr>
+        <tr><td>平均数</td><td>总量/个数</td><td>截位直除</td></tr>
+        <tr><td>倍数</td><td>A/B</td><td>截位直除 / 首数法</td></tr>
+        <tr><td>年均增长量</td><td>(末期-初期)/年份差</td><td>等差时=公差</td></tr>
+        <tr><td>隔年增长率</td><td>r1+r2+r1×r2</td><td>r1×r2小时可忽略</td></tr>
+        <tr><td>混合增长率</td><td>居中不正中，偏向基数大的</td><td>十字交叉 / 线段法</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>百化分完整对照表</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="two-col">
+        <table>
+          <tr><th>r</th><th>1/n</th><th>n</th><th>增长量分母</th></tr>
+          <tr><td>100%</td><td>1/1</td><td>1</td><td>2</td></tr>
+          <tr><td>50%</td><td>1/2</td><td>2</td><td>3</td></tr>
+          <tr><td>33.3%</td><td>1/3</td><td>3</td><td>4</td></tr>
+          <tr><td>25%</td><td>1/4</td><td>4</td><td>5</td></tr>
+          <tr><td>20%</td><td>1/5</td><td>5</td><td>6</td></tr>
+          <tr><td>16.7%</td><td>1/6</td><td>6</td><td>7</td></tr>
+          <tr><td>14.3%</td><td>1/7</td><td>7</td><td>8</td></tr>
+          <tr><td>12.5%</td><td>1/8</td><td>8</td><td>9</td></tr>
+        </table>
+        <table>
+          <tr><th>r</th><th>1/n</th><th>n</th><th>增长量分母</th></tr>
+          <tr><td>11.1%</td><td>1/9</td><td>9</td><td>10</td></tr>
+          <tr><td>10%</td><td>1/10</td><td>10</td><td>11</td></tr>
+          <tr><td>9.1%</td><td>1/11</td><td>11</td><td>12</td></tr>
+          <tr><td>8.3%</td><td>1/12</td><td>12</td><td>13</td></tr>
+          <tr><td>7.7%</td><td>1/13</td><td>13</td><td>14</td></tr>
+          <tr><td>7.1%</td><td>1/14</td><td>14</td><td>15</td></tr>
+          <tr><td>6.7%</td><td>1/15</td><td>15</td><td>16</td></tr>
+          <tr><td>6.25%</td><td>1/16</td><td>16</td><td>17</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>放缩法凑整系数速查</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>分母(1+r)</th><th>对应r</th><th>系数k</th><th>凑整结果</th><th>分子r×k</th></tr>
+        <tr><td>1.1</td><td>10%</td><td>×9.1</td><td>≈10</td><td>≈0.91</td></tr>
+        <tr><td class="highlight">1.125</td><td class="highlight">12.5%</td><td class="highlight">×8.9</td><td class="highlight">≈10</td><td class="highlight">≈1.11</td></tr>
+        <tr><td class="highlight">1.25</td><td class="highlight">25%</td><td class="highlight">×8</td><td class="highlight">=10</td><td class="highlight">=2</td></tr>
+        <tr><td class="highlight">1.333</td><td class="highlight">33.3%</td><td class="highlight">×7.5</td><td class="highlight">=10</td><td class="highlight">=2.5</td></tr>
+        <tr><td class="highlight">1.5</td><td class="highlight">50%</td><td class="highlight">×6.7</td><td class="highlight">≈10</td><td class="highlight">≈3.33</td></tr>
+        <tr><td>2</td><td>100%</td><td>×5</td><td>=10</td><td>=5</td></tr>
+        <tr><td>1.087</td><td>8.7%</td><td>×920</td><td>≈1000</td><td>≈80</td></tr>
+        <tr><td>1.234</td><td>23.4%</td><td>×81</td><td>≈100</td><td>≈18.95</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>考前自检清单 <span class="tag">必看</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <div class="two-col">
+        <div>
+          <p style="font-weight:600;color:var(--primary);margin-bottom:8px">读题自检</p>
+          <p style="font-size:13px">□ 时间圈了吗（同比/环比）</p>
+          <p style="font-size:13px">□ 基期/现期分清了吗</p>
+          <p style="font-size:13px">□ 单位看了吗（亿/万/%）</p>
+          <p style="font-size:13px">□ 问的是"正确"还是"错误"</p>
+          <p style="font-size:13px">□ 主体定位对了吗</p>
+        </div>
+        <div>
+          <p style="font-weight:600;color:var(--primary);margin-bottom:8px">计算自检</p>
+          <p style="font-size:13px">□ 公式列对了吗</p>
+          <p style="font-size:13px">□ 方法选对了吗（百化分优先）</p>
+          <p style="font-size:13px">□ 正负号对了吗</p>
+          <p style="font-size:13px">□ 量级估了吗</p>
+          <p style="font-size:13px">□ 算到能区分选项就停</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ===== 回到顶部 ===== -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<div class="footer">
+  资料分析速算技巧大全 · 公考备考专用 · 持续更新
+</div>
+
+<script>
+// 折叠卡片
+function toggleCard(header){
+  header.parentElement.classList.toggle('open');
+}
+// 回到顶部
+window.addEventListener('scroll',function(){
+  var btn=document.getElementById('backTop');
+  if(window.scrollY>400){btn.classList.add('show')}else{btn.classList.remove('show')}
+});
+// 导航高亮
+var sections=document.querySelectorAll('.section');
+var navLinks=document.querySelectorAll('.nav a');
+window.addEventListener('scroll',function(){
+  var current='';
+  sections.forEach(function(s){
+    if(window.scrollY>=s.offsetTop-120){current=s.id}
+  });
+  navLinks.forEach(function(a){
+    a.classList.remove('active');
+    if(a.getAttribute('href')==='#'+current){a.classList.add('active')}
+  });
+});
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
