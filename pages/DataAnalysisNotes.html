@@ -553,6 +553,48 @@
             .d14-block .flow-branch { flex-direction: column; align-items: stretch; }
             .d14-block .flow-branch .flow-node { max-width: 100%; }
         }
+
+        /* ===== Ch15 — 双基期 vs 间隔增长率（合并自独立讲义） ===== */
+        .chapter pre {
+            background: var(--code-bg);
+            padding: 14px 18px;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary);
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.85;
+            overflow-x: auto;
+            margin: 12px 0;
+            white-space: pre;
+        }
+        .chapter .question-box {
+            background: var(--code-bg);
+            padding: 16px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin: 14px 0;
+        }
+        .chapter .question-box p { margin-bottom: 8px; }
+        .chapter .answer-tag {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-left: 4px;
+        }
+        .chapter .error-item {
+            background: #fff5f5;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 4px solid var(--danger);
+            margin: 12px 0;
+        }
+        .chapter .error-item h4 { margin: 0 0 6px; color: var(--danger); font-size: 0.98em; }
+        .chapter .error-item p { margin-bottom: 6px; }
+        .chapter .error-item ul { margin: 6px 0 4px 20px; }
     </style>
     <!-- umami 统计 -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
@@ -590,6 +632,7 @@
         <a href="#ch12">十二·严格推导</a>
         <a href="#ch13">十三·贡献率/拉动增长</a>
         <a href="#ch14">十四·年均增长率深度讲义</a>
+        <a href="#ch15">十五·双基期/间隔增长率</a>
     </nav>
 
     <main>
@@ -1237,6 +1280,155 @@
                 ① <strong>基期找对</strong>（五年规划前移一年）；<br>
                 ② <strong>n 数对</strong>（现期年 − 基期年，不加 1）；<br>
                 ③ <strong>策略选对</strong>（r≤5% 用近似公式；r&gt;5% 选项散用居中代入，选项近用二项式前三项精算）。
+            </div>
+        </section>
+
+        <!-- ===== Chapter 15 — 双基期增长率 vs 间隔增长率（合并自独立讲义） ===== -->
+        <section class="chapter" id="ch15">
+            <h2><span class="num">15</span>双基期增长率 vs 间隔增长率</h2>
+            <div class="callout info">
+                <div class="label">本章定位</div>
+                第四章给出「间隔增长率」的<strong>公式 + 一句话原则</strong>。本章以一道 2017 国考真题为蓝本，把<strong>双基期增长率</strong>（一个现期对比两个过去基期）和<strong>间隔增长率</strong>（连续两期顺推）放到一起对照，辨析两种极易混淆的「增长率反推」题型。
+            </div>
+
+            <h3 id="ch15-1"><span class="num">15.1</span>原题呈现（2017 国考）</h3>
+            <div class="question-box">
+                <p><strong>题目：</strong>2016 年末全国手持船舶订单较同年 2 月末（ ）。</p>
+                <p>A. 降低 16.2% &nbsp;&nbsp; B. 降低 2.2% &nbsp;&nbsp; C. 增加 16.2% &nbsp;&nbsp; D. 增加 2.2%</p>
+                <p><strong>材料：</strong>2017 年 1~2 月，全国造船完工 936 万载重吨，同比增长 123%；承接新船订单 221 万载重吨，同比增长 133%。2 月末，手持船舶订单 9207 万载重吨，同比下降 22.6%，<strong>比 2016 年末下降 7.6%</strong>。</p>
+                <p><strong>正确答案：</strong><span class="answer-tag">A</span></p>
+            </div>
+
+            <h3 id="ch15-2"><span class="num">15.2</span>本题题型：同现期·双基期增长率</h3>
+
+            <h4>15.2.1 考点识别</h4>
+            <p>已知<strong>同一个现期时间点</strong>（2017 年 2 月末），分别对比两个不同基期（2016 年 2 月末、2016 年末）的增速，求两个基期之间的相对增长率。</p>
+
+            <h4>15.2.2 符号定义</h4>
+            <ul>
+                <li><code class="code-inline">A</code>：2017 年 2 月末（现期量，共同参照）</li>
+                <li><code class="code-inline">B</code>：2016 年 2 月末（较早基期）</li>
+                <li><code class="code-inline">C</code>：2016 年末（较晚基期）</li>
+                <li><code class="code-inline">r<sub>AB</sub></code>：A 相对于 B 的增长率 = −22.6%</li>
+                <li><code class="code-inline">r<sub>AC</sub></code>：A 相对于 C 的增长率 = −7.6%</li>
+                <li><code class="code-inline">r<sub>CB</sub></code>：C 相对于 B 的增长率（待求量）</li>
+            </ul>
+
+            <h4>15.2.3 公式完整推导</h4>
+            <p>核心依据：增长率基本公式 <code class="code-inline">现期 = 基期 × (1 + 增长率)</code></p>
+            <pre>① 由同比下降22.6%得：
+A = B × (1 + r_AB)
+
+② 由比2016年末下降7.6%得：
+A = C × (1 + r_AC)
+
+③ 联立两式（左边均为A）：
+B × (1 + r_AB) = C × (1 + r_AC)
+
+④ 变形求两个基期的比值：
+C / B = (1 + r_AB) / (1 + r_AC)
+
+⑤ 代入增长率定义 r = 现期/基期 − 1：
+r_CB = C/B − 1
+r_CB = (1 + r_AB) / (1 + r_AC) − 1</pre>
+
+            <h4>15.2.4 代入计算过程</h4>
+            <pre>r_CB = (1 − 22.6%) / (1 − 7.6%) − 1
+     = 0.774 / 0.924 − 1
+     ≈ 0.838 − 1
+     = −16.2%</pre>
+            <p>结果为负，代表<strong>降低 16.2%</strong>。</p>
+
+            <h3 id="ch15-3"><span class="num">15.3</span>易混淆考点：间隔增长率</h3>
+
+            <h4>15.3.1 适用场景</h4>
+            <p>时间线<strong>顺推</strong>：基期 → 中间期 → 现期，已知连续两期的增长率，求隔一期的总增长率（典型如"隔年增长率"）。</p>
+
+            <h4>15.3.2 符号定义</h4>
+            <ul>
+                <li><code class="code-inline">A</code>：最早期基期量</li>
+                <li><code class="code-inline">B</code>：中间期量</li>
+                <li><code class="code-inline">C</code>：最末期现期量</li>
+                <li><code class="code-inline">r₁</code>：B 相对于 A 的增长率（第一期增速）</li>
+                <li><code class="code-inline">r₂</code>：C 相对于 B 的增长率（第二期增速）</li>
+                <li><code class="code-inline">R</code>：C 相对于 A 的间隔增长率（待求量）</li>
+            </ul>
+
+            <h4>15.3.3 公式完整推导</h4>
+            <pre>① 第一期增长：
+B = A × (1 + r₁)
+
+② 第二期增长：
+C = B × (1 + r₂)
+
+③ 将B代入，得到最终现期：
+C = A × (1 + r₁)(1 + r₂)
+
+④ 代入间隔增长率定义 R = C/A − 1：
+R = (1 + r₁)(1 + r₂) − 1
+  = 1 + r₁ + r₂ + r₁×r₂ − 1
+  = r₁ + r₂ + r₁ × r₂</pre>
+
+            <h4>15.3.4 示例验证</h4>
+            <p>2020 年产值 100 万，2021 年增长 10%，2022 年增长 20%，求 2022 年相对 2020 年的间隔增速。</p>
+            <pre>R = 10% + 20% + 10% × 20% = 32%
+验算：100 × 1.1 × 1.2 = 132，增长32%，公式成立。</pre>
+
+            <h3 id="ch15-4"><span class="num">15.4</span>两大题型核心对比</h3>
+            <table>
+                <tr>
+                    <th style="width:18%">题型</th>
+                    <th style="width:24%">时间逻辑</th>
+                    <th style="width:30%">核心公式</th>
+                    <th>本质</th>
+                </tr>
+                <tr>
+                    <td>双基期增长率（本题）</td>
+                    <td>一个现期，回头对比两个过去基期</td>
+                    <td><code class="code-inline">r = (1+r₁) / (1+r₂) − 1</code></td>
+                    <td>逆向搭桥，求两个基期的相对变化</td>
+                </tr>
+                <tr>
+                    <td>间隔增长率</td>
+                    <td>连续两期增长，从过去顺推到现在</td>
+                    <td><code class="code-inline">R = r₁ + r₂ + r₁×r₂</code></td>
+                    <td>顺向叠加，求两段增长的总效果</td>
+                </tr>
+            </table>
+
+            <h3 id="ch15-5"><span class="num">15.5</span>高频错误与避坑指南</h3>
+
+            <div class="error-item">
+                <h4>错误 1：直接将两个增速做减法</h4>
+                <p><strong>典型错解：</strong>−22.6% − (−7.6%) = −15%，近似选择 B 选项。</p>
+                <p><strong>错误根源：</strong>直接相减是"增长量差值"的思维，但增长率是比例值，两个增速的<strong>基数不同</strong>，不能直接做减法，必须通过除法计算相对变化。</p>
+                <p><strong>仅有的例外：</strong>当两个增速绝对值都极小（&lt; 5%）时，直接相减误差可忽略；但增速较大时绝对不能使用。</p>
+            </div>
+
+            <div class="error-item">
+                <h4>错误 2：混淆两种公式的适用场景</h4>
+                <p>把双基期题当成间隔增长率做，或反过来套用公式，导致结果完全错误。</p>
+                <p><strong>快速区分口诀：</strong></p>
+                <ul>
+                    <li>"连续涨、隔年算" → 间隔增长率：<code class="code-inline">r₁ + r₂ + r₁r₂</code></li>
+                    <li>"同现在、比俩过去" → 双基期：<code class="code-inline">(1+r₁)/(1+r₂) − 1</code></li>
+                </ul>
+            </div>
+
+            <h3 id="ch15-6"><span class="num">15.6</span>解题逻辑总结</h3>
+            <ol>
+                <li><strong>定题型：</strong>先看时间关系，判断是"连续两期顺推"还是"一个现期对比两个基期"。</li>
+                <li><strong>标增速：</strong>把每个增速对应的"现期-基期"时间节点写清楚，避免搞反方向。</li>
+                <li><strong>带符号：</strong>下降/减少的增速必须带负号代入公式，不能漏掉负号。</li>
+                <li><strong>判方向：</strong>先通过正负判断是增长还是降低，排除方向错误的选项。</li>
+                <li><strong>估数值：</strong>结合选项差距估算，无需硬算精确值，节省时间。</li>
+            </ol>
+
+            <div class="d-memory">
+                <strong>第十五章心法：</strong>双基期 vs 间隔，<strong>看时间方向</strong>就能秒判：<br>
+                · 时间线<strong>顺推</strong>（过去→现在）→ 间隔增长率，公式 <code class="code-inline">r₁ + r₂ + r₁r₂</code>；<br>
+                · 时间线<strong>回看</strong>（现在回头比两个过去）→ 双基期，公式 <code class="code-inline">(1+r₁)/(1+r₂) − 1</code>。<br>
+                与第四章的间隔增长率联读：第四章是公式 + 一句话原则，本章是真题复盘 + 易混点对照。
             </div>
         </section>
 
