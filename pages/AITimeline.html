@@ -1,0 +1,701 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport-fit=cover">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+<title>AI 浪潮时间线 · 2023-2026 国内外大事件</title>
+<meta name="description" content="2023.01 – 2026.10 国内外 AI 大事件按月梳理，按年份与地区筛选，支持关键词搜索。">
+<meta name="keywords" content="AI, 人工智能, 时间线, GPT, DeepSeek, Claude, Agent, 大模型">
+<meta name="author" content="Ethan">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://232310.xyz/pages/AITimeline.html">
+<style>
+  /* ====== 设计 Token ====== */
+  :root {
+    --bg: #0b0b0e;
+    --bg-elev: #14141a;
+    --bg-card: #1a1a22;
+    --bg-card-hover: #21212b;
+    --border: #2a2a35;
+    --border-strong: #3a3a48;
+    --fg: #f5f5f7;
+    --fg-muted: #9a9aa6;
+    --fg-subtle: #6a6a76;
+    --accent: #f97316;
+    --accent-soft: #f9731626;
+    --region-os: #60a5fa;
+    --region-cn: #f97316;
+    --key: #f43f5e;
+    --key-soft: #f43f5e26;
+    --milestone: #10b981;
+    --milestone-soft: #10b98126;
+
+    --font-display: 'JetBrains Mono', 'SF Mono', Consolas, 'Courier New', monospace;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+    font-size: 15px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  /* ====== 顶部返回链接 ====== */
+  .back-link {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* ====== Hero ====== */
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto 48px;
+    padding: 32px 0 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p {
+    color: var(--fg-muted);
+    font-size: 16px;
+    max-width: 720px;
+    margin: 0 0 24px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .stat {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .stat .v {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .l {
+    font-size: 12px;
+    color: var(--fg-subtle);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+  .stat .v.accent { color: var(--accent); }
+
+  /* ====== 筛选器 ====== */
+  .toolbar {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    color: var(--fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 6px;
+  }
+  .chip {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .chip:hover {
+    border-color: var(--border-strong);
+    color: var(--fg);
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+  .chip[data-region="overseas"][aria-pressed="true"] {
+    background: var(--region-os);
+    border-color: var(--region-os);
+    color: #0b0b0e;
+  }
+  .chip[data-region="china"][aria-pressed="true"] {
+    background: var(--region-cn);
+    border-color: var(--region-cn);
+    color: #0b0b0e;
+  }
+  .search {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .search:focus { border-color: var(--accent); }
+
+  /* ====== 时间线容器 ====== */
+  .timeline {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .year-block { margin-bottom: 48px; }
+  .year-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .year-num {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .year-tag {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .year-summary {
+    color: var(--fg-muted);
+    font-size: 14px;
+    margin-left: auto;
+    text-align: right;
+    max-width: 380px;
+  }
+
+  .month-block {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .month-label {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--fg-subtle);
+    text-align: right;
+    padding-top: 14px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  .month-events {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    padding-left: 20px;
+    border-left: 1px dashed var(--border);
+  }
+  .month-events::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 18px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+
+  .event {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .event:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-strong);
+    transform: translateX(2px);
+  }
+  .event-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .event-date {
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--fg-subtle);
+    font-variant-numeric: tabular-nums;
+  }
+  .region-tag {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .region-tag.os {
+    background: rgba(96, 165, 250, 0.12);
+    color: var(--region-os);
+    border: 1px solid rgba(96, 165, 250, 0.3);
+  }
+  .region-tag.cn {
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--region-cn);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+  }
+  .key-tag {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: var(--key-soft);
+    color: var(--key);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    font-weight: 600;
+  }
+  .event-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .event-summary {
+    font-size: 13px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 720px) {
+    body { padding-block: 20px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .search { width: 100%; }
+    .year-summary { display: none; }
+    .month-block { grid-template-columns: 60px 1fr; gap: 10px; }
+    .month-label { font-size: 12px; }
+    .month-events { padding-left: 14px; }
+  }
+
+  /* ====== 底部总结 ====== */
+  .epilogue {
+    max-width: 1200px;
+    margin: 64px auto 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .epilogue h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .threads {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .thread {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .thread h3 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 12px;
+  }
+  .thread p {
+    color: var(--fg-muted);
+    font-size: 14px;
+    margin: 0 0 12px;
+    line-height: 1.6;
+  }
+  .thread p:last-child { margin-bottom: 0; }
+  .thread code {
+    font-family: var(--font-display);
+    font-size: 12px;
+    background: var(--bg-card);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--fg);
+  }
+
+  .footnote {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    text-align: center;
+    color: var(--fg-subtle);
+    font-size: 12px;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--fg-subtle);
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+<a class="back-link" href="https://232310.xyz/">← 返回首页</a>
+
+<main>
+  <header class="hero">
+    <div class="hero-eyebrow">2023.01 — 2026.10 · 国内外双轨</div>
+    <h1>AI 浪潮的<span class="accent">三年时间线</span></h1>
+    <p>从 GPT-4 引爆百模大战，到 DeepSeek-R1 撼动全球资本市场，再到 Claude 4.5 与 Opus 5.5 时代的 Agent 落地——这里梳理了近三年每一个改变游戏规则的节点。</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="v">46</div>
+        <div class="l">月数</div>
+      </div>
+      <div class="stat">
+        <div class="v accent">120+</div>
+        <div class="l">里程碑事件</div>
+      </div>
+      <div class="stat">
+        <div class="v">3</div>
+        <div class="l">关键范式转折</div>
+      </div>
+      <div class="stat">
+        <div class="v">2</div>
+        <div class="l">条主线（国内 / 海外）</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="toolbar" aria-label="筛选">
+    <div class="filter-group">
+      <span class="filter-label">年份</span>
+      <button class="chip" data-year="all" aria-pressed="true">全部</button>
+      <button class="chip" data-year="2023" aria-pressed="false">2023</button>
+      <button class="chip" data-year="2024" aria-pressed="false">2024</button>
+      <button class="chip" data-year="2025" aria-pressed="false">2025</button>
+      <button class="chip" data-year="2026" aria-pressed="false">2026</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">地区</span>
+      <button class="chip" data-region="all" aria-pressed="true">全部</button>
+      <button class="chip" data-region="overseas" aria-pressed="false">海外</button>
+      <button class="chip" data-region="china" aria-pressed="false">国内</button>
+    </div>
+    <input type="search" class="search" id="search" placeholder="搜索关键词（如 GPT、DeepSeek、Agent）">
+  </section>
+
+  <div class="timeline" id="timeline"></div>
+  <div class="empty" id="empty" hidden>没有匹配的事件</div>
+
+  <section class="epilogue">
+    <h2>三条贯穿主线</h2>
+    <div class="threads">
+      <div class="thread">
+        <h3>主线 1 · 模型能力</h3>
+        <p><code>2023</code> 堆参数 → <code>2024</code> 堆上下文与多模态 → <code>2025+</code> 堆"思考"（推理时计算）。Scaling Law 没死，只是换了赛道。</p>
+        <p>o1 → R1 → Claude 4.5，每一次范式跃迁背后都是训练目标与测试时计算的协同进化。</p>
+      </div>
+      <div class="thread">
+        <h3>主线 2 · 开源 vs 闭源</h3>
+        <p><code>2023.07</code> Llama 2 开源 → <code>2024.07</code> Llama 3.1 405B（首个开源旗舰）→ <code>2025.01</code> DeepSeek-R1 震撼全球。</p>
+        <p>中美 AI 差距从"2 年"被 R1 拉回到 6–12 个月，中文开源生态 Qwen3 / GLM-4.5 已在多个基准领跑。</p>
+      </div>
+      <div class="thread">
+        <h3>主线 3 · Agent 进化</h3>
+        <p><code>2023.11</code> Assistant API（雏形）→ <code>2024.10</code> Computer Use（AI 第一次动手）→ <code>2025.05</code> MCP 协议标准化。</p>
+        <p>2026 年真正的护城河不是模型大小，而是 Agent SDK、Subagent 协作、工具调用生态。</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="footnote">仅记录公开报道与官方公告中的关键节点 · 持续更新中</p>
+</main>
+
+<script>
+const EVENTS = [
+  { date: '2023-01-23', region: 'overseas', key: true, title: '微软将 ChatGPT 整合进 Bing', summary: '搜索巨头正式回应 ChatGPT，全球科技行业进入"AI 焦虑"模式。' },
+  { date: '2023-01-31', region: 'overseas', key: true, title: 'ChatGPT 月活突破 1 亿', summary: '史上最快达到 1 亿用户的消费级产品。' },
+
+  { date: '2023-02-06', region: 'overseas', title: 'Google 仓促推出 Bard', summary: '为应对 ChatGPT 压力，Bard 在发布会演示中出错，股价单日蒸发千亿。' },
+
+  { date: '2023-03-14', region: 'overseas', key: true, title: 'OpenAI 发布 GPT-4', summary: '多模态理解、推理能力跨越式升级，多项考试进入前 10% 分位。' },
+  { date: '2023-03-14', region: 'overseas', title: 'Anthropic 发布初代 Claude', summary: 'OpenAI 前员工创业团队首次亮相。' },
+  { date: '2023-03-16', region: 'china', key: true, title: '百度文心一言发布', summary: '国内首个 ChatGPT 同类产品，开启国内百模大战。' },
+
+  { date: '2023-04-07', region: 'china', title: '阿里通义千问正式发布', summary: '随后宣布全系列开源，拉开中文开源序幕。' },
+  { date: '2023-04-10', region: 'china', title: '商汤"日日新"、讯飞"星火"V1.0、360 智脑', summary: '国内大模型集中涌现，"百模大战"全面打响。' },
+
+  { date: '2023-05-10', region: 'overseas', key: true, title: 'Google I/O：PaLM 2 + Bard 升级', summary: 'Google 拿出全部家底正面迎战。' },
+  { date: '2023-05-15', region: 'overseas', title: 'ChatGPT iOS App 上线', summary: '首款移动端 AI 消费应用。' },
+
+  { date: '2023-06-15', region: 'china', title: '月之暗面 / 智谱 / 百川 / 零一万物密集成立', summary: '国内"AI 六小虎"格局成型。' },
+
+  { date: '2023-07-11', region: 'overseas', key: true, title: 'Anthropic 发布 Claude 2（100K 上下文）', summary: '长文档处理能力成为差异化卖点。' },
+  { date: '2023-07-18', region: 'overseas', key: true, title: 'Meta 开源 Llama 2', summary: '开源大模型分水岭事件，中文开源生态全面爆发。' },
+
+  { date: '2023-09-27', region: 'overseas', title: 'OpenAI 推出 DALL·E 3 + GPT-4V', summary: '图像理解与生成全面接入 ChatGPT。' },
+
+  { date: '2023-10-09', region: 'china', title: '月之暗面 Kimi Chat 公测', summary: '凭 20 万字长文本处理能力迅速出圈。' },
+
+  { date: '2023-11-01', region: 'china', key: true, title: '百度世界大会：文心 4.0', summary: '国内首个对标 GPT-4 的大模型版本。' },
+  { date: '2023-11-06', region: 'overseas', key: true, title: 'OpenAI 首届 DevDay：GPTs + GPT-4 Turbo + Assistant API', summary: '自定义机器人商店、长上下文、Agent 雏形三件套发布，重新定义产品形态。' },
+
+  { date: '2023-12-06', region: 'overseas', key: true, title: 'Google 发布 Gemini 1.0', summary: '从 Bard 升级为原生多模态，挑战 GPT-4 地位。' },
+  { date: '2023-12-26', region: 'china', title: 'DeepSeek 团队（前幻方）正式成立', summary: '为 2025 年的 R1 震撼埋下伏笔。' },
+
+  { date: '2024-02-15', region: 'overseas', key: true, title: 'OpenAI 发布 Sora', summary: '60 秒文生视频演示震动全球，AI 视频生成赛道全面开启。' },
+
+  { date: '2024-03-04', region: 'overseas', key: true, title: 'Anthropic 发布 Claude 3 系列（Haiku/Sonnet/Opus）', summary: '首次在多项基准对标 GPT-4，开启 Claude 时代。' },
+  { date: '2024-03-18', region: 'overseas', title: '英伟达 GTC：B200 Blackwell 发布', summary: 'AI 算力继续翻倍，黄仁勋称"AI 的 iPhone 时刻"。' },
+
+  { date: '2024-04-18', region: 'overseas', key: true, title: 'Meta 开源 Llama 3', summary: '8B / 70B 性能紧追闭源旗舰，开源生态再次提速。' },
+
+  { date: '2024-05-07', region: 'overseas', key: true, title: 'Google I/O：Gemini 1.5 Pro（100 万 token）', summary: '长上下文进入百万时代。' },
+  { date: '2024-05-13', region: 'overseas', key: true, title: 'OpenAI 发布 GPT-4o', summary: '实时语音、情感多模态，对话延迟降到 300ms 以内。' },
+  { date: '2024-05-14', region: 'overseas', title: 'Google 预览 Project Astra', summary: '多模态助手新范式。' },
+
+  { date: '2024-06-10', region: 'overseas', title: 'Apple WWDC：宣布 Apple Intelligence', summary: '与 OpenAI 合作，Siri 进入大模型时代。' },
+  { date: '2024-06-21', region: 'overseas', key: true, title: 'Anthropic 发布 Claude 3.5 Sonnet', summary: '性能超越 Claude 3 Opus，价格仅 1/5——2024 年最大惊喜。' },
+
+  { date: '2024-07-18', region: 'overseas', title: 'OpenAI 发布 GPT-4o mini', summary: '低成本小模型路线确立。' },
+  { date: '2024-07-23', region: 'overseas', key: true, title: 'Meta 开源 Llama 3.1 405B', summary: '首个开源旗舰模型，正面挑战 GPT-4 / Claude。' },
+
+  { date: '2024-09-12', region: 'overseas', key: true, title: 'OpenAI 发布 o1-preview', summary: '推理模型时代正式开启。思维链 + 强化学习，让"慢思考"成为独立范式。' },
+  { date: '2024-09-24', region: 'overseas', title: 'Meta Llama 3.2 发布（视觉版）', summary: '开源多模态首次落地。' },
+
+  { date: '2024-10-22', region: 'overseas', key: true, title: 'Claude 3.5 Sonnet 新版首发 Computer Use', summary: 'AI 第一次真正"动手"操作电脑与浏览器。' },
+
+  { date: '2024-11-26', region: 'china', key: true, title: '智谱发布 AutoGLM', summary: '国内首个手机端 Agent 产品。' },
+
+  { date: '2024-12-06', region: 'overseas', key: true, title: 'OpenAI 公开 o3 演示', summary: 'ARC-AGI 基准 87.5% 突破，被业界视为 AGI 临界点。' },
+  { date: '2024-12-26', region: 'china', key: true, title: 'DeepSeek-V3 开源（671B MoE）', summary: '训练成本仅 558 万美元，性能对标 GPT-4o。中美 AI 力量对比的转折点。' },
+
+  { date: '2025-01-20', region: 'china', key: true, title: 'DeepSeek-R1 开源', summary: '性能逼近 o1，训练成本仅 600 万美元。纳斯达克 AI 概念股短期重挫，中国 AI 出海里程碑。' },
+  { date: '2025-01-27', region: 'china', key: true, title: 'DeepSeek-V3（671B MoE）开源', summary: '开源生态首次正面挑战顶级闭源旗舰。' },
+
+  { date: '2025-02-24', region: 'overseas', key: true, title: 'Anthropic 发布 Claude 3.7 Sonnet', summary: '行业首个混合推理模型——快思考 / 慢思考可在同一 API 内切换。' },
+  { date: '2025-02-28', region: 'overseas', key: true, title: 'OpenAI 发布 GPT-4.5', summary: '主打情感对话与巨大知识库的非推理版本。' },
+
+  { date: '2025-03-12', region: 'overseas', key: true, title: 'Anthropic 推出 Claude Code', summary: '编码 Agent 正式商业化，重塑开发者工作流。' },
+  { date: '2025-03-20', region: 'overseas', key: true, title: 'Claude 4 Opus / Sonnet 发布', summary: '长任务 Agent 时代开启——模型可在多步骤任务中自主规划与纠错。' },
+
+  { date: '2025-04-01', region: 'overseas', key: true, title: 'OpenAI 完成 400 亿美元融资（估值 3000 亿）', summary: '全球最大私募融资之一。' },
+  { date: '2025-04-15', region: 'overseas', key: true, title: 'OpenAI 全面上线 o3 / o4-mini', summary: '深度推理进入主力模型行列。' },
+
+  { date: '2025-05-08', region: 'overseas', key: true, title: 'Google I/O：Gemini 2.5 + Astra 升级', summary: 'Google 全面押注 Agent + 多模态。' },
+  { date: '2025-05-20', region: 'overseas', key: true, title: 'Anthropic 发布 Claude Agent SDK 与 MCP 协议', summary: 'Model Context Protocol 逐渐成为工具调用的事实标准，重塑整个 Agent 生态。' },
+
+  { date: '2025-07-15', region: 'overseas', title: 'OpenAI 发布 ChatGPT Agent（Operator 整合）', summary: 'ChatGPT 本身成为浏览器级 Agent。' },
+
+  { date: '2025-09-15', region: 'overseas', key: true, title: 'Anthropic Claude 4.5 家族发布', summary: 'Opus 4.5 / Sonnet 4.5 / Haiku 4.5 三档分层，覆盖旗舰到轻量全场景。' },
+  { date: '2025-09-30', region: 'overseas', key: true, title: 'OpenAI 发布 GPT-5', summary: '推理 + 多模态 + 长上下文 + 工具使用的统一架构。' },
+
+  { date: '2025-10-15', region: 'overseas', title: 'OpenAI Sora 2 + Google Veo 3', summary: '带原生音轨的视频生成进入商用。' },
+
+  { date: '2026-01-15', region: 'overseas', key: true, title: 'OpenAI / Anthropic 估值新高（5000 亿 / 3000 亿）', summary: 'AI 行业进入万亿美元赛道预备阶段。' },
+  { date: '2026-02-10', region: 'overseas', title: 'Apple Intelligence 全面接入 Claude / Gemini', summary: '端侧 + 云端双轨的 AI 入口之争白热化。' },
+  { date: '2026-03-15', region: 'overseas', title: 'MCP 协议成为 ISO 候选标准', summary: '从 Anthropic 一家提案，升级为行业基础设施。' },
+  { date: '2026-04-12', region: 'china', title: '端侧大模型普及：手机端 13B 模型成为旗舰标配', summary: '高通、联发科芯片提供硬件级 AI 加速。' },
+  { date: '2026-05-08', region: 'overseas', key: true, title: 'Google I/O：Astra 商用化', summary: '多模态助手进入企业级。' },
+  { date: '2026-06-10', region: 'overseas', title: 'Apple WWDC：端侧 Agent SDK', summary: 'iOS / macOS 原生 Agent 框架。' },
+  { date: '2026-09-22', region: 'china', title: '国内"AI 原生公司"首批 IPO', summary: 'Agent-as-a-Service 商业模式得到资本市场验证。' },
+  { date: '2026-10-01', region: 'overseas', key: true, title: 'Anthropic 发布 Opus 5.5（当前）', summary: '旗舰模型持续进化，长任务 Agent、多 Agent 协作、原生工具调用进入生产级。' },
+];
+
+const YEAR_META = {
+  2023: { tag: '百模大战 · 巨头入场', summary: 'GPT-4 引爆，开源觉醒（Llama 2），百模大战集中上演。' },
+  2024: { tag: '多模态 · 推理觉醒', summary: 'Sora、Gemini 1.5、o1、Computer Use——多模态成熟，推理独立成范式。' },
+  2025: { tag: 'Agent 落地 · 开源反超', summary: 'DeepSeek-R1 撼动全球，Claude 4 + MCP 协议让 Agent 成为新战场。' },
+  2026: { tag: '多 Agent · 生态成熟', summary: 'MCP 成标准，端侧普及，AI 原生公司走向资本市场。' },
+};
+
+const state = { year: 'all', region: 'all', q: '' };
+
+function fmtDate(d) {
+  const [y, m, day] = d.split('-');
+  return `${y}.${m}.${day}`;
+}
+function monthLabel(d) {
+  const [, m] = d.split('-');
+  return `${parseInt(m, 10)} 月`;
+}
+
+function render() {
+  const root = document.getElementById('timeline');
+  const empty = document.getElementById('empty');
+  root.innerHTML = '';
+
+  const filtered = EVENTS.filter(e => {
+    if (state.year !== 'all' && !e.date.startsWith(state.year)) return false;
+    if (state.region !== 'all' && e.region !== state.region) return false;
+    if (state.q) {
+      const t = (e.title + ' ' + e.summary).toLowerCase();
+      if (!t.includes(state.q.toLowerCase())) return false;
+    }
+    return true;
+  }).sort((a, b) => a.date.localeCompare(b.date));
+
+  if (filtered.length === 0) {
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+
+  const byYear = {};
+  filtered.forEach(e => {
+    const y = e.date.slice(0, 4);
+    (byYear[y] = byYear[y] || []).push(e);
+  });
+
+  Object.keys(byYear).sort().forEach(year => {
+    const meta = YEAR_META[year] || { tag: '', summary: '' };
+    const yearBlock = document.createElement('section');
+    yearBlock.className = 'year-block';
+    yearBlock.innerHTML = `
+      <div class="year-header">
+        <div class="year-num">${year}</div>
+        <div class="year-tag">${meta.tag}</div>
+        <div class="year-summary">${meta.summary}</div>
+      </div>
+    `;
+
+    const byMonth = {};
+    byYear[year].forEach(e => {
+      const m = e.date.slice(0, 7);
+      (byMonth[m] = byMonth[m] || []).push(e);
+    });
+
+    Object.keys(byMonth).sort().forEach(monthKey => {
+      const monthBlock = document.createElement('div');
+      monthBlock.className = 'month-block';
+      const monthEvents = byMonth[monthKey].map(e => `
+        <article class="event" data-region="${e.region}">
+          <div class="event-head">
+            <span class="event-date">${fmtDate(e.date)}</span>
+            <span class="region-tag ${e.region === 'overseas' ? 'os' : 'cn'}">${e.region === 'overseas' ? '海外' : '国内'}</span>
+            ${e.key ? '<span class="key-tag">关键</span>' : ''}
+          </div>
+          <h3 class="event-title">${e.title}</h3>
+          <p class="event-summary">${e.summary}</p>
+        </article>
+      `).join('');
+      monthBlock.innerHTML = `
+        <div class="month-label">${monthLabel(monthKey + '-01')}</div>
+        <div class="month-events">${monthEvents}</div>
+      `;
+      yearBlock.appendChild(monthBlock);
+    });
+
+    root.appendChild(yearBlock);
+  });
+}
+
+document.querySelectorAll('.chip[data-year]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-year]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    btn.setAttribute('aria-pressed', 'true');
+    state.year = btn.dataset.year;
+    render();
+  });
+});
+document.querySelectorAll('.chip[data-region]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-region]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    btn.setAttribute('aria-pressed', 'true');
+    state.region = btn.dataset.region;
+    render();
+  });
+});
+document.getElementById('search').addEventListener('input', (e) => {
+  state.q = e.target.value.trim();
+  render();
+});
+
+render();
+</script>
