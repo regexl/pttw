@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>言语规范搭配背诵手册 · 305 词</title>
+<meta name="description" content="305 条公文规范搭配，支持卡片翻面、例句挖空、释义反推与速查表格四种背诵模式，含掌握度进度追踪。">
+<meta name="keywords" content="行测,言语理解,逻辑填空,规范搭配,背诵,国考">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<style>
+:root{
+  --ink:#1a2332; --ink-soft:#3a4a5e; --ink-mute:#6b7a8f;
+  --paper:#faf8f5; --paper-warm:#f3efe8; --card:#fffdfa;
+  --line:#d9d2c7; --line-soft:#e8e2d8;
+  --primary:#1a365d; --primary-deep:#0f2440; --accent:#c2410c; --accent-soft:#fde8d8;
+  --good:#15803d; --good-soft:#dcfce7; --warn:#b45309; --warn-soft:#fef3c7;
+  --bad:#b91c1c; --bad-soft:#fee2e2; --info:#1d4ed8; --info-soft:#dbeafe;
+  --shadow:0 1px 3px rgba(26,35,50,.08),0 4px 12px rgba(26,35,50,.06);
+  --shadow-lg:0 4px 16px rgba(26,35,50,.1),0 12px 32px rgba(26,35,50,.08);
+  --radius:12px;
+  /* hero 渐变与主按钮底色独立于 --primary：暗色下 --primary 是浅蓝，
+     直接拿来当底色配白字会几乎没有对比度 */
+  --hero-a:#1a365d; --hero-b:#0f2440;
+  --active-bg:#1a365d; --active-fg:#ffffff;
+}
+[data-theme="dark"]{
+  --ink:#e8eaed; --ink-soft:#c2c8d2; --ink-mute:#8b94a4;
+  --paper:#12151b; --paper-warm:#1a1e26; --card:#181c24;
+  --line:#2c323d; --line-soft:#232833;
+  --primary:#8ab4f8; --primary-deep:#aecbfa; --accent:#f97316; --accent-soft:#3a2415;
+  --good:#4ade80; --good-soft:#12301f; --warn:#fbbf24; --warn-soft:#33260c;
+  --bad:#f87171; --bad-soft:#3a1c1c; --info:#93c5fd; --info-soft:#16243d;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.5),0 12px 32px rgba(0,0,0,.4);
+  --hero-a:#182642; --hero-b:#0b1322;
+  --active-bg:#2563eb; --active-fg:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.7; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--primary)}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; gap:14px;
+  padding:10px 20px;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:500}
+.topbar a:hover{color:var(--accent)}
+.brand-sub{font-size:12.5px;color:var(--ink-mute);letter-spacing:.3px}
+.theme-toggle{
+  margin-left:auto; width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); font-size:15px;
+  display:flex; align-items:center; justify-content:center; transition:.2s;
+}
+.theme-toggle:hover{border-color:var(--accent);transform:rotate(-15deg)}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px;width:100%}
+
+/* ---------- Hero ---------- */
+.hero{
+  background:linear-gradient(135deg,var(--hero-a) 0%,var(--hero-b) 100%);
+  color:#fff; padding:38px 0 30px;
+}
+.hero .tag{
+  display:inline-block;font-size:11.5px;letter-spacing:2px;opacity:.8;
+  border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 12px;margin-bottom:14px;
+}
+.hero h1{font-size:1.9rem;font-weight:700;letter-spacing:.5px;margin-bottom:8px}
+.hero p{font-size:.92rem;opacity:.82;margin-bottom:22px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.hero-stats>div{background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,.14)}
+.hero-stats .n{font-size:1.5rem;font-weight:700;line-height:1.2}
+.hero-stats .n.good{color:#86efac}
+.hero-stats .n.warn{color:#fcd34d}
+.hero-stats .l{font-size:11.5px;opacity:.75;margin-top:2px}
+.progress-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#fbbf24,#4ade80);transition:width .45s ease}
+
+/* ---------- 工具栏 ---------- */
+.toolbar{
+  position:sticky; top:55px; z-index:50;
+  background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line); padding:10px 0 0;
+}
+.toolbar-inner{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-bottom:10px}
+.toolbar input[type=search]{
+  flex:1 1 220px;min-width:0;padding:8px 12px;border:1px solid var(--line);
+  border-radius:8px;background:var(--card);font-size:13.5px;outline:none;
+}
+.toolbar input[type=search]:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--info-soft)}
+.toolbar select,.toolbar .ghost-btn{
+  padding:8px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);font-size:13px;color:var(--ink-soft);outline:none;
+}
+.toolbar .ghost-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px}
+.tab{
+  flex:0 0 auto;padding:7px 16px;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink-soft);font-size:13.5px;font-weight:500;transition:.18s;
+}
+.tab:hover{border-color:var(--primary);color:var(--primary)}
+.tab.active{background:var(--active-bg);border-color:var(--active-bg);color:var(--active-fg)}
+
+/* ---------- 舞台 ---------- */
+main{padding:26px 0 60px;min-height:60vh}
+.stage-meta{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:12.5px;color:var(--ink-mute);margin-bottom:14px;
+}
+.stage-meta .pos{font-weight:600;color:var(--ink-soft)}
+
+/* ---------- M1 卡片 ---------- */
+.flip-scene{perspective:1600px}
+.flip-card{
+  position:relative;transform-style:preserve-3d;display:grid;
+  transition:transform .55s cubic-bezier(.2,.7,.3,1);
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);min-height:300px;
+}
+.flip-scene.flipped .flip-card{transform:rotateY(180deg)}
+.flip-face{
+  grid-area:1/1;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  padding:32px 34px;display:flex;flex-direction:column;justify-content:center;
+}
+.flip-face--back{transform:rotateY(180deg);background:var(--card)}
+.flip-word{font-size:2rem;font-weight:700;letter-spacing:1px;color:var(--ink);margin-bottom:14px;line-height:1.4}
+.flip-meaning{font-size:1.02rem;color:var(--ink-soft);background:var(--paper-warm);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0}
+.flip-quote{font-size:1.08rem;line-height:1.9;color:var(--ink)}
+.flip-quote::before{content:'「';color:var(--accent)}
+.flip-quote::after{content:'」';color:var(--accent)}
+.flip-source{margin-top:18px;font-size:13px;color:var(--ink-mute)}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+
+/* ---------- 徽章 ---------- */
+.badge{
+  display:inline-block;font-size:11.5px;padding:2px 10px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper-warm);color:var(--ink-soft);font-weight:500;
+}
+.badge.theme{border-color:var(--info);background:var(--info-soft);color:var(--info)}
+.badge.shape-A{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.badge.shape-B{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.badge.shape-C{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.badge.st-0{border-color:var(--line);background:var(--paper-warm);color:var(--ink-mute)}
+.badge.st-1{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.badge.st-2{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+
+/* ---------- 操作条 ---------- */
+.actions{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  margin-top:18px;padding-top:16px;border-top:1px dashed var(--line-soft);
+}
+.btn{
+  padding:8px 16px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+  color:var(--ink-soft);font-size:13.5px;font-weight:500;transition:.18s;
+}
+.btn:hover{border-color:var(--primary);color:var(--primary)}
+.btn.primary{background:var(--active-bg);border-color:var(--active-bg);color:var(--active-fg)}
+.btn.primary:hover{opacity:.88;color:var(--active-fg)}
+.btn.good{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.btn.warn{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions .spacer{flex:1}
+.hint{font-size:12px;color:var(--ink-mute);margin-top:10px}
+
+/* ---------- M2 / M3 答题 ---------- */
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 30px}
+.quiz-prompt{font-size:12.5px;color:var(--ink-mute);margin-bottom:12px}
+.quiz-sentence{font-size:1.25rem;line-height:2.1;color:var(--ink);margin-bottom:20px}
+.quiz-sentence em{font-style:normal;color:var(--ink-mute)}
+.blank-input{
+  display:inline-block;min-width:8em;width:auto;
+  border:none;border-bottom:2px solid var(--accent);background:var(--accent-soft);
+  border-radius:4px 4px 0 0;padding:2px 10px;font-size:1.2rem;font-weight:600;color:var(--ink);
+  text-align:center;outline:none;
+}
+.blank-input:focus{border-bottom-color:var(--primary);box-shadow:0 2px 0 var(--primary)}
+.answer-input{
+  width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:8px;
+  background:var(--paper);font-size:1rem;outline:none;
+}
+.answer-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--info-soft)}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:10px;font-size:14px;line-height:1.8}
+.feedback.ok{background:var(--good-soft);border-left:4px solid var(--good);color:var(--good)}
+.feedback.no{background:var(--bad-soft);border-left:4px solid var(--bad);color:var(--bad)}
+.feedback.close{background:var(--warn-soft);border-left:4px solid var(--warn);color:var(--warn)}
+.feedback b{font-weight:700}
+.clue{
+  margin-top:16px;padding:12px 16px;border-radius:10px;
+  background:var(--paper-warm);border:1px dashed var(--line);font-size:13.5px;color:var(--ink-soft);
+}
+.clue .k{color:var(--ink-mute);font-size:12px;display:block;margin-bottom:2px}
+
+/* ---------- M4 表格 ---------- */
+.group{margin-bottom:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:var(--shadow)}
+.group-head{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:14px 20px;background:var(--paper-warm);border:none;text-align:left;font-size:15px;font-weight:600;
+}
+.group-head .cnt{font-size:12px;color:var(--ink-mute);font-weight:400}
+.group-head .arrow{margin-left:auto;color:var(--ink-mute);transition:transform .2s;font-size:12px}
+.group.open .group-head .arrow{transform:rotate(180deg)}
+.group-body{display:none;border-top:1px solid var(--line)}
+.group.open .group-body{display:block}
+table.list{width:100%;border-collapse:collapse;font-size:13.5px}
+table.list th{
+  background:var(--paper-warm);color:var(--ink-soft);text-align:left;
+  padding:10px 14px;font-size:12px;font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap;
+}
+table.list td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+table.list tbody tr{cursor:pointer;transition:background .15s}
+table.list tbody tr:hover{background:var(--paper-warm)}
+table.list tbody tr:last-child td{border-bottom:none}
+table.list .c-idx{color:var(--ink-mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.list .c-word{font-weight:600;color:var(--ink);white-space:nowrap}
+table.list .c-src{color:var(--ink-mute);font-size:12.5px;white-space:nowrap}
+table.list mark{background:var(--warn-soft);color:var(--warn);padding:0 2px;border-radius:2px}
+
+.empty{
+  text-align:center;padding:60px 20px;color:var(--ink-mute);font-size:14px;
+  background:var(--card);border:1px dashed var(--line);border-radius:var(--radius);
+}
+
+/* ---------- 页脚 ---------- */
+footer{
+  text-align:center;padding:26px 20px;color:var(--ink-mute);font-size:12.5px;
+  border-top:1px solid var(--line);background:var(--paper-warm);
+}
+footer a{color:var(--ink-soft)}
+
+@media (max-width:720px){
+  .hero{padding:28px 0 24px}
+  .hero h1{font-size:1.45rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .toolbar{top:52px}
+  .flip-face{padding:24px 22px}
+  .flip-word{font-size:1.5rem}
+  .quiz{padding:20px 18px}
+  .quiz-sentence{font-size:1.08rem}
+  .toolbar-inner{gap:6px}
+  .toolbar select,.toolbar .ghost-btn{padding:7px 8px;font-size:12.5px}
+  /* 表格转卡片 */
+  table.list thead{display:none}
+  table.list,table.list tbody,table.list tr,table.list td{display:block;width:100%}
+  table.list tr{border-bottom:1px solid var(--line);padding:10px 14px}
+  table.list td{border:none;padding:2px 0}
+  table.list td::before{
+    content:attr(data-label);display:inline-block;min-width:62px;
+    font-size:11.5px;color:var(--ink-mute);font-weight:600;
+  }
+  table.list .c-idx::before{content:'序号 '}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">言语理解 · 规范搭配 305 词</span>
+  <button id="theme-toggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="tag">行测言语理解 · 逻辑填空</span>
+    <h1>言语规范搭配背诵手册</h1>
+    <p>305 条公文规范搭配 · 四种背诵模式 · 掌握度进度追踪</p>
+    <div class="hero-stats">
+      <div><div class="n" id="stat-total">305</div><div class="l">搭配总数</div></div>
+      <div><div class="n good" id="stat-known">0</div><div class="l">已掌握</div></div>
+      <div><div class="n warn" id="stat-review">0</div><div class="l">待复习</div></div>
+      <div><div class="n" id="stat-rate">0%</div><div class="l">掌握率</div></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap toolbar-inner">
+    <input type="search" id="search" placeholder="搜索用词 / 释义 / 例句（按 / 聚焦）" autocomplete="off">
+    <select id="filter-theme" aria-label="主题筛选"></select>
+    <select id="filter-status" aria-label="状态筛选">
+      <option value="all">全部状态</option>
+      <option value="0">未学</option>
+      <option value="2">待复习</option>
+      <option value="1">已掌握</option>
+    </select>
+    <select id="order" aria-label="刷题顺序">
+      <option value="seq">顺序</option>
+      <option value="shuffle">乱序</option>
+      <option value="unlearned">只刷未掌握</option>
+    </select>
+    <button class="ghost-btn" id="reset-progress" title="清空全部掌握度标记">重置进度</button>
+  </div>
+  <div class="wrap">
+    <div class="tabs" id="mode-tabs">
+      <button class="tab active" data-mode="card">卡片翻面</button>
+      <button class="tab" data-mode="blank">例句挖空</button>
+      <button class="tab" data-mode="recall">释义反推</button>
+      <button class="tab" data-mode="table">速查表格</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap" id="stage"></div>
+</main>
+
+<footer>
+  言语规范搭配背诵手册 · 数据源自《言语规范搭配汇总》305 条 · 进度保存在本机浏览器<br>
+  <a href="../index.html#notes">返回学习笔记</a>
+</footer>
+
+<script src="../viewport/js/app-utils.js"></script>
+
+<!-- YANYU_DATA_START -->
+    <script type="application/json" id="yanyu-data">[{"n":1,"w":"锚定（目标）","m":"锁定目标、坚定不移","e":"锚定农业农村现代化、扎实推进乡村全面振兴","s":"乡村振兴意见","th":["乡村振兴"],"sh":"A","kw":["锚定"],"bl":{"s":0,"e":2,"t":"锚定","lv":"L1"}},{"n":2,"w":"筑牢（防线/根基）","m":"加固使牢固","e":"守牢国家粮食安全底线、筑牢思想防线","s":"乡村振兴意见","th":["乡村振兴"],"sh":"A","kw":["筑牢"],"bl":{"s":11,"e":13,"t":"筑牢","lv":"L1"}},{"n":3,"w":"夯实（基础/底座）","m":"使基础坚实","e":"夯实基础、全面发力","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["夯实"],"bl":{"s":0,"e":2,"t":"夯实","lv":"L1"}},{"n":4,"w":"激活（活力/潜能）","m":"刺激使活跃","e":"激活数据要素潜能","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["激活"],"bl":{"s":0,"e":2,"t":"激活","lv":"L1"}},{"n":5,"w":"释放（潜力/红利）","m":"使潜能显现","e":"充分释放消费潜力、释放数据要素潜能","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["释放"],"bl":{"s":2,"e":4,"t":"释放","lv":"L1"}},{"n":6,"w":"激发（动力/活力）","m":"刺激引发","e":"激发全社会内生动力和创新活力","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["激发"],"bl":{"s":0,"e":2,"t":"激发","lv":"L1"}},{"n":7,"w":"赋能（产业/发展）","m":"赋予能力","e":"全方位推进数智技术赋能、文化赋能经济社会发展","s":"规划纲要/新质生产力","th":["规划纲要","新质生产力"],"sh":"A","kw":["赋能"],"bl":{"s":9,"e":11,"t":"赋能","lv":"L1"}},{"n":8,"w":"培育（动能/产业）","m":"培养使其成长","e":"培育壮大新兴产业和未来产业","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["培育"],"bl":{"s":0,"e":2,"t":"培育","lv":"L1"}},{"n":9,"w":"壮大（产业/力量）","m":"使壮大","e":"发展壮大民营经济、壮大耐心资本","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["壮大"],"bl":{"s":2,"e":4,"t":"壮大","lv":"L1"}},{"n":10,"w":"做强（主业/优势）","m":"使更强大","e":"做强做优做大国有企业和国有资本","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["做强"],"bl":{"s":0,"e":2,"t":"做强","lv":"L1"}},{"n":11,"w":"做优（增量）","m":"使更优","e":"做优增量、盘活存量","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["做优"],"bl":{"s":0,"e":2,"t":"做优","lv":"L1"}},{"n":12,"w":"盘活（存量资源）","m":"使闲置资源活起来","e":"盘活闲置低效的老旧厂房、盘活用好存量资源","s":"城市更新/规划纲要","th":["规划纲要","城市更新"],"sh":"A","kw":["盘活"],"bl":{"s":0,"e":2,"t":"盘活","lv":"L1"}},{"n":13,"w":"畅通（循环/渠道）","m":"使通行无阻","e":"畅通国内国际双循环","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["畅通"],"bl":{"s":0,"e":2,"t":"畅通","lv":"L1"}},{"n":14,"w":"破除（障碍/壁垒）","m":"解除、扫除","e":"破除阻碍全国统一大市场建设卡点堵点","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["破除"],"bl":{"s":0,"e":2,"t":"破除","lv":"L1"}},{"n":15,"w":"打通（堵点/梗阻）","m":"使贯通","e":"打通城际未贯通路段和瓶颈路段","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["打通"],"bl":{"s":0,"e":2,"t":"打通","lv":"L1"}},{"n":16,"w":"补齐（短板）","m":"弥补不足","e":"补齐民生领域公共服务设施短板","s":"城市更新","th":["城市更新"],"sh":"A","kw":["补齐"],"bl":{"s":0,"e":2,"t":"补齐","lv":"L1"}},{"n":17,"w":"拓展（空间/渠道）","m":"向外扩展","e":"拓展中间品贸易、拓展国际循环","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["拓展"],"bl":{"s":0,"e":2,"t":"拓展","lv":"L1"}},{"n":18,"w":"深化（改革/合作）","m":"使更深入","e":"深化国资国企改革、深化多双边合作","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["深化"],"bl":{"s":0,"e":2,"t":"深化","lv":"L1"}},{"n":19,"w":"健全（机制/体系）","m":"使完备","e":"健全中长期护理保险制度、健全市场体系","s":"长期护理/规划纲要","th":["规划纲要","长期护理"],"sh":"A","kw":["健全"],"bl":{"s":0,"e":2,"t":"健全","lv":"L1"}},{"n":20,"w":"完善（制度/体系）","m":"使完备良好","e":"完善要素市场化配置体制机制","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["完善"],"bl":{"s":0,"e":2,"t":"完善","lv":"L1"}},{"n":21,"w":"优化（结构/布局）","m":"使更优良","e":"优化产业结构、优化国土空间发展格局","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["优化"],"bl":{"s":0,"e":2,"t":"优化","lv":"L1"}},{"n":22,"w":"构建（格局/体系）","m":"建立形成","e":"构建新发展格局、构建现代化基础设施体系","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["构建"],"bl":{"s":0,"e":2,"t":"构建","lv":"L1"}},{"n":23,"w":"统筹（发展/安全）","m":"统一筹划","e":"统筹发展和安全、统筹国内国际两个大局","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["统筹"],"bl":{"s":0,"e":2,"t":"统筹","lv":"L1"}},{"n":24,"w":"巩固（成果/地位）","m":"使稳固","e":"巩固拓展脱贫攻坚成果、巩固提升优势","s":"规划纲要/乡村振兴","th":["规划纲要","乡村振兴"],"sh":"A","kw":["巩固"],"bl":{"s":0,"e":2,"t":"巩固","lv":"L1"}},{"n":25,"w":"守牢（底线）","m":"坚守不放","e":"守牢不发生规模性返贫致贫底线","s":"乡村振兴意见","th":["乡村振兴"],"sh":"A","kw":["守牢"],"bl":{"s":0,"e":2,"t":"守牢","lv":"L1"}},{"n":26,"w":"稳住（预期/大盘）","m":"使稳定","e":"稳定和扩大就业容量、稳就业稳预期","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["稳住"],"bl":null},{"n":27,"w":"兜住（民生底线）","m":"兜底保障","e":"兜住民生底线","s":"长期护理意见","th":["长期护理"],"sh":"A","kw":["兜住"],"bl":{"s":0,"e":2,"t":"兜住","lv":"L1"}},{"n":28,"w":"织密（社会保障网）","m":"使更严密","e":"织密扎牢社会保障网","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["织密"],"bl":{"s":0,"e":2,"t":"织密","lv":"L1"}},{"n":29,"w":"提升（质效/能级）","m":"提高水平","e":"提升城市产业创新策源力、提升治理效能","s":"城市更新/规划纲要","th":["规划纲要","城市更新"],"sh":"A","kw":["提升"],"bl":{"s":0,"e":2,"t":"提升","lv":"L1"}},{"n":30,"w":"增强（能力/韧性）","m":"加强","e":"增强核心功能、提升核心竞争力、增强经济和社会韧性","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["增强"],"bl":{"s":0,"e":2,"t":"增强","lv":"L1"}},{"n":31,"w":"强化（支撑/保障）","m":"加强、使更强","e":"强化算力算法数据高效供给、强化金融监管","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["强化"],"bl":{"s":0,"e":2,"t":"强化","lv":"L1"}},{"n":32,"w":"防范（风险）","m":"预防应对","e":"有效防范化解各类风险","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["防范"],"bl":{"s":2,"e":4,"t":"防范","lv":"L1"}},{"n":33,"w":"化解（风险/矛盾）","m":"解除消除","e":"防范化解房地产、地方政府债务等风险","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["化解"],"bl":{"s":2,"e":4,"t":"化解","lv":"L1"}},{"n":34,"w":"锻造（长板）","m":"塑造优势","e":"锻长板和补短板相结合","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["锻造"],"bl":null},{"n":35,"w":"抢占（制高点）","m":"抢先占据","e":"抢占科技发展制高点、抢占人工智能产业应用制高点","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["抢占"],"bl":{"s":0,"e":2,"t":"抢占","lv":"L1"}},{"n":36,"w":"抢占（先机）","m":"抢先行动","e":"抢占先机、赢得主动","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["抢占"],"bl":{"s":0,"e":2,"t":"抢占","lv":"L1"}},{"n":37,"w":"引领（发展/改革）","m":"起导向作用","e":"发挥国家战略科技力量引领作用、引领发展新质生产力","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["引领"],"bl":{"s":10,"e":12,"t":"引领","lv":"L1"}},{"n":38,"w":"依托（平台/优势）","m":"凭借、依靠","e":"依托科教资源优势突出地区建设未来产业先导区","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["依托"],"bl":{"s":0,"e":2,"t":"依托","lv":"L1"}},{"n":39,"w":"催生（新质生产力/新产业）","m":"促成产生","e":"不断催生新质生产力","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["催生"],"bl":{"s":2,"e":4,"t":"催生","lv":"L1"}},{"n":40,"w":"加快（培育/布局）","m":"加速推进","e":"加快培育自主可控软硬件生态","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["加快"],"bl":{"s":0,"e":2,"t":"加快","lv":"L1"}},{"n":41,"w":"纵深推进（改革）","m":"深入推进","e":"纵深推进全国统一大市场建设","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["纵深推进"],"bl":{"s":0,"e":4,"t":"纵深推进","lv":"L1"}},{"n":42,"w":"一体推进（发展）","m":"同步推进","e":"一体推进教育科技人才发展","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["一体推进"],"bl":{"s":0,"e":4,"t":"一体推进","lv":"L1"}},{"n":43,"w":"系统推进（治理）","m":"全面系统地推进","e":"系统推进上游水源涵养、中游水土保持","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["系统推进"],"bl":{"s":0,"e":4,"t":"系统推进","lv":"L1"}},{"n":44,"w":"因地制宜（施策）","m":"依据实际差别施策","e":"因地制宜、分类指导、分区分类施策","s":"规划纲要/城市更新","th":["规划纲要","城市更新"],"sh":"A","kw":["因地制宜"],"bl":{"s":0,"e":4,"t":"因地制宜","lv":"L1"}},{"n":45,"w":"尽力而为、量力而行","m":"按能力而为","e":"坚持尽力而为、量力而行","s":"城市更新/长期护理","th":["城市更新","长期护理"],"sh":"C","kw":["尽力而为","量力而行"],"bl":{"s":2,"e":11,"t":"尽力而为、量力而行","lv":"L1"}},{"n":46,"w":"先立后破","m":"先建立再破除","e":"坚持先立后破、稳中求进","s":"新质生产力","th":["新质生产力"],"sh":"B","kw":["先立后破"],"bl":{"s":2,"e":6,"t":"先立后破","lv":"L1"}},{"n":47,"w":"破立并举","m":"破除与建立并行","e":"统筹推进、破立并举","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["破立并举"],"bl":{"s":5,"e":9,"t":"破立并举","lv":"L1"}},{"n":48,"w":"防范化解（风险）","m":"预防并消除","e":"有效防范化解各类风险隐患","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["防范化解"],"bl":{"s":2,"e":6,"t":"防范化解","lv":"L1"}},{"n":49,"w":"深化拓展（行动）","m":"深入推进","e":"深化拓展'人工智能+'、深化拓展要素市场化配置改革试点","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["深化拓展"],"bl":{"s":0,"e":4,"t":"深化拓展","lv":"L1"}},{"n":50,"w":"巩固拓展（成果）","m":"巩固并扩大","e":"巩固拓展脱贫攻坚成果","s":"乡村振兴意见","th":["乡村振兴"],"sh":"A","kw":["巩固拓展"],"bl":{"s":0,"e":4,"t":"巩固拓展","lv":"L1"}},{"n":51,"w":"守正创新","m":"坚守正道并创新","e":"坚持问题导向、守正创新","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["守正创新"],"bl":{"s":7,"e":11,"t":"守正创新","lv":"L1"}},{"n":52,"w":"兜牢（底线）","m":"兜住、保牢","e":"兜牢基本民生底线","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["兜牢"],"bl":{"s":0,"e":2,"t":"兜牢","lv":"L1"}},{"n":53,"w":"扎牢（安全网/笼子）","m":"扎紧、紧固","e":"扎牢制度笼子","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["扎牢"],"bl":{"s":0,"e":2,"t":"扎牢","lv":"L1"}},{"n":54,"w":"织密（防线/网络）","m":"使更密集牢固","e":"织密织牢社会保障安全网","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["织密"],"bl":{"s":0,"e":2,"t":"织密","lv":"L1"}},{"n":55,"w":"锻强（长板）","m":"锻造强化优势","e":"锻强长板、补齐短板","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["锻强"],"bl":{"s":0,"e":2,"t":"锻强","lv":"L1"}},{"n":56,"w":"蓄势（发力）","m":"积蓄势能","e":"蓄势待发、厚积薄发","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["蓄势"],"bl":{"s":0,"e":2,"t":"蓄势","lv":"L1"}},{"n":57,"w":"起势（开局）","m":"形成良好开端","e":"开局起势、迈稳第一步","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["起势"],"bl":{"s":2,"e":4,"t":"起势","lv":"L1"}},{"n":58,"w":"发力（重点领域）","m":"集中力量推进","e":"在重点领域精准发力","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["发力"],"bl":{"s":7,"e":9,"t":"发力","lv":"L1"}},{"n":59,"w":"攻坚（难题/目标）","m":"全力攻克","e":"集中力量攻坚突破","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["攻坚"],"bl":{"s":4,"e":6,"t":"攻坚","lv":"L1"}},{"n":60,"w":"实现突围","m":"突破重围","e":"在关键领域实现突围","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["实现突围"],"bl":{"s":5,"e":9,"t":"实现突围","lv":"L1"}},{"n":61,"w":"破局（难题）","m":"打破僵局","e":"以改革破局开路","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["破局"],"bl":{"s":3,"e":5,"t":"破局","lv":"L1"}},{"n":62,"w":"闯关（挑战）","m":"攻克关口","e":"闯关夺隘、爬坡过坎","s":"规划纲要","th":["规划纲要"],"sh":"A","kw":["闯关"],"bl":{"s":0,"e":2,"t":"闯关","lv":"L1"}},{"n":63,"w":"强链补链延链","m":"做强补齐延长产业链","e":"强链补链延链、集群发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["强链补链延链"],"bl":{"s":0,"e":6,"t":"强链补链延链","lv":"L1"}},{"n":64,"w":"识变应变求变","m":"识别、应对、追求变化","e":"积极识变应变求变","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["识变应变求变"],"bl":{"s":2,"e":8,"t":"识变应变求变","lv":"L1"}},{"n":65,"w":"培育新动能、构筑新优势","m":"新的增长动力与优势","e":"加快培育新动能、构筑产业发展新优势","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["培育新动能","构筑新优势"],"bl":null},{"n":66,"w":"补短板强弱项","m":"弥补短板、强化薄弱","e":"着力补短板强弱项","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["补短板强弱项"],"bl":{"s":2,"e":8,"t":"补短板强弱项","lv":"L1"}},{"n":67,"w":"锻长板扬优势","m":"锻造长板、发扬优势","e":"锻长板、补短板相结合","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["锻长板扬优势"],"bl":null},{"n":68,"w":"爬坡过坎","m":"克服艰难险阻","e":"爬坡过坎、攻坚克难","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["爬坡过坎"],"bl":{"s":0,"e":4,"t":"爬坡过坎","lv":"L1"}},{"n":69,"w":"滚石上山","m":"喻知难而进","e":"保持滚石上山的劲头","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["滚石上山"],"bl":{"s":2,"e":6,"t":"滚石上山","lv":"L1"}},{"n":70,"w":"攻坚拔寨","m":"攻克坚固堡垒","e":"攻坚拔寨、决战决胜","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["攻坚拔寨"],"bl":{"s":0,"e":4,"t":"攻坚拔寨","lv":"L1"}},{"n":71,"w":"提质增效","m":"提升质量效益能级","e":"推动产业提质增效升级","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["提质增效"],"bl":{"s":4,"e":8,"t":"提质增效","lv":"L1"}},{"n":72,"w":"扩容下沉","m":"扩大规模并下沉","e":"促进优质医疗资源扩容下沉","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["扩容下沉"],"bl":{"s":8,"e":12,"t":"扩容下沉","lv":"L1"}},{"n":73,"w":"强筋健骨","m":"强健体质，喻夯实基础","e":"补钙强筋、强筋健骨","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["强筋健骨"],"bl":{"s":5,"e":9,"t":"强筋健骨","lv":"L1"}},{"n":74,"w":"固本培元","m":"巩固根本培育元气","e":"固本培元、行稳致远","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["固本培元"],"bl":{"s":0,"e":4,"t":"固本培元","lv":"L1"}},{"n":75,"w":"活血化瘀、破冰前行","m":"疏通郁结，喻破解顽疾","e":"活血化瘀、破冰前行","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["活血化瘀","破冰前行"],"bl":{"s":0,"e":9,"t":"活血化瘀、破冰前行","lv":"L1"}},{"n":76,"w":"提速扩面","m":"加快速度扩大范围","e":"推动改革提速扩面","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["提速扩面"],"bl":{"s":4,"e":8,"t":"提速扩面","lv":"L1"}},{"n":77,"w":"降本增效","m":"降低成本提升效益","e":"推动企业降本增效","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["降本增效"],"bl":{"s":4,"e":8,"t":"降本增效","lv":"L1"}},{"n":78,"w":"联农带农","m":"联结农民带动增收","e":"完善联农带农利益联结机制","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["联农带农"],"bl":{"s":2,"e":6,"t":"联农带农","lv":"L1"}},{"n":79,"w":"纾困解难","m":"帮助企业摆脱困境","e":"及时助企纾困解难","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["纾困解难"],"bl":{"s":4,"e":8,"t":"纾困解难","lv":"L1"}},{"n":80,"w":"托底保障","m":"兜底式保障","e":"发挥社会救助托底保障作用","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["托底保障"],"bl":{"s":6,"e":10,"t":"托底保障","lv":"L1"}},{"n":81,"w":"扶弱济困","m":"帮扶弱者救济困苦","e":"扶弱济困、兜牢底线","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["扶弱济困"],"bl":{"s":0,"e":4,"t":"扶弱济困","lv":"L1"}},{"n":82,"w":"共建共享","m":"共同建设、共同享有","e":"推进共建共享、协调发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["共建共享"],"bl":{"s":2,"e":6,"t":"共建共享","lv":"L1"}},{"n":83,"w":"对口支援","m":"定点支援","e":"深化东中西部对口支援","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["对口支援"],"bl":{"s":6,"e":10,"t":"对口支援","lv":"L1"}},{"n":84,"w":"组团帮扶","m":"组团式对口帮扶","e":"深化教育医疗'组团式'帮扶","s":"规划纲要/教育","th":["规划纲要","教育"],"sh":"B","kw":["组团帮扶"],"bl":null},{"n":85,"w":"援企稳岗","m":"援助企业稳定岗位","e":"实施援企稳岗扩就业政策","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["援企稳岗"],"bl":{"s":2,"e":6,"t":"援企稳岗","lv":"L1"}},{"n":86,"w":"以工代赈","m":"以工程劳动代替救济","e":"扩大以工代赈规模","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["以工代赈"],"bl":{"s":2,"e":6,"t":"以工代赈","lv":"L1"}},{"n":87,"w":"就近就业","m":"就近就地就业","e":"促进农民就近就业增收","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["就近就业"],"bl":{"s":4,"e":8,"t":"就近就业","lv":"L1"}},{"n":88,"w":"以商招商","m":"以商引商","e":"创新以商招商模式","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以商招商"],"bl":{"s":2,"e":6,"t":"以商招商","lv":"L1"}},{"n":89,"w":"筑巢引凤","m":"建好平台吸引人才","e":"筑巢引凤、聚才兴业","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["筑巢引凤"],"bl":{"s":0,"e":4,"t":"筑巢引凤","lv":"L1"}},{"n":90,"w":"聚才引智、招才引智","m":"聚集人才智慧","e":"聚才引智、汇智聚力，实施招才引智工程","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["聚才引智","招才引智"],"bl":null},{"n":91,"w":"借梯登高","m":"借助外力登高","e":"借梯登高、借智聚力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["借梯登高"],"bl":{"s":0,"e":4,"t":"借梯登高","lv":"L1"}},{"n":92,"w":"借船出海","m":"借助外力走向海外","e":"鼓励企业'借船出海'","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["借船出海"],"bl":{"s":5,"e":9,"t":"借船出海","lv":"L1"}},{"n":93,"w":"扬帆出海","m":"迈向海外市场","e":"推动品牌'扬帆出海'","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["扬帆出海"],"bl":{"s":5,"e":9,"t":"扬帆出海","lv":"L1"}},{"n":94,"w":"抱团出海","m":"组团走向海外","e":"支持企业抱团出海","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["抱团出海"],"bl":{"s":4,"e":8,"t":"抱团出海","lv":"L1"}},{"n":95,"w":"链式招商","m":"沿产业链招商","e":"推行链式招商、集群发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["链式招商"],"bl":{"s":2,"e":6,"t":"链式招商","lv":"L1"}},{"n":96,"w":"串珠成链","m":"串联成完整链条","e":"推动文旅资源串珠成链","s":"文化规划","th":["文化"],"sh":"B","kw":["串珠成链"],"bl":{"s":6,"e":10,"t":"串珠成链","lv":"L1"}},{"n":97,"w":"稳中求进","m":"工作总基调","e":"坚持稳中求进工作总基调","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["稳中求进"],"bl":{"s":2,"e":6,"t":"稳中求进","lv":"L1"}},{"n":98,"w":"量力而行","m":"按能力办事","e":"尽力而为、量力而行","s":"长期护理意见","th":["长期护理"],"sh":"B","kw":["量力而行"],"bl":{"s":5,"e":9,"t":"量力而行","lv":"L1"}},{"n":99,"w":"多措并举","m":"多项措施同时推进","e":"多措并举促进乳制品消费","s":"乡村振兴意见","th":["乡村振兴"],"sh":"C","kw":["多措并举"],"bl":{"s":0,"e":4,"t":"多措并举","lv":"L1"}},{"n":100,"w":"同向同行","m":"方向一致、同步前行","e":"推进思政课程和课程思政同向同行","s":"教育规划","th":["教育"],"sh":"B","kw":["同向同行"],"bl":{"s":11,"e":15,"t":"同向同行","lv":"L1"}},{"n":101,"w":"同频共振","m":"频率一致、互相呼应","e":"教育科技人才同频共振","s":"教育规划","th":["教育"],"sh":"B","kw":["同频共振"],"bl":{"s":6,"e":10,"t":"同频共振","lv":"L1"}},{"n":102,"w":"提质增效","m":"提高质量、增加效益","e":"推动外贸提质增效、促进服务消费提质增效","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["提质增效"],"bl":{"s":4,"e":8,"t":"提质增效","lv":"L1"}},{"n":103,"w":"扩容提质","m":"扩大规模、提升质量","e":"推动高等教育提质扩容、服务业扩能提质行动","s":"规划纲要/教育","th":["规划纲要","教育"],"sh":"B","kw":["扩容提质"],"bl":null},{"n":104,"w":"优势互补","m":"相互补充、各展所长","e":"促进各种所有制经济优势互补、共同发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["优势互补"],"bl":{"s":9,"e":13,"t":"优势互补","lv":"L1"}},{"n":105,"w":"互利共赢","m":"互惠互利、共同受益","e":"促进区域间互融互促、互利共赢","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["互利共赢"],"bl":{"s":10,"e":14,"t":"互利共赢","lv":"L1"}},{"n":106,"w":"行稳致远","m":"走得稳、走得远","e":"确保高质量发展行稳致远","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["行稳致远"],"bl":{"s":7,"e":11,"t":"行稳致远","lv":"L1"}},{"n":107,"w":"走深走实","m":"深入扎实地推进","e":"高质量共建'一带一路'走深走实","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["走深走实"],"bl":{"s":11,"e":15,"t":"走深走实","lv":"L1"}},{"n":108,"w":"落地见效","m":"落实并见到成效","e":"推动政策举措落地见效","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["落地见效"],"bl":{"s":6,"e":10,"t":"落地见效","lv":"L1"}},{"n":109,"w":"精准施策","m":"有针对性地采取措施","e":"因地制宜、精准施策","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["精准施策"],"bl":{"s":5,"e":9,"t":"精准施策","lv":"L1"}},{"n":110,"w":"分类施策","m":"分类有针对性地施策","e":"分区分类施策、分类指导","s":"规划纲要/城市更新","th":["规划纲要","城市更新"],"sh":"B","kw":["分类施策"],"bl":{"s":2,"e":6,"t":"分类施策","lv":"L1"}},{"n":111,"w":"靶向发力","m":"精准聚焦发力","e":"聚焦短板弱项、靶向发力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["靶向发力"],"bl":{"s":7,"e":11,"t":"靶向发力","lv":"L1"}},{"n":112,"w":"固本强基","m":"巩固根本、强化基础","e":"固本强基、厚植优势","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["固本强基"],"bl":{"s":0,"e":4,"t":"固本强基","lv":"L1"}},{"n":113,"w":"筑牢根基","m":"加固基础","e":"筑牢数智化发展底座、筑牢思想防线","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["筑牢根基"],"bl":null},{"n":114,"w":"激发活力","m":"激活生机活力","e":"激发各类经营主体活力、激发全民族文化创新创造活力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["激发活力"],"bl":null},{"n":115,"w":"增强韧性","m":"增强抗风险能力","e":"增强经济和社会韧性、提升安全韧性","s":"规划纲要/城市更新","th":["规划纲要","城市更新"],"sh":"B","kw":["增强韧性"],"bl":null},{"n":116,"w":"盘活存量","m":"用活既有资源","e":"做优增量、盘活存量","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["盘活存量"],"bl":{"s":5,"e":9,"t":"盘活存量","lv":"L1"}},{"n":117,"w":"做优增量","m":"做优新增部分","e":"做优增量、盘活存量","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["做优增量"],"bl":{"s":0,"e":4,"t":"做优增量","lv":"L1"}},{"n":118,"w":"量质并举","m":"数量与质量并重","e":"推动量的合理增长和质的有效提升","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["量质并举"],"bl":null},{"n":119,"w":"质效提升","m":"质量与效益提升","e":"增强核心功能、提升核心竞争力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["质效提升"],"bl":null},{"n":120,"w":"厚积薄发","m":"积累深厚、突然发力","e":"厚积薄发、换羽新生","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["厚积薄发"],"bl":{"s":0,"e":4,"t":"厚积薄发","lv":"L1"}},{"n":121,"w":"先立后破","m":"先立新再破旧","e":"坚持先立后破、稳中求进","s":"新质生产力","th":["新质生产力"],"sh":"B","kw":["先立后破"],"bl":{"s":2,"e":6,"t":"先立后破","lv":"L1"}},{"n":122,"w":"破立并举","m":"破与立同时进行","e":"统筹推进破立并举","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["破立并举"],"bl":{"s":4,"e":8,"t":"破立并举","lv":"L1"}},{"n":123,"w":"动能转换","m":"新旧增长动力切换","e":"新旧动能转换任务艰巨","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["动能转换"],"bl":{"s":2,"e":6,"t":"动能转换","lv":"L1"}},{"n":124,"w":"强基固本","m":"强化基础、稳固根本","e":"强基固本、行稳致远","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["强基固本"],"bl":{"s":0,"e":4,"t":"强基固本","lv":"L1"}},{"n":125,"w":"乘势而上","m":"顺应趋势、更进一步","e":"乘势而上、砥砺前行","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["乘势而上"],"bl":{"s":0,"e":4,"t":"乘势而上","lv":"L1"}},{"n":126,"w":"攻坚克难","m":"攻克难关、战胜困难","e":"聚力攻坚、团结奋斗","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["攻坚克难"],"bl":null},{"n":127,"w":"迎难而上","m":"面对困难迎头奋进","e":"迎难而上、砥砺前行","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["迎难而上"],"bl":{"s":0,"e":4,"t":"迎难而上","lv":"L1"}},{"n":128,"w":"风高浪急","m":"风浪险急，喻形势严峻","e":"勇于面对风高浪急甚至惊涛骇浪的重大考验","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["风高浪急"],"bl":{"s":4,"e":8,"t":"风高浪急","lv":"L1"}},{"n":129,"w":"惊涛骇浪","m":"凶险巨浪，喻重大考验","e":"勇于面对风高浪急甚至惊涛骇浪的重大考验","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["惊涛骇浪"],"bl":{"s":10,"e":14,"t":"惊涛骇浪","lv":"L1"}},{"n":130,"w":"百折不挠","m":"意志坚定、不退缩","e":"迎难而上、百折不挠","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["百折不挠"],"bl":{"s":5,"e":9,"t":"百折不挠","lv":"L1"}},{"n":131,"w":"群策群力","m":"集思广益、共同努力","e":"群策群力、共克时艰","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["群策群力"],"bl":{"s":0,"e":4,"t":"群策群力","lv":"L1"}},{"n":132,"w":"凝心聚力","m":"集中精力、凝聚力量","e":"凝心聚力、团结奋斗","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["凝心聚力"],"bl":{"s":0,"e":4,"t":"凝心聚力","lv":"L1"}},{"n":133,"w":"同舟共济","m":"同船渡河、共渡难关","e":"同舟共济、共克时艰","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["同舟共济"],"bl":{"s":0,"e":4,"t":"同舟共济","lv":"L1"}},{"n":134,"w":"多元参与","m":"多方共同参与","e":"健全政府、市场、社会多元参与机制","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["多元参与"],"bl":{"s":10,"e":14,"t":"多元参与","lv":"L1"}},{"n":135,"w":"协同推进","m":"协调同步推进","e":"协同推进县域国土空间治理、协同推进育人","s":"规划纲要/教育","th":["规划纲要","教育"],"sh":"B","kw":["协同推进"],"bl":{"s":0,"e":4,"t":"协同推进","lv":"L1"}},{"n":136,"w":"统筹兼顾","m":"通盘筹划、同时顾及","e":"统筹兼顾、整体推进","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["统筹兼顾"],"bl":{"s":0,"e":4,"t":"统筹兼顾","lv":"L1"}},{"n":137,"w":"系统集成","m":"整体系统性地整合","e":"推动政策系统集成、统筹推进系统集成","s":"规划纲要/乡村振兴","th":["规划纲要","乡村振兴"],"sh":"B","kw":["系统集成"],"bl":{"s":4,"e":8,"t":"系统集成","lv":"L1"}},{"n":138,"w":"整体推进","m":"全面推进","e":"统筹推进、整体推进","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["整体推进"],"bl":{"s":5,"e":9,"t":"整体推进","lv":"L1"}},{"n":139,"w":"久久为功","m":"长期坚持、持续用力","e":"坚持不懈、久久为功","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["久久为功"],"bl":{"s":5,"e":9,"t":"久久为功","lv":"L1"}},{"n":140,"w":"善作善成","m":"善于做事并做成","e":"善作善成、行稳致远","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["善作善成"],"bl":{"s":0,"e":4,"t":"善作善成","lv":"L1"}},{"n":141,"w":"接续奋斗","m":"连续不断地奋斗","e":"不懈努力、接续奋斗","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["接续奋斗"],"bl":{"s":5,"e":9,"t":"接续奋斗","lv":"L1"}},{"n":142,"w":"砥砺前行","m":"磨炼意志、勇往直前","e":"迎难而上、砥砺前行","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["砥砺前行"],"bl":{"s":5,"e":9,"t":"砥砺前行","lv":"L1"}},{"n":143,"w":"踔厉奋发","m":"奋发有为","e":"踔厉奋发、笃行不怠","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["踔厉奋发"],"bl":{"s":0,"e":4,"t":"踔厉奋发","lv":"L1"}},{"n":144,"w":"标本兼治","m":"治标与治本并重","e":"坚持标本兼治、综合施策","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["标本兼治"],"bl":{"s":2,"e":6,"t":"标本兼治","lv":"L1"}},{"n":145,"w":"源头治理","m":"从源头上治理","e":"强化源头治理、防患未然","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["源头治理"],"bl":{"s":2,"e":6,"t":"源头治理","lv":"L1"}},{"n":146,"w":"综合施策","m":"综合运用多种措施","e":"综合施策、系统发力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["综合施策"],"bl":{"s":0,"e":4,"t":"综合施策","lv":"L1"}},{"n":147,"w":"多管齐下","m":"多种办法同时施行","e":"多管齐下、综合施策","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["多管齐下"],"bl":{"s":0,"e":4,"t":"多管齐下","lv":"L1"}},{"n":148,"w":"疏堵结合","m":"疏导与堵截结合","e":"坚持疏堵结合、标本兼治","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["疏堵结合"],"bl":{"s":2,"e":6,"t":"疏堵结合","lv":"L1"}},{"n":149,"w":"内外兼修","m":"内部外部同时提升","e":"坚持内外兼修、软硬兼施","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["内外兼修"],"bl":{"s":2,"e":6,"t":"内外兼修","lv":"L1"}},{"n":150,"w":"软硬兼施","m":"软件硬件并举","e":"内外兼修、软硬兼施","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["软硬兼施"],"bl":{"s":5,"e":9,"t":"软硬兼施","lv":"L1"}},{"n":151,"w":"量质并举","m":"数量与质量并重","e":"推动经济量质并举","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["量质并举"],"bl":{"s":4,"e":8,"t":"量质并举","lv":"L1"}},{"n":152,"w":"以质取胜","m":"靠质量取胜","e":"坚持以质取胜、以新制胜","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以质取胜"],"bl":{"s":2,"e":6,"t":"以质取胜","lv":"L1"}},{"n":153,"w":"以新制胜","m":"靠创新取胜","e":"以新制胜、以特取胜","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以新制胜"],"bl":{"s":0,"e":4,"t":"以新制胜","lv":"L1"}},{"n":154,"w":"以特取胜","m":"靠特色取胜","e":"以质取胜、以特取胜","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以特取胜"],"bl":{"s":5,"e":9,"t":"以特取胜","lv":"L1"}},{"n":155,"w":"绿色低碳","m":"绿色与低碳","e":"推进绿色低碳发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["绿色低碳"],"bl":{"s":2,"e":6,"t":"绿色低碳","lv":"L1"}},{"n":156,"w":"节能降碳","m":"节约能源降低碳排","e":"深入开展节能降碳","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["节能降碳"],"bl":{"s":4,"e":8,"t":"节能降碳","lv":"L1"}},{"n":157,"w":"固碳增汇","m":"固定碳、增加碳汇","e":"提升生态系统固碳增汇能力","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["固碳增汇"],"bl":{"s":6,"e":10,"t":"固碳增汇","lv":"L1"}},{"n":158,"w":"系统治理","m":"整体系统治理","e":"坚持系统治理、源头治理","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["系统治理"],"bl":{"s":2,"e":6,"t":"系统治理","lv":"L1"}},{"n":159,"w":"综合治理","m":"全面综合整治","e":"坚持综合治理、依法治理","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["综合治理"],"bl":{"s":2,"e":6,"t":"综合治理","lv":"L1"}},{"n":160,"w":"源头管控","m":"从源头控制","e":"强化源头管控、过程监管","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["源头管控"],"bl":{"s":2,"e":6,"t":"源头管控","lv":"L1"}},{"n":161,"w":"过程监管","m":"全程监督管理","e":"源头管控、过程监管","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["过程监管"],"bl":{"s":5,"e":9,"t":"过程监管","lv":"L1"}},{"n":162,"w":"末端治理","m":"末端净化处理","e":"强化末端治理","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["末端治理"],"bl":{"s":2,"e":6,"t":"末端治理","lv":"L1"}},{"n":163,"w":"精准治污","m":"精准科学治理污染","e":"坚持精准科学依法治污","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["精准治污"],"bl":null},{"n":164,"w":"依法治污","m":"依法治理污染","e":"精准科学依法治污","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["依法治污"],"bl":{"s":4,"e":8,"t":"依法治污","lv":"L1"}},{"n":165,"w":"科学治污","m":"科学治理污染","e":"精准科学依法治污","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["科学治污"],"bl":null},{"n":166,"w":"联防联控","m":"联合防控","e":"健全联防联控机制","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["联防联控"],"bl":{"s":2,"e":6,"t":"联防联控","lv":"L1"}},{"n":167,"w":"群防群治","m":"群众共同防治","e":"发展壮大群防群治力量","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["群防群治"],"bl":{"s":4,"e":8,"t":"群防群治","lv":"L1"}},{"n":168,"w":"共同富裕","m":"全体人民共同富裕","e":"扎实推进全体人民共同富裕","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["共同富裕"],"bl":{"s":8,"e":12,"t":"共同富裕","lv":"L1"}},{"n":169,"w":"三权分置","m":"所有权承包权经营权分置","e":"深化农村'三权分置'改革","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["三权分置"],"bl":{"s":5,"e":9,"t":"三权分置","lv":"L1"}},{"n":170,"w":"产权明晰","m":"产权清晰明确","e":"健全产权明晰、权责明确制度","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["产权明晰"],"bl":{"s":2,"e":6,"t":"产权明晰","lv":"L1"}},{"n":171,"w":"权责对等","m":"权利与责任对等","e":"坚持权责对等、放管结合","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["权责对等"],"bl":{"s":2,"e":6,"t":"权责对等","lv":"L1"}},{"n":172,"w":"放管结合","m":"放权与管理结合","e":"坚持放管结合、优化服务","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["放管结合"],"bl":{"s":2,"e":6,"t":"放管结合","lv":"L1"}},{"n":173,"w":"宽严相济","m":"宽大与严格结合","e":"贯彻宽严相济刑事政策","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["宽严相济"],"bl":{"s":2,"e":6,"t":"宽严相济","lv":"L1"}},{"n":174,"w":"刚柔并济","m":"刚性柔性结合","e":"坚持刚柔并济、宽严相济","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["刚柔并济"],"bl":{"s":2,"e":6,"t":"刚柔并济","lv":"L1"}},{"n":175,"w":"疏浚畅通","m":"疏通导流","e":"疏浚畅通、化解积怨","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["疏浚畅通"],"bl":{"s":0,"e":4,"t":"疏浚畅通","lv":"L1"}},{"n":176,"w":"息诉罢访","m":"止息诉讼、停止上访","e":"推动矛盾纠纷息诉罢访","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["息诉罢访"],"bl":{"s":6,"e":10,"t":"息诉罢访","lv":"L1"}},{"n":177,"w":"定分止争","m":"确定名分、止息争端","e":"有效定分止争、化解矛盾","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["定分止争"],"bl":{"s":2,"e":6,"t":"定分止争","lv":"L1"}},{"n":178,"w":"化解积怨","m":"消除积久怨恨","e":"疏浚畅通、化解积怨","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["化解积怨"],"bl":{"s":5,"e":9,"t":"化解积怨","lv":"L1"}},{"n":179,"w":"雪中送炭","m":"急难时给予帮助","e":"多做雪中送炭的实事","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["雪中送炭"],"bl":{"s":2,"e":6,"t":"雪中送炭","lv":"L1"}},{"n":180,"w":"锦上添花","m":"好上加好","e":"既锦上添花更雪中送炭","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["锦上添花"],"bl":{"s":1,"e":5,"t":"锦上添花","lv":"L1"}},{"n":181,"w":"厚植优势","m":"培育深厚优势","e":"厚植发展新优势","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["厚植优势"],"bl":null},{"n":182,"w":"蓄势赋能","m":"积蓄势能赋予能量","e":"蓄势赋能、积厚成势","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["蓄势赋能"],"bl":{"s":0,"e":4,"t":"蓄势赋能","lv":"L1"}},{"n":183,"w":"积厚成势","m":"积累深厚形成优势","e":"蓄势赋能、积厚成势","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["积厚成势"],"bl":{"s":5,"e":9,"t":"积厚成势","lv":"L1"}},{"n":184,"w":"行稳致远","m":"走得稳走得远","e":"确保高质量发展行稳致远","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["行稳致远"],"bl":{"s":7,"e":11,"t":"行稳致远","lv":"L1"}},{"n":185,"w":"原始创新","m":"源头性基础创新","e":"加强原始创新和关键核心技术攻关","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["原始创新"],"bl":{"s":2,"e":6,"t":"原始创新","lv":"L1"}},{"n":186,"w":"惠民生","m":"惠及民生","e":"尽力而为惠民生","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["惠民生"],"bl":{"s":4,"e":7,"t":"惠民生","lv":"L1"}},{"n":187,"w":"兜底线","m":"兜住底线","e":"惠民生、兜底线、防风险","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["兜底线"],"bl":{"s":4,"e":7,"t":"兜底线","lv":"L1"}},{"n":188,"w":"防风险","m":"防范风险","e":"惠民生、兜底线、防风险","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["防风险"],"bl":{"s":8,"e":11,"t":"防风险","lv":"L1"}},{"n":189,"w":"稳增长","m":"稳定增长","e":"稳增长、促改革、调结构、惠民生","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["稳增长"],"bl":{"s":0,"e":3,"t":"稳增长","lv":"L1"}},{"n":190,"w":"促改革","m":"推动改革","e":"稳增长、促改革、调结构","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["促改革"],"bl":{"s":4,"e":7,"t":"促改革","lv":"L1"}},{"n":191,"w":"调结构","m":"调整结构","e":"促改革、调结构、防风险","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["调结构"],"bl":{"s":4,"e":7,"t":"调结构","lv":"L1"}},{"n":192,"w":"好房子","m":"安全舒适绿色智慧住房","e":"建设改造安全舒适绿色智慧的'好房子'","s":"城市更新","th":["城市更新"],"sh":"B","kw":["好房子"],"bl":{"s":14,"e":17,"t":"好房子","lv":"L1"}},{"n":193,"w":"降碳减污扩绿增长","m":"协同推进","e":"协同推进降碳、减污、扩绿、增长","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["降碳减污扩绿增长"],"bl":null},{"n":194,"w":"山水林田湖草沙一体化","m":"系统治理理念","e":"坚持山水林田湖草沙一体化保护","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["山水林田湖草沙一体化"],"bl":{"s":2,"e":12,"t":"山水林田湖草沙一体化","lv":"L1"}},{"n":195,"w":"责权利一致","m":"责任、权力、利益对应","e":"健全责权利一致的管理制度","s":"新质生产力","th":["新质生产力"],"sh":"B","kw":["责权利一致"],"bl":{"s":2,"e":7,"t":"责权利一致","lv":"L1"}},{"n":196,"w":"放管服改革","m":"简政放权、放管结合、优化服务","e":"深入推进放管服改革","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["放管服改革"],"bl":{"s":4,"e":9,"t":"放管服改革","lv":"L1"}},{"n":197,"w":"全国一盘棋","m":"全国统一布局协调","e":"强化全国一盘棋思想","s":"新质生产力","th":["新质生产力"],"sh":"B","kw":["全国一盘棋"],"bl":{"s":2,"e":7,"t":"全国一盘棋","lv":"L1"}},{"n":198,"w":"橄榄型分配格局","m":"中间大两头小的格局","e":"推动形成橄榄型分配格局","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["橄榄型分配格局"],"bl":{"s":4,"e":11,"t":"橄榄型分配格局","lv":"L1"}},{"n":199,"w":"新质生产力","m":"以创新为主导的先进生产力","e":"发展新质生产力是推动高质量发展的内在要求和重要着力点","s":"新质生产力意见","th":["新质生产力"],"sh":"B","kw":["新质生产力"],"bl":{"s":2,"e":7,"t":"新质生产力","lv":"L1"}},{"n":200,"w":"高质量发展","m":"以新发展理念为引领的发展","e":"推动经济实现质的有效提升和量的合理增长","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["高质量发展"],"bl":null},{"n":201,"w":"新发展格局","m":"双循环相互促进格局","e":"加快构建新发展格局","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["新发展格局"],"bl":{"s":4,"e":9,"t":"新发展格局","lv":"L1"}},{"n":202,"w":"现代化产业体系","m":"以先进制造业为骨干","e":"构建以先进制造业为骨干的现代化产业体系","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["现代化产业体系"],"bl":{"s":12,"e":19,"t":"现代化产业体系","lv":"L1"}},{"n":203,"w":"新型基础设施","m":"数字化智能化基础设施","e":"适度超前建设新型基础设施","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["新型基础设施"],"bl":{"s":6,"e":12,"t":"新型基础设施","lv":"L1"}},{"n":204,"w":"未来产业先导区","m":"未来产业先行布局区域","e":"建设一批未来产业先导区","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["未来产业先导区"],"bl":{"s":4,"e":11,"t":"未来产业先导区","lv":"L1"}},{"n":205,"w":"国家战略科技力量","m":"承担国家战略任务的力量","e":"统筹国家战略科技力量建设","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["国家战略科技力量"],"bl":{"s":2,"e":10,"t":"国家战略科技力量","lv":"L1"}},{"n":206,"w":"关键核心技术攻关","m":"突破核心技术的攻关","e":"打好关键核心技术攻坚战","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["关键核心技术攻关"],"bl":null},{"n":207,"w":"科技自立自强","m":"关键核心技术自主可控","e":"加快高水平科技自立自强","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["科技自立自强"],"bl":{"s":5,"e":11,"t":"科技自立自强","lv":"L1"}},{"n":208,"w":"数字经济核心产业","m":"数字化程度高的产业","e":"数字经济核心产业增加值占比超过10.5%","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["数字经济核心产业"],"bl":{"s":0,"e":8,"t":"数字经济核心产业","lv":"L1"}},{"n":209,"w":"有效市场和有为政府","m":"市场与政府作用结合","e":"坚持有效市场和有为政府相结合","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["有效市场和有为政府"],"bl":{"s":2,"e":11,"t":"有效市场和有为政府","lv":"L1"}},{"n":210,"w":"全国统一大市场","m":"全国统一的市场体系","e":"纵深推进全国统一大市场建设","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["全国统一大市场"],"bl":{"s":4,"e":11,"t":"全国统一大市场","lv":"L1"}},{"n":211,"w":"宜居宜业和美乡村","m":"宜居宜业、和美文明的乡村","e":"推进宜居宜业和美乡村建设","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["宜居宜业和美乡村"],"bl":{"s":2,"e":10,"t":"宜居宜业和美乡村","lv":"L1"}},{"n":212,"w":"千万工程经验","m":"浙江'千万工程'经验","e":"学习运用'千万工程'经验","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["千万工程经验"],"bl":null},{"n":213,"w":"藏粮于地、藏粮于技","m":"依靠耕地与技术储粮","e":"深入实施藏粮于地、藏粮于技战略","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["藏粮于地","藏粮于技"],"bl":{"s":4,"e":13,"t":"藏粮于地、藏粮于技","lv":"L1"}},{"n":214,"w":"守牢粮食安全底线","m":"守住粮食安全底线","e":"守牢国家粮食安全底线","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["守牢粮食安全底线"],"bl":null},{"n":215,"w":"韧性安全城市","m":"安全韧性强的城市","e":"增强城市安全韧性、建设韧性城市","s":"城市更新","th":["城市更新"],"sh":"B","kw":["韧性安全城市"],"bl":null},{"n":216,"w":"完整社区","m":"设施齐全的社区","e":"加快建设完整社区","s":"城市更新","th":["城市更新"],"sh":"B","kw":["完整社区"],"bl":{"s":4,"e":8,"t":"完整社区","lv":"L1"}},{"n":217,"w":"一刻钟便民生活圈","m":"15分钟可达的便民生活圈","e":"推动一刻钟便民生活圈建设扩围升级","s":"城市更新/规划纲要","th":["规划纲要","城市更新"],"sh":"B","kw":["一刻钟便民生活圈"],"bl":{"s":2,"e":10,"t":"一刻钟便民生活圈","lv":"L1"}},{"n":218,"w":"城市体检、县城体检","m":"对城市进行体检评估","e":"开展城市体检、开展县城体检","s":"城市更新","th":["城市更新"],"sh":"C","kw":["城市体检","县城体检"],"bl":null},{"n":219,"w":"银发经济","m":"面向老年人的经济","e":"发展银发经济、养老金融","s":"规划纲要/城市更新","th":["规划纲要","城市更新"],"sh":"B","kw":["银发经济"],"bl":{"s":2,"e":6,"t":"银发经济","lv":"L1"}},{"n":220,"w":"首发经济","m":"首店首发业态","e":"积极推进首发经济","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["首发经济"],"bl":{"s":4,"e":8,"t":"首发经济","lv":"L1"}},{"n":221,"w":"低空经济","m":"低空空域经济业态","e":"推动低空经济健康有序发展","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["低空经济"],"bl":{"s":2,"e":6,"t":"低空经济","lv":"L1"}},{"n":222,"w":"冰雪经济","m":"冰雪产业经济","e":"实施冰雪旅游提升计划、发展冰雪经济","s":"规划纲要/城市更新","th":["规划纲要","城市更新"],"sh":"B","kw":["冰雪经济"],"bl":{"s":13,"e":17,"t":"冰雪经济","lv":"L1"}},{"n":223,"w":"普惠托育","m":"普惠性托育服务","e":"加快普惠托育服务体系建设","s":"健康规划/城市更新","th":["城市更新","健康"],"sh":"B","kw":["普惠托育"],"bl":{"s":2,"e":6,"t":"普惠托育","lv":"L1"}},{"n":224,"w":"医养结合","m":"医疗与养老结合","e":"支持医疗卫生机构开展医养结合服务","s":"城市更新/健康规划","th":["城市更新","健康"],"sh":"B","kw":["医养结合"],"bl":{"s":10,"e":14,"t":"医养结合","lv":"L1"}},{"n":225,"w":"紧密型县域医共体","m":"县域医疗共同体","e":"推进紧密型县域医共体建设","s":"健康规划/乡村振兴","th":["乡村振兴","健康"],"sh":"B","kw":["紧密型县域医共体"],"bl":{"s":2,"e":10,"t":"紧密型县域医共体","lv":"L1"}},{"n":226,"w":"健康优先发展战略","m":"健康优先的发展战略","e":"实施健康优先发展战略","s":"健康规划","th":["健康"],"sh":"B","kw":["健康优先发展战略"],"bl":{"s":2,"e":10,"t":"健康优先发展战略","lv":"L1"}},{"n":227,"w":"全方位全周期健康服务","m":"全人群全生命周期健康服务","e":"优化全人群全方位全周期健康服务","s":"健康规划","th":["健康"],"sh":"B","kw":["全方位全周期健康服务"],"bl":{"s":5,"e":15,"t":"全方位全周期健康服务","lv":"L1"}},{"n":228,"w":"立德树人","m":"培育德才兼备人才","e":"坚持立德树人根本任务","s":"教育规划","th":["教育"],"sh":"B","kw":["立德树人"],"bl":{"s":2,"e":6,"t":"立德树人","lv":"L1"}},{"n":229,"w":"教育科技人才一体发展","m":"三者一体化发展","e":"一体推进教育科技人才发展","s":"教育规划","th":["教育"],"sh":"B","kw":["教育科技人才一体发展"],"bl":null},{"n":230,"w":"双减政策","m":"减轻作业与校外培训负担","e":"统筹推进'双减'和教育教学质量提升","s":"教育规划","th":["教育"],"sh":"B","kw":["双减政策"],"bl":null},{"n":231,"w":"文化遗产系统性保护","m":"系统保护文化遗产","e":"推动文化遗产系统性保护和统一监管","s":"文化规划","th":["文化"],"sh":"B","kw":["文化遗产系统性保护"],"bl":{"s":2,"e":11,"t":"文化遗产系统性保护","lv":"L1"}},{"n":232,"w":"创造性转化、创新性发展","m":"传统文化创新转化","e":"坚持创造性转化、创新性发展","s":"文化规划","th":["文化"],"sh":"C","kw":["创造性转化","创新性发展"],"bl":{"s":2,"e":13,"t":"创造性转化、创新性发展","lv":"L1"}},{"n":233,"w":"保护第一、最小干预","m":"保护优先原则","e":"坚持保护第一、合理利用和最小干预原则","s":"文化规划","th":["文化"],"sh":"C","kw":["保护第一","最小干预"],"bl":null},{"n":234,"w":"以用促保","m":"通过利用促进保护","e":"坚持保护第一、应保尽保、以用促保","s":"城市更新/文化规划","th":["城市更新","文化"],"sh":"B","kw":["以用促保"],"bl":{"s":12,"e":16,"t":"以用促保","lv":"L1"}},{"n":235,"w":"长期护理保险","m":"失能人员照护保障制度","e":"加快建立长期护理保险制度","s":"长期护理意见","th":["长期护理"],"sh":"B","kw":["长期护理保险"],"bl":{"s":4,"e":10,"t":"长期护理保险","lv":"L1"}},{"n":236,"w":"失能等级评估","m":"评估失能程度","e":"建立健全失能等级评估标准体系","s":"长期护理意见","th":["长期护理"],"sh":"B","kw":["失能等级评估"],"bl":{"s":4,"e":10,"t":"失能等级评估","lv":"L1"}},{"n":237,"w":"量能筹资机制","m":"按能力筹集资金","e":"鼓励探索完善更加科学精细的量能筹资机制","s":"长期护理意见","th":["长期护理"],"sh":"B","kw":["量能筹资机制"],"bl":{"s":13,"e":19,"t":"量能筹资机制","lv":"L1"}},{"n":238,"w":"全过程人民民主","m":"全链条民主实践","e":"发展全过程人民民主","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["全过程人民民主"],"bl":{"s":2,"e":9,"t":"全过程人民民主","lv":"L1"}},{"n":239,"w":"高效办成一件事","m":"政务服务改革","e":"推行'高效办成一件事'","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["高效办成一件事"],"bl":{"s":3,"e":10,"t":"高效办成一件事","lv":"L1"}},{"n":240,"w":"一件事一次办","m":"政务服务","e":"深化'一件事一次办'改革","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["一件事一次办"],"bl":{"s":3,"e":9,"t":"一件事一次办","lv":"L1"}},{"n":241,"w":"跨省通办、一网通办","m":"跨省政务服务、网络化政务服务","e":"推进'跨省通办'、深化'一网通办'","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["跨省通办","一网通办"],"bl":null},{"n":242,"w":"一网统管","m":"一体化城市管理","e":"建设'一网统管'城市运行平台","s":"城市更新","th":["城市更新"],"sh":"B","kw":["一网统管"],"bl":{"s":3,"e":7,"t":"一网统管","lv":"L1"}},{"n":243,"w":"以旧换新","m":"消费品以旧换新","e":"实施大规模设备更新和消费品以旧换新","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以旧换新"],"bl":{"s":13,"e":17,"t":"以旧换新","lv":"L1"}},{"n":244,"w":"新型消费","m":"数字化智能化消费","e":"培育壮大新型消费","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["新型消费"],"bl":{"s":4,"e":8,"t":"新型消费","lv":"L1"}},{"n":245,"w":"赛事经济","m":"赛事带动经济","e":"鼓励发展赛事经济","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["赛事经济"],"bl":{"s":4,"e":8,"t":"赛事经济","lv":"L1"}},{"n":246,"w":"文旅融合","m":"文旅一体化发展","e":"深化文旅融合、以文塑旅","s":"文化规划","th":["文化"],"sh":"B","kw":["文旅融合"],"bl":{"s":2,"e":6,"t":"文旅融合","lv":"L1"}},{"n":247,"w":"以文塑旅、以旅彰文","m":"以文化塑造旅游、以旅游彰显文化","e":"以文塑旅、以旅彰文","s":"文化规划","th":["文化"],"sh":"C","kw":["以文塑旅","以旅彰文"],"bl":{"s":0,"e":9,"t":"以文塑旅、以旅彰文","lv":"L1"}},{"n":248,"w":"全域旅游","m":"全地域旅游发展","e":"推进全域旅游发展","s":"文化规划","th":["文化"],"sh":"B","kw":["全域旅游"],"bl":{"s":2,"e":6,"t":"全域旅游","lv":"L1"}},{"n":249,"w":"数字乡村","m":"数字化乡村建设","e":"实施数字乡村发展行动","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["数字乡村"],"bl":{"s":2,"e":6,"t":"数字乡村","lv":"L1"}},{"n":250,"w":"智慧农业","m":"智能化农业","e":"发展智慧农业","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["智慧农业"],"bl":{"s":2,"e":6,"t":"智慧农业","lv":"L1"}},{"n":251,"w":"高标准农田","m":"建设高标准农田","e":"分区分类推进高标准农田建设","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["高标准农田"],"bl":{"s":6,"e":11,"t":"高标准农田","lv":"L1"}},{"n":252,"w":"黑土地保护","m":"保护东北黑土地","e":"实施新一轮黑土地保护工程","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["黑土地保护"],"bl":{"s":5,"e":10,"t":"黑土地保护","lv":"L1"}},{"n":253,"w":"种业振兴","m":"种业振兴行动","e":"深入实施种业振兴行动","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["种业振兴"],"bl":{"s":4,"e":8,"t":"种业振兴","lv":"L1"}},{"n":254,"w":"千万工程","m":"浙江'千万工程'","e":"学习运用'千万工程'经验","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["千万工程"],"bl":{"s":5,"e":9,"t":"千万工程","lv":"L1"}},{"n":255,"w":"四好农村路","m":"建好管好护好运营好农村路","e":"建设'四好农村路'","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["四好农村路"],"bl":{"s":3,"e":8,"t":"四好农村路","lv":"L1"}},{"n":256,"w":"厕所革命","m":"农村厕所改造","e":"扎实推进农村'厕所革命'","s":"乡村振兴意见","th":["乡村振兴"],"sh":"B","kw":["厕所革命"],"bl":{"s":7,"e":11,"t":"厕所革命","lv":"L1"}},{"n":257,"w":"雨污分流","m":"雨水污水分离","e":"推进城市雨污分流改造","s":"城市更新","th":["城市更新"],"sh":"B","kw":["雨污分流"],"bl":{"s":4,"e":8,"t":"雨污分流","lv":"L1"}},{"n":258,"w":"海绵城市","m":"弹性吸水城市","e":"建设海绵城市","s":"城市更新","th":["城市更新"],"sh":"B","kw":["海绵城市"],"bl":{"s":2,"e":6,"t":"海绵城市","lv":"L1"}},{"n":259,"w":"完整社区","m":"设施完整社区","e":"加快建设完整社区","s":"城市更新","th":["城市更新"],"sh":"B","kw":["完整社区"],"bl":{"s":4,"e":8,"t":"完整社区","lv":"L1"}},{"n":260,"w":"口袋公园","m":"小微公园绿地","e":"建设'小而美'口袋公园","s":"城市更新","th":["城市更新"],"sh":"B","kw":["口袋公园"],"bl":{"s":7,"e":11,"t":"口袋公园","lv":"L1"}},{"n":261,"w":"微更新","m":"微小渐进式更新","e":"推行'微更新'、渐进式改造","s":"城市更新","th":["城市更新"],"sh":"B","kw":["微更新"],"bl":{"s":3,"e":6,"t":"微更新","lv":"L1"}},{"n":262,"w":"渐进式改造","m":"分步渐进改造","e":"推行渐进式、针灸式改造","s":"城市更新","th":["城市更新"],"sh":"B","kw":["渐进式改造"],"bl":null},{"n":263,"w":"针灸式改造","m":"精准小切口改造","e":"针灸式、微改造","s":"城市更新","th":["城市更新"],"sh":"B","kw":["针灸式改造"],"bl":null},{"n":264,"w":"平急两用","m":"平时急时两用设施","e":"推进城市平急两用公共设施建设","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["平急两用"],"bl":{"s":4,"e":8,"t":"平急两用","lv":"L1"}},{"n":265,"w":"数字家庭","m":"数字化家庭场景","e":"开展数字家庭建设","s":"城市更新","th":["城市更新"],"sh":"B","kw":["数字家庭"],"bl":{"s":2,"e":6,"t":"数字家庭","lv":"L1"}},{"n":266,"w":"量的有效提升+质的合理增长","m":"质量与数量并重","e":"推动经济实现质的有效提升和量的合理增长","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["量的有效提升","质的合理增长"],"bl":null},{"n":267,"w":"做优增量+盘活存量","m":"增量存量并重","e":"做优增量、盘活存量","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["做优增量","盘活存量"],"bl":{"s":0,"e":9,"t":"做优增量、盘活存量","lv":"L1"}},{"n":268,"w":"在发展中固安全+在安全中谋发展","m":"发展与安全辩证统一","e":"在发展中固安全，在安全中谋发展","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["在发展中固安全","在安全中谋发展"],"bl":{"s":0,"e":15,"t":"在发展中固安全，在安全中谋发展","lv":"L1"}},{"n":269,"w":"以新需求引领新供给+以新供给创造新需求","m":"供需互动","e":"以新需求引领新供给，以新供给创造新需求","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["以新需求引领新供给","以新供给创造新需求"],"bl":{"s":0,"e":19,"t":"以新需求引领新供给，以新供给创造新需求","lv":"L1"}},{"n":270,"w":"政策沟通+设施联通+贸易畅通+资金融通+民心相通","m":"五通表述","e":"深化'硬联通'、'软联通'、'心联通'","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["政策沟通","设施联通","贸易畅通","资金融通","民心相通"],"bl":null},{"n":271,"w":"引进来+走出去","m":"双向开放","e":"统筹吸引外资和境外投资","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["引进来","走出去"],"bl":null},{"n":272,"w":"放得活+管得好","m":"放管结合","e":"形成既'放得活'又'管得好'的经济秩序","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["放得活","管得好"],"bl":null},{"n":273,"w":"强龙头+补链条+聚集群","m":"产业链条表述","e":"强龙头、补链条、聚集群","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["强龙头","补链条","聚集群"],"bl":{"s":0,"e":11,"t":"强龙头、补链条、聚集群","lv":"L1"}},{"n":274,"w":"固根基+扬优势+补短板+强弱项","m":"基础优势短板兼顾","e":"固根基、扬优势、补短板、强弱项","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["固根基","扬优势","补短板","强弱项"],"bl":{"s":0,"e":15,"t":"固根基、扬优势、补短板、强弱项","lv":"L1"}},{"n":275,"w":"守住底线+把握主线+追求高线","m":"三线表述","e":"守底线、抓主线、攀高线","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["守住底线","把握主线","追求高线"],"bl":null},{"n":276,"w":"质的有效提升+量的合理增长+势的积蓄壮大","m":"质量量势兼顾","e":"推动质的有效提升、量的合理增长","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["质的有效提升","量的合理增长","势的积蓄壮大"],"bl":null},{"n":277,"w":"出实招+求实效","m":"务实导向","e":"出实招、求实效","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["出实招","求实效"],"bl":{"s":0,"e":7,"t":"出实招、求实效","lv":"L1"}},{"n":278,"w":"补短+提质+增效","m":"补强并重","e":"补短、提质、增效","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["补短","提质","增效"],"bl":{"s":0,"e":8,"t":"补短、提质、增效","lv":"L1"}},{"n":279,"w":"宜水则水+宜山则山+宜粮则粮+宜农则农","m":"因地制宜","e":"坚持宜水则水、宜山则山，宜粮则粮、宜农则农","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["宜水则水","宜山则山","宜粮则粮","宜农则农"],"bl":null},{"n":280,"w":"共建+共治+共享","m":"治理格局","e":"构建共建共治共享格局","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["共建","共治","共享"],"bl":{"s":2,"e":8,"t":"共建共治共享","lv":"L1"}},{"n":281,"w":"在发展中保障和改善民生+在满足民生需求中拓展发展空间","m":"民生与发展统一","e":"在发展中保障和改善民生，在满足民生需求中拓展发展空间","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["在发展中保障和改善民生","在满足民生需求中拓展发展空间"],"bl":{"s":0,"e":26,"t":"在发展中保障和改善民生，在满足民生需求中拓展发展空间","lv":"L1"}},{"n":282,"w":"应保尽保+应兜尽兜","m":"保障兜底","e":"坚持应保尽保、应兜尽兜","s":"长期护理/规划纲要","th":["规划纲要","长期护理"],"sh":"C","kw":["应保尽保","应兜尽兜"],"bl":{"s":2,"e":11,"t":"应保尽保、应兜尽兜","lv":"L1"}},{"n":283,"w":"尽力而为+量力而行","m":"尽力与量力统一","e":"尽力而为、量力而行","s":"城市更新/长期护理","th":["城市更新","长期护理"],"sh":"C","kw":["尽力而为","量力而行"],"bl":{"s":0,"e":9,"t":"尽力而为、量力而行","lv":"L1"}},{"n":284,"w":"优质服务基层行+医疗卫生强基工程","m":"基层医疗建设","e":"实施医疗卫生强基工程、开展'优质服务基层行'","s":"健康规划","th":["健康"],"sh":"C","kw":["优质服务基层行","医疗卫生强基工程"],"bl":null},{"n":285,"w":"县管乡用+乡聘村用","m":"基层人才使用","e":"实行县管乡用、乡聘村用","s":"健康规划","th":["健康"],"sh":"C","kw":["县管乡用","乡聘村用"],"bl":{"s":2,"e":11,"t":"县管乡用、乡聘村用","lv":"L1"}},{"n":286,"w":"早筛查早干预","m":"疾病早防","e":"推进孤独症早筛查早干预","s":"健康规划","th":["健康"],"sh":"B","kw":["早筛查早干预"],"bl":{"s":5,"e":11,"t":"早筛查早干预","lv":"L1"}},{"n":287,"w":"医防协同+医防融合","m":"医疗预防协同","e":"深化医防协同、医防融合","s":"健康规划","th":["健康"],"sh":"C","kw":["医防协同","医防融合"],"bl":{"s":2,"e":11,"t":"医防协同、医防融合","lv":"L1"}},{"n":288,"w":"健康中国+健康乡村","m":"健康战略","e":"共建健康中国、健康乡村","s":"健康规划","th":["健康"],"sh":"C","kw":["健康中国","健康乡村"],"bl":{"s":2,"e":11,"t":"健康中国、健康乡村","lv":"L1"}},{"n":289,"w":"大思政课+课程思政","m":"思政教育","e":"加强'大思政课'建设、推进课程思政","s":"教育规划","th":["教育"],"sh":"C","kw":["大思政课","课程思政"],"bl":null},{"n":290,"w":"铸魂育人+启智润心","m":"育人目标","e":"铸魂育人、启智润心","s":"教育规划","th":["教育"],"sh":"C","kw":["铸魂育人","启智润心"],"bl":{"s":0,"e":9,"t":"铸魂育人、启智润心","lv":"L1"}},{"n":291,"w":"五育并举","m":"德智体美劳并举","e":"坚持'五育'并举","s":"教育规划","th":["教育"],"sh":"C","kw":["五育并举"],"bl":null},{"n":292,"w":"产教融合+科教融汇","m":"教育与产业科技融合","e":"深化产教融合、科教融汇","s":"教育规划","th":["教育"],"sh":"C","kw":["产教融合","科教融汇"],"bl":{"s":2,"e":11,"t":"产教融合、科教融汇","lv":"L1"}},{"n":293,"w":"贯通培养+一体化育人","m":"人才衔接培养","e":"推进贯通培养、一体化育人","s":"教育规划","th":["教育"],"sh":"C","kw":["贯通培养","一体化育人"],"bl":{"s":2,"e":12,"t":"贯通培养、一体化育人","lv":"L1"}},{"n":294,"w":"锻长板+补短板+固底板","m":"三块板","e":"锻长板、补短板、固底板","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["锻长板","补短板","固底板"],"bl":{"s":0,"e":11,"t":"锻长板、补短板、固底板","lv":"L1"}},{"n":295,"w":"保基本+兜底线+促公平","m":"民生三层面","e":"保基本、兜底线、促公平","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["保基本","兜底线","促公平"],"bl":{"s":0,"e":11,"t":"保基本、兜底线、促公平","lv":"L1"}},{"n":296,"w":"幼有所育+学有所教+劳有所得+病有所医+老有所养+住有所居+弱有所扶","m":"民生'七有'","e":"聚焦'七有'目标、改善民生","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["幼有所育","学有所教","劳有所得","病有所医","老有所养","住有所居","弱有所扶"],"bl":null},{"n":297,"w":"多层次+多支柱+全覆盖","m":"社会保障体系","e":"健全多层次、多支柱、全覆盖社会保障体系","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["多层次","多支柱","全覆盖"],"bl":{"s":2,"e":13,"t":"多层次、多支柱、全覆盖","lv":"L1"}},{"n":298,"w":"普惠性+基础性+兜底性","m":"民生建设层次","e":"加强普惠性、基础性、兜底性民生建设","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["普惠性","基础性","兜底性"],"bl":{"s":2,"e":13,"t":"普惠性、基础性、兜底性","lv":"L1"}},{"n":299,"w":"全覆盖+全生命周期+全人群","m":"服务体系维度","e":"健全覆盖全人群、全生命周期的服务体系","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["全覆盖","全生命周期","全人群"],"bl":null},{"n":300,"w":"预防为主+防治结合","m":"健康工作方针","e":"坚持预防为主、防治结合","s":"健康规划","th":["健康"],"sh":"C","kw":["预防为主","防治结合"],"bl":{"s":2,"e":11,"t":"预防为主、防治结合","lv":"L1"}},{"n":301,"w":"以治病为中心向以健康为中心转变","m":"健康观念转变","e":"推动从以治病为中心向以健康为中心转变","s":"规划纲要","th":["规划纲要"],"sh":"B","kw":["以治病为中心向以健康为中心转变"],"bl":{"s":3,"e":18,"t":"以治病为中心向以健康为中心转变","lv":"L1"}},{"n":302,"w":"减污+降碳+协同+增效","m":"绿色转型","e":"推动减污降碳协同增效","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["减污","降碳","协同","增效"],"bl":{"s":2,"e":10,"t":"减污降碳协同增效","lv":"L1"}},{"n":303,"w":"源头减排+过程控制+末端治理","m":"治污链条","e":"坚持源头减排、过程控制、末端治理","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["源头减排","过程控制","末端治理"],"bl":{"s":2,"e":16,"t":"源头减排、过程控制、末端治理","lv":"L1"}},{"n":304,"w":"严执法+强监管+优服务","m":"监管执法","e":"坚持严执法、强监管、优服务","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["严执法","强监管","优服务"],"bl":{"s":2,"e":13,"t":"严执法、强监管、优服务","lv":"L1"}},{"n":305,"w":"民有所呼+我有所应","m":"为民呼应","e":"推动'民有所呼、我有所应'","s":"规划纲要","th":["规划纲要"],"sh":"C","kw":["民有所呼","我有所应"],"bl":{"s":3,"e":12,"t":"民有所呼、我有所应","lv":"L1"}}]</script>
+  <!-- YANYU_DATA_END -->
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA = JSON.parse(document.getElementById('yanyu-data').textContent);
+  var esc = function (v) { return AppUtils.escapeHTML(v); };
+
+  var STORE = AppUtils.createNamespacedStorage('yanyu_collocation_progress', { version: 1 });
+  var THEME_STORE = AppUtils.createNamespacedStorage('yanyu_collocation_theme');
+
+  var THEME_ORDER = ['规划纲要', '乡村振兴', '城市更新', '新质生产力', '教育强国', '健康中国', '文化自信', '长期护理'];
+  var SHAPE_LABEL = { A: '动宾搭配', B: '名词短语', C: '并列组合' };
+
+  var state = {
+    states: {},
+    mode: 'card',
+    idx: 0,
+    order: 'seq',
+    themeFilter: '',
+    statusFilter: 'all',
+    query: '',
+    flipped: false,
+    revealed: false,
+    judged: null
+  };
+  var shuffled = null;
+
+  // ---------------- 持久化 ----------------
+  function loadState() {
+    var saved = STORE.get(null);
+    if (saved && typeof saved === 'object') {
+      state.states = saved.states && typeof saved.states === 'object' ? saved.states : {};
+      if (saved.mode) state.mode = saved.mode;
+      if (typeof saved.idx === 'number') state.idx = saved.idx;
+      if (saved.order) state.order = saved.order;
+      if (typeof saved.themeFilter === 'string') state.themeFilter = saved.themeFilter;
+      if (typeof saved.statusFilter === 'string') state.statusFilter = saved.statusFilter;
+    }
+  }
+  function saveState() {
+    STORE.set({
+      states: state.states,
+      mode: state.mode,
+      idx: state.idx,
+      order: state.order,
+      themeFilter: state.themeFilter,
+      statusFilter: state.statusFilter
+    });
+  }
+  function statusOf(n) { return state.states[n] || 0; }
+  function setStatus(n, v) {
+    if (statusOf(n) === v) { delete state.states[n]; } else { state.states[n] = v; }
+    saveState();
+  }
+
+  // ---------------- 筛选 ----------------
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function filtered() {
+    var q = state.query.trim();
+    var out = [];
+    for (var i = 0; i < DATA.length; i++) {
+      var r = DATA[i];
+      if (state.themeFilter && r.th.indexOf(state.themeFilter) < 0) continue;
+      if (state.statusFilter !== 'all' && statusOf(r.n) !== Number(state.statusFilter)) continue;
+      if (state.order === 'unlearned' && statusOf(r.n) === 1) continue;
+      if (q) {
+        var hay = r.w + ' ' + r.m + ' ' + r.e + ' ' + r.s + ' ' + r.kw.join(' ');
+        if (hay.indexOf(q) < 0) continue;
+      }
+      out.push(r);
+    }
+    if (state.order === 'shuffle') {
+      if (!shuffled) shuffled = shuffle(DATA);
+      var keep = {};
+      out.forEach(function (r) { keep[r.n] = true; });
+      out = shuffled.filter(function (r) { return keep[r.n]; });
+    }
+    return out;
+  }
+
+  // ---------------- 判分 ----------------
+  function normalize(s) {
+    return String(s == null ? '' : s)
+      .replace(/[（(][^）)]*[）)]/g, '')
+      .replace(/[\s　]+/g, '')
+      .replace(/[，,。、；;：:！!？?"'“”‘’《》·]/g, '')
+      .replace(/＋/g, '+')
+      .toLowerCase();
+  }
+  function judge(input, r) {
+    var got = normalize(input);
+    if (!got) return { ok: false, empty: true };
+    var need = r.kw.map(normalize);
+    var hit = need.filter(function (k) { return got.indexOf(k) >= 0; });
+    if (hit.length === need.length) return { ok: true, exact: true };
+    if (hit.length > 0) return { ok: false, partial: true, hit: hit, need: need };
+    var first = need[0] || '';
+    if (first.length >= 2 && got.slice(0, 2) === first.slice(0, 2)) return { ok: false, close: true };
+    return { ok: false };
+  }
+
+  // ---------------- 渲染：统计 ----------------
+  function updateStats() {
+    var known = 0, review = 0;
+    DATA.forEach(function (r) {
+      var s = statusOf(r.n);
+      if (s === 1) known++;
+      else if (s === 2) review++;
+    });
+    document.getElementById('stat-total').textContent = DATA.length;
+    document.getElementById('stat-known').textContent = known;
+    document.getElementById('stat-review').textContent = review;
+    document.getElementById('stat-rate').textContent = (DATA.length ? Math.round(known / DATA.length * 100) : 0) + '%';
+    document.getElementById('progress-fill').style.width = (DATA.length ? known / DATA.length * 100 : 0) + '%';
+  }
+
+  function statusBadge(n) {
+    var s = statusOf(n);
+    var label = s === 1 ? '已掌握' : (s === 2 ? '待复习' : '未学');
+    return '<span class="badge st-' + s + '">' + label + '</span>';
+  }
+  function themeBadges(r) {
+    return r.th.map(function (t) { return '<span class="badge theme">' + esc(t) + '</span>'; }).join('') +
+      '<span class="badge shape-' + r.sh + '">' + esc(SHAPE_LABEL[r.sh] || r.sh) + '</span>';
+  }
+
+  // ---------------- 渲染：M1 卡片 ----------------
+  function renderCard(r, list) {
+    var back = '<div class="card-meta">' + themeBadges(r) + statusBadge(r.n) + '</div>' +
+      '<div class="flip-quote">' + esc(r.e) + '</div>' +
+      '<div class="flip-source">出处：' + esc(r.s) + '　·　' + esc(r.m) + '</div>';
+    var front = '<div class="card-meta">' + themeBadges(r) + statusBadge(r.n) + '</div>' +
+      '<div class="flip-word">' + esc(r.w) + '</div>' +
+      '<div class="flip-meaning">' + esc(r.m) + '</div>';
+
+    return '' +
+      '<div class="stage-meta">' +
+        '<span class="pos">第 ' + (state.idx + 1) + ' / ' + list.length + ' 条</span>' +
+        '<span>·</span><span>第 ' + r.n + ' 条</span>' +
+        '<span>·</span><span>' + esc(r.s) + '</span>' +
+      '</div>' +
+      '<div class="flip-scene' + (state.flipped ? ' flipped' : '') + '" id="flip-scene">' +
+        '<div class="flip-card">' +
+          '<div class="flip-face flip-face--front">' + front + '</div>' +
+          '<div class="flip-face flip-face--back">' + back + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="actions">' +
+        '<button class="btn" id="prev">← 上一条</button>' +
+        '<button class="btn primary" id="flip">' + (state.flipped ? '看正面' : '看例句') + '</button>' +
+        '<button class="btn" id="next">下一条 →</button>' +
+        '<span class="spacer"></span>' +
+        '<button class="btn good" id="mark1">1 已掌握</button>' +
+        '<button class="btn warn" id="mark2">2 待复习</button>' +
+        '<button class="btn" id="mark0">3 未学</button>' +
+      '</div>' +
+      '<div class="hint">快捷键：空格 / → 翻面，← → 切换条目，1 / 2 / 3 标记掌握度</div>';
+  }
+
+  // ---------------- 渲染：M2 例句挖空 ----------------
+  function renderBlank(r, list) {
+    var body, answerField, hint;
+    if (r.bl) {
+      var slot = Math.max(3, r.bl.t.length + 1);
+      body = esc(r.e.slice(0, r.bl.s)) +
+        '<input class="blank-input" id="answer" autocomplete="off" placeholder="填空" style="width:' + slot + 'em">' +
+        esc(r.e.slice(r.bl.e));
+      hint = '<div class="clue"><span class="k">提示 · 含义用法</span>' + esc(r.m) + '</div>';
+    } else {
+      body = esc(r.e);
+      hint = '<div class="clue"><span class="k">提示 · 含义用法</span>' + esc(r.m) +
+        '<br><span class="k">提示 · 本条例句未直接包含用词，请根据语境写出规范搭配</span></div>';
+    }
+    answerField = '<input class="answer-input" id="answer" autocomplete="off" placeholder="输入规范搭配，如：锚定">';
+
+    var feedback = '';
+    if (state.judged) {
+      var j = state.judged;
+      var cls = j.ok ? 'ok' : (j.close || j.partial ? 'close' : 'no');
+      var msg;
+      if (j.ok) msg = '<b>正确。</b>「' + esc(r.w) + '」用得很准。';
+      else if (j.partial) msg = '部分正确（命中：' + esc(j.hit.join('、')) + '）。<br>完整搭配是：<b>' + esc(r.w) + '</b>';
+      else if (j.close) msg = '接近了。<br>正确答案是：<b>' + esc(r.w) + '</b>';
+      else msg = '不对。<br>正确答案是：<b>' + esc(r.w) + '</b>';
+      feedback = '<div class="feedback ' + cls + '">' + msg + '</div>';
+    }
+
+    return '' +
+      '<div class="stage-meta">' +
+        '<span class="pos">第 ' + (state.idx + 1) + ' / ' + list.length + ' 条</span>' +
+        '<span>·</span><span>第 ' + r.n + ' 条</span>' +
+        '<span>·</span><span>' + esc(r.s) + '</span>' +
+      '</div>' +
+      '<div class="quiz">' +
+        '<div class="quiz-prompt">根据例句，把合适的规范搭配填进去' + (r.bl ? '' : '（本条例句为整句作答）') + '</div>' +
+        '<div class="quiz-sentence">' + body + '</div>' +
+        (r.bl ? '' : answerField) +
+        hint +
+        feedback +
+        '<div class="actions">' +
+          '<button class="btn primary" id="submit">提交答案</button>' +
+          '<button class="btn" id="reveal">显示答案</button>' +
+          '<button class="btn" id="skip">跳过</button>' +
+          '<span class="spacer"></span>' +
+          '<button class="btn" id="prev">← 上一条</button>' +
+          '<button class="btn" id="next">下一条 →</button>' +
+          '<button class="btn good" id="mark1">1 已掌握</button>' +
+          '<button class="btn warn" id="mark2">2 待复习</button>' +
+        '</div>' +
+        '<div class="hint">快捷键：Enter 提交，← → 切换条目，1 / 2 标记掌握度</div>' +
+      '</div>';
+  }
+
+  // ---------------- 渲染：M3 释义反推 ----------------
+  function renderRecall(r, list) {
+    var feedback = '';
+    if (state.judged) {
+      var j = state.judged;
+      var cls = j.ok ? 'ok' : (j.close || j.partial ? 'close' : 'no');
+      var msg;
+      if (j.ok) msg = '<b>正确。</b>「' + esc(r.w) + '」';
+      else if (j.partial) msg = '部分正确（命中：' + esc(j.hit.join('、')) + '）。<br>完整搭配是：<b>' + esc(r.w) + '</b>';
+      else if (j.close) msg = '接近了。<br>正确答案是：<b>' + esc(r.w) + '</b>';
+      else msg = '不对。<br>正确答案是：<b>' + esc(r.w) + '</b>';
+      feedback = '<div class="feedback ' + cls + '">' + msg +
+        '<br><span style="opacity:.75">原句：' + esc(r.e) + '</span></div>';
+    }
+    return '' +
+      '<div class="stage-meta">' +
+        '<span class="pos">第 ' + (state.idx + 1) + ' / ' + list.length + ' 条</span>' +
+        '<span>·</span><span>第 ' + r.n + ' 条</span>' +
+        '<span>·</span><span>' + esc(r.s) + '</span>' +
+      '</div>' +
+      '<div class="quiz">' +
+        '<div class="quiz-prompt">只看释义，写出对应的规范搭配</div>' +
+        '<div class="flip-meaning" style="font-size:1.15rem;margin-bottom:18px">' + esc(r.m) + '</div>' +
+        '<div class="card-meta">' + themeBadges(r) + statusBadge(r.n) + '</div>' +
+        '<input class="answer-input" id="answer" autocomplete="off" placeholder="输入规范搭配，如：锚定">' +
+        feedback +
+        '<div class="actions">' +
+          '<button class="btn primary" id="submit">提交答案</button>' +
+          '<button class="btn" id="reveal">显示答案</button>' +
+          '<button class="btn" id="skip">跳过</button>' +
+          '<span class="spacer"></span>' +
+          '<button class="btn" id="prev">← 上一条</button>' +
+          '<button class="btn" id="next">下一条 →</button>' +
+          '<button class="btn good" id="mark1">1 已掌握</button>' +
+          '<button class="btn warn" id="mark2">2 待复习</button>' +
+        '</div>' +
+        '<div class="hint">快捷键：Enter 提交，← → 切换条目，1 / 2 标记掌握度</div>' +
+      '</div>';
+  }
+
+  // ---------------- 渲染：M4 速查表格 ----------------
+  function highlight(text, q) {
+    var safe = esc(text);
+    if (!q) return safe;
+    var needle = esc(q);
+    var idx = safe.indexOf(needle);
+    if (idx < 0) return safe;
+    var out = '', pos = 0;
+    while (idx >= 0) {
+      out += safe.slice(pos, idx) + '<mark>' + safe.substr(idx, needle.length) + '</mark>';
+      pos = idx + needle.length;
+      idx = safe.indexOf(needle, pos);
+    }
+    return out + safe.slice(pos);
+  }
+  function renderTable(list) {
+    if (!list.length) return '<div class="empty">没有匹配的条目，换个筛选条件试试。</div>';
+    var q = state.query.trim();
+    var groups = {};
+    var order = [];
+    list.forEach(function (r) {
+      var key = r.th[0] || '其他';
+      if (!groups[key]) { groups[key] = []; order.push(key); }
+      groups[key].push(r);
+    });
+    order.sort(function (a, b) {
+      var ia = THEME_ORDER.indexOf(a), ib = THEME_ORDER.indexOf(b);
+      if (ia < 0) ia = 99; if (ib < 0) ib = 99;
+      return ia - ib;
+    });
+
+    return '<div class="stage-meta">共 <span class="pos">' + list.length + '</span> 条 · 点击任意一行可跳到卡片模式</div>' +
+      order.map(function (key) {
+        var rows = groups[key];
+        var ns = rows.map(function (r) { return r.n; });
+        var lo = Math.min.apply(null, ns), hi = Math.max.apply(null, ns);
+        var range = lo === hi ? ('第 ' + lo + ' 号') : ('第 ' + lo + '–' + hi + ' 号');
+        return '<div class="group open">' +
+          '<button class="group-head">' + esc(key) +
+            '<span class="cnt">' + rows.length + ' 条 · ' + range + '</span>' +
+            '<span class="arrow">▼</span>' +
+          '</button>' +
+          '<div class="group-body"><table class="list"><thead><tr>' +
+            '<th>序号</th><th>用词 · 搭配</th><th>含义 · 用法</th><th>原文例句</th><th>来源文件</th>' +
+          '</tr></thead><tbody>' +
+          rows.map(function (r) {
+            return '<tr data-n="' + r.n + '">' +
+              '<td class="c-idx" data-label="序号">' + r.n + '</td>' +
+              '<td class="c-word" data-label="用词">' + highlight(r.w, q) + '</td>' +
+              '<td data-label="含义">' + highlight(r.m, q) + '</td>' +
+              '<td data-label="例句">' + highlight(r.e, q) + '</td>' +
+              '<td class="c-src" data-label="来源">' + highlight(r.s, q) + '</td>' +
+            '</tr>';
+          }).join('') +
+          '</tbody></table></div></div>';
+      }).join('');
+  }
+
+  // ---------------- 主渲染 ----------------
+  var stage = document.getElementById('stage');
+
+  function render() {
+    updateStats();
+    var list = filtered();
+    if (!list.length) {
+      stage.innerHTML = '<div class="empty">没有匹配的条目，换个筛选条件试试。</div>';
+      return;
+    }
+    if (state.idx >= list.length) state.idx = list.length - 1;
+    if (state.idx < 0) state.idx = 0;
+
+    if (state.mode === 'table') {
+      stage.innerHTML = renderTable(list);
+      bindTable();
+      return;
+    }
+    var r = list[state.idx];
+    if (state.mode === 'card') stage.innerHTML = renderCard(r, list);
+    else if (state.mode === 'blank') stage.innerHTML = renderBlank(r, list);
+    else stage.innerHTML = renderRecall(r, list);
+    bindStage(r, list);
+  }
+
+  function bindTable() {
+    var heads = stage.querySelectorAll('.group-head');
+    for (var i = 0; i < heads.length; i++) {
+      heads[i].addEventListener('click', function () {
+        this.parentNode.classList.toggle('open');
+      });
+    }
+    var rows = stage.querySelectorAll('table.list tbody tr');
+    for (var j = 0; j < rows.length; j++) {
+      rows[j].addEventListener('click', function () {
+        var n = Number(this.getAttribute('data-n'));
+        setMode('card');
+        var list = filtered();
+        for (var k = 0; k < list.length; k++) {
+          if (list[k].n === n) { state.idx = k; break; }
+        }
+        state.flipped = false;
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  }
+
+  function bindStage(r, list) {
+    function go(delta) {
+      state.idx = (state.idx + delta + list.length) % list.length;
+      state.flipped = false;
+      state.judged = null;
+      saveState();
+      render();
+    }
+    var on = function (id, fn) { var el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
+
+    on('prev', function () { go(-1); });
+    on('next', function () { go(1); });
+    on('flip', function () { state.flipped = !state.flipped; render(); });
+    on('mark1', function () { setStatus(r.n, 1); render(); });
+    on('mark2', function () { setStatus(r.n, 2); render(); });
+    on('mark0', function () { setStatus(r.n, 0); render(); });
+    on('skip', function () { go(1); });
+    on('reveal', function () { state.judged = { ok: false, exact: false, close: false, partial: false, revealed: true }; render(); });
+    on('submit', function () {
+      var input = document.getElementById('answer');
+      var j = judge(input ? input.value : '', r);
+      state.judged = j.ok ? { ok: true } : j;
+      if (j.ok) setStatus(r.n, 1); else if (j.partial || j.close) setStatus(r.n, 2);
+      render();
+    });
+
+    var answer = document.getElementById('answer');
+    if (answer) {
+      if (state.mode === 'blank' && r.bl) {
+        answer.setAttribute('inputmode', 'text');
+      }
+      answer.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          var btn = document.getElementById('submit');
+          if (btn) btn.click();
+        }
+      });
+    }
+  }
+
+  function setMode(mode, updateHash) {
+    state.mode = mode;
+    state.flipped = false;
+    state.judged = null;
+    state.idx = 0;
+    var tabs = document.querySelectorAll('#mode-tabs .tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-mode') === mode);
+    }
+    if (updateHash && location.hash.slice(1) !== mode) location.hash = mode;
+    saveState();
+  }
+
+  var MODES = ['card', 'blank', 'recall', 'table'];
+  function applyHashMode() {
+    var h = (location.hash || '').slice(1);
+    if (MODES.indexOf(h) >= 0 && h !== state.mode) {
+      setMode(h, false);
+      render();
+    }
+  }
+
+  // ---------------- 事件绑定 ----------------
+  function initTheme() {
+    var btn = document.getElementById('theme-toggle');
+    function apply(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        btn.textContent = '☀️';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        btn.textContent = '🌙';
+      }
+    }
+    apply(THEME_STORE.get('light') || 'light');
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(cur);
+      THEME_STORE.set(cur);
+    });
+  }
+
+  function initThemeOptions() {
+    var sel = document.getElementById('filter-theme');
+    var counts = {};
+    DATA.forEach(function (r) { r.th.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; }); });
+    var names = Object.keys(counts).sort(function (a, b) {
+      var ia = THEME_ORDER.indexOf(a), ib = THEME_ORDER.indexOf(b);
+      if (ia < 0) ia = 99; if (ib < 0) ib = 99;
+      return ia - ib || counts[b] - counts[a];
+    });
+    sel.innerHTML = '<option value="">全部主题（' + DATA.length + '）</option>' +
+      names.map(function (n) {
+        return '<option value="' + esc(n) + '">' + esc(n) + '（' + counts[n] + '）</option>';
+      }).join('');
+    sel.value = state.themeFilter;
+  }
+
+  function initControls() {
+    document.getElementById('mode-tabs').addEventListener('click', function (ev) {
+      var t = ev.target.closest('.tab');
+      if (!t) return;
+      setMode(t.getAttribute('data-mode'), true);
+      render();
+    });
+
+    var search = document.getElementById('search');
+    search.addEventListener('input', AppUtils.debounce(function () {
+      state.query = search.value;
+      state.idx = 0;
+      render();
+    }, 120));
+
+    document.getElementById('filter-theme').addEventListener('change', function () {
+      state.themeFilter = this.value;
+      state.idx = 0;
+      saveState();
+      render();
+    });
+
+    document.getElementById('filter-status').addEventListener('change', function () {
+      state.statusFilter = this.value;
+      state.idx = 0;
+      saveState();
+      render();
+    });
+
+    document.getElementById('order').addEventListener('change', function () {
+      state.order = this.value;
+      shuffled = null;
+      state.idx = 0;
+      saveState();
+      render();
+    });
+
+    document.getElementById('reset-progress').addEventListener('click', function () {
+      if (!confirm('确定清空全部 305 条的掌握度标记？此操作不可撤销。')) return;
+      state.states = {};
+      saveState();
+      render();
+    });
+
+    document.getElementById('filter-status').value = state.statusFilter;
+    document.getElementById('order').value = state.order;
+  }
+
+  function initKeyboard() {
+    document.addEventListener('keydown', function (ev) {
+      var tag = (ev.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+        if (ev.key === 'Escape') ev.target.blur();
+        return;
+      }
+      if (ev.key === '/') {
+        ev.preventDefault();
+        document.getElementById('search').focus();
+        return;
+      }
+      if (state.mode === 'table') return;
+
+      var list = filtered();
+      if (!list.length) return;
+      var r = list[state.idx];
+
+      if (ev.key === 'ArrowLeft') { ev.preventDefault(); step(-1); }
+      else if (ev.key === 'ArrowRight') { ev.preventDefault(); step(1); }
+      else if (ev.key === ' ' || ev.key === 'Enter') {
+        if (state.mode === 'card') { ev.preventDefault(); state.flipped = !state.flipped; render(); }
+      }
+      else if (ev.key === '1') { setStatus(r.n, 1); render(); }
+      else if (ev.key === '2') { setStatus(r.n, 2); render(); }
+      else if (ev.key === '3') { setStatus(r.n, 0); render(); }
+    });
+
+    function step(delta) {
+      state.idx = (state.idx + delta + list.length) % list.length;
+      state.flipped = false;
+      state.judged = null;
+      saveState();
+      render();
+    }
+  }
+
+  // ---------------- 启动 ----------------
+  loadState();
+  initTheme();
+  initThemeOptions();
+  initControls();
+  initKeyboard();
+  window.addEventListener('hashchange', applyHashMode);
+  var hashMode = (location.hash || '').slice(1);
+  setMode(MODES.indexOf(hashMode) >= 0 ? hashMode : (state.mode || 'card'), false);
+  render();
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
