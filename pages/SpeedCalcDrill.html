@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测资料分析 · 百化分与必背幂次数速算练习</title>
+<meta name="description" content="随机出题限时抢答：百化分（分数↔百分数）与必背平方数反射训练，实时正确率与用时统计。">
+<meta name="keywords" content="行测,资料分析,百化分,平方数,速算,限时训练,国考">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>">
+<style>
+:root{
+  --ink:#1a2332; --ink-soft:#3a4a5e; --ink-mute:#6b7a8f;
+  --paper:#faf8f5; --paper-warm:#f3efe8; --card:#fffdfa;
+  --line:#d9d2c7; --line-soft:#e8e2d8;
+  --primary:#1a365d; --primary-deep:#0f2440; --accent:#c2410c; --accent-soft:#fde8d8;
+  --good:#15803d; --good-soft:#dcfce7; --warn:#b45309; --warn-soft:#fef3c7;
+  --bad:#b91c1c; --bad-soft:#fee2e2; --info:#1d4ed8; --info-soft:#dbeafe;
+  --shadow:0 1px 3px rgba(26,35,50,.08),0 4px 12px rgba(26,35,50,.06);
+  --shadow-lg:0 4px 16px rgba(26,35,50,.1),0 12px 32px rgba(26,35,50,.08);
+  --radius:12px;
+  /* hero 渐变与主按钮底色独立于 --primary：暗色下 --primary 是浅蓝，
+     拿来当底色配白字会几乎没有对比度 */
+  --hero-a:#1a365d; --hero-b:#0f2440;
+  --active-bg:#1a365d; --active-fg:#ffffff;
+}
+[data-theme="dark"]{
+  --ink:#e8eaed; --ink-soft:#c2c8d2; --ink-mute:#8b94a4;
+  --paper:#12151b; --paper-warm:#1a1e26; --card:#181c24;
+  --line:#2c323d; --line-soft:#232833;
+  --primary:#8ab4f8; --primary-deep:#aecbfa; --accent:#f97316; --accent-soft:#3a2415;
+  --good:#4ade80; --good-soft:#12301f; --warn:#fbbf24; --warn-soft:#33260c;
+  --bad:#f87171; --bad-soft:#3a1c1c; --info:#93c5fd; --info-soft:#16243d;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.5),0 12px 32px rgba(0,0,0,.4);
+  --hero-a:#182642; --hero-b:#0b1322;
+  --active-bg:#2563eb; --active-fg:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.7; font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--primary)}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;width:100%}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:14px;padding:10px 20px;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:500}
+.topbar a:hover{color:var(--accent)}
+.brand-sub{font-size:12.5px;color:var(--ink-mute)}
+.theme-toggle{
+  margin-left:auto;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.theme-toggle:hover{border-color:var(--accent);transform:rotate(-15deg)}
+
+/* ---------- Hero ---------- */
+.hero{
+  background:linear-gradient(135deg,var(--hero-a) 0%,var(--hero-b) 100%);
+  color:#fff;padding:32px 0 26px;
+}
+.hero h1{font-size:1.65rem;font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+.hero p{font-size:.9rem;opacity:.82;margin-bottom:20px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.hero-stats>div{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 14px}
+.hero-stats .n{font-size:1.45rem;font-weight:700;line-height:1.2}
+.hero-stats .n.good{color:#86efac}
+.hero-stats .n.warn{color:#fcd34d}
+.hero-stats .l{font-size:11.5px;opacity:.75;margin-top:2px}
+/* 训练开始后 hero 收缩成一条紧凑统计条：把统计留在视野里，
+   同时把竖向空间让给题目卡与倒计时环 */
+.hero.compact{padding:10px 0 8px}
+.hero.compact h1,.hero.compact p{display:none}
+.hero.compact .hero-stats{margin-bottom:0;gap:8px}
+.hero.compact .hero-stats>div{padding:6px 10px;border-radius:8px}
+.hero.compact .hero-stats .n{font-size:1.05rem}
+.hero.compact .hero-stats .l{font-size:10.5px;margin-top:0}
+
+/* ---------- 控制条 ---------- */
+.toolbar{
+  position:sticky;top:55px;z-index:50;
+  background:color-mix(in srgb,var(--paper) 93%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding:10px 0;
+}
+.toolbar-inner{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar label{font-size:12.5px;color:var(--ink-mute);display:flex;align-items:center;gap:6px}
+.toolbar select,.btn{
+  padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink-soft);font-size:13px;outline:none;transition:.18s;
+}
+.toolbar select:hover,.btn:hover{border-color:var(--primary);color:var(--primary)}
+.btn{font-weight:500}
+.btn.primary{background:var(--active-bg);border-color:var(--active-bg);color:var(--active-fg)}
+.btn.primary:hover{opacity:.88;color:var(--active-fg)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.good{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.spacer{flex:1}
+
+/* ---------- 题目卡 ---------- */
+main{padding:26px 0 60px;min-height:58vh}
+.qcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:26px 30px;
+}
+.q-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.badge{
+  display:inline-block;font-size:11.5px;padding:2px 10px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper-warm);color:var(--ink-soft);font-weight:500;
+}
+.badge.k-baihua{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.badge.k-square{border-color:var(--info);background:var(--info-soft);color:var(--info)}
+.badge.streak{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.q-no{font-size:12.5px;color:var(--ink-mute)}
+
+.timer{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.ring{width:132px;height:132px;display:block;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--line-soft);stroke-width:9}
+.ring-fg{
+  fill:none;stroke:var(--good);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:326.7;stroke-dashoffset:0;transition:stroke .3s;
+}
+.timer.warn .ring-fg{stroke:var(--warn)}
+.timer.danger .ring-fg{stroke:var(--bad)}
+.seconds{
+  position:relative;margin-top:-88px;margin-bottom:52px;
+  font-size:1.8rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.timer.warn .seconds{color:var(--warn)}
+.timer.danger .seconds{color:var(--bad)}
+.timer-note{font-size:11.5px;color:var(--ink-mute);margin-top:6px}
+
+.q-prompt{
+  font-size:clamp(1.6rem,7vw,2.4rem);font-weight:700;letter-spacing:.5px;
+  text-align:center;color:var(--ink);margin-bottom:8px;line-height:1.45;
+}
+.q-sub{text-align:center;font-size:12.5px;color:var(--ink-mute);margin-bottom:20px}
+.answer-input{
+  width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:8px;
+  background:var(--paper);font-size:1.15rem;font-weight:600;text-align:center;outline:none;
+}
+.answer-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--info-soft)}
+.answer-input[readonly]{opacity:.6}
+.q-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.q-tip{
+  min-height:18px;margin-top:8px;font-size:12.5px;color:var(--bad);
+  text-align:center;opacity:0;transition:opacity .2s;
+}
+.q-tip.show{opacity:1}
+.shake{animation:shake .32s ease}
+@keyframes shake{20%{transform:translateX(-5px)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}100%{transform:translateX(0)}}
+.q-feedback{margin-top:18px;padding:14px 16px;border-radius:10px;font-size:14px;line-height:1.8}
+.q-feedback.ok{background:var(--good-soft);border-left:4px solid var(--good);color:var(--good)}
+.q-feedback.no{background:var(--bad-soft);border-left:4px solid var(--bad);color:var(--bad)}
+.q-feedback.warn{background:var(--warn-soft);border-left:4px solid var(--warn);color:var(--warn)}
+.q-feedback b{font-weight:700}
+.hint{text-align:center;font-size:12px;color:var(--ink-mute);margin-top:14px}
+
+.idle{text-align:center;padding:56px 20px;background:var(--card);border:1px dashed var(--line);border-radius:var(--radius)}
+.idle h2{font-size:1.25rem;margin-bottom:10px;color:var(--primary)}
+.idle p{color:var(--ink-soft);font-size:14px;margin-bottom:8px}
+.idle .btn{margin-top:18px}
+.idle .btn.primary{padding:11px 30px;font-size:15px}
+
+footer{
+  text-align:center;padding:24px 20px;color:var(--ink-mute);font-size:12.5px;
+  border-top:1px solid var(--line);background:var(--paper-warm);
+}
+@media (max-width:640px){
+  .brand-sub{display:none}
+  .hero{padding:24px 0 20px}
+  .hero h1{font-size:1.3rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .hero.compact .hero-stats{grid-template-columns:repeat(4,1fr);gap:6px}
+  .hero.compact .hero-stats>div{padding:5px 7px}
+  .hero.compact .hero-stats .n{font-size:.95rem}
+  .hero.compact .hero-stats .l{font-size:9.5px}
+  .toolbar{top:52px}
+  .qcard{padding:20px 16px}
+  .ring{width:112px;height:112px}
+  .seconds{margin-top:-76px;margin-bottom:44px;font-size:1.5rem}
+  .answer-input{font-size:1.05rem;padding:11px 12px}
+  .toolbar select,.btn{padding:7px 10px;font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">行测资料分析 · 百化分 + 必背幂次数</span>
+  <button id="theme-toggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<section class="hero" id="hero">
+  <div class="wrap">
+    <h1>行测速算 · 限时闪练</h1>
+    <p>随机出题 · 倒计时抢答 · 百化分与必背平方数交替出现，练到形成条件反射</p>
+    <div class="hero-stats">
+      <div><div class="n" id="stat-answered">0</div><div class="l">已答</div></div>
+      <div><div class="n good" id="stat-correct">0</div><div class="l">答对</div></div>
+      <div><div class="n" id="stat-rate">—</div><div class="l">正确率</div></div>
+      <div><div class="n warn" id="stat-avg">—</div><div class="l">平均用时</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap toolbar-inner">
+    <label>单题限时
+      <select id="sel-limit">
+        <option value="3">3 秒</option>
+        <option value="5">5 秒</option>
+        <option value="8" selected>8 秒</option>
+        <option value="10">10 秒</option>
+        <option value="15">15 秒</option>
+        <option value="0">不限时</option>
+      </select>
+    </label>
+    <label>平方范围
+      <select id="sel-square">
+        <option value="20" selected>11 – 20</option>
+        <option value="25">11 – 25</option>
+        <option value="30">11 – 30</option>
+        <option value="35">11 – 35</option>
+      </select>
+    </label>
+    <span class="spacer"></span>
+    <button class="btn" id="btn-restart">重新开始</button>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="qcard" id="qcard"></div>
+  </div>
+</main>
+
+<footer>
+  快捷键：直接输入答案 · <b>Enter</b> 提交 · <b>Enter / 空格</b> 进入下一题 · <b>Esc</b> 离开输入框
+</footer>
+
+<script src="../viewport/js/app-utils.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // =========================================================
+  // 数据（源自 pages/DataAnalysisNotes.html 第 8、9 章）
+  // =========================================================
+
+  // 百化分：1/n = (100/n)%。值为笔记里的记忆值（含 ≈ 的取一位小数）
+  var BAIHUA_TABLE = {
+    2: 50, 3: 33.3, 4: 25, 5: 20, 6: 16.7, 7: 14.3, 8: 12.5, 9: 11.1, 10: 10,
+    11: 9.1, 12: 8.3, 13: 7.7, 14: 7.1, 15: 6.7, 16: 6.25, 17: 5.9, 18: 5.6,
+    19: 5.3, 20: 5
+  };
+
+  // 必背平方数：11² – 35²（笔记第 8 章原表）
+  var SQUARE_TABLE = {
+    11: 121, 12: 144, 13: 169, 14: 196, 15: 225, 16: 256, 17: 289, 18: 324,
+    19: 361, 20: 400, 21: 441, 22: 484, 23: 529, 24: 576, 25: 625, 26: 676,
+    27: 729, 28: 784, 29: 841, 30: 900, 31: 961, 32: 1024, 33: 1089, 34: 1156,
+    35: 1225
+  };
+
+  var BAIHUA_MIN = 2, BAIHUA_MAX = 20;
+  var SQUARE_MIN = 11;
+
+  // =========================================================
+  // 状态
+  // =========================================================
+
+  var SETTINGS_STORE = AppUtils.createNamespacedStorage('speedcalc_drill_settings', { version: 1 });
+  var THEME_STORE = AppUtils.createNamespacedStorage('speedcalc_drill_theme');
+
+  var state = {
+    phase: 'idle',        // idle | active | correct | wrong | timeout
+    settings: { limitSec: 8, squareMax: 20 },
+    stats: { answered: 0, correct: 0, totalMs: 0, streak: 0, bestStreak: 0 },
+    question: null,
+    lastKey: '',
+    questionNo: 0
+  };
+
+  // 计时
+  var limitMs = 8000, startedAt = 0, rafId = 0;
+  var pausedAt = 0, pausedTotal = 0;
+  var advanceTimer = 0;
+
+  var CIRC = 2 * Math.PI * 52;   // 环周长，r = 52
+
+  // =========================================================
+  // 工具函数
+  // =========================================================
+
+  function esc(v) { return AppUtils.escapeHTML(v); }
+
+  function fmtPct(x) { return String(Number(x.toFixed(4))); }
+
+  // 百分数答案的容差：至少 0.06（覆盖 ±0.05 的四舍五入误差），
+  // 且不小于「真值与表值之差 + 0.02」
+  function pctTolerance(n) {
+    var trueV = 100 / n;
+    return Math.max(0.06, Math.abs(trueV - BAIHUA_TABLE[n]) + 0.02);
+  }
+
+  // 输入归一化：全角数字/斜杠/百分号 → 半角，去空白与标点
+  function normalize(s) {
+    return String(s == null ? '' : s)
+      .replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+      .replace(/[／％]/g, function (c) { return c === '／' ? '/' : '%'; })
+      .replace(/[\s　]+/g, '')
+      .replace(/[，,。、；;：:！!？?"'“”‘’《》·]/g, '')
+      .toLowerCase();
+  }
+
+  // =========================================================
+  // 判分
+  // =========================================================
+
+  function judge(input, q) {
+    var got = normalize(input);
+    if (!got) return { ok: false, empty: true };
+
+    if (q.kind === 'square') {
+      if (!/^\d+$/.test(got)) return { ok: false, invalid: true };
+      return { ok: Number(got) === q.target };
+    }
+
+    if (q.kind === 'pct2frac') {
+      // 12.5% = 1/? —— 接受 "8" 或 "1/8"
+      var m = got.match(/^1\/(\d+)$/);
+      var n = m ? m[1] : got;
+      if (!/^\d+$/.test(n)) return { ok: false, invalid: true };
+      return { ok: Number(n) === q.target };
+    }
+
+    // frac2pct：1/8 = ?% —— 接受 "12.5" 或 "12.5%"
+    var num = got.replace(/%$/, '');
+    if (!/^\d+(\.\d+)?$/.test(num)) return { ok: false, invalid: true };
+    var v = parseFloat(num);
+    return { ok: Math.abs(v - q.target) <= q.tol, value: v };
+  }
+
+  // =========================================================
+  // 题目生成
+  // =========================================================
+
+  function pickInRange(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
+
+  // 生成一道题（不做去重）
+  function makeQuestion() {
+    if (Math.random() < 0.5) {
+      // 必背平方数
+      var n = pickInRange(SQUARE_MIN, state.settings.squareMax);
+      return {
+        kind: 'square', n: n, target: SQUARE_TABLE[n],
+        prompt: n + '² = ?',
+        sub: '答出这个整数的平方',
+        answer: String(SQUARE_TABLE[n]),
+        key: 'sq' + n
+      };
+    }
+    var d = pickInRange(BAIHUA_MIN, BAIHUA_MAX);
+    if (Math.random() < 0.5) {
+      // 给百分数 → 答分数
+      return {
+        kind: 'pct2frac', n: d, target: d,
+        prompt: fmtPct(BAIHUA_TABLE[d]) + '% = 1/?',
+        sub: '这个百分数是几分之一',
+        answer: '1/' + d,
+        key: 'bf' + d
+      };
+    }
+    // 给分数 → 答百分数
+    return {
+      kind: 'frac2pct', n: d, target: 100 / d, tol: pctTolerance(d),
+      prompt: '1/' + d + ' = ?%',
+      sub: '这个分数约等于百分之多少',
+      answer: fmtPct(BAIHUA_TABLE[d]) + '%',
+      key: 'fp' + d
+    };
+  }
+
+  // 取下一道题，避免与上一题完全相同（题池小，重复概率高）
+  // 注意：名字不能叫 nextQuestion —— 会话控制里已有同名的「进入下一题」函数，
+  // 函数声明会被后者覆盖，导致这里自调用形成无限递归。
+  function pickQuestion() {
+    var q, guard = 0;
+    do { q = makeQuestion(); } while (q.key === state.lastKey && ++guard < 30);
+    state.lastKey = q.key;
+    return q;
+  }
+
+  // =========================================================
+  // 计时器
+  // =========================================================
+
+  function elapsedMs() { return performance.now() - startedAt - pausedTotal; }
+
+  function startTimer() {
+    stopTimer();
+    limitMs = state.settings.limitSec * 1000;
+    startedAt = performance.now();
+    pausedTotal = 0;
+    pausedAt = 0;
+    if (limitMs <= 0) { paintRing(1, 0); return; }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stopTimer() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+  }
+
+  function tick() {
+    var left = limitMs - elapsedMs();
+    if (left <= 0) { paintRing(0, 0); onTimeout(); return; }
+    paintRing(left / limitMs, left);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // ratio = 剩余比例，leftMs = 剩余毫秒
+  function paintRing(ratio, leftMs) {
+    var fg = document.getElementById('ring-fg');
+    var box = document.getElementById('timer');
+    if (!fg) return;
+    fg.style.strokeDashoffset = String(CIRC * (1 - Math.max(0, Math.min(1, ratio))));
+    if (box) {
+      box.classList.remove('warn', 'danger');
+      if (ratio <= 0.2) box.classList.add('danger');
+      else if (ratio <= 0.4) box.classList.add('warn');
+    }
+    var sec = document.getElementById('seconds');
+    if (sec && limitMs > 0) sec.textContent = (Math.max(0, leftMs) / 1000).toFixed(1);
+  }
+
+  // =========================================================
+  // 渲染
+  // =========================================================
+
+  var card = document.getElementById('qcard');
+
+  function updateStats() {
+    var s = state.stats;
+    document.getElementById('stat-answered').textContent = s.answered;
+    document.getElementById('stat-correct').textContent = s.correct;
+    document.getElementById('stat-rate').textContent =
+      s.answered ? Math.round(s.correct / s.answered * 100) + '%' : '—';
+    document.getElementById('stat-avg').textContent =
+      s.answered ? (s.totalMs / s.answered / 1000).toFixed(1) + 's' : '—';
+  }
+
+  function renderIdle() {
+    card.innerHTML =
+      '<div class="idle">' +
+        '<h2>准备好了就开始</h2>' +
+        '<p>每题随机出：<b>百化分</b>（12.5% = 1/? ⇄ 1/8 = ?%）或 <b>必背平方数</b>（17² = ?）</p>' +
+        '<p>题型与方向都是随机的，限时内提交；超时判错并自动进入下一题。</p>' +
+        '<button class="btn primary" id="btn-start">开始训练</button>' +
+      '</div>';
+    document.getElementById('btn-start').addEventListener('click', startSession);
+  }
+
+  function renderQuestion() {
+    var q = state.question;
+    var kindLabel = q.kind === 'square' ? '必背平方数' : '百化分';
+    var kindClass = q.kind === 'square' ? 'k-square' : 'k-baihua';
+    var streak = state.stats.streak > 1
+      ? '<span class="badge streak">连对 ' + state.stats.streak + '</span>' : '';
+
+    var ring = state.settings.limitSec > 0
+      ? '<svg class="ring" viewBox="0 0 120 120">' +
+          '<circle class="ring-bg" cx="60" cy="60" r="52"></circle>' +
+          '<circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>' +
+        '</svg>' +
+        '<div class="seconds" id="seconds">0.0</div>' +
+        '<div class="timer-note">秒 · 超时判错</div>'
+      : '<div class="timer-note" style="margin-top:2px">不限时模式</div>';
+
+    card.innerHTML =
+      '<div class="q-head">' +
+        '<span class="badge ' + kindClass + '">' + kindLabel + '</span>' +
+        '<span class="q-no">第 ' + state.questionNo + ' 题</span>' + streak +
+      '</div>' +
+      '<div class="timer" id="timer">' + ring + '</div>' +
+      '<div class="q-prompt" id="q-prompt">' + esc(q.prompt) + '</div>' +
+      '<div class="q-sub">' + esc(q.sub) + '</div>' +
+      '<input class="answer-input" id="answer" autocomplete="off" inputmode="text" ' +
+        'placeholder="' + esc(q.kind === 'pct2frac' ? '输入分母，如 8 或 1/8' :
+                              q.kind === 'frac2pct' ? '输入百分数，如 14.3' : '输入平方数，如 289') + '">' +
+      '<div class="q-tip" id="q-tip"></div>' +
+      '<div class="q-feedback" id="q-feedback" style="display:none"></div>' +
+      '<div class="q-actions">' +
+        '<button class="btn primary" id="btn-submit">提交答案</button>' +
+        '<button class="btn" id="btn-skip">跳过</button>' +
+      '</div>' +
+      '<div class="hint">Enter 提交 · 超时自动进入下一题</div>';
+
+    var input = document.getElementById('answer');
+    input.focus({ preventScroll: true });
+    // 聚焦默认会滚动页面，把倒计时环顶出视野 —— 这里手动最小化滚动，保住计时环
+    var timerEl = document.getElementById('timer');
+    if (timerEl) {
+      var tr = timerEl.getBoundingClientRect();
+      if (tr.top < 0 || tr.bottom > window.innerHeight) timerEl.scrollIntoView({ block: 'center' });
+    }
+    document.getElementById('btn-submit').addEventListener('click', submit);
+    document.getElementById('btn-skip').addEventListener('click', function () {
+      if (state.phase === 'active') { settle('skip', null); }
+    });
+  }
+
+  function renderFeedback(phase, q, result) {
+    var fb = document.getElementById('q-feedback');
+    if (!fb) return;
+    var cls = phase === 'correct' ? 'ok' : (phase === 'wrong' ? 'no' : 'warn');
+    var usedMs = result && result.ms != null ? result.ms : elapsedMs();
+    var secs = (usedMs / 1000).toFixed(1);
+    var msg;
+    if (phase === 'correct') {
+      msg = '<b>正确！</b>用时 ' + secs + ' 秒。';
+    } else if (phase === 'timeout') {
+      msg = '<b>超时。</b>正确答案是 <b>' + esc(q.answer) + '</b>。';
+    } else if (phase === 'skip') {
+      msg = '已跳过。正确答案是 <b>' + esc(q.answer) + '</b>。';
+    } else {
+      msg = '不对。正确答案是 <b>' + esc(q.answer) + '</b>。';
+    }
+    fb.className = 'q-feedback ' + cls;
+    fb.innerHTML = msg;
+    fb.style.display = '';
+  }
+
+  // =========================================================
+  // 会话控制
+  // =========================================================
+
+  function startSession() {
+    state.stats = { answered: 0, correct: 0, totalMs: 0, streak: 0, bestStreak: 0 };
+    state.questionNo = 0;
+    state.lastKey = '';
+    updateStats();
+    document.getElementById('hero').classList.add('compact');
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = 0; }
+    state.question = pickQuestion();
+    state.questionNo++;
+    state.phase = 'active';
+    renderQuestion();
+    startTimer();
+  }
+
+  function submit() {
+    if (state.phase !== 'active') return;
+    var input = document.getElementById('answer');
+    var raw = input ? input.value : '';
+    var q = state.question;
+    var result = judge(raw, q);
+
+    if (result.empty) {
+      // 空输入：不计入统计、不推进状态，只提示
+      showTip('先输入答案再回车（本次不计入统计）', true);
+      return;
+    }
+    if (result.invalid) {
+      // 格式无法识别（如中文输入法误入）：同样不判错，只给格式提示
+      var tip = q.kind === 'pct2frac' ? '请写分母，如 8 或 1/8'
+              : q.kind === 'frac2pct' ? '请写百分数，如 14.3 或 14.3%'
+              : '请直接写数字，如 289';
+      showTip('无法识别这个格式 —— ' + tip, true);
+      return;
+    }
+    settle(result.ok ? 'correct' : 'wrong', result);
+  }
+
+  // 提示条（格式错误 / 空输入）
+  function showTip(text, shake) {
+    var tip = document.getElementById('q-tip');
+    if (tip) { tip.textContent = text; tip.classList.add('show'); }
+    var input = document.getElementById('answer');
+    if (shake && input) {
+      input.classList.remove('shake');
+      void input.offsetWidth;      // 强制重排以便重复触发动画
+      input.classList.add('shake');
+      input.focus();
+    }
+  }
+
+  function settle(phase, result) {
+    if (state.phase !== 'active') return;
+    var q = state.question;
+    var usedMs = elapsedMs();
+    stopTimer();
+
+    state.phase = phase;
+    state.stats.answered++;
+    state.stats.totalMs += usedMs;
+    if (phase === 'correct') {
+      state.stats.correct++;
+      state.stats.streak++;
+      if (state.stats.streak > state.stats.bestStreak) state.stats.bestStreak = state.stats.streak;
+    } else {
+      state.stats.streak = 0;
+    }
+    updateStats();
+
+    // 冻结输入框并回填
+    var input = document.getElementById('answer');
+    if (input) {
+      input.readOnly = true;
+      if (phase === 'correct') input.value = q.answer;
+    }
+    var tip = document.getElementById('q-tip');
+    if (tip) { tip.textContent = ''; tip.classList.remove('show'); }
+    renderFeedback(phase, q, { ms: usedMs });
+
+    if (phase === 'correct') {
+      advanceTimer = setTimeout(nextQuestion, 800);
+    } else if (phase === 'timeout') {
+      advanceTimer = setTimeout(nextQuestion, 1400);
+    }
+    // wrong / skip：停在这里等用户按 Enter 或空格
+  }
+
+  function onTimeout() {
+    if (state.phase !== 'active') return;
+    settle('timeout', null);
+  }
+
+  // =========================================================
+  // 设置 / 主题 / 事件
+  // =========================================================
+
+  function saveSettings() {
+    SETTINGS_STORE.set(state.settings);
+  }
+
+  function initTheme() {
+    var btn = document.getElementById('theme-toggle');
+    function apply(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        btn.textContent = '☀️';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        btn.textContent = '🌙';
+      }
+    }
+    apply(THEME_STORE.get('light') || 'light');
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(cur);
+      THEME_STORE.set(cur);
+    });
+  }
+
+  function initControls() {
+    var saved = SETTINGS_STORE.get(null);
+    if (saved && typeof saved === 'object') {
+      if (typeof saved.limitSec === 'number') state.settings.limitSec = saved.limitSec;
+      if (typeof saved.squareMax === 'number') state.settings.squareMax = saved.squareMax;
+    }
+    var selLimit = document.getElementById('sel-limit');
+    var selSquare = document.getElementById('sel-square');
+    selLimit.value = String(state.settings.limitSec);
+    selSquare.value = String(state.settings.squareMax);
+
+    selLimit.addEventListener('change', function () {
+      state.settings.limitSec = Number(this.value);
+      saveSettings();
+      if (state.phase === 'active') startTimer();   // 当前题按新限时重新计时
+    });
+    selSquare.addEventListener('change', function () {
+      state.settings.squareMax = Number(this.value);
+      saveSettings();
+    });
+    document.getElementById('btn-restart').addEventListener('click', function () {
+      if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = 0; }
+      stopTimer();
+      state.phase = 'idle';
+      document.getElementById('hero').classList.remove('compact');
+      renderIdle();
+    });
+  }
+
+  function initKeyboard() {
+    document.addEventListener('keydown', function (ev) {
+      var tag = (ev.target.tagName || '').toLowerCase();
+      if (tag === 'select') return;
+
+      if (ev.key === 'Escape') {
+        if (tag === 'input') ev.target.blur();
+        return;
+      }
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        if (state.phase === 'active') submit();
+        else if (state.phase !== 'idle') nextQuestion();
+        return;
+      }
+      if (ev.key === ' ' || ev.key === 'ArrowRight') {
+        if (state.phase === 'active') {
+          if (tag === 'input') return;   // 空格要能正常输入
+          ev.preventDefault();
+        } else if (state.phase !== 'idle') {
+          ev.preventDefault();
+          nextQuestion();
+        }
+      }
+    });
+  }
+
+  function initVisibility() {
+    document.addEventListener('visibilitychange', function () {
+      if (state.phase !== 'active' || state.settings.limitSec <= 0) return;
+      if (document.hidden) {
+        pausedAt = performance.now();
+        stopTimer();
+      } else {
+        if (pausedAt) {
+          pausedTotal += performance.now() - pausedAt;
+          pausedAt = 0;
+        }
+        if (state.phase === 'active') rafId = requestAnimationFrame(tick);
+      }
+    });
+  }
+
+  // =========================================================
+  // 启动
+  // =========================================================
+  initTheme();
+  initControls();
+  initKeyboard();
+  initVisibility();
+  updateStats();
+  renderIdle();
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
