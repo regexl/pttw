@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行测资料分析错题复盘汇总</title>
+<meta name="description" content="11 道资料分析典型错题逐题精批：翻番、变化幅度、倍数、平均数分母、混合增长率、增长量倍数、隔年增量、容斥比重极值、累计存量等高频易错考点 + 避坑口诀表。">
+<meta name="keywords" content="行测,资料分析,错题复盘,翻番,混合增长率,线段法,百化分,避坑口诀">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📕</text></svg>">
+<style>
+:root{
+  --ink:#1a2332; --ink-soft:#3a4a5e; --ink-mute:#6b7a8f;
+  --paper:#faf8f5; --paper-warm:#f3efe8; --card:#fffdfa;
+  --line:#d9d2c7; --line-soft:#e8e2d8;
+  --primary:#1a365d; --primary-deep:#0f2440; --accent:#c2410c; --accent-soft:#fde8d8;
+  --good:#15803d; --good-soft:#dcfce7; --warn:#b45309; --warn-soft:#fef3c7;
+  --bad:#b91c1c; --bad-soft:#fee2e2; --info:#1d4ed8; --info-soft:#dbeafe;
+  --shadow:0 1px 3px rgba(26,35,50,.08),0 4px 12px rgba(26,35,50,.06);
+  --shadow-lg:0 4px 16px rgba(26,35,50,.1),0 12px 32px rgba(26,35,50,.08);
+  --radius:12px;
+  --hero-a:#1a365d; --hero-b:#0f2440;
+}
+[data-theme="dark"]{
+  --ink:#e8eaed; --ink-soft:#c2c8d2; --ink-mute:#8b94a4;
+  --paper:#12151b; --paper-warm:#1a1e26; --card:#181c24;
+  --line:#2c323d; --line-soft:#232833;
+  --primary:#8ab4f8; --primary-deep:#aecbfa; --accent:#f97316; --accent-soft:#3a2415;
+  --good:#4ade80; --good-soft:#12301f; --warn:#fbbf24; --warn-soft:#33260c;
+  --bad:#f87171; --bad-soft:#3a1c1c; --info:#93c5fd; --info-soft:#16243d;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.5),0 12px 32px rgba(0,0,0,.4);
+  --hero-a:#182642; --hero-b:#0b1322;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:10px 0;
+  position:sticky;top:0;z-index:60;
+}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.topbar a{color:var(--primary);text-decoration:none;font-weight:600;font-size:14px}
+.topbar a:hover{color:var(--accent)}
+.topbar .brand-sub{color:var(--ink-soft);font-size:13px}
+.theme-toggle{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:var(--card);font-size:15px;display:flex;align-items:center;
+  justify-content:center;transition:.2s;margin-left:auto;
+}
+.theme-toggle:hover{border-color:var(--accent);transform:rotate(-15deg)}
+
+/* ---------- Hero ---------- */
+.hero{
+  background:linear-gradient(135deg,var(--hero-a) 0%,var(--hero-b) 100%);
+  color:#fff;padding:52px 0 44px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),
+    radial-gradient(circle at 80% 70%,rgba(194,65,12,.16) 0%,transparent 42%);
+}
+.hero-inner{position:relative;z-index:1}
+.hero-tag{
+  display:inline-block;font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.28);padding:4px 14px;border-radius:2px;
+  margin-bottom:18px;font-weight:500;
+}
+.hero h1{font-size:clamp(26px,4.4vw,38px);font-weight:800;line-height:1.35;margin-bottom:14px;letter-spacing:-.01em}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.82);max-width:720px;line-height:1.8}
+.hero-meta{margin-top:26px;display:flex;gap:28px;flex-wrap:wrap;font-size:13.5px;color:rgba(255,255,255,.62)}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:#f0a04b;display:inline-block}
+
+/* ---------- 目录 ---------- */
+.toc{
+  background:var(--paper-warm);border-bottom:1px solid var(--line);padding:14px 0;
+  position:sticky;top:45px;z-index:50;backdrop-filter:blur(8px);
+}
+.toc-list{display:flex;gap:8px;flex-wrap:wrap;list-style:none}
+.toc-list a{
+  text-decoration:none;color:var(--ink-soft);font-size:13px;padding:5px 12px;
+  border-radius:3px;transition:all .2s;font-weight:500;
+}
+.toc-list a:hover{background:var(--primary);color:#fff}
+
+/* ---------- 主体 ---------- */
+main{padding:8px 0 20px}
+.section{padding:38px 0}
+.section + .section{border-top:1px solid var(--line-soft)}
+.sec-num{font-size:12.5px;color:var(--accent);font-weight:700;letter-spacing:.12em;margin-bottom:6px}
+.sec-title{font-size:clamp(21px,3vw,27px);font-weight:700;color:var(--primary-deep);margin-bottom:10px;line-height:1.45}
+.sec-lead{font-size:15px;color:var(--ink-mute);margin-bottom:26px;max-width:820px}
+h3.sub{
+  font-size:17px;font-weight:700;color:var(--primary);margin:26px 0 10px;
+  padding-left:11px;border-left:4px solid var(--accent);
+}
+h3.sub:first-of-type{margin-top:16px}
+p{margin-bottom:12px}
+ol,ul{margin:0 0 14px 24px}
+li{margin-bottom:7px}
+strong{color:var(--ink)}
+
+/* ---------- 概述卡 ---------- */
+.overview{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow)}
+
+/* ---------- 错法表 ---------- */
+.error-table{width:100%;border-collapse:collapse;margin:16px 0 6px;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);font-size:14px}
+.error-table th{
+  background:var(--primary);color:#fff;text-align:left;padding:11px 14px;
+  font-size:13px;font-weight:600;white-space:nowrap;
+}
+.error-table td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.error-table tbody tr:last-child td{border-bottom:none}
+.error-table tbody tr:nth-child(even){background:color-mix(in srgb,var(--paper-warm) 55%,transparent)}
+.error-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+.error-table td:nth-child(4){color:var(--accent);font-weight:500}
+
+/* ---------- 题目卡 ---------- */
+.question-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);
+}
+.question-card h3{
+  font-size:17px;font-weight:700;color:var(--primary-deep);margin-bottom:10px;line-height:1.5;
+}
+.tag{
+  display:inline-block;font-size:11.5px;padding:2px 10px;border-radius:999px;
+  border:1px solid var(--line);background:var(--paper-warm);color:var(--ink-soft);
+  font-weight:500;margin:0 6px 12px 0;
+}
+.tag-point{border-color:var(--info);background:var(--info-soft);color:var(--info)}
+.tag-mistake{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+
+.formula{
+  background:var(--paper-warm);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;
+  padding:13px 17px;margin:10px 0 14px;font-size:14px;line-height:1.9;
+  color:var(--ink);white-space:pre-wrap;
+}
+.mistake-reason{
+  background:var(--bad-soft);border-left:3px solid var(--bad);border-radius:0 8px 8px 0;
+  padding:12px 16px;margin:12px 0;font-size:14px;color:var(--ink);
+}
+.mistake-reason::before{
+  content:'✗ 错因';display:block;font-size:11.5px;font-weight:700;
+  color:var(--bad);letter-spacing:.06em;margin-bottom:3px;
+}
+.tip{
+  background:var(--good-soft);border-left:3px solid var(--good);border-radius:0 8px 8px 0;
+  padding:12px 16px;margin:12px 0 4px;font-size:14px;color:var(--ink);
+}
+.tip::before{
+  content:'✓ 避坑要点';display:block;font-size:11.5px;font-weight:700;
+  color:var(--good);letter-spacing:.06em;margin-bottom:3px;
+}
+.summary-section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow)}
+
+/* ---------- 页脚 ---------- */
+footer{
+  background:var(--primary-deep);color:rgba(255,255,255,.6);
+  padding:34px 0;text-align:center;font-size:13px;line-height:1.9;
+}
+footer strong{color:rgba(255,255,255,.9)}
+#back-top{
+  position:fixed;bottom:22px;right:22px;width:42px;height:42px;border-radius:50%;
+  background:var(--primary);color:#fff;border:none;font-size:19px;display:none;z-index:99;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:all .2s;
+}
+#back-top:hover{background:var(--accent);transform:translateY(-2px)}
+#back-top.show{display:block}
+
+@media (max-width:640px){
+  .hero{padding:34px 0 30px}
+  .hero-meta{gap:16px;font-size:12.5px}
+  .section{padding:28px 0}
+  .overview,.summary-section{padding:18px 16px}
+  .question-card{padding:16px 15px}
+  .error-table{font-size:12.5px}
+  .error-table th,.error-table td{padding:8px 9px}
+  .error-table td:first-child{white-space:normal}
+  .toc-list a{padding:7px 11px}
+  .formula{padding:11px 13px;font-size:13.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="../index.html#notes">← 返回学习笔记</a>
+    <span class="brand-sub">行测资料分析 · 错题复盘汇总</span>
+    <button id="theme-toggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌙</button>
+  </div>
+</header>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <span class="hero-tag">资料分析 · 错题复盘</span>
+    <h1>11 道典型错题逐题精批<br>把「会错的地方」变成「不会再错」</h1>
+    <p class="hero-sub">不是题目罗列，是规律提炼。每一道题都标出错因类型、正确解法与避坑口诀，最后汇总成 10 条避坑口诀表和 4 条可执行的改进措施。</p>
+    <div class="hero-meta">
+      <span><span class="dot"></span>题量：11 道典型错题</span>
+      <span><span class="dot"></span>错误类型：5 类</span>
+      <span><span class="dot"></span>覆盖考点：10 个高频易错点</span>
+      <span><span class="dot"></span>适用：国考 / 省考 资料分析</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <ul class="toc-list">
+      <li><a href="#overview">一、整体概述</a></li>
+      <li><a href="#pitfalls">二、避坑口诀表</a></li>
+      <li><a href="#review">三、分题复盘</a></li>
+      <li><a href="#improve">四、改进措施</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- ============ 一、整体概述 ============ -->
+  <section class="section" id="overview">
+    <div class="sec-num">01 / OVERVIEW</div>
+    <h2 class="sec-title">一、整体概述</h2>
+    <p class="sec-lead">先看清「错在哪儿」，再谈怎么补。下面把 11 道错题按错误类型归因，再拆成概念、审题、公式、估算、陷阱五类。</p>
+
+    <div class="overview">
+      <h3 class="sub">1. 覆盖核心知识点</h3>
+      <p>本次复盘共 11 道典型错题，全面覆盖资料分析高频易错考点：翻番概念辨析、增长率与变化幅度辨析、倍数与增长率辨析、平均数分母判定、混合增长率（线段法）、增长量计算与倍数、隔年增量与基期、两集合容斥比重极值、两期比重逆用、累计存量与增量转化。</p>
+
+      <h3 class="sub">2. 高频错误类型</h3>
+      <ul>
+        <li><strong>概念混淆类</strong>：翻番与倍数、增长率与变化幅度、是几倍与多几倍、基期/现期/增长量概念边界模糊</li>
+        <li><strong>审题偏差类</strong>：时间错位（问基期算现期）、对象错位（问国家平均算人均）、层级错位（问增量的增量算总量的增量）</li>
+        <li><strong>公式误用类</strong>：增长率直接用增量÷现期、增长量倍数直接用现期相除、混合增长率只判范围不精算</li>
+        <li><strong>估算失误类</strong>：百化分取值偏差、小增长率近似公式滥用、截位误差过大</li>
+        <li><strong>陷阱识别不足</strong>：累计存量陷阱、隔年增量陷阱、比重交集极值陷阱</li>
+      </ul>
+
+      <h3 class="sub">3. 整体原因分析</h3>
+      <p>核心问题在于未形成「先圈时间、再定对象、后套公式」的标准化解题流程，对题干关键词敏感度不足；易被材料中最直观的近期数据干扰，跳过关键推导步骤直接计算；同时对小众考点（如容斥比重极值、两期比重逆用）的题型特征识别不熟练。</p>
+    </div>
+  </section>
+
+  <!-- ============ 二、避坑口诀表 ============ -->
+  <section class="section" id="pitfalls">
+    <div class="sec-num">02 / PITFALLS</div>
+    <h2 class="sec-title">二、高频错误与避坑口诀汇总</h2>
+    <p class="sec-lead">把 10 个高频错法压成一张表：错在哪、正确逻辑是什么、考场上一句话怎么提醒自己。建议截图存手机，考前扫一遍。</p>
+
+    <table class="error-table">
+      <thead>
+        <tr>
+          <th>错误场景</th>
+          <th>常见错法</th>
+          <th>正确逻辑</th>
+          <th>避坑口诀</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>翻番计算</td>
+          <td>翻 n 番 = 乘以 n</td>
+          <td>翻 n 番 = 乘以 2ⁿ</td>
+          <td>翻几番，2 的几次方</td>
+        </tr>
+        <tr>
+          <td>变化幅度</td>
+          <td>带正负号直接做差</td>
+          <td>先取绝对值再做差</td>
+          <td>变化幅度，先套绝对值</td>
+        </tr>
+        <tr>
+          <td>多几倍 / 高几倍</td>
+          <td>直接 A÷B</td>
+          <td>A÷B − 1</td>
+          <td>是几倍直接除，多几倍除完减一</td>
+        </tr>
+        <tr>
+          <td>平均每个国家</td>
+          <td>除以人口数</td>
+          <td>除以国家数量</td>
+          <td>主语是国家除以国家数，主语是人除以人口</td>
+        </tr>
+        <tr>
+          <td>混合增长率</td>
+          <td>只判大于整体就选</td>
+          <td>线段法按量反比算差距</td>
+          <td>混合居中，偏向量大，距离与量成反比</td>
+        </tr>
+        <tr>
+          <td>给现期 + 增量求增速</td>
+          <td>增量÷现期</td>
+          <td>增量÷(现期−增量)</td>
+          <td>增长率分母，永远是基期</td>
+        </tr>
+        <tr>
+          <td>隔年增量题</td>
+          <td>拿最近年份增量直接算</td>
+          <td>先推基期再算目标年份增速</td>
+          <td>先圈问题时间，再定对比基准</td>
+        </tr>
+        <tr>
+          <td>增长量的倍数</td>
+          <td>现期量直接相除</td>
+          <td>分别算增长量再相除</td>
+          <td>增量比增量，先算再相除</td>
+        </tr>
+        <tr>
+          <td>累计存量题</td>
+          <td>拿累计值直接算增量</td>
+          <td>先算当年新增，再算增量的增量</td>
+          <td>存量先求新增，新增再算增量</td>
+        </tr>
+        <tr>
+          <td>两特征比重交集</td>
+          <td>认为无法计算直接排除</td>
+          <td>交集最小值 = A+B−100%</td>
+          <td>占比相加超百分百，重叠最少和减百</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 三、分题复盘 ============ -->
+  <section class="section" id="review">
+    <div class="sec-num">03 / REVIEW</div>
+    <h2 class="sec-title">三、分题详细复盘</h2>
+    <p class="sec-lead">每题四段：题干 → 正确解法 → 错因 → 避坑要点。错因一栏是重点——它对应的是你的思考习惯，而不是这道题的知识点。</p>
+
+    <div class="question-card">
+      <h3>第 1 题：IPv4 地址翻番判断</h3>
+      <span class="tag tag-point">考点：翻番概念</span>
+      <span class="tag tag-mistake">错误类型：概念混淆</span>
+      <p><strong>题干：</strong>2001 年底 0.2 亿个，2008 年底 1.8 亿个，判断「几乎每年翻一番」是否正确。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">间隔年数 = 2008 − 2001 = 7 年
+总倍数 = 1.8 ÷ 0.2 = 9 倍
+若每年翻一番：2⁷ = 128 倍，远大于实际 9 倍</div>
+      <p>结论：表述错误，实际约 3.17 年翻一番。</p>
+      <p class="mistake-reason">混淆「翻番」与「增长倍数」，误以为翻一番是线性增长，忽略翻番是指数级增长。</p>
+      <div class="tip">翻 n 番 = 基期 × 2ⁿ；翻 1 番 = 2 倍，翻 2 番 = 4 倍，翻 3 番 = 8 倍。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 2 题：飞鱼牌自行车产量变化幅度差值</h3>
+      <span class="tag tag-point">考点：变化幅度概念</span>
+      <span class="tag tag-mistake">错误类型：概念混淆</span>
+      <p><strong>题干：</strong>求产量变化幅度最高与最低相差几个百分点。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">变化幅度 = |增长率|
+最高变化幅度：30%；最低变化幅度：|−3%| = 3%
+差值 = 30% − 3% = 27 个百分点</div>
+      <p>答案：A（27 个百分点）</p>
+      <p class="mistake-reason">未注意「变化幅度」需取绝对值，直接用增速最高减增速最低（30% − (−3%) = 33%），误选易错项。</p>
+      <div class="tip">看到「变化幅度 / 涨跌幅度」，先对增长率取绝对值；只有问「增速 / 增幅差值」才带正负直接做差。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 3 题：中国 GDP 比巴西高多少倍</h3>
+      <span class="tag tag-point">考点：倍数与增长率辨析</span>
+      <span class="tag tag-mistake">错误类型：概念混淆</span>
+      <p><strong>题干：</strong>2011 年中国 GDP 73010 亿美元，巴西 24808 亿美元，求中国比巴西高多少倍。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">A 比 B 高多少倍 = (A ÷ B) − 1
+73010 ÷ 24808 ≈ 2.94（是巴西的 2.94 倍）
+高多少倍 = 2.94 − 1 = 1.94</div>
+      <p>答案：B（1.94 倍）</p>
+      <p class="mistake-reason">混淆「是几倍」与「高 / 多几倍」，直接计算现期倍数 2.94，误选 A。</p>
+      <div class="tip">「是几倍」直接除；「高 / 多 / 增长几倍」本质是增长率，必须除完减 1。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 4 题：一带一路平均每个南亚国家对外贸易额</h3>
+      <span class="tag tag-point">考点：平均数分母判定</span>
+      <span class="tag tag-mistake">错误类型：审题对象错位</span>
+      <p><strong>题干：</strong>判断平均每个南亚国家对外贸易额是否超过 1000 亿美元。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">对外贸易总额 = 进口额 + 出口额 = 4724.1 + 3308.5 = 8032.6 亿美元
+南亚共 8 个国家
+平均 = 8032.6 ÷ 8 ≈ 1004.07 亿美元 ＞ 1000，表述正确</div>
+      <p>答案：C 选项正确</p>
+      <p class="mistake-reason">误将「平均每个国家」当成「人均」，用总额除以人口数，导致结果完全偏离。</p>
+      <div class="tip">平均每个 XX 国家 → 分母 = 国家数量；人均 XX → 分母 = 人口数。题干主语决定分母对象。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 5 题：大中型水利项目投资同比增速（混合增长率）</h3>
+      <span class="tag tag-point">考点：混合增长率 + 线段法</span>
+      <span class="tag tag-mistake">错误类型：公式应用不全</span>
+      <p><strong>题干：</strong>水利总投资同比增 10.1%；小型项目 9009 亿，增 3.1%；大中型项目 2987 亿，求大中型增速。</p>
+      <p><strong>正确解法：</strong></p>
+      <ol>
+        <li>居中原则：整体增速 10.1%，小型 3.1%，则大中型增速 ＞ 10.1%</li>
+        <li>线段法：量之比 ≈ 9009 : 2987 ≈ 3 : 1，距离与量成反比 = 1 : 3</li>
+        <li>小型到整体距离 = 10.1% − 3.1% = 7 个百分点（对应 1 份）</li>
+        <li>大中型增速 = 10.1% + 7% × 3 = 31.1% ＞ 20%</li>
+      </ol>
+      <p>答案：D（20% 以上）</p>
+      <p class="mistake-reason">仅用「混合居中」判断增速大于 10.1%，就误选 10%–20% 区间，未用量的比例计算具体增速差距。</p>
+      <div class="tip">混合增长率两步走：先居中排选项，再用量反比算具体值；基数差距越大，未知部分增速离整体越远。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 6 题：水利各类工程同比增速排序</h3>
+      <span class="tag tag-point">考点：增长率计算（现期 + 增量）</span>
+      <span class="tag tag-mistake">错误类型：公式误用</span>
+      <p><strong>题干：</strong>给出现期值与同比增长量，按增速从大到小排序。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">增长率 = 增长量 ÷ (现期量 − 增长量)
+建筑工程：597 ÷ (9089 − 597) ≈ 7.0%
+安装工程：97 ÷ (583 − 97) ≈ 20.0%
+机电设备：34 ÷ (321 − 34) ≈ 11.8%
+其他：375 ÷ (2003 − 375) ≈ 23.0%</div>
+      <p>排序：其他 ＞ 安装工程 ＞ 机电设备 ＞ 建筑工程 → 答案 C</p>
+      <p class="mistake-reason">直接用「增长量 ÷ 现期量」近似替代增长率，或数值估算偏差导致排序错误。</p>
+      <div class="tip">增长率的分母永远是基期量；增量 ÷ 现期仅可用于初步预判，选项接近时必须用基期精算。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 7 题：2021 年数字阅读上架作品同比增速</h3>
+      <span class="tag tag-point">考点：隔年增量与基期</span>
+      <span class="tag tag-mistake">错误类型：时间错位</span>
+      <p><strong>题干：</strong>2022 年总量 5271.86 万部，比上年增 1825 万部，比 2020 年增 2168.26 万部，求 2021 年同比增速。</p>
+      <p><strong>正确解法：</strong></p>
+      <ol>
+        <li>2020 年总量 = 5271.86 − 2168.26 = 3103.6 万部</li>
+        <li>2021 年同比增量 = 2168.26 − 1825 = 343.26 万部</li>
+        <li>2021 年增速 = 343.26 ÷ 3103.6 ≈ 11%</li>
+      </ol>
+      <p>答案：A（11%）</p>
+      <p class="mistake-reason">审题忽略时间，直接用 2022 年增量计算 2022 年增速，误选 C。</p>
+      <div class="tip">第一步先圈问题时间，再定位对应对比基期；给跨两年增量时，先画时间轴梳理各年份数值。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 8 题：网络文学增量是电子书增量的多少倍</h3>
+      <span class="tag tag-point">考点：增长量的倍数</span>
+      <span class="tag tag-mistake">错误类型：对象错位 + 估算偏差</span>
+      <p><strong>题干：</strong>给出现期量与同比增速，求网络文学增量是电子书增量的多少倍。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">增长量 = 现期 ÷ (1+r) × r（百化分速算）
+网络文学：7.93% ≈ 1/12.6，增量 ≈ 3458.84 ÷ 13.6 ≈ 254
+电子书：14.61% ≈ 1/6.8，增量 ≈ 206.92 ÷ 7.8 ≈ 26.5
+倍数 ≈ 254 ÷ 26.5 ≈ 9.6 ≈ 10</div>
+      <p>答案：D（10）</p>
+      <p class="mistake-reason">误将「增长量的倍数」算成「现期量的倍数」，或百化分计算时忘记分母加 1。</p>
+      <div class="tip">问「增量是多少倍」，必须先分别算两个增长量再相除；百化分公式：增长量 = 现期 /(n+1)。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 9 题：数字阅读发展情况综合判断</h3>
+      <span class="tag tag-point">考点：容斥比重极值 + 两期比重逆用</span>
+      <span class="tag tag-mistake">错误类型：考点识别不足</span>
+      <p><strong>题干：</strong>判断 3 个说法正确的有几项。</p>
+      <ol>
+        <li><strong>① 19–45 岁男性占比超 20%</strong>：两集合容斥极值
+          <div class="formula">交集最小值 = A + B − 100% = 67.15% + 55.87% − 100% = 23.02% ＞ 20% → 正确</div>
+        </li>
+        <li><strong>② 版权营收占比最高最低差 16.57 个百分点</strong>：最高 28.90%，最低 11.90%，差值 17 个百分点 → 错误</li>
+        <li><strong>③ 总增速超广告及其他的年份有 3 个</strong>：两期比重逆用，比重下降 → 部分增速 ＜ 整体增速；仅 2022 年比重下降，共 1 个 → 错误</li>
+      </ol>
+      <p>答案：B（1 项正确）</p>
+      <p class="mistake-reason">未识别出 ① 是两集合比重交集极值考点，误以为无法计算；对两期比重逆用逻辑不熟练。</p>
+      <div class="tip">两个群体占比相加 ＞ 100%，同时满足两者的占比最小值 = 占比之和 − 100%；比重上升 → 部分增速 ＞ 整体，比重下降 → 部分增速 ＜ 整体。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 10 题：2023 年城市排水管道长度（基期计算）</h3>
+      <span class="tag tag-point">考点：基期量计算</span>
+      <span class="tag tag-mistake">错误类型：估算偏差</span>
+      <p><strong>题干：</strong>2024 年末 99.36 万公里，同比增 4.32%，求 2023 年末长度。</p>
+      <p><strong>正确解法：</strong></p>
+      <div class="formula">基期量 = 现期量 ÷ (1+r)
+百化分：4.32% ≈ 1/23，增长量 ≈ 99.36 ÷ 24 ≈ 4.14
+基期 ≈ 99.36 − 4.14 ≈ 95.22 万公里</div>
+      <p>答案：A（95）</p>
+      <p class="mistake-reason">估算时直接粗略扣减 4 万公里，或直除时估算偏差，误选 98。</p>
+      <div class="tip">r ＜ 5% 时，优先用「现期 − 增长量」的思路计算基期；百化分后增长量 = 现期/(n+1)，再做减法更精准。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 11 题：轨道交通新建成线路增量变化趋势</h3>
+      <span class="tag tag-point">考点：累计存量与增量转化</span>
+      <span class="tag tag-mistake">错误类型：层级错位</span>
+      <p><strong>题干：</strong>给累计已建成线路长度，求 2021–2024 年新建成线路长度的同比增量变化趋势。</p>
+      <p><strong>正确解法：</strong>两步做差</p>
+      <ol>
+        <li>第一步：本年累计 − 上年累计 = 当年新建成长度
+          <p>2020: 1660、2021: 920、2022: 1000、2023: 790、2024: 720</p>
+        </li>
+        <li>第二步：本年新增 − 上年新增 = 新增量的同比增量
+          <p>2021: 920 − 1660 = −740、2022: 1000 − 920 = 80、2023: 790 − 1000 = −210、2024: 720 − 790 = −70</p>
+        </li>
+        <li>趋势：先大幅上升 → 下降 → 小幅回升，对应 D</li>
+      </ol>
+      <p>答案：D</p>
+      <p class="mistake-reason">直接拿累计总长算同比增量，只做了一层减法，未意识到题目求的是「新增量的增量」，需要二次做差。</p>
+      <div class="tip">材料给累计 / 存量，问「当年新增的同比增量」，必须两次做差：先求每年新增，再求新增的增量。</div>
+    </div>
+  </section>
+
+  <!-- ============ 四、改进措施 ============ -->
+  <section class="section" id="improve">
+    <div class="sec-num">04 / ACTION</div>
+    <h2 class="sec-title">四、补救与改进措施</h2>
+    <p class="sec-lead">复盘的价值在最后这四条。做得到，才算真的复盘过。</p>
+
+    <div class="summary-section">
+      <h3 class="sub">1. 审题环节标准化</h3>
+      <ol>
+        <li><strong>先圈时间</strong>：明确求现期 / 基期 / 隔年，标记问题年份与材料年份的差异</li>
+        <li><strong>再定对象</strong>：圈出主语（国家 / 人 / 企业），确定分母或计算主体</li>
+        <li><strong>后判题型</strong>：根据关键词（增速、增量、倍数、平均）匹配对应公式</li>
+      </ol>
+
+      <h3 class="sub">2. 核心概念闭环记忆</h3>
+      <p>将易混淆概念成对记忆：翻番 vs 倍数、变化幅度 vs 增速、是几倍 vs 多几倍、累计 vs 当年新增，每天过一遍辨析口诀，形成条件反射。</p>
+
+      <h3 class="sub">3. 计算能力专项提升</h3>
+      <ul>
+        <li>百化分表格熟记到 1/20，配套每天 5 道增长量计算题</li>
+        <li>线段法固定步骤：写比例 → 定距离 → 算未知，每天 3 道混合增长率题</li>
+        <li>小增长率基期计算优先用「现期 − 增长量」，减少直除误差</li>
+      </ul>
+
+      <h3 class="sub">4. 错题复盘机制</h3>
+      <p>每道错题标注「错误类型 + 考点关键词 + 避坑口诀」，同类型错题归类整理；每周重做一遍本周错题，重点关注审题陷阱和概念混淆点，形成错题条件反射。</p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<button id="back-top" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<footer>
+  <div class="wrap">
+    <p><strong>行测资料分析错题复盘汇总</strong></p>
+    <p>11 道典型错题 · 10 条避坑口诀 · 4 项可执行改进措施</p>
+    <p style="margin-top:10px"><a href="../index.html#notes" style="color:rgba(255,255,255,.8)">← 返回学习笔记</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // 回到顶部
+  (function () {
+    var bt = document.getElementById('back-top');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 400) bt.classList.add('show');
+      else bt.classList.remove('show');
+    });
+  })();
+
+  // 主题切换（沿用站内 data-theme 机制 + localStorage 持久化）
+  (function () {
+    var btn = document.getElementById('theme-toggle');
+    var KEY = 'datamistakes_theme';
+    function apply(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        btn.textContent = '☀️';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        btn.textContent = '🌙';
+      }
+    }
+    var saved = null;
+    try { saved = window.localStorage.getItem(KEY); } catch (e) { /* 隐私模式下忽略 */ }
+    apply(saved === 'dark' ? 'dark' : 'light');
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(cur);
+      try { window.localStorage.setItem(KEY, cur); } catch (e) { /* 忽略 */ }
+    });
+  })();
+
+  // 目录高亮
+  (function () {
+    var links = document.querySelectorAll('.toc-list a');
+    var sections = document.querySelectorAll('.section');
+    if (!links.length || !sections.length) return;
+    window.addEventListener('scroll', function () {
+      var current = '';
+      sections.forEach(function (s) {
+        if (s.getBoundingClientRect().top <= 160) current = s.id;
+      });
+      links.forEach(function (a) {
+        var active = a.getAttribute('href') === '#' + current;
+        a.style.background = active ? 'var(--primary)' : '';
+        a.style.color = active ? '#fff' : '';
+      });
+    });
+  })();
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->

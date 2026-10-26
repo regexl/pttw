@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>图形推理常见考点 · 知识点与解题方法整理</title>
+<style>
+:root{
+  --ink:#182231; --ink2:#3b4859; --grey:#6d7787;
+  --line:#e0e4ea; --bg:#f3f5f8;
+  --deep:#123a63; --deep-dark:#0c2743; --deep-light:#eef4fa;
+  --gold:#a8741a; --gold-light:#fdf7ea;
+  --red:#c0392b; --red-light:#fdf1ef;
+  --teal:#0e7c85; --teal-light:#e9f6f6;
+  --green:#1c7a4d; --green-light:#eff8f2;
+  --purple:#5b3d8f; --purple-light:#f4f0fa;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;
+  line-height:1.92;font-size:15px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px 70px}
+header.hero{background:linear-gradient(135deg,var(--deep) 0%,var(--deep-dark) 100%);color:#fff;
+  padding:38px 28px 30px;box-shadow:0 3px 14px rgba(0,0,0,.18)}
+header.hero .kicker{font-size:12.5px;letter-spacing:4px;color:#f0c674;margin-bottom:8px}
+header.hero h1{margin:0 0 14px;font-size:26px;line-height:1.45;letter-spacing:.5px}
+header.hero .meta{font-size:13.5px;opacity:.95;line-height:2}
+header.hero .meta b{color:#f0c674;font-weight:600}
+header.hero .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+header.hero .tags span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);
+  padding:2px 11px;border-radius:20px;font-size:12.5px}
+.notice{background:var(--gold-light);border:2px solid var(--gold);border-left-width:6px;border-radius:8px;
+  padding:14px 18px;margin:22px 0;font-size:14px;line-height:1.9;color:#6b4a05}
+.notice b{color:#4a3303}
+.toc{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 22px 18px;
+  margin:22px 0 6px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.toc-title{font-weight:700;color:var(--deep);margin-bottom:8px;font-size:15px;letter-spacing:1px}
+.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+.toc li{margin:4px 0;font-size:14px}
+.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px solid #cfd8e0}
+.toc a:hover{color:var(--teal);border-color:var(--teal)}
+h2{font-size:21px;color:var(--deep);margin:40px 0 16px;padding-left:13px;border-left:6px solid var(--deep);line-height:1.45}
+h3{font-size:17px;color:var(--teal);margin:24px 0 10px;padding-left:10px;border-left:4px solid #b6dfe1}
+h4{font-size:15.5px;color:var(--deep-dark);margin:18px 0 8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0;padding-left:26px}
+li{margin:5px 0}
+strong{color:var(--deep-dark)}
+hr{border:0;border-top:1px dashed var(--line);margin:28px 0}
+code{background:#eef1f5;padding:1px 6px;border-radius:4px;font-size:13.5px;
+  font-family:Consolas,"Courier New",monospace;color:#0b4f6c}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 24px 22px;
+  margin:16px 0 20px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.card.tight{padding:16px 20px 18px}
+.card-title{font-size:15px;font-weight:700;color:var(--deep);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.card-title .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+.card.tl{border-left:5px solid var(--teal)}
+.card.gd{border-left:5px solid var(--gold);background:var(--gold-light)}
+.card.rd{border-left:5px solid var(--red);background:var(--red-light)}
+.card.gr{border-left:5px solid var(--green);background:var(--green-light)}
+.card.pu{border-left:5px solid var(--purple);background:var(--purple-light)}
+.card.dp{border-left:5px solid var(--deep);background:var(--deep-light)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.grid2,.grid4{grid-template-columns:1fr}}
+.table-wrap{overflow-x:auto;margin:14px 0 20px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);background:#fff}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:13.4px;background:#fff}
+th{background:var(--deep);color:#fff;font-weight:600;text-align:left;padding:9px 11px;border:1px solid var(--deep)}
+td{padding:9px 11px;border:1px solid var(--line);vertical-align:top;line-height:1.8}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:var(--deep-light)}
+td b,th b{color:var(--deep-dark)}
+.pill{display:inline-block;background:var(--deep-light);color:var(--deep-dark);border:1px solid #c8d6e4;
+  border-radius:14px;padding:1px 10px;font-size:12.5px;margin:2px 4px 2px 0}
+.pill.r{background:var(--red-light);color:var(--red);border-color:#f0c8c2}
+.pill.g{background:var(--green-light);color:var(--green);border-color:#c4e3d2}
+.pill.a{background:var(--gold-light);color:var(--gold);border-color:#ecd9ac}
+.pill.t{background:var(--teal-light);color:var(--teal);border-color:#bfe1e2}
+.pill.p{background:var(--purple-light);color:var(--purple);border-color:#d8cdec}
+pre{background:#1d2733;color:#d8e2ec;padding:15px 18px;border-radius:8px;overflow-x:auto;
+  font-size:13.4px;line-height:1.85;border-left:5px solid var(--teal);margin:14px 0;
+  font-family:Consolas,"Courier New",monospace}
+.quote{background:var(--deep-light);border-left:4px solid var(--deep);padding:12px 18px;
+  border-radius:0 6px 6px 0;margin:14px 0;font-size:14.3px;color:var(--ink2)}
+ol.steps{counter-reset:st;list-style:none;padding-left:0}
+ol.steps>li{counter-increment:st;position:relative;padding:12px 16px 12px 52px;background:#fff;
+  border:1px solid var(--line);border-radius:8px;margin:9px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+ol.steps>li::before{content:counter(st);position:absolute;left:14px;top:11px;width:24px;height:24px;
+  background:var(--teal);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-size:13px;font-weight:700}
+ol.steps>li b{color:var(--teal)}
+.check{list-style:none;padding-left:0}
+.check li{padding-left:28px;position:relative;margin:7px 0}
+.check li::before{content:"☐";position:absolute;left:4px;top:0;font-size:17px;color:var(--teal)}
+.num4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+@media (max-width:900px){.num4{grid-template-columns:repeat(2,1fr)}}
+.num4 .b{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:8px;
+  padding:14px 13px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.num4 .b .n{font-size:12px;color:var(--grey);letter-spacing:1px}
+.num4 .b .t{font-size:15.5px;font-weight:700;color:var(--deep);margin:3px 0 5px;line-height:1.4}
+.num4 .b .m{font-size:12.5px;color:var(--teal);font-weight:700}
+.num4 .b .d{font-size:12.8px;color:var(--ink2);line-height:1.75;margin-top:4px}
+footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;line-height:2;
+  border-top:1px solid var(--line);margin-top:36px}
+.src{font-size:12.5px;color:var(--grey)}
+@media print{
+  body{background:#fff}
+  .toc{display:none}
+  h2{break-after:avoid}
+  .card{break-inside:avoid}
+  .table-wrap{overflow:visible}
+  table{min-width:0;font-size:10.5px}
+  pre{background:#f4f4f4;color:#222;border:1px solid #ddd}
+}
+
+/* ===== 站点外壳：顶栏 / 主题切换 / 回到顶部 ===== */
+.sd-topbar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.sd-topbar a{color:var(--deep);text-decoration:none;font-weight:600;font-size:14px}
+.sd-topbar a:hover{color:var(--gold)}
+.sd-topbar .brand-sub{color:var(--grey);font-size:13px}
+.sd-theme{
+  margin-left:auto;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--line);background:var(--bg);font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.sd-theme:hover{border-color:var(--gold);transform:rotate(-15deg)}
+.sd-backtop{
+  position:fixed;bottom:22px;right:22px;width:42px;height:42px;border-radius:50%;
+  background:var(--deep);color:#fff;border:none;font-size:19px;display:none;z-index:99;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:all .2s;
+}
+.sd-backtop:hover{background:var(--gold)}
+.sd-backtop.show{display:block}
+h2{scroll-margin-top:64px}
+.toc a{scroll-margin-top:64px}
+
+/* ===== 暗色模式（源页面大量硬编码 #fff，这里统一覆盖） ===== */
+[data-theme="dark"]{
+  --ink:#e6eaef; --ink2:#c2cad4; --grey:#8b95a3;
+  --line:#2b3340; --bg:#12151b;
+  --gold:#d9a441; --gold-light:#33260f;
+  --red:#f07a6c; --red-light:#3a1d1a;
+  --teal:#4fc4cd; --teal-light:#123033;
+  --green:#57c98c; --green-light:#12301f;
+  --purple:#a98fe0; --purple-light:#241d33;
+  --deep-light:#18263a;
+}
+[data-theme="dark"] .card,
+[data-theme="dark"] table,
+[data-theme="dark"] .toc,
+[data-theme="dark"] .table-wrap,
+[data-theme="dark"] ol.steps>li,
+[data-theme="dark"] .num4 .b{background:#181c24}
+[data-theme="dark"] .card{box-shadow:0 1px 5px rgba(0,0,0,.35)}
+[data-theme="dark"] tbody tr:nth-child(even){background:#1d222c}
+[data-theme="dark"] .notice{color:#e8c98a}
+[data-theme="dark"] .notice b{color:#f7dda4}
+[data-theme="dark"] code{background:#232a36;color:#d7dee8}
+[data-theme="dark"] h2{color:#8ab4f8;border-left-color:#3b6ea8}
+[data-theme="dark"] h3{color:#c8d4e2}
+[data-theme="dark"] th{background:#1e4a78;border-color:#1e4a78}
+[data-theme="dark"] td{border-color:var(--line)}
+[data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
+[data-theme="dark"] .pill.r{border-color:#5c2f2a}
+[data-theme="dark"] .pill.g{border-color:#1f4a35}
+[data-theme="dark"] .pill.a{border-color:#4a3a14}
+[data-theme="dark"] .pill.t{border-color:#1d4749}
+[data-theme="dark"] .pill.p{border-color:#372a4d}
+[data-theme="dark"] .hero{box-shadow:0 3px 14px rgba(0,0,0,.5)}
+</style>
+<meta name="description" content="图形推理常见考点与解题方法：通用解题框架、位置规律、数量规律（面/点/线角素）、对称、加减同异、黑白运算、极端思维、二级辨析与考场速查卡。">
+<meta name="keywords" content="行测,判断推理,图形推理,位置规律,数量规律,对称,黑白运算,加减同异,极端思维">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔷</text></svg>">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+<header class="sd-topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">判断推理 · 图形推理常见考点</span>
+  <button id="sd-theme" class="sd-theme" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<header class="hero">
+  <div class="kicker">判断推理专项 · 图形推理</div>
+  <h1>图形推理常见考点：知识点与解题方法</h1>
+  <div class="meta">
+    <b>来源</b>：徐来《图形推理常见考点》讲义（11页）　|
+    <b>整理日期</b>：2026年10月24日　|
+    <b>用途</b>：行测判断推理 · 图形推理（考点梳理 + 方法论）<br>
+    <b>整理原则</b>：<b>只保留知识点与解题方法，不含例题</b>（原讲义 30+ 道真题已全部剔除）
+  </div>
+  <div class="tags">
+    <span>位置规律</span><span>数量规律-面</span><span>数量规律-点</span><span>对称规律</span>
+    <span>加减同异</span><span>黑白运算</span><span>极端思维</span><span>二级辨析</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="notice">
+  <b>整理说明：</b>原 PDF 是一份以真题为主体的例题讲义（每页含若干道国考/省考/联考题，图形以图片形式呈现），文字部分仅有考点标题与题干。本整理<b>完整剥离所有题目与选项</b>，只保留①图形推理通用解题框架、②六大考点各自的规律体系与识别特征、③可落地的解题方法与步骤、④二级辨析与易错陷阱、⑤考场速查卡。
+</div>
+
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#s1">图形推理通用解题框架</a></li>
+    <li><a href="#s2">考点一：位置规律（平移·旋转·翻转·时针）</a></li>
+    <li><a href="#s3">考点二：数量规律 —— 面</a></li>
+    <li><a href="#s4">考点二：数量规律 —— 点</a></li>
+    <li><a href="#s5">数量规律补充：线、角、素</a></li>
+    <li><a href="#s6">考点三：对称规律</a></li>
+    <li><a href="#s7">考点四：图形的“加减同异”</a></li>
+    <li><a href="#s8">考点五：黑白运算</a></li>
+    <li><a href="#s9">常用解题思维：极端思维</a></li>
+    <li><a href="#s10">二级辨析与解题优先级</a></li>
+    <li><a href="#s11">考场速查卡</a></li>
+  </ol>
+</nav>
+
+<!-- ================= 1 ================= -->
+<h2 id="s1">一、图形推理通用解题框架</h2>
+
+<div class="card dp">
+  <div class="card-title"><span class="dot"></span>总原则：先定性、后定量、再属性</div>
+  图形推理的观察顺序是固定的，<b>不要一上来就数点线面</b>。绝大多数题在“看图两秒”内就能靠定性判断定方向，定性无解再进入定量。
+  <ol class="steps" style="margin-top:12px">
+    <li><b>一看图形组成：</b>组成元素是否相同/相似？是“相同元素看位置”还是“不同元素看数量”。</li>
+    <li><b>二看位置特征：</b>元素位置发生移动→位置规律（平移、旋转、翻转）；位置不动→排除位置。</li>
+    <li><b>三看数量特征：</b>点（交点）、线（笔画/直曲线）、面（封闭区域）、素（元素种类/个数）。</li>
+    <li><b>四看属性特征：</b>对称性（轴对称/中心对称）、曲直性、开闭性、黑白运算、加减同异。</li>
+    <li><b>五看特殊规律：</b>样式运算（叠加）、元素替换、空间重构、立体截面。</li>
+  </ol>
+</div>
+
+<div class="grid2">
+  <div class="card tl">
+    <div class="card-title"><span class="dot"></span>图形组成相同 / 相似</div>
+    <ul>
+      <li><b>完全相同</b>：优先看<b>位置</b>（平移、旋转、翻转），其次看<b>样式运算</b>（叠加）。</li>
+      <li><b>相似（组成元素不变，细节有别）</b>：优先看<b>数量</b>（交点数、线条数、封闭区域数），其次看<b>属性</b>（曲直性、开闭性）。</li>
+      <li><b>凌乱无序</b>：说明图形本身不构成规律，规律藏在<b>选项</b>里（见“极端思维”与排除法）。</li>
+    </ul>
+  </div>
+  <div class="card gr">
+    <div class="card-title"><span class="dot"></span>题干特殊形式识别</div>
+    <ul>
+      <li><b>六图两问</b>：分为两类，即“分类分组型”，考的是<b>两类各自的共性</b>，不是找唯一规律。</li>
+      <li><b>问“不能/不属于”</b>：反向问法，需先找出三项的共性，剩下的一项即为答案。</li>
+      <li><b>问“最恰当/最符合”</b>：选项之间存在风格差异，往往是<b>数量递减、线条递增</b>等程度类规律。</li>
+      <li><b>题干给出图形分组</b>：优先考虑<b>对称性、曲直性、开闭性</b>这三类属性二分法。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================= 2 ================= -->
+<h2 id="s2">二、考点一：位置规律</h2>
+
+<div class="notice">
+  <b>识别特征：</b>图形组成<b>完全相同</b>（元素个数、形状、大小一致），只是摆放位置不同 → 直接锁定位置规律。位置规律的本质是<b>“谁在动、往哪动、动多少”</b>。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>平移规律</div>
+  <p><b>方法要点</b></p>
+  <ul>
+    <li><b>方向</b>：上下、左右、斜向（左上→右下、右上→左下）。</li>
+    <li><b>步长</b>：可以是恒定步长，也可以是<b>等差数列</b>步长（如 1、2、3 格）。</li>
+    <li><b>平移方式</b>：
+      <ul>
+        <li><b>直接平移</b>：图形整体沿直线移动。</li>
+        <li><b>平移+翻转</b>：每步平移的同时自身翻面（如左右镜像交替）。</li>
+        <li><b>循环平移</b>：多个元素分别按不同方向/步长移动，需要<b>逐个元素单独追踪</b>。</li>
+      </ul>
+    </li>
+    <li><b>解题动作</b>：选一个<b>特征最明显</b>的元素（尖角、缺口、阴影块）作为跟踪锚点，只跟一个元素即可锁定规律。</li>
+  </ul>
+  <div class="quote">⚠️ 陷阱：多个元素移动方向不一致时，不要试图整体平移；改为<b>分元素追踪</b>，分别记方向与步长（常为等差）。</div>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>旋转规律</div>
+  <ul>
+    <li><b>识别</b>：元素造型不变，只是朝向改变。</li>
+    <li><b>方向</b>：顺时针 / 逆时针（方向恒定最常见；方向交替是进阶考法）。</li>
+    <li><b>角度</b>：常见 90°、120°、135°、180°、45°；角度本身也可构成<b>等差数列</b>。</li>
+    <li><b>叠加旋转</b>：整体旋转 + 内部元素相对旋转（双层旋转），需要分别追踪<b>外框</b>和<b>内元素</b>。</li>
+    <li><b>解题动作</b>：找一条<b>“参照边”</b>（如直角边、斜边、指针方向），记录它每次转过的角度。</li>
+  </ul>
+  <div class="quote">⚠️ 陷阱：60°、45° 易看错方向。方向判断错会导致全盘皆错，务必先用<b>一个特征突出的元素</b>确定顺/逆时针，再看角度。</div>
+</div>
+
+<div class="card pu">
+  <div class="card-title"><span class="dot"></span>翻转规律</div>
+  <ul>
+    <li><b>上下翻转</b>（沿水平轴镜像）与<b>左右翻转</b>（沿垂直轴镜像）。</li>
+    <li><b>翻转+平移</b>：最常见的复合形式，尤其在图形不规则时。</li>
+    <li><b>辨析翻转与旋转</b>：翻转不改变图形内部的<b>顺/逆时针环绕关系</b>（会镜像），旋转保持环绕关系不变——用图形内部的小箭头/小元素朝向判断。</li>
+    <li><b>解题动作</b>：在图上标出左右两个方向的特征元素，看对应关系是否镜像。</li>
+  </ul>
+  <div class="quote">⚠️ 陷阱：左右翻转看起来像“对称”，容易误判为对称规律。要区分：<b>对称</b>是同一个图形自身轴对称；<b>翻转</b>是图形 A 变成图形 B。</div>
+</div>
+
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>时针（指针式）规律</div>
+  <ul>
+    <li>本质是<b>位置规律的一种</b>：指针绕固定中心按一定角度、方向、周期转动。</li>
+    <li>关注三要素：<b>转动的指针数量</b>（一根/多根）、<b>方向</b>（顺/逆）、<b>步长角度</b>（可等差）。</li>
+    <li>多指针时，每根指针的步长可能不同，需分别记录。</li>
+  </ul>
+</div>
+
+<!-- ================= 3 ================= -->
+<h2 id="s3">三、考点二：数量规律 —— 面（封闭区域）</h2>
+
+<div class="notice">
+  <b>识别特征：</b>图形<b>组成元素不规则</b>（不相似也不完全相同），但肉眼可见被分成若干<b>块状封闭空间</b> → 数“面”。面的数量是图形推理中出现频率最高、最稳定的数量考点。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>面的三种数法（关键区分）</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:130px">数法</th><th style="width:180px">定义</th><th>典型说明与易错点</th></tr></thead>
+      <tbody>
+        <tr><td><b>封闭区域数</b></td><td>图形内部被线条完全围成的独立空白块数</td><td>最常用。汉字、字母、图形拼接时，数“被围住的口”。注意<b>外部的大空白不算面</b>，只数被线段围出的封闭区域。</td></tr>
+        <tr><td><b>面数量（区域数，含轮廓外）</b></td><td>在封闭区域基础上考虑整体轮廓</td><td>当题干图形存在<b>笔画交叉形成的区域</b>时常用；关键判断是否把图形自身轮廓当作一条边界线。</td></tr>
+        <tr><td><b>部分数 / 拆分计数</b></td><td>由几个独立的部分组成</td><td>图形被明显分割成互不相连的块时数块数；注意“分离的笔画”也算部分。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>面的常见数列规律</div>
+  <ul>
+    <li><b>等差</b>：1、2、3、4、5（递增）或 5、4、3、2、1（递减）。</li>
+    <li><b>恒定</b>：每个图形都是 3 个面 / 4 个面。</li>
+    <li><b>等比或倍数</b>：1、2、4、8。</li>
+    <li><b>分组数列</b>：两两一组，如 1、2 / 3、4 / 5、6（每组差 1）。</li>
+    <li><b>质数数列</b>：2、3、5、7。</li>
+    <li><b>图形间做加减</b>：图1 + 图2 = 图3 的面数（前两项相加等于第三项）。</li>
+    <li><b>面数量相同但形状不同</b>：面数一致即规律成立，此时往往考<b>面的形状组合</b>。</li>
+  </ul>
+</div>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>面的易错陷阱</div>
+  <ul class="check">
+    <li><b>数错闭合口</b>：线条末端未闭合的地方不算一个面，须逐条确认边界闭合。</li>
+    <li><b>忽略镂空</b>：图形中间的“洞”是独立的面，容易漏数。</li>
+    <li><b>忽略交叉产生的面</b>：两条线交叉会额外增加区域。</li>
+    <li><b>把图形外的空白计入</b>：面只算图形内部封闭区域。</li>
+    <li><b>混淆“笔画数”与“面数”</b>：见后文线条部分。</li>
+  </ul>
+</div>
+
+<!-- ================= 4 ================= -->
+<h2 id="s4">四、考点二：数量规律 —— 点（交点）</h2>
+
+<div class="notice">
+  <b>识别特征：</b>图形由<b>线条</b>（直线、曲线）构成，且线条之间存在大量<b>交叉点</b> → 数“点”。点的规律通常<b>等差</b>，分 <b>交点数</b> 与 <b>切点数</b> 两类。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>点的两大类型</div>
+  <ul>
+    <li><b>交点</b>：线条与线条<b>相交</b>形成的点（直线交直线、直线交曲线、曲线交曲线都算交点）。</li>
+    <li><b>切点</b>：线条与线条<b>相切</b>（相接但不穿过）形成的点，常在两圆相切、线与圆相切中出现。</li>
+  </ul>
+  <div class="quote">💡 计数时只数<b>图形内部</b>的点；图形轮廓线自身的外接顶点不算交点。</div>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>点的解题方法</div>
+  <ol class="steps">
+    <li><b>先分类，再计数</b>：区分交点与切点，确定题目考的是哪一种（通常只考交点，若切点明显则单独考虑）。</li>
+    <li><b>数“点”的位置优先级</b>：从图形左上角开始，顺时针/逆时针逐个标记，避免漏数重数。</li>
+    <li><b>快速验数</b>：直线交点数可用“线数×线数 − 重合数”粗估；圆形图形用<b>切线弦定理</b>式直觉（一条直线与圆相切时交点数骤减）。</li>
+    <li><b>找数列</b>：交点数常呈 1、2、3、4 递增，或 2、3、5、7，或 5、4、3、2 递减。</li>
+  </ol>
+</div>
+
+<div class="card pu">
+  <div class="card-title"><span class="dot"></span>点的易错陷阱</div>
+  <ul class="check">
+    <li>把<b>端点</b>（线条起止点）当成交点——端点通常不算。</li>
+    <li>曲线相切与相交的混淆。</li>
+    <li>多个点重叠在同一位置（粗细线叠印），只算一个点。</li>
+    <li>图形轮廓的四角顶点不算交点。</li>
+  </ul>
+</div>
+
+<!-- ================= 5 ================= -->
+<h2 id="s5">五、数量规律补充：线、角、素</h2>
+
+<div class="grid2">
+  <div class="card tl">
+    <div class="card-title"><span class="dot"></span>线条数（笔画）</div>
+    <ul>
+      <li><b>直线数 / 曲线数</b>：数图形中直线、曲线各自的条数，常一增一减。</li>
+      <li><b>笔画数（一笔画/两笔画）</b>：奇点（连接奇数条线的点）个数决定笔数。
+        <ul><li>奇点 0 个 → <b>一笔画</b></li><li>奇点 2 个 → <b>两笔画</b></li><li>奇点 2n 个 → <b>n 笔画</b></li></ul>
+      </li>
+      <li><b>解题方法</b>：先数奇点个数（连接奇数条线的交点），奇点为 0/2 的一笔画两笔画最常考。</li>
+    </ul>
+  </div>
+  <div class="card gr">
+    <div class="card-title"><span class="dot"></span>角度数</div>
+    <ul>
+      <li>图形中<b>直角、锐角、钝角</b>的个数，常呈等差或一增一减。</li>
+      <li>注意区分<b>图形内角</b>与<b>图形之间的夹角</b>。</li>
+      <li>与<b>曲直性</b>联动：一个图形全是直线 → 必有直角；含曲线则多为非直角。</li>
+    </ul>
+  </div>
+  <div class="card pu">
+    <div class="card-title"><span class="dot"></span>元素种类与个数（素）</div>
+    <ul>
+      <li><b>种类数</b>：图形由几种不同元素/图形拼成（常为 2、3、4 种）。</li>
+      <li><b>个数</b>：每种元素出现几次（常呈等差 1、2、3）。</li>
+      <li><b>方法</b>：先分类再计数；每种元素单独记数，再看每种的个数是否成规律。</li>
+    </ul>
+  </div>
+  <div class="card gd">
+    <div class="card-title"><span class="dot"></span>曲直性 / 开闭性</div>
+    <ul>
+      <li><b>曲直性</b>：全直线、全曲线、直曲结合（分类分组题高频考点）。</li>
+      <li><b>开闭性</b>：图形是开放图形（线条不封闭）还是封闭图形，常一条开一条闭交替。</li>
+      <li>分类分组题中，这两项常作为<b>第一层切分维度</b>。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================= 6 ================= -->
+<h2 id="s6">六、考点三：对称规律</h2>
+
+<div class="notice">
+  <b>识别特征：</b>图形<b>组成元素相似</b>（甚至相同）但整体摆放形态各异，重点看其<b>自身结构</b>是否轴对称或中心对称。对称规律本身即答案，无需再找数量。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>两大对称类型</div>
+  <ul>
+    <li><b>轴对称</b>：沿某条直线折叠可完全重合。
+      <ul>
+        <li><b>找轴的方法</b>：看图形的<b>最外轮廓</b>与<b>内部元素</b>是否都对称；只外轮廓对称而内部不对称 → 不是轴对称。</li>
+        <li><b>对称轴数量</b>本身也可成为规律（1 条、2 条、无数条交替）。</li>
+      </ul>
+    </li>
+    <li><b>中心对称</b>：绕某点旋转 180° 后与自身重合。
+      <ul>
+        <li>判断技巧：图形内部若存在<b>箭头、缺口、不对称小元素</b>，中心对称时被“甩”到对侧位置，而不是原地保留。</li>
+        <li>与轴对称的区别：一个图形可能只轴对称、只中心对称、两者兼具（如正方形、圆）或两者皆无（如一般不规则图形）。</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>解题方法与顺序</div>
+  <ol class="steps">
+    <li><b>第一步：</b>看题干图形是否有<b>明显的对称元素</b>（如带对称的字母、字母表镜像、规则多边形）。</li>
+    <li><b>第二步：</b>若整体不对称，尝试<b>部分对称</b>——只取图形中的某一部分（如一个小箭头）判断其对称性。</li>
+    <li><b>第三步：</b>分类分组题中，用“轴对称 / 非轴对称”或“中心对称 / 非中心对称”作<b>二分切分</b>，再验证二分类是否成立。</li>
+    <li><b>第四步：</b>若四项答案对称性都相同，则对称不是规律，转看<b>对称轴方向/数量</b>或改看其他考点。</li>
+  </ol>
+</div>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>对称的易错陷阱</div>
+  <ul class="check">
+    <li>只看<b>外轮廓</b>就判定轴对称，忽略内部元素不对称。</li>
+    <li>把<b>旋转 180°</b>误当中心对（旋转的是整组图形之间的关系，对称说的是单个图形自身的性质）。</li>
+    <li>把“看起来对称”当作“数学上对称”——对称轴必须<b>贯穿图形并使两侧完全重合</b>。</li>
+  </ul>
+</div>
+
+<!-- ================= 7 ================= -->
+<h2 id="s7">七、考点四：图形的“加减同异”</h2>
+
+<div class="notice">
+  <b>识别特征：</b>题干中出现<b>两个及以上简单图形叠加</b>（如两个小图 + 一个问号框），或者图形之间存在<b>覆盖、叠加、擦除</b>关系 → 属于“样式运算/加减同异”类。核心是<b>定义运算规则</b>，而非寻找数量规律。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>四类基本运算规则</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:120px">规则</th><th style="width:170px">含义</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>去同存异</b></td><td>保留两者<b>不同</b>的部分，相同部分抵消</td><td>最常见。判定方法：把前后两个图对应位置逐一比对，“黑黑白黑”类图形直接看某位置是否同时同色。</td></tr>
+        <tr><td><b>去异存同</b></td><td>保留两者<b>相同</b>的部分，不同的抵消</td><td>与去同存异恰好互补；两者常作为干扰项同时出现。</td></tr>
+        <tr><td><b>求同（叠加相同）</b></td><td>相同部分保留并加粗，不同部分消失</td><td>常见于线条图：<b>相同线条保留、其余擦除</b>。</td></tr>
+        <tr><td><b>差（相减）</b></td><td>去同存异或叠加求差（异或型）</td><td>常以“白+黑=黑”一类的<b>布尔运算</b>形式出现（见黑白运算）。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>解题方法</div>
+  <ol class="steps">
+    <li><b>找“两个图形叠加”的位置</b>：常见为 “图1 + 图2 → ？” 或 “图1 = 图2 + 图3”。</li>
+    <li><b>优先选简单图形做试验</b>：线条少的一方更容易看出叠加痕迹。</li>
+    <li><b>只验证一个特征点</b>：不必整图比对，选<b>线条最少的位置</b>试推，若成立再推广到全图。</li>
+    <li><b>规则不确定时用选项反推</b>：把四个选项分别与前两图试算，看哪种规则能自洽且唯一对应。</li>
+    <li><b>线条类叠加</b>：注意“保留”还是“加粗”——相同线条叠加可能变粗，这是重要区分点。</li>
+  </ol>
+</div>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>易错陷阱</div>
+  <ul class="check">
+    <li>“去同存异”与“去异存同”选反——<b>两者互为干扰项</b>，务必用选项验证。</li>
+    <li>把叠加结果理解为“颜色相加”（黑+黑=黑），忽略了图形是线条集合。</li>
+    <li>叠加时未考虑<b>图形被完全覆盖</b>的情形。</li>
+    <li>题干中图形有<b>位置移动</b>时，误判为叠加，实为位置规律（位置+样式复合题）。</li>
+  </ul>
+</div>
+
+<!-- ================= 8 ================= -->
+<h2 id="s8">八、考点五：黑白运算</h2>
+
+<div class="notice">
+  <b>识别特征：</b>图形被网格（常见 3×3、4×4 或九宫格）分割，每个格子里有<b>黑格/白格/空</b>，图形之间呈现<b>逐格对应</b>的运算关系 → 黑白运算（也称“黑白块运算”“格内运算”）。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>两大思路：位置类与数量类</div>
+  <ul>
+    <li><b>位置类（逐格对应运算）</b>：把两个图<b>按格位对齐</b>，逐格考察黑白的进退关系，得出一个运算规则，再用第三图验证。
+      <ul>
+        <li>常见规则：<b>黑+黑=白</b>（去同存异）、<b>黑+白=黑</b>（去异存同/异或）、<b>白+白=白</b>（或）、<b>黑+黑=黑</b>（或）、<b>黑+白=白</b>（与非）、<b>相同得白、不同得黑</b>（异或）等。</li>
+        <li>关键：题目通常是<b>三个图形</b>（图1、图2、图3），图1 与图2 按规则运算得到图3；问号处由图2、图3 按同一规则推出。</li>
+      </ul>
+    </li>
+    <li><b>数量类</b>：不逐格对齐，而是看<b>整体黑格数量</b>的加减关系（如 黑1 + 黑2 = 黑3，或 黑1 − 黑2 = 黑3）。
+      <ul>
+        <li>适合图形整体黑白分布杂乱的题目，逐格对齐找不到规律时改用数量法。</li>
+        <li>注意<b>空格子</b>的编码：空 = 0，白 = 1，黑 = 2，则运算可能变为<b>纯加减</b>。</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>解题方法</div>
+  <ol class="steps">
+    <li><b>找对齐基准</b>：以题干给定的<b>图形边框/网格</b>为参照，确保三个图按同一格位对应（不要凭视觉大小随意对齐）。</li>
+    <li><b>先做一格</b>：随便挑一格，看两个已知图在该格的颜色组合与第三图的结果，推测规则。</li>
+    <li><b>横向验证</b>：用推测规则检查全部格子是否自洽；只要有一格不成立，规则就错，需换规则重推。</li>
+    <li><b>常见规律速记表</b>：黑+黑=白、白+白=白、黑+白=黑（异或型）；或型（全黑）；与非型（黑白相与为白）。</li>
+    <li><b>兜底策略</b>：若位置法推不通，直接转数量法（黑格数相加/相减），通常能解。</li>
+  </ol>
+</div>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>易错陷阱</div>
+  <ul class="check">
+    <li>对齐错位——两图大小不同却强行按视觉位置对齐，结论全错。</li>
+    <li>把<b>空格</b>与<b>白格</b>混为一谈（很多题目刻意区分）。</li>
+    <li>规则只在一两格成立就仓促定案，未做全格验证。</li>
+    <li>位置法失败后仍死磕，浪费做题时间（应立刻转数量法或回头看其他考点）。</li>
+  </ul>
+</div>
+
+<!-- ================= 9 ================= -->
+<h2 id="s9">九、常用解题思维：极端思维</h2>
+
+<div class="notice">
+  <b>为什么需要它：</b>当题干图形“看上去毫无规律”（元素杂乱、形状各异）时，规律往往不在题干序列里，而是<b>题干与选项之间的差异</b>。此时用<b>极端思维</b>：构造“最极端/最不可能”的选项，用排除法反推。
+</div>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>核心思想</div>
+  <p>不追求“找出规律”，而是<b>先排除</b>。极端思维指的是：把选项当作可能呈现的“极端形态”，观察<b>哪些选项明显不符合图形的整体风格</b>（数量跨度、元素属性、复杂程度），从而锁定答案。</p>
+  <ul>
+    <li><b>数量极端</b>：题干图形复杂度接近，而某个选项元素数量明显偏多/偏少 → 排除。</li>
+    <li><b>属性极端</b>：题干全为封闭图形，某选项为开放图形 → 排除；题干全为轴对称，某选项明显不对称 → 排除。</li>
+    <li><b>构成极端</b>：题干图形均由若干相同小元素组成，某选项结构完全迥异 → 排除。</li>
+    <li><b>视觉极端</b>：某选项线条异常密集/异常稀疏，与题干视觉密度不匹配 → 排除。</li>
+  </ul>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>落地步骤</div>
+  <ol class="steps">
+    <li><b>先常规尝试</b>：按位置→数量→属性顺序找规律，各给 5~10 秒。</li>
+    <li><b>无解则转极端</b>：不看题干找规律，改为<b>逐个选项与题干整体比对</b>，找出“格格不入”的那一项。</li>
+    <li><b>反向选择题</b>（问“不能/不属于”）：先找出三项的共性，剩下的即为答案——这是极端思维的典型应用。</li>
+    <li><b>分类分组题</b>：把六个图两两比较，找“能配成对的那一组”，剩下的两项即为答案。</li>
+    <li><b>时间控制</b>：一道图推 90 秒仍无头绪，果断标记跳过，回头再做。</li>
+  </ol>
+</div>
+
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>极端思维在分类题中的用法</div>
+  <ul>
+    <li>六图分类的标准流程：<b>先横看</b>（同排/同组找共同属性）→ <b>再纵看</b>（逐个过一遍四类属性：对称性、曲直性、开闭性、元素组成）→ 只要能<b>干净地分成 3+3</b>，规律即成立。</li>
+    <li>常见易错点：找到“3+3”但其中某一组内部并不统一；此时应放弃该维度，换下一个维度再切。</li>
+    <li>验证方法：把分好的两组分别再找一条共同解释，若两组解释不同但都成立，说明切分正确。</li>
+  </ul>
+</div>
+
+<!-- ================= 10 ================= -->
+<h2 id="s10">十、二级辨析与解题优先级</h2>
+
+<div class="card dp">
+  <div class="card-title"><span class="dot"></span>一级规律与二级辨析</div>
+  <ul>
+    <li><b>一级规律</b>：位置、数量、属性、样式四大类，是解题的主框架。</li>
+    <li><b>二级辨析</b>：当一级规律有多个答案都能解释题干时，用更细的维度把答案唯一化。常见二级维度：
+      <ul>
+        <li>数量规律：<b>等差/等比/质数/分组/图形间加减</b>；面数相同 → 继续看<b>面的形状</b>。</li>
+        <li>位置规律：<b>方向+步长</b>之外，再看<b>是否循环</b>、<b>是否叠加旋转</b>。</li>
+        <li>对称规律：轴对称/中心对称之外，再看<b>对称轴方向</b>、<b>对称轴数量</b>。</li>
+        <li>样式规律：叠加规则之外，再看<b>线条粗细</b>、<b>颜色深浅</b>。</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>解题优先级速排（考场执行顺序）</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:70px">优先级</th><th style="width:150px">观察方向</th><th>触发条件 / 判断依据</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>位置</b></td><td>元素完全相同，只是摆放不同 → 平移/旋转/翻转</td></tr>
+        <tr><td>2</td><td><b>属性</b></td><td>图形组成相似但形态各异，且选项中存在明显对称/曲直差异 → 对称、开闭、曲直</td></tr>
+        <tr><td>3</td><td><b>数量-面</b></td><td>图形被分成若干封闭块，肉眼可见“几个口”</td></tr>
+        <tr><td>4</td><td><b>数量-点</b></td><td>线条构成且交叉明显，数交点</td></tr>
+        <tr><td>5</td><td><b>样式运算</b></td><td>出现两个图叠加或图形擦除关系</td></tr>
+        <tr><td>6</td><td><b>黑白运算</b></td><td>网格 + 黑白格逐格对应</td></tr>
+        <tr><td>7</td><td><b>极端思维</b></td><td>以上全部无解 → 转向选项对比与排除</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card pu">
+  <div class="card-title"><span class="dot"></span>一眼定位口诀</div>
+  <ul>
+    <li><b>长得一样 → 动位置</b>（平移、旋转、翻转）</li>
+    <li><b>长得像 → 数数量</b>（面、点、线、角、素）</li>
+    <li><b>长得不像 → 看属性</b>（对称、曲直、开闭）</li>
+    <li><b>两图一起 → 做叠加</b>（加减同异、黑白运算）</li>
+    <li><b>都不像 → 走极端</b>（选项排除法）</li>
+  </ul>
+</div>
+
+<!-- ================= 11 ================= -->
+<h2 id="s11">十一、考场速查卡</h2>
+
+<div class="num4">
+  <div class="b"><div class="n">NUM-01</div><div class="t">平移</div><div class="m">方向 + 步长</div><div class="d">跟一个特征元素；多元素分开跟；步长可等差。</div></div>
+  <div class="b"><div class="n">NUM-02</div><div class="t">旋转</div><div class="m">顺/逆 + 角度</div><div class="d">先定方向再定角度；注意 45°/60° 易错；双层旋转分层跟。</div></div>
+  <div class="b"><div class="n">NUM-03</div><div class="t">翻转</div><div class="m">左右 / 上下</div><div class="d">镜像会改变环绕关系；与旋转区分看内部小元素朝向。</div></div>
+  <div class="b"><div class="n">NUM-04</div><div class="t">面</div><div class="m">封闭区域数</div><div class="d">数“口”；镂空、交叉额外区域要算；外部空白不算。</div></div>
+  <div class="b"><div class="n">NUM-05</div><div class="t">点</div><div class="m">交点 / 切点</div><div class="d">端点不算；轮廓顶点不算；重合点只算一个。</div></div>
+  <div class="b"><div class="n">NUM-06</div><div class="t">线</div><div class="m">笔画 / 曲直</div><div class="d">奇点 0 → 一笔画；奇点 2 → 两笔画；曲直性常用于分组。</div></div>
+  <div class="b"><div class="n">NUM-07</div><div class="t">对称</div><div class="m">轴 / 中心</div><div class="d">内外都要对称才算；可只取部分元素判断。</div></div>
+  <div class="b"><div class="n">NUM-08</div><div class="t">叠加</div><div class="m">去同存异 / 存同</div><div class="d">选最简单图形试验；两规则互为干扰，必须用选项验证。</div></div>
+  <div class="b"><div class="n">NUM-09</div><div class="t">黑白</div><div class="m">位置 / 数量</div><div class="d">逐格对齐推规则并全格验证；失败转数量法（黑格加减）。</div></div>
+  <div class="b"><div class="n">NUM-10</div><div class="t">极端</div><div class="m">排除法</div><div class="d">题干无规律时，比对选项风格与数量跨度，排除突兀项。</div></div>
+</div>
+
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>时间分配建议</div>
+  <ul>
+    <li>单题目标用时 <b>60~90 秒</b>；图形题平均应控制在 <b>70 秒</b> 内。</li>
+    <li>一图推不出，先做标记，<b>不要在一题上耗过 2 分钟</b>。</li>
+    <li>做题顺序建议：先扫<b>分类分组题</b>（规律明确、耗时可控），再攻位置与数量规律，最后处理黑白运算与叠加。</li>
+    <li>本讲义涉及考点（位置、面、点、对称、加减同异、黑白运算、极端思维）覆盖图形推理主干题型，<b>练题时按考点专项突破</b>，效率高于按套卷随机刷。</li>
+  </ul>
+</div>
+
+<footer>
+  <div>图形推理常见考点 · 知识点与解题方法整理</div>
+  <div class="src">来源：徐来《图形推理常见考点》讲义结构梳理　|　整理日期：2026-10-24　|　本整理仅含知识点与方法框架，不含例题与真题</div>
+</footer>
+
+</div>
+<button id="sd-backtop" class="sd-backtop" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'graphicguide_theme';
+  var btn = document.getElementById('sd-theme');
+  function apply(t){
+    if (t === 'dark') { document.documentElement.setAttribute('data-theme','dark'); btn.textContent='☀️'; }
+    else { document.documentElement.removeAttribute('data-theme'); btn.textContent='🌙'; }
+  }
+  var saved = null;
+  try { saved = window.localStorage.getItem(KEY); } catch(e){}
+  apply(saved === 'dark' ? 'dark' : 'light');
+  btn.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(cur);
+    try { window.localStorage.setItem(KEY, cur); } catch(e){}
+  });
+
+  var bt = document.getElementById('sd-backtop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 400) bt.classList.add('show'); else bt.classList.remove('show');
+  });
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
