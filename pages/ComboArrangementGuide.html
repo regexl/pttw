@@ -1,0 +1,554 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>组合排列的经典结构 · 知识点与解题方法整理</title>
+<style>
+:root{
+  --ink:#182231; --ink2:#3b4859; --grey:#6d7787;
+  --line:#e0e4ea; --bg:#f3f5f8;
+  --deep:#123a63; --deep-dark:#0c2743; --deep-light:#eef4fa;
+  --gold:#a8741a; --gold-light:#fdf7ea;
+  --red:#c0392b; --red-light:#fdf1ef;
+  --teal:#0e7c85; --teal-light:#e9f6f6;
+  --green:#1c7a4d; --green-light:#eff8f2;
+  --purple:#5b3d8f; --purple-light:#f4f0fa;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;
+  line-height:1.92;font-size:15px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px 70px}
+header.hero{background:linear-gradient(135deg,var(--deep) 0%,var(--deep-dark) 100%);color:#fff;
+  padding:38px 28px 30px;box-shadow:0 3px 14px rgba(0,0,0,.18)}
+header.hero .kicker{font-size:12.5px;letter-spacing:4px;color:#f0c674;margin-bottom:8px}
+header.hero h1{margin:0 0 14px;font-size:26px;line-height:1.45;letter-spacing:.5px}
+header.hero .meta{font-size:13.5px;opacity:.95;line-height:2}
+header.hero .meta b{color:#f0c674;font-weight:600}
+header.hero .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+header.hero .tags span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);
+  padding:2px 11px;border-radius:20px;font-size:12.5px}
+.notice{background:var(--gold-light);border:2px solid var(--gold);border-left-width:6px;border-radius:8px;
+  padding:14px 18px;margin:22px 0;font-size:14px;line-height:1.9;color:#6b4a05}
+.notice b{color:#4a3303}
+.toc{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 22px 18px;
+  margin:22px 0 6px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.toc-title{font-weight:700;color:var(--deep);margin-bottom:8px;font-size:15px;letter-spacing:1px}
+.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+.toc li{margin:4px 0;font-size:14px}
+.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px solid #cfd8e0}
+.toc a:hover{color:var(--teal);border-color:var(--teal)}
+h2{font-size:21px;color:var(--deep);margin:40px 0 16px;padding-left:13px;border-left:6px solid var(--deep);line-height:1.45}
+h3{font-size:17px;color:var(--teal);margin:24px 0 10px;padding-left:10px;border-left:4px solid #b6dfe1}
+h4{font-size:15.5px;color:var(--deep-dark);margin:18px 0 8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0;padding-left:26px}
+li{margin:5px 0}
+strong{color:var(--deep-dark)}
+hr{border:0;border-top:1px dashed var(--line);margin:28px 0}
+code{background:#eef1f5;padding:1px 6px;border-radius:4px;font-size:13.5px;
+  font-family:Consolas,"Courier New",monospace;color:#0b4f6c}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 24px 22px;
+  margin:16px 0 20px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.card.tight{padding:16px 20px 18px}
+.card-title{font-size:15px;font-weight:700;color:var(--deep);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.card-title .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+.card.tl{border-left:5px solid var(--teal)}
+.card.gd{border-left:5px solid var(--gold);background:var(--gold-light)}
+.card.rd{border-left:5px solid var(--red);background:var(--red-light)}
+.card.gr{border-left:5px solid var(--green);background:var(--green-light)}
+.card.pu{border-left:5px solid var(--purple);background:var(--purple-light)}
+.card.dp{border-left:5px solid var(--deep);background:var(--deep-light)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.grid2,.grid4{grid-template-columns:1fr}}
+.table-wrap{overflow-x:auto;margin:14px 0 20px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);background:#fff}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:13.4px;background:#fff}
+th{background:var(--deep);color:#fff;font-weight:600;text-align:left;padding:9px 11px;border:1px solid var(--deep)}
+td{padding:9px 11px;border:1px solid var(--line);vertical-align:top;line-height:1.8}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:var(--deep-light)}
+td b,th b{color:var(--deep-dark)}
+.pill{display:inline-block;background:var(--deep-light);color:var(--deep-dark);border:1px solid #c8d6e4;
+  border-radius:14px;padding:1px 10px;font-size:12.5px;margin:2px 4px 2px 0}
+.pill.r{background:var(--red-light);color:var(--red);border-color:#f0c8c2}
+.pill.g{background:var(--green-light);color:var(--green);border-color:#c4e3d2}
+.pill.a{background:var(--gold-light);color:var(--gold);border-color:#ecd9ac}
+.pill.t{background:var(--teal-light);color:var(--teal);border-color:#bfe1e2}
+.pill.p{background:var(--purple-light);color:var(--purple);border-color:#d8cdec}
+pre{background:#1d2733;color:#d8e2ec;padding:15px 18px;border-radius:8px;overflow-x:auto;
+  font-size:13.4px;line-height:1.85;border-left:5px solid var(--teal);margin:14px 0;
+  font-family:Consolas,"Courier New",monospace}
+pre .k{color:#7fd4d8}
+pre .c{color:#8fa3b5}
+pre .y{color:#f0c674}
+.quote{background:var(--deep-light);border-left:4px solid var(--deep);padding:12px 18px;
+  border-radius:0 6px 6px 0;margin:14px 0;font-size:14.3px;color:var(--ink2)}
+ol.steps{counter-reset:st;list-style:none;padding-left:0}
+ol.steps>li{counter-increment:st;position:relative;padding:12px 16px 12px 52px;background:#fff;
+  border:1px solid var(--line);border-radius:8px;margin:9px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+ol.steps>li::before{content:counter(st);position:absolute;left:14px;top:11px;width:24px;height:24px;
+  background:var(--teal);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-size:13px;font-weight:700}
+ol.steps>li b{color:var(--teal)}
+.check{list-style:none;padding-left:0}
+.check li{padding-left:28px;position:relative;margin:7px 0}
+.check li::before{content:"☐";position:absolute;left:4px;top:0;font-size:17px;color:var(--teal)}
+.num4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+@media (max-width:900px){.num4{grid-template-columns:repeat(2,1fr)}}
+.num4 .b{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:8px;
+  padding:14px 13px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.num4 .b .n{font-size:12px;color:var(--grey);letter-spacing:1px}
+.num4 .b .t{font-size:15.5px;font-weight:700;color:var(--deep);margin:3px 0 5px;line-height:1.4}
+.num4 .b .m{font-size:12.5px;color:var(--teal);font-weight:700}
+.num4 .b .d{font-size:12.8px;color:var(--ink2);line-height:1.75;margin-top:4px}
+footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;line-height:2;
+  border-top:1px solid var(--line);margin-top:36px}
+.src{font-size:12.5px;color:var(--grey)}
+@media print{
+  body{background:#fff}
+  .toc{display:none}
+  h2{break-after:avoid}
+  .card{break-inside:avoid}
+  .table-wrap{overflow:visible}
+  table{min-width:0;font-size:10.5px}
+  pre{background:#f4f4f4;color:#222;border:1px solid #ddd}
+}
+
+/* ===== 亮色模式对比度微调 =====
+   原讲义的 teal / gold / grey 三个色值在浅底上只有 3.8~4.5:1（低于 WCAG AA 4.5:1），
+   这里各压深一档；深色模式另有一套变量，不受影响。 */
+:root{ --teal:#0a6a72; --gold:#8a5d0e; --grey:#5c6673; }
+
+/* ===== 站点外壳：顶栏 / 主题切换 / 回到顶部 ===== */
+.sd-topbar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.sd-topbar a{color:var(--deep);text-decoration:none;font-weight:600;font-size:14px}
+.sd-topbar a:hover{color:var(--gold)}
+.sd-topbar .brand-sub{color:var(--grey);font-size:13px}
+.sd-theme{
+  margin-left:auto;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--line);background:var(--bg);font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.sd-theme:hover{border-color:var(--gold);transform:rotate(-15deg)}
+.sd-backtop{
+  position:fixed;bottom:22px;right:22px;width:42px;height:42px;border-radius:50%;
+  background:var(--deep);color:#fff;border:none;font-size:19px;display:none;z-index:99;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:all .2s;
+}
+.sd-backtop:hover{background:var(--gold)}
+.sd-backtop.show{display:block}
+h2{scroll-margin-top:64px}
+.toc a{scroll-margin-top:64px}
+
+/* ===== 暗色模式（源页面硬编码了一批浅色，这里统一覆盖） ===== */
+[data-theme="dark"]{
+  --ink:#e6eaef; --ink2:#c2cad4; --grey:#8b95a3;
+  --line:#2b3340; --bg:#12151b;
+  --gold:#d9a441; --gold-light:#33260f;
+  --red:#f07a6c; --red-light:#3a1d1a;
+  --teal:#4fc4cd; --teal-light:#123033;
+  --green:#57c98c; --green-light:#12301f;
+  --purple:#a98fe0; --purple-light:#241d33;
+  --deep-light:#18263a;
+}
+[data-theme="dark"] .card,
+[data-theme="dark"] .card.tight,
+[data-theme="dark"] table,
+[data-theme="dark"] .toc,
+[data-theme="dark"] .table-wrap,
+[data-theme="dark"] ol.steps>li,
+[data-theme="dark"] .num4 .b{background:#181c24}
+[data-theme="dark"] .card{box-shadow:0 1px 5px rgba(0,0,0,.35)}
+[data-theme="dark"] tbody tr:nth-child(even){background:#1d222c}
+[data-theme="dark"] .notice{color:#e8c98a}
+[data-theme="dark"] .notice b{color:#f7dda4}
+[data-theme="dark"] code{background:#232a36;color:#d7dee8}
+[data-theme="dark"] h2{color:#8ab4f8;border-left-color:#3b6ea8}
+[data-theme="dark"] h3{color:#c8d4e2}
+[data-theme="dark"] th{background:#1e4a78;border-color:#1e4a78}
+[data-theme="dark"] td{border-color:var(--line)}
+[data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
+/* --deep / --deep-dark 是深藏青，源页面把它们当文字色用；暗色下必须换成浅色，
+   但作为表头底色/边框时又要保持深色，所以这里只覆盖「文字用途」的规则 */
+[data-theme="dark"] .toc-title,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .num4 .b .t{color:#9cc4f5}
+[data-theme="dark"] h4,
+[data-theme="dark"] strong,
+[data-theme="dark"] td b,
+[data-theme="dark"] th b,
+[data-theme="dark"] .pill{color:#c2d8f0}
+[data-theme="dark"] .pill.r{border-color:#5c2f2a}
+[data-theme="dark"] .pill.g{border-color:#1f4a35}
+[data-theme="dark"] .pill.a{border-color:#4a3a14}
+[data-theme="dark"] .pill.t{border-color:#1d4749}
+[data-theme="dark"] .pill.p{border-color:#372a4d}
+[data-theme="dark"] .hero{box-shadow:0 3px 14px rgba(0,0,0,.5)}
+</style>
+<meta name="description" content="组合排列（匹配类）题型专项：题型识别三大特征 + 四大经典结构破题点（比大小、排序题列表格、一对一错最小信息假设、与翻译推理结合肯前否后）+ 通用推理流程与顺藤摸瓜 + 细节规则与文字陷阱清单 + 考场速查卡。">
+<meta name="keywords" content="行测,判断推理,组合排列,逻辑判断,比大小,排序题,最小信息假设,顺藤摸瓜,间隔信息,破题点">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+<header class="sd-topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">判断推理 · 组合排列经典结构</span>
+  <button id="sd-theme" class="sd-theme" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<header class="hero">
+  <div class="kicker">粉笔 · 判断推理专项 · 知识整理</div>
+  <h1>组合排列的经典结构：知识点与解题方法</h1>
+  <div class="meta">
+    <b>来源</b>：徐来《组合排列的经典结构》（讲义+笔记，2023.03.27）　|
+    <b>整理日期</b>：2026年10月23日　|
+    <b>用途</b>：行测判断推理 · 组合排列（匹配类）专项<br>
+    <b>整理原则</b>：<b>只保留知识点与方法框架，不含例题</b>（原讲义 12 道例题已剔除）
+  </div>
+  <div class="tags">
+    <span>比大小</span><span>排序题</span><span>列表格</span><span>间隔信息</span>
+    <span>最小信息假设</span><span>翻译推理结合</span><span>顺藤摸瓜</span><span>破题点</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="notice">
+  <b>整理说明：</b>本文按原讲义的「笔记」部分方法论重排，<b>完整剥离全部例题与真题</b>，只保留①题型识别特征、②四大经典结构的破题点与解法、③通用推理流程、④细节规则与陷阱、⑤考场速查卡。原讲义中的例题仅用于说明方法的抽象示意（如间隔记法 <code>甲××乙 / 乙××甲</code>），不含具体题目与选项。
+</div>
+
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#s1">题型识别：什么才是组合排列</a></li>
+    <li><a href="#s2">四大经典结构总览（破题点速查）</a></li>
+    <li><a href="#s3">结构一：比大小 —— 找最值，做排除</a></li>
+    <li><a href="#s4">结构二：排序题 —— 列表格</a></li>
+    <li><a href="#s5">结构三：一对一错 —— 最小信息假设</a></li>
+    <li><a href="#s6">结构四：与翻译推理结合 —— 肯前 / 否后</a></li>
+    <li><a href="#s7">通用解题流程与「顺藤摸瓜」</a></li>
+    <li><a href="#s8">细节规则与文字陷阱清单</a></li>
+    <li><a href="#s9">考场速查卡</a></li>
+  </ol>
+</nav>
+
+<h2 id="s1">一、题型识别：什么才是组合排列</h2>
+
+<div class="card dp">
+  <div class="card-title"><span class="dot"></span>三个判定特征（同时满足即为组合排列）</div>
+  <ol>
+    <li><b>存在两组及以上对象</b>（如：人与职务 / 人与爱好 / 人与地点 / 物品与容器 / 编号与对象）；</li>
+    <li><b>对象之间存在对应关系或比较关系</b>（谁是谁、谁在谁前面、谁比谁大）；</li>
+    <li><b>要求推出"谁是谁"或"谁在哪"</b>。</li>
+  </ol>
+  <p>原讲义比喻：组合排列类似"柯南游戏"——给出一批人和人与人之间的信息，要求推出每个人在哪里。</p>
+  <div class="grid2" style="margin-top:12px">
+    <div class="card tight gr"><div class="card-title"><span class="dot"></span>题目难度趋势</div>
+      <p style="font-size:14px">组合排列<b>可以考得很难</b>，完全不知道从何下手时容易靠运气；但<b>近年的组合排列题越来越简单，特别难的题目很少</b>。所以在规定时间内做出来，关键不是"更聪明"，而是<b>按题型找到破题点</b>。</p></div>
+    <div class="card tight pu"><div class="card-title"><span class="dot"></span>考查趋势</div>
+      <p style="font-size:14px">逻辑题型很多，各省国考省考<b>比较喜欢以论证为主考查</b>，因此组合排列<b>常与其他推理题结合</b>出现——最典型的就是<b>与翻译推理结合</b>，这正是本讲的第四个结构。</p></div>
+  </div>
+</div>
+
+<h2 id="s2">二、四大经典结构总览（破题点速查）</h2>
+
+<div class="num4">
+  <div class="b"><div class="n">STRUCTURE 01</div><div class="t">比大小</div><div class="m">找最值，做排除</div>
+    <div class="d">题干出现"最贵/最便宜/最大/最小"等最值表述时，改用<b>反向思维</b>，找"谁一定不是最值"来排除选项。</div></div>
+  <div class="b"><div class="n">STRUCTURE 02</div><div class="t">排序题</div><div class="m">列表格</div>
+    <div class="d">表格只写序号；<b>确定信息先填</b>；问"一定正确/由此推出"走推理，问"可能/不可能"走代入。</div></div>
+  <div class="b"><div class="n">STRUCTURE 03</div><div class="t">一对一错</div><div class="m">最小信息假设</div>
+    <div class="d">每人说两句话且一对一错时，找到<b>只出现 1 次</b>的那个信息，假设它为真再顺推。</div></div>
+  <div class="b"><div class="n">STRUCTURE 04</div><div class="t">翻译推理结合</div><div class="m">找肯前 / 否后</div>
+    <div class="d">题干出现"如果…那么…"，这句就是破题点，找<b>肯前推肯后</b>或<b>否后推否前</b>的信息。</div></div>
+</div>
+
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>四个结构的适用顺序建议</div>
+  <p>拿到组合排列题，先用第 1 节的三个特征确认题型归属，再按上表选破题点。<b>若一个题同时具备多个结构特征（如既有最值又有排序），优先用"信息量更大、更容易落地"的那个</b>——通常是排序题列表格或翻译推理破题。</p>
+</div>
+
+<h2 id="s3">三、结构一：比大小 —— 找最值，做排除</h2>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>破题点：找最值，做排除</div>
+  <p><b>典型场景：</b>成绩、收入、身高、年龄、前后顺序等一切可比较的量。</p>
+  <p><b>核心手法（反向思维）：</b>题干一旦出现"最贵/最便宜/最大/最小"，<b>不要顺着"谁是最值"去想，而要问"谁一定不是最值"</b>，然后拿这个结论去排除选项。</p>
+</div>
+
+<h3>3.1 三条推导规则</h3>
+<div class="card">
+  <div class="table-wrap" style="margin:6px 0">
+  <table>
+    <thead><tr><th>已知条件</th><th>能推出</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr><td>"X 最贵" + "A 比 B 贵"</td><td><b>A 不是最便宜的</b></td><td>A 既然比 B 贵，就不可能是最便宜的那个</td></tr>
+      <tr><td>"X 最贵" + "B 比 A 贵"</td><td><b>A 不是最贵的</b></td><td>虽然不知道 B 是不是最贵，但 A 一定不是</td></tr>
+      <tr><td>"某人是最大的" + "丙比某点小"</td><td><b>丙不是最大的</b></td><td>比较双方都可以推出"不是最值"的一方</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>推论链的价值：</b>当"甲、乙、丙都不是最大的"三者凑齐时，<b>最大者被唯一确定</b>，随之其他人的归属也锁定。这就是排除法的完整闭环。</p>
+</div>
+
+<h3>3.2 使用要点</h3>
+<div class="card">
+  <ul>
+    <li><b>只在有最值表述时才用这套。</b>没有最值的比大小题，仍按普通推理走。</li>
+    <li>比较关系写成"A &gt; B"这种形式<b>对做题帮助不大</b>，必须转成"谁一定不是最值"的结论。</li>
+    <li><b>近年比大小题几乎都会给最值表述</b>，用排除法做非常快——这是性价比最高的一类结构。</li>
+    <li>选项中出现"某人是最值/某人不是最值"的表述，直接对号入座排除，不要重新推全排列。</li>
+  </ul>
+</div>
+
+<h2 id="s4">四、结构二：排序题 —— 列表格</h2>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>破题点：列表格</div>
+  <p><b>题型两种形态：</b>① 从左到右 / 从上到下的<b>线性排序</b>（有 1 号位，考查多）；② <b>圆桌排序</b>（没有 1 号位，考查较少）。</p>
+  <p><b>工具：</b>表格。<b>只写序号 1、2、3、4……，把信息标注上去</b>，不要写人名，避免抄写错误。</p>
+</div>
+
+<h3>4.1 提问方式决定解法（关键分叉）</h3>
+<div class="card">
+  <div class="table-wrap" style="margin:6px 0">
+  <table>
+    <thead><tr><th>提问方式</th><th>解法</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td><b>一定正确 / 由此可以推出</b></td><td><span class="pill t">列表格 + 从确定信息出发推理</span></td>
+        <td>代入题干只能推出"可能对""符合题干意思"，<b>不等于一定对</b>——同一位置可能是甲也可能是乙，代入两个选项都"符合"，所以不能用来证明"一定正确"。</td></tr>
+      <tr><td><b>可能 / 不可能</b></td><td><span class="pill a">代入法</span>（确定信息可先填，但大概率还要代入）</td>
+        <td>"可能对"意味着不确定；四个选项里三个可能、一个不可能，<b>代入排除比推理更快</b>，也避免推出一堆用不上的信息。</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>实操：</b>先列出表格，把<b>确定信息</b>（如"某人是第几位"）填进去，再按顺序读条件。</p>
+</div>
+
+<h3>4.2 间隔信息：排序题的隐形王牌</h3>
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>间隔信息的两条性质</div>
+  <ul>
+    <li><b>双向锁定：</b>"甲和乙中间隔了 2 个人"——知道甲的位置，乙的位置立刻确定；知道乙的位置，甲的位置也确定。</li>
+    <li><b>占地大：</b>间隔 2 人意味着连头带尾共占 <b>4 个位置</b>，间隔人数越多的条件优先放入表格，越容易先锁定结构。</li>
+  </ul>
+  <pre><span class="c">【间隔记法】</span>
+<span class="y">甲和乙中间隔了 2 个人</span>  →  <span class="k">甲××乙</span>  或  <span class="k">乙××甲</span>
+<span class="c">（"×" = 中间隔着的人；两种写法都成立，除非题干额外说明"甲在前面"，此时才唯一）</span></pre>
+  <p><b>用法：</b>遇到"谁和谁间隔了 N 个人"，这往往就是<b>破题的关键点</b>；因为它同时给出<b>确定信息</b>（占几个位置）和<b>相对顺序</b>，信息密度最高，应优先处理。</p>
+</div>
+
+<h3>4.3 填表顺序：先确定，再顺藤摸瓜</h3>
+<div class="card">
+  <ol class="steps">
+    <li><b>列表格</b>，只写序号。</li>
+    <li><b>先填确定信息</b>：谁在第几位、谁在最左/最右、谁不在某位。</li>
+    <li><b>顺藤摸瓜</b>：填进去的信息涉及了谁，就回到题干找提到这个人的条件；没有提到就看下一条。</li>
+    <li><b>间隔条件优先</b>：剩余条件中，间隔人数多的先放（占地大、约束强）。</li>
+    <li><b>需要时再代入</b>：问"可能/不可能"且表格推不出结论时，逐项代入验证。</li>
+  </ol>
+</div>
+
+<h2 id="s5">五、结构三：一对一错 —— 最小信息假设</h2>
+
+<div class="card tl">
+  <div class="card-title"><span class="dot"></span>破题点：最小信息假设</div>
+  <p><b>适用模型：</b>题干里<b>每个人都说了两句话</b>，并且已知<b>这些猜测一对一错</b>（每人一组话里恰好一对一错，但不知道哪句对、哪句错）。</p>
+</div>
+
+<h3>5.1 方法本体</h3>
+<div class="card">
+  <p><b>三步动作：</b></p>
+  <ol>
+    <li><b>找最小信息</b>——把所有"人名 / 位置 / 事物"的提及次数统计一遍，找出<b>只出现 1 次</b>的那个信息。</li>
+    <li><b>假设它为真</b>——"出现次数最少的信息，正确"。</li>
+    <li><b>顺着它推</b>——用它触发其他条件，把整组关系推完，再看设问。</li>
+  </ol>
+  <p><b>为什么能假设为真：</b>因为"一对一错"是硬约束，<b>若最小信息是错的，则同一组里的另一句话必然是对的</b>；而按最小信息为真往下推，结果<b>目前所有此类题目都能自洽</b>（原讲义明确：这种"最小信息为假"的情形目前尚未遇到）。</p>
+  <div class="card gd" style="margin:10px 0 0">
+    <div class="card-title"><span class="dot"></span>边界情况</div>
+    <p style="margin:0"><b>如果没有找到只出现 1 次的信息</b>，最小信息假设法失效，<b>只能用代入法</b>（因为"只对了一半"意味着不知道哪句对，必须逐项代入试）。</p>
+  </div>
+</div>
+
+<h3>5.2 统计视角：数人还是数物</h3>
+<div class="card">
+  <p>同一个题，<b>既可以数"人名"出现次数，也可以数"事物/位置"出现次数</b>，哪边更容易找到只出现 1 次的就用哪边。</p>
+  <div class="table-wrap" style="margin:6px 0">
+  <table>
+    <thead><tr><th>统计对象</th><th>典型载体</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td><b>人名</b></td><td>几个人物在几句话里被提到</td><td>如"丙"只出现一次</td></tr>
+      <tr><td><b>事物 / 位置</b></td><td>编号、职位、爱好、地点</td><td>如某个编号只出现一次、某个身份只出现一次</td></tr>
+      <tr><td><b>组合体</b></td><td>"某人是某身份"这一整句</td><td>整句作为一条信息参与计数</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="src">注：统计时必须<b>逐句认真数</b>，漏数或多数都会导致最小信息判断错误——原讲义把"数错最小信息"列为该方法的主要失败原因。</p>
+</div>
+
+<h3>5.3 与真假推理的区别</h3>
+<div class="card">
+  <p><b>组合排列里的"一对一错"</b>：同一人的两句话中一对一错，<b>不知道哪句对</b>，所以用最小信息假设。</p>
+  <p><b>标准真假推理题</b>：题干几句话中，<b>一整句话对，或者一整句话错</b>（整句判定，不拆），走另一套真假推理规则（如矛盾关系、反对关系）。</p>
+</div>
+
+<h2 id="s6">六、结构四：与翻译推理结合 —— 肯前 / 否后</h2>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>破题点：题干出现"如果…那么…"，这句就是破题点</div>
+  <p>组合排列题<b>涉及推理</b>，逻辑性较强；很多地方的考试<b>喜欢以论证为主考查</b>，所以组合排列<b>常与翻译推理结合</b>。识别出翻译句之后，只做两件事：<b>找肯前</b>、<b>找否后</b>。</p>
+</div>
+
+<h3>6.1 唯一可用的两条推理方向</h3>
+<div class="card">
+  <p><b>基础公式：</b><code>A → B</code>　<b>等价于</b>　<code>¬B → ¬A</code>（逆否等价）</p>
+  <div class="table-wrap" style="margin:6px 0">
+  <table>
+    <thead><tr><th>要找的信息</th><th>推理方向</th><th>能推出什么</th></tr></thead>
+    <tbody>
+      <tr><td><b>A</b>（前件为真）</td><td><span class="pill g">肯前必肯后</span></td><td>必然推出 B</td></tr>
+      <tr><td><b>¬B</b>（后件为假）</td><td><span class="pill g">否后必否前</span></td><td>必然推出 ¬A</td></tr>
+      <tr><td><b>¬A</b>（前件为假）</td><td><span class="pill r">否前</span></td><td><b>无必然结论</b>，不能用来破题</td></tr>
+      <tr><td><b>B</b>（后件为真）</td><td><span class="pill r">肯后</span></td><td><b>无必然结论</b>，不能用来破题</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>找信息时的两条纪律：</b>① 要找 <b>A</b>，不要找 ¬A；② 要找 <b>¬B</b>，不要找 B。<b>反过来说</b>：看到"某人不是 A"，对否前没用；看到"某人就是 B"，是肯后，也没用。<b>真正有用的信号只有"某人就是 A"和"某人不是 B"。</b></p>
+</div>
+
+<h3>6.2 代入法与翻译的配合</h3>
+<div class="card">
+  <ul>
+    <li>设问出现"<b>可能 / 不可能</b>" → 用<b>代入法</b>；此时<b>代入方向要选对</b>：如果 <code>A</code> 出现在箭头前，就优先代入"<b>A 成立</b>"的选项（肯前推肯后）；如果设问方向是"<b>不是 B</b>"，就优先代入"<b>¬B</b>"的选项（否后推否前）。</li>
+    <li>设问出现"<b>可以推出 / 一定正确</b>" → 走列表格推理，从确定信息出发。</li>
+    <li>信息量大时，<b>列表格 + 代入</b>同时用：先列表格，再优先代入与翻译句相关的那两个选项，通常两三个选项就能排除完。</li>
+  </ul>
+</div>
+
+<h3>6.3 分组类题目的数量前提</h3>
+<div class="card gd">
+  <div class="card-title"><span class="dot"></span>读题时必须先算清名额</div>
+  <p>分组题里，<b>名额结构就是破题点的一部分</b>。题干常见表述"每个小区安排 1 至 2 人"，5 人分 3 组且每组 1~2 人 → 立刻得出唯一结构 <b>1、2、2</b>；再叠加"某组人最少"之类的条件，就能把人数锁死。</p>
+  <p style="margin-bottom:0">数量结构一旦确定，翻译句的<b>否后</b>往往就出来了（例如"某组只有某人"与"该组实际有 2 人"矛盾 → 否后成立 → 反推否前）。</p>
+</div>
+
+<h2 id="s7">七、通用解题流程与「顺藤摸瓜」</h2>
+
+<div class="card dp">
+  <div class="card-title"><span class="dot"></span>组合排列题通用四步</div>
+  <ol class="steps">
+    <li><b>定题型</b>——用"两组对象 + 对应关系 + 推出谁是谁"三个特征确认属于组合排列，再判断落在四大结构的哪一个（比大小 / 排序 / 一对一错 / 翻译结合）。</li>
+    <li><b>找破题点</b>——按结构取破题点：<b>最值</b>（比大小）、<b>确定信息 + 间隔</b>（排序）、<b>只出现一次的信息</b>（一对一错）、<b>"如果…那么…"</b>（翻译结合）。</li>
+    <li><b>顺藤摸瓜</b>——得到一个结论后，<b>立刻回头找题干中提到这个结论（这个人/这个位置/这个事物）的条件</b>，顺着继续推。</li>
+    <li><b>结合设问</b>——<b>问谁就往谁身上靠</b>。已得的结论如果与设问对象无关，它就只是"跳板"，要主动向设问对象靠拢。</li>
+  </ol>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot"></span>「顺藤摸瓜」是什么意思</div>
+  <p>这是组合排列题最核心的推进方式：<b>推出一条结论后，不要停下来从头重读，而是拿着这条结论回到题干里找"提到它"的那一条条件</b>，用这条条件继续推下一条，形成链条。</p>
+  <p><b>为什么要"结合设问"：</b>题干里关于其他人的信息可能很多，但设问只问一个人。前面推出来的结论如果问的不是它，就当"跳板"用完即弃，<b>把注意力转到设问对象上</b>。</p>
+  <p class="src">原讲义强调：条件（2）（4）先看，是因为它们涉及最值与比大小；推出关于某人的结论后去看提到他的条件，都是这一思路的应用。</p>
+</div>
+
+<h2 id="s8">八、细节规则与文字陷阱清单</h2>
+
+<div class="card">
+  <div class="card-title"><span class="dot"></span>八条必须知道的规则</div>
+  <ol>
+    <li><b>题干每一句话都不是废话。</b>题干里突然冒出一个新概念（学历、批评/表扬、性别、类别），就要<b>下意识回到题干找提到该概念的条件</b>。原讲义举例：出现"批评和表扬"，就去找哪句提到批评和表扬；出现"硕士"，就去找哪句提到硕士。</li>
+    <li><b>同一句话里的不同主体，默认是不同的人。</b>"A 和 B 住在同一幢公寓楼""A、B、C 经常一起打球""A、B 和 C 结伴旅行"——一般不说某人和自己住一起，所以这些表述意味着<b>是几个不同的人</b>。这是组合排列里最常用的"主体拆分"工具。</li>
+    <li><b>比较关系能推出"谁一定不是最值"。</b>见结构一，但反过来不成立：<b>知道"某人不是最小的"，推不出他具体是多少</b>。</li>
+    <li><b>间隔信息双向锁定、占地大</b>，且默认<b>两种顺序都成立</b>，除非题干说明谁在前。</li>
+    <li><b>排序题有两种形态</b>：线性排序（有 1 号位，常见）与圆桌排序（无 1 号位，考查较少）。</li>
+    <li><b>用"＞"排列顺序号的方法可行但慢</b>，近年这类题目很少；原讲义明确不推荐作为主力方法，<b>列表格才是标准动作</b>。</li>
+    <li><b>最小信息假设的前提是"一对一错"</b>；若题干是"一整句对或一整句错"，那属于真假推理，走另一套规则。</li>
+    <li><b>数量类限制要单独看：</b>"每人均需至少完成其中一项工作，一项工作只能由一人完成"——前者保证不漏项、后者保证不重复，两者共同决定"主体互斥"的用法。</li>
+  </ol>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>时间观（考场节奏）</div>
+  <ul>
+    <li><b>不是所有题都能 1 分钟做完。</b>像"排序 + 间隔 + 翻译"这种组合题，考场上<b>1.5~2 分钟</b>做出来都是划算的（题库正确率通常 50%~60%，与数量题用时相当）。</li>
+    <li><b>简单题要更快</b>：类比推理可能半分钟一道，省下的时间补给难题。</li>
+    <li><b>课上不要只听"乐子"</b>——原讲义特别强调：<b>关键不是这道题答案选什么，而是"下次遇到这样的题该怎么破题"</b>。</li>
+    <li><b>事业单位联考 D 类</b>考职测，判断推理一般 30~35 题，<b>有可能考查组合排列题</b>，鄂州市事业单位同样需要准备这一题型。</li>
+  </ul>
+</div>
+
+<h2 id="s9">九、考场速查卡</h2>
+
+<div class="card dp">
+  <div class="card-title"><span class="dot"></span>开考前 30 秒默背</div>
+  <pre><span class="c">【组合排列 · 四大破题点】</span>
+<span class="y">比大小</span>  → 找最值，做排除（找"谁一定不是最值"）
+<span class="y">排序题</span>  → 列表格；先填确定信息；问"一定/推出"走推理，问"可能/不可能"走代入
+<span class="y">一对一错</span>  → 找最小信息（只出现 1 次），假设它为真
+<span class="y">翻译结合</span>  → 找肯前（A）、找否后（¬B）；否前、肯后无效
+
+<span class="c">【间隔记法】</span>
+甲和乙中间隔 2 个人  →  甲××乙  /  乙××甲   （双向锁定、占地大）
+
+<span class="c">【推进四步】</span>
+<span class="k">1</span>. 定题型（两组对象 + 对应关系 + 推出谁是谁）
+<span class="k">2</span>. 找破题点（最值 / 确定信息+间隔 / 最小信息 / 翻译句）
+<span class="k">3</span>. 顺藤摸瓜（拿到结论就回题干找提到它的条件）
+<span class="k">4</span>. 结合设问（问谁往谁身上靠，其余只是跳板）
+
+<span class="c">【三条纪律】</span>
+· 题干每句话都不是废话：冒出新概念就去找对应条件
+· 同一句里不同主体默认是不同的人（拆分用）
+· 表格只写序号，别抄人名</pre>
+</div>
+
+<div class="card teal" style="border-left:5px solid var(--teal)">
+  <div class="card-title"><span class="dot"></span>最后一句</div>
+  <p>组合排列的"快"不来自聪明，而来自<b>套路识别</b>：看到最值就做排除，看到排序就列表格，看到一对一错就找最小信息，看到"如果…那么…"就找肯前否后。<b>四套动作任选其一切入，五道小问的时间就出来了。</b></p>
+</div>
+
+<footer>
+  知识点整理自：粉笔公考 · 徐来《组合排列的经典结构》（讲义+笔记，2023.03.27）· 仅保留知识点与解题方法，例题已剔除<br>
+  整理日期 2026年10月23日 · 配合《行测判断推理·一拖五全能笔记》《逻辑分组题核心笔记》一起看效果更好
+</footer>
+
+</div>
+<button id="sd-backtop" class="sd-backtop" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'comboarr_guide_theme';
+  var btn = document.getElementById('sd-theme');
+  function apply(t){
+    if (t === 'dark') { document.documentElement.setAttribute('data-theme','dark'); btn.textContent='☀️'; }
+    else { document.documentElement.removeAttribute('data-theme'); btn.textContent='🌙'; }
+  }
+  var saved = null;
+  try { saved = window.localStorage.getItem(KEY); } catch(e){}
+  apply(saved === 'dark' ? 'dark' : 'light');
+  btn.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(cur);
+    try { window.localStorage.setItem(KEY, cur); } catch(e){}
+  });
+
+  var bt = document.getElementById('sd-backtop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 400) bt.classList.add('show'); else bt.classList.remove('show');
+  });
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->

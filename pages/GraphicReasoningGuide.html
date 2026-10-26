@@ -113,6 +113,11 @@ footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;
   pre{background:#f4f4f4;color:#222;border:1px solid #ddd}
 }
 
+/* ===== 亮色模式对比度微调 =====
+   原讲义的 teal / gold / grey 三个色值在浅底上只有 3.8~4.5:1（低于 WCAG AA 4.5:1），
+   这里各压深一档；深色模式另有一套变量，不受影响。 */
+:root{ --teal:#0a6a72; --gold:#8a5d0e; --grey:#5c6673; }
+
 /* ===== 站点外壳：顶栏 / 主题切换 / 回到顶部 ===== */
 .sd-topbar{
   position:sticky;top:0;z-index:60;
@@ -140,7 +145,7 @@ footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;
 h2{scroll-margin-top:64px}
 .toc a{scroll-margin-top:64px}
 
-/* ===== 暗色模式（源页面大量硬编码 #fff，这里统一覆盖） ===== */
+/* ===== 暗色模式（源页面硬编码了一批浅色，这里统一覆盖） ===== */
 [data-theme="dark"]{
   --ink:#e6eaef; --ink2:#c2cad4; --grey:#8b95a3;
   --line:#2b3340; --bg:#12151b;
@@ -152,6 +157,7 @@ h2{scroll-margin-top:64px}
   --deep-light:#18263a;
 }
 [data-theme="dark"] .card,
+[data-theme="dark"] .card.tight,
 [data-theme="dark"] table,
 [data-theme="dark"] .toc,
 [data-theme="dark"] .table-wrap,
@@ -167,6 +173,16 @@ h2{scroll-margin-top:64px}
 [data-theme="dark"] th{background:#1e4a78;border-color:#1e4a78}
 [data-theme="dark"] td{border-color:var(--line)}
 [data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
+/* --deep / --deep-dark 是深藏青，源页面把它们当文字色用；暗色下必须换成浅色，
+   但作为表头底色/边框时又要保持深色，所以这里只覆盖「文字用途」的规则 */
+[data-theme="dark"] .toc-title,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .num4 .b .t{color:#9cc4f5}
+[data-theme="dark"] h4,
+[data-theme="dark"] strong,
+[data-theme="dark"] td b,
+[data-theme="dark"] th b,
+[data-theme="dark"] .pill{color:#c2d8f0}
 [data-theme="dark"] .pill.r{border-color:#5c2f2a}
 [data-theme="dark"] .pill.g{border-color:#1f4a35}
 [data-theme="dark"] .pill.a{border-color:#4a3a14}
