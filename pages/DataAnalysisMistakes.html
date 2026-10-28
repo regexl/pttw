@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>行测资料分析错题复盘汇总</title>
-<meta name="description" content="11 道资料分析典型错题逐题精批：翻番、变化幅度、倍数、平均数分母、混合增长率、增长量倍数、隔年增量、容斥比重极值、累计存量等高频易错考点 + 避坑口诀表。">
+<meta name="description" content="16 道资料分析典型错题逐题精批：翻番、变化幅度、倍数、平均数分母、混合增长率、增长量倍数、隔年增量、容斥比重极值、累计存量、二维分组统计、平均数语序、环比增速比较、综合分析计数等高频易错考点 + 避坑口诀表与公式语序方法论。">
 <meta name="keywords" content="行测,资料分析,错题复盘,翻番,混合增长率,线段法,百化分,避坑口诀">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📕</text></svg>">
 <style>
@@ -164,6 +164,11 @@ strong{color:var(--ink)}
   color:var(--good);letter-spacing:.06em;margin-bottom:3px;
 }
 .summary-section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow)}
+.hl{background:var(--warn-soft);color:var(--warn);padding:0 5px;border-radius:3px;font-weight:600}
+.conclusion{
+  background:var(--good-soft);border-left:4px solid var(--good);color:var(--good);
+  padding:14px 18px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.85;margin-top:16px;
+}
 
 /* ---------- 页脚 ---------- */
 footer{
@@ -209,9 +214,9 @@ footer strong{color:rgba(255,255,255,.9)}
   <div class="wrap hero-inner">
     <span class="hero-tag">资料分析 · 错题复盘</span>
     <h1>11 道典型错题逐题精批<br>把「会错的地方」变成「不会再错」</h1>
-    <p class="hero-sub">不是题目罗列，是规律提炼。每一道题都标出错因类型、正确解法与避坑口诀，最后汇总成 10 条避坑口诀表和 4 条可执行的改进措施。</p>
+    <p class="hero-sub">不是题目罗列，是规律提炼。16 道题每一道都标出错因类型、正确解法与避坑口诀，另附 10 条避坑口诀表、公式语序与方法论速查，以及 8 项可执行的改进措施。</p>
     <div class="hero-meta">
-      <span><span class="dot"></span>题量：11 道典型错题</span>
+      <span><span class="dot"></span>题量：16 道典型错题</span>
       <span><span class="dot"></span>错误类型：5 类</span>
       <span><span class="dot"></span>覆盖考点：10 个高频易错点</span>
       <span><span class="dot"></span>适用：国考 / 省考 资料分析</span>
@@ -226,6 +231,7 @@ footer strong{color:rgba(255,255,255,.9)}
       <li><a href="#pitfalls">二、避坑口诀表</a></li>
       <li><a href="#review">三、分题复盘</a></li>
       <li><a href="#improve">四、改进措施</a></li>
+      <li><a href="#method">五、公式语序与方法论</a></li>
     </ul>
   </div>
 </nav>
@@ -241,7 +247,17 @@ footer strong{color:rgba(255,255,255,.9)}
 
     <div class="overview">
       <h3 class="sub">1. 覆盖核心知识点</h3>
-      <p>本次复盘共 11 道典型错题，全面覆盖资料分析高频易错考点：翻番概念辨析、增长率与变化幅度辨析、倍数与增长率辨析、平均数分母判定、混合增长率（线段法）、增长量计算与倍数、隔年增量与基期、两集合容斥比重极值、两期比重逆用、累计存量与增量转化。</p>
+      <p>本次复盘共 16 道典型错题，全面覆盖资料分析高频易错考点：翻番概念辨析、增长率与变化幅度辨析、倍数与增长率辨析、平均数分母判定、混合增长率（线段法）、增长量计算与倍数、隔年增量与基期、两集合容斥比重极值、两期比重逆用、累计存量与增量转化。</p>
+      <p>第二批深度复盘新增覆盖：</p>
+      <ul>
+          <li>现期比重计算与临界判定</li>
+          <li>现期平均数（语序判定+区间求和）</li>
+          <li>环比增长率比较（倍数观察法）</li>
+          <li>二维分组统计下的简单加减计算</li>
+          <li>综合分析计数题（多考点拼盘）</li>
+          <li>比值约分简化（公共总量约去技巧）</li>
+          <li>连环设问题型（先筛选后二次排序）</li>
+      </ul>
 
       <h3 class="sub">2. 高频错误类型</h3>
       <ul>
@@ -252,8 +268,54 @@ footer strong{color:rgba(255,255,255,.9)}
         <li><strong>陷阱识别不足</strong>：累计存量陷阱、隔年增量陷阱、比重交集极值陷阱</li>
       </ul>
 
-      <h3 class="sub">3. 整体原因分析</h3>
+      <h3 class="sub">3. 第二批错题的错误类型汇总</h3>
+<table class="error-table">
+        <thead>
+            <tr>
+                <th>错误大类</th>
+                <th>具体表现</th>
+                <th>对应错题</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>找数审题类</td>
+                <td>表格城乡分组串行、指标名称混淆、时间范围看错、连环题两步范围混淆</td>
+                <td>第5题（抚州比重）、第3题（环比增速排序）</td>
+            </tr>
+            <tr>
+                <td>公式语序类</td>
+                <td>平均数/比重分子分母颠倒、句式翻译错误</td>
+                <td>第2题（人均外借册次）</td>
+            </tr>
+            <tr>
+                <td>计算精度类</td>
+                <td>百分数小数点移位错误、临界值截位过度导致结论反转</td>
+                <td>第4题（综合分析条数题）</td>
+            </tr>
+            <tr>
+                <td>思路方法类</td>
+                <td>增长率比较硬算不会看倍数、二维分组不会搭桥、不会约去公共总量</td>
+                <td>第1题（财产险投诉）、第3题（环比增速）、第4题（排片倍数）</td>
+            </tr>
+            <tr>
+                <td>结果统计类</td>
+                <td>综合题正确条数计数错误、排序方向颠倒</td>
+                <td>第3题（占比排名）、第4题（条数判定）</td>
+            </tr>
+        </tbody>
+    </table>
+
+      <h3 class="sub">4. 整体原因分析</h3>
       <p>核心问题在于未形成「先圈时间、再定对象、后套公式」的标准化解题流程，对题干关键词敏感度不足；易被材料中最直观的近期数据干扰，跳过关键推导步骤直接计算；同时对小众考点（如容斥比重极值、两期比重逆用）的题型特征识别不熟练。</p>
+      <p>第二批复盘补充的共性错因：</p>
+      <ol>
+          <li><strong>重计算、轻观察</strong>：拿到题目优先动笔硬算，不先宏观扫视数据特征（倍数、负增长、公共总量），既浪费时间又易出错</li>
+          <li><strong>审题无标记习惯</strong>：对限定词（城镇/农村、时间区间、排序范围）不做圈画，容易遗漏关键约束条件</li>
+          <li><strong>基础公式规则不固化</strong>：比重、平均数的句式判定依赖直觉，没有形成固定的语序口诀，正确率不稳定</li>
+          <li><strong>表格材料找数不校验</strong>：多行多分组表格，找到数字后不核对行标签，极易串行串组</li>
+          <li><strong>临界值计算轻敌</strong>：刚好卡在阈值附近的比重、倍数，粗暴截位估算，造成结论反转</li>
+      </ol>
     </div>
   </section>
 
@@ -341,7 +403,7 @@ footer strong{color:rgba(255,255,255,.9)}
   <section class="section" id="review">
     <div class="sec-num">03 / REVIEW</div>
     <h2 class="sec-title">三、分题详细复盘</h2>
-    <p class="sec-lead">每题四段：题干 → 正确解法 → 错因 → 避坑要点。错因一栏是重点——它对应的是你的思考习惯，而不是这道题的知识点。</p>
+    <p class="sec-lead">每题四段：题干 → 正确解法 → 错因 → 避坑要点。错因一栏是重点——它对应的是你的思考习惯，而不是这道题的知识点。第 12–16 题为第二批深度复盘，另含「错误表现」一段。</p>
 
     <div class="question-card">
       <h3>第 1 题：IPv4 地址翻番判断</h3>
@@ -513,6 +575,99 @@ footer strong{color:rgba(255,255,255,.9)}
       <p class="mistake-reason">直接拿累计总长算同比增量，只做了一层减法，未意识到题目求的是「新增量的增量」，需要二次做差。</p>
       <div class="tip">材料给累计 / 存量，问「当年新增的同比增量」，必须两次做差：先求每年新增，再求新增的增量。</div>
     </div>
+    <div class="question-card">
+      <h3>第 12 题：财产险公司违法违规投诉量计算</h3>
+      <span class="tag tag-point">考点：二维分组统计下的简单加减计算</span>
+      <span class="tag tag-mistake">错误类型：思路方法类</span>
+      <p><strong>题干：</strong>2016年4月，涉及财产险公司违法违规类的投诉为多少件？</p>
+      <p><strong>错误表现：</strong>找不到对应数据、盲目加减数字，混淆两套分组口径</p>
+      <p><strong>标准解题逻辑：</strong></p>
+      <ol>
+            <li>识别两套独立分组口径：
+                <ul>
+                    <li>口径1：总投诉 = 合同纠纷类 + 违法违规类</li>
+                    <li>口径2：总投诉 = 财产险公司投诉 + 人身险公司投诉</li>
+                </ul>
+            </li>
+            <li>核心桥梁：全行业违法违规投诉共259件 = 人身险违法违规 + 财产险违法违规</li>
+            <li>先算人身险违法违规：人身险总投诉1470 - 人身险合同纠纷1281 = 189件</li>
+            <li>最终所求：259 - 189 = 70件</li>
+        </ol>
+      <p class="mistake-reason">思路型短板，不会识别多维度分类材料，不知道通过中间量搭桥计算</p>
+      <div class="tip">同一总量出现两种分类标准时，立刻画二维表格梳理数字归属，禁止裸眼找数乱加减。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 13 题：平均每流通人次书刊外借册次</h3>
+      <span class="tag tag-point">考点：现期平均数（语序判定+区间求和）</span>
+      <span class="tag tag-mistake">错误类型：公式语序类</span>
+      <p><strong>题干：</strong>2012～2014年，平均每流通人次约产生多少册次的书刊文献外借？</p>
+      <p><strong>错误表现：</strong>分不清分子分母，凭感觉用大数除小数导致结果颠倒</p>
+      <p><strong>标准解题逻辑：</strong></p>
+      <ol>
+            <li>句式判定：<span class="hl">平均每A多少B = B ÷ A</span>，“每”字后面的量为分母</li>
+            <li>本题：平均每流通人次 → 流通人次为分母，外借册次为分子</li>
+            <li>时间处理：2012-2014三年数据分别求和，再整体相除</li>
+            <li>计算：册次合计12.08 ÷ 人次合计14.56 ≈ 0.8</li>
+        </ol>
+      <p class="mistake-reason">技巧型短板，平均数语序规则未固化，依赖直觉判断除法顺序</p>
+      <div class="tip">牢记口诀“每后为分母”，动笔前先写好除法顺序，再找数代入。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 14 题：环比增速最快单日占比排名</h3>
+      <span class="tag tag-point">考点：环比增长率比较 + 连环设问二次排序</span>
+      <span class="tag tag-mistake">错误类型：找数审题类</span>
+      <p><strong>题干：</strong>7月28日～8月5日间，A影片票房环比增速最快的单日，当日A影片占全国总票房的比例在该影片上映10天内排名第几？</p>
+      <p><strong>错误表现：</strong>增长率比较硬算，看不出倍数关系；误判增速最快日期，导致排序结果错误</p>
+      <p><strong>标准解题逻辑：</strong></p>
+      <ol>
+            <li>第一步（筛选增速）：在7.28-8.5范围内找环比增速最快
+                <ul>
+                    <li>先排除所有负增长日期（7.31、8.2、8.3）</li>
+                    <li>增长率比较等价于比较现期/基期，7.28现期约为基期1.78倍，断层最大</li>
+                </ul>
+            </li>
+            <li>第二步（二次排序）：取出7.28当日占比，在<strong>上映全部10天</strong>范围内从高到低排序，位列第7</li>
+        </ol>
+      <p class="mistake-reason">技巧型短板，增长率比较优先硬算，不会先观察倍数特征；对连环题的两步范围区分不清</p>
+      <div class="tip">增速比较先看倍数再算差值；连环设问务必圈画两个不同的时间范围，防止范围混淆。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 15 题：综合分析条数判定题</h3>
+      <span class="tag tag-point">考点：多考点拼盘（和值比较、总量推导、比重临界判定、比值约分）</span>
+      <span class="tag tag-mistake">错误类型：计算精度类</span>
+      <p><strong>题干：</strong>以下信息能够从资料中推出的有几条？（4个论断逐一判断）</p>
+      <p><strong>错误表现：</strong>比重临界计算时百分位数移位错误，误判第③条，导致正确条数统计错误</p>
+      <p><strong>标准解题逻辑：</strong></p>
+      <ol>
+            <li>① 和值比较：第6-10日票房总和＞前5日总和 → 正确</li>
+            <li>② 总量比较：全国总票房=A票房÷占比，8.2总票房＜8.1 → 错误</li>
+            <li>③ 比重临界：B影片占比15.7%＞15% → 正确</li>
+            <li>④ 倍数化简：场次倍数=排片占比直接相除，34.5%÷1.6%≈21.5，为20多倍 → 正确</li>
+            <li>合计正确3条，对应选项C</li>
+        </ol>
+      <p class="mistake-reason">技巧型短板，百分数换算小数点移位不熟练；临界值截位过度导致结论反转</p>
+      <div class="tip">临界比重/倍数判定谨慎截位，动笔写清百分号，不依赖心算移位。</div>
+    </div>
+
+    <div class="question-card">
+      <h3>第 16 题：抚州城镇居民消费支出占收入比重</h3>
+      <span class="tag tag-point">考点：现期比重计算</span>
+      <span class="tag tag-mistake">错误类型：找数审题类</span>
+      <p><strong>题干：</strong>抚州市2010年城镇居民人均可支配收入中用于消费性支出的比例约为多少？</p>
+      <p><strong>错误表现：</strong>表格找数串行，误用农村居民组数据计算</p>
+      <p><strong>标准解题逻辑：</strong></p>
+      <ol>
+            <li>句式判定：Y中X的比例 = X ÷ Y，即消费支出÷可支配收入</li>
+            <li>定位数据：抚州2010年城镇居民，消费支出7474元，可支配收入14445元</li>
+            <li>计算：7474÷14445≈51.7%</li>
+        </ol>
+      <p class="mistake-reason">审题型短板，表格多行分组材料找数后不核对行标签，串行串组</p>
+      <div class="tip">表格找数后，回扫一眼行首分组标签（城镇/农村、地市名），确认匹配题干再计算。</div>
+    </div>
+
   </section>
 
   <!-- ============ 四、改进措施 ============ -->
@@ -541,8 +696,90 @@ footer strong{color:rgba(255,255,255,.9)}
 
       <h3 class="sub">4. 错题复盘机制</h3>
       <p>每道错题标注「错误类型 + 考点关键词 + 避坑口诀」，同类型错题归类整理；每周重做一遍本周错题，重点关注审题陷阱和概念混淆点，形成错题条件反射。</p>
+      <h3 class="sub">5. 找数习惯整改</h3>
+      <ul>
+          <li>所有表格材料，找到数据后强制核对一次行标签+列标题，杜绝串行串组</li>
+          <li>题干中的限定词（时间、主体、分组、范围）一律圈出，尤其是连环双问题，分别标记两步的范围</li>
+          <li>图表材料先宏观扫读指标名称，再定位具体数值，不凭数字大小盲目找数</li>
+      </ul>
+
+      <h3 class="sub">6. 计算规范整改</h3>
+      <ul>
+          <li>百分数计算统一动笔转换，禁止纯心算小数点移位</li>
+          <li>临界值判定（是否大于X%、是否N倍）保留两位有效数字以上，不粗暴截位</li>
+          <li>除法计算先定顺序再算数，避免算完再颠倒分子分母</li>
+      </ul>
+
+      <h3 class="sub">7. 题型识别强化</h3>
+      <ul>
+          <li>固化比重、平均数的两类句式公式，形成条件反射</li>
+          <li>见到同一总量两套分类，立刻画二维表梳理数字归属</li>
+          <li>增长率比较题，先排除负增长，再看倍数断层，最后精算差值</li>
+      </ul>
+
+      <h3 class="sub">8. 考场策略优化</h3>
+      <ul>
+          <li>综合分析计数题后置作答，时间紧张可优先跳过</li>
+          <li>单题超过90秒无明确思路，标记后先做后面题目</li>
+          <li>简单题不降审题标准，越简单越要核对标签与限定词</li>
+      </ul>
     </div>
   </section>
+  <!-- ============ 五、公式语序与方法论 ============ -->
+  <section class="section" id="method">
+    <div class="sec-num">05 / METHOD</div>
+    <h2 class="sec-title">五、公式语序与方法论</h2>
+    <p class="sec-lead">前 16 道题反复考的是同一套底层规则：句子怎么翻译、分数怎么比、坑在哪儿。把它们抽成口诀，考场上先认题型再套动作。</p>
+
+    <div class="summary-section">
+      <h3 class="sub">1. 核心公式语序口诀</h3>
+      <table class="error-table">
+        <thead>
+            <tr>
+                <th>题型</th>
+                <th>常见句式</th>
+                <th>公式规则</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>比重</td>
+                <td>A占B的比重 / B中A的比例</td>
+                <td>A ÷ B（占/中后面的量是分母）</td>
+            </tr>
+            <tr>
+                <td>平均数</td>
+                <td>平均每A多少B / 单位A对应B</td>
+                <td>B ÷ A（每字后面的量是分母）</td>
+            </tr>
+            <tr>
+                <td>增长率</td>
+                <td>环比/同比增速最快</td>
+                <td>等价于比较 现期÷基期</td>
+            </tr>
+        </tbody>
+    </table>
+
+      <h3 class="sub">2. 通用秒杀技巧</h3>
+      <ul>
+          <li><strong>倍数观察法</strong>：增长率比较中，若某一期现期接近基期2倍及以上，大概率为增速最大值</li>
+          <li><strong>公共总量约分法</strong>：同一整体下两个部分量求比值，整体量可直接约去（如排片占比求场次倍数）</li>
+          <li><strong>负增长排除法</strong>：找最大增速，先把所有下降的日期全部排除，缩小比较范围</li>
+      </ul>
+
+      <h3 class="sub">3. 经典陷阱避坑清单</h3>
+      <ol>
+          <li>表格城乡/地市多行并列，必核对行标签</li>
+          <li>连环设问两步走，必区分两个时间范围</li>
+          <li>临界值判定，不过度截位</li>
+          <li>综合计数题，逐条打√×，最后数清楚个数</li>
+          <li>平均数、比重，先定除法顺序再找数</li>
+      </ol>
+    </div>
+
+    <div class="conclusion">本次错题集中在资料分析基础题型的审题、找数、公式固化环节，无高难度计算。核心提升方向是规范解题流程，把「圈限定词-定公式-核对数据-计算」四步形成固定习惯，减少直觉性失误，实现基础题全拿分。</div>
+  </section>
+
 
 </div>
 </main>
@@ -552,7 +789,7 @@ footer strong{color:rgba(255,255,255,.9)}
 <footer>
   <div class="wrap">
     <p><strong>行测资料分析错题复盘汇总</strong></p>
-    <p>11 道典型错题 · 10 条避坑口诀 · 4 项可执行改进措施</p>
+    <p>16 道典型错题 · 10 条避坑口诀 · 5 条经典陷阱 · 8 项可执行改进措施</p>
     <p style="margin-top:10px"><a href="../index.html#notes" style="color:rgba(255,255,255,.8)">← 返回学习笔记</a></p>
   </div>
 </footer>
@@ -603,6 +840,10 @@ footer strong{color:rgba(255,255,255,.9)}
       sections.forEach(function (s) {
         if (s.getBoundingClientRect().top <= 160) current = s.id;
       });
+      // 最后一节永远滚不到顶部（页面到底了），到底时直接高亮它
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        current = sections[sections.length - 1].id;
+      }
       links.forEach(function (a) {
         var active = a.getAttribute('href') === '#' + current;
         a.style.background = active ? 'var(--primary)' : '';
