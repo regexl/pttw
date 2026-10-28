@@ -1,0 +1,693 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>行测判断推理「一拖五」快速做对方法 · 调研报告</title>
+<style>
+:root{
+  --ink:#16202c; --ink2:#3d4a5c; --grey:#6b7684;
+  --line:#dfe4ea; --bg:#f2f4f7;
+  --navy:#1b3a5c; --navy-dark:#12283f; --navy-light:#eef3f8;
+  --teal:#0f7f86; --teal-light:#e9f6f6;
+  --amber:#b9770e; --amber-light:#fff8ea;
+  --red:#c0392b; --red-light:#fdf1ef;
+  --green:#1e7a4d; --green-light:#eff8f2;
+  --purple:#5b3d8f; --purple-light:#f3effa;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;
+  line-height:1.92;font-size:15px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 70px}
+header.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);color:#fff;
+  padding:40px 28px 32px;box-shadow:0 3px 14px rgba(0,0,0,.18)}
+header.hero .kicker{font-size:12.5px;letter-spacing:4px;color:#7fd4d8;margin-bottom:8px}
+header.hero h1{margin:0 0 14px;font-size:27px;line-height:1.45;letter-spacing:.5px}
+header.hero .meta{font-size:13.5px;opacity:.95;line-height:2}
+header.hero .meta b{color:#ffd88a;font-weight:600}
+header.hero .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+header.hero .tags span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);
+  padding:2px 11px;border-radius:20px;font-size:12.5px}
+.notice{background:var(--amber-light);border:2px solid var(--amber);border-left-width:6px;border-radius:8px;
+  padding:14px 18px;margin:22px 0;font-size:14px;line-height:1.9;color:#6b4a05}
+.notice b{color:#4a3303}
+.toc{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 22px 18px;
+  margin:22px 0 6px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.toc-title{font-weight:700;color:var(--navy);margin-bottom:8px;font-size:15px;letter-spacing:1px}
+.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+.toc li{margin:4px 0;font-size:14px}
+.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px solid #cfd8e0}
+.toc a:hover{color:var(--teal);border-color:var(--teal)}
+h2{font-size:21px;color:var(--navy);margin:40px 0 16px;padding-left:13px;border-left:6px solid var(--navy);line-height:1.45}
+h3{font-size:17px;color:var(--teal);margin:24px 0 10px;padding-left:10px;border-left:4px solid #b6dfe1}
+h4{font-size:15.5px;color:var(--navy-dark);margin:18px 0 8px}
+p{margin:10px 0}
+ul,ol{margin:10px 0;padding-left:26px}
+li{margin:5px 0}
+strong{color:var(--navy-dark)}
+hr{border:0;border-top:1px dashed var(--line);margin:28px 0}
+code{background:#eef1f5;padding:1px 6px;border-radius:4px;font-size:13.5px;
+  font-family:Consolas,"Courier New",monospace;color:#0b4f6c}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 24px 22px;
+  margin:16px 0 20px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.card.tight{padding:16px 20px 18px}
+.card-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.card-title .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+.card.tl{border-left:5px solid var(--teal)}
+.card.am{border-left:5px solid var(--amber);background:var(--amber-light)}
+.card.rd{border-left:5px solid var(--red);background:var(--red-light)}
+.card.gr{border-left:5px solid var(--green);background:var(--green-light)}
+.card.pu{border-left:5px solid var(--purple);background:var(--purple-light)}
+.card.nv{border-left:5px solid var(--navy);background:var(--navy-light)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+.table-wrap{overflow-x:auto;margin:14px 0 20px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);background:#fff}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:13.4px;background:#fff}
+th{background:var(--navy);color:#fff;font-weight:600;text-align:left;padding:9px 11px;border:1px solid var(--navy)}
+td{padding:9px 11px;border:1px solid var(--line);vertical-align:top;line-height:1.8}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:var(--navy-light)}
+td b,th b{color:var(--navy-dark)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+@media (max-width:820px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.kpi .item{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 12px;text-align:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.kpi .num{font-size:25px;font-weight:700;color:var(--teal);line-height:1.3}
+.kpi .num.warn{color:var(--red)}
+.kpi .num.amber{color:var(--amber)}
+.kpi .lbl{font-size:12.5px;color:var(--grey);margin-top:2px}
+pre{background:#1d2733;color:#d8e2ec;padding:15px 18px;border-radius:8px;overflow-x:auto;
+  font-size:13.4px;line-height:1.85;border-left:5px solid var(--teal);margin:14px 0;
+  font-family:Consolas,"Courier New",monospace}
+pre .k{color:#7fd4d8}
+pre .c{color:#8fa3b5}
+.quote{background:var(--navy-light);border-left:4px solid var(--navy);padding:12px 18px;
+  border-radius:0 6px 6px 0;margin:14px 0;font-size:14.3px;color:var(--ink2)}
+.pill{display:inline-block;background:var(--navy-light);color:var(--navy-dark);border:1px solid #c8d6e4;
+  border-radius:14px;padding:1px 10px;font-size:12.5px;margin:2px 4px 2px 0}
+.pill.r{background:var(--red-light);color:var(--red);border-color:#f0c8c2}
+.pill.g{background:var(--green-light);color:var(--green);border-color:#c4e3d2}
+.pill.a{background:var(--amber-light);color:var(--amber);border-color:#ecd9ac}
+.pill.t{background:var(--teal-light);color:var(--teal);border-color:#bfe1e2}
+ol.steps{counter-reset:st;list-style:none;padding-left:0}
+ol.steps>li{counter-increment:st;position:relative;padding:12px 16px 12px 52px;background:#fff;
+  border:1px solid var(--line);border-radius:8px;margin:9px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+ol.steps>li::before{content:counter(st);position:absolute;left:14px;top:11px;width:24px;height:24px;
+  background:var(--teal);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-size:13px;font-weight:700}
+ol.steps>li b{color:var(--teal)}
+.check{list-style:none;padding-left:0}
+.check li{padding-left:28px;position:relative;margin:7px 0}
+.check li::before{content:"☐";position:absolute;left:4px;top:0;font-size:17px;color:var(--teal)}
+footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;line-height:2;
+  border-top:1px solid var(--line);margin-top:36px}
+.tag-src{font-size:12.5px;color:var(--grey)}
+@media print{
+  body{background:#fff}
+  .toc{display:none}
+  h2{break-after:avoid}
+  .card{break-inside:avoid}
+  .table-wrap{overflow:visible}
+  table{min-width:0;font-size:10.5px}
+  pre{background:#f4f4f4;color:#222;border:1px solid #ddd}
+}
+
+/* ===== 亮色模式对比度微调 =====
+   原讲义的 teal / accent / grey 三个色值在浅底上只有 3.4~4.5:1（低于 WCAG AA 4.5:1），
+   这里各压深一档；深色模式另有一套变量，不受影响。 */
+:root{ --teal:#0a6a72; --amber:#8a5d0e; --grey:#5c6673; }
+
+/* ===== 站点外壳：顶栏 / 主题切换 / 回到顶部 ===== */
+.sd-topbar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.sd-topbar a{color:var(----navy);text-decoration:none;font-weight:600;font-size:14px}
+.sd-topbar a:hover{color:var(----amber)}
+.sd-topbar .brand-sub{color:var(--grey);font-size:13px}
+.sd-theme{
+  margin-left:auto;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--line);background:var(--bg);font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.sd-theme:hover{border-color:var(----amber);transform:rotate(-15deg)}
+.sd-backtop{
+  position:fixed;bottom:22px;right:22px;width:42px;height:42px;border-radius:50%;
+  background:var(----navy);color:#fff;border:none;font-size:19px;display:none;z-index:99;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:all .2s;
+}
+.sd-backtop:hover{background:var(----amber)}
+.sd-backtop.show{display:block}
+h2{scroll-margin-top:64px}
+.toc a{scroll-margin-top:64px}
+
+/* ===== 暗色模式（源页面硬编码了一批浅色，这里统一覆盖） ===== */
+[data-theme="dark"]{
+  --ink:#e6eaef; --ink2:#c2cad4; --grey:#8b95a3;
+  --line:#2b3340; --bg:#12151b;
+  --teal:#4fc4cd; --teal-light:#123033;
+  --green:#57c98c; --green-light:#12301f;
+  --red:#f07a6c; --red-light:#3a1d1a;
+  --purple:#a98fe0; --purple-light:#241d33;
+  --gold:#d9a441; --gold-light:#33260f;
+  --amber:#d9a441; --amber-light:#33260f;
+  --navy-light:#18263a;
+}
+[data-theme="dark"] .card,
+[data-theme="dark"] .card.tight,
+[data-theme="dark"] table,
+[data-theme="dark"] .toc,
+[data-theme="dark"] .table-wrap,
+[data-theme="dark"] ol.steps>li,
+[data-theme="dark"] .num4 .b,
+[data-theme="dark"] .kpi .item,
+[data-theme="dark"] .item{background:#181c24}
+[data-theme="dark"] .card{box-shadow:0 1px 5px rgba(0,0,0,.35)}
+[data-theme="dark"] tbody tr:nth-child(even){background:#1d222c}
+[data-theme="dark"] .notice{color:#e8c98a}
+[data-theme="dark"] .notice b{color:#f7dda4}
+[data-theme="dark"] code{background:#232a36;color:#d7dee8}
+[data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
+[data-theme="dark"] th{background:#1e4a78;border-color:#1e4a78}
+[data-theme="dark"] td{border-color:var(--line)}
+[data-theme="dark"] h3{color:#c8d4e2}
+/* --primary / --primary-dark 是深藏青，源页面把它们当文字色用；暗色下必须换成浅色，
+   但作为表头底色/边框时又要保持深色，所以这里只覆盖「文字用途」的规则 */
+[data-theme="dark"] .toc-title,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .num4 .b .t{color:#9cc4f5}
+[data-theme="dark"] h2{color:#8ab4f8;border-left-color:#3b6ea8}
+[data-theme="dark"] h4,
+[data-theme="dark"] strong,
+[data-theme="dark"] td b,
+[data-theme="dark"] th b,
+[data-theme="dark"] .pill{color:#c2d8f0}
+[data-theme="dark"] .pill.r{border-color:#5c2f2a}
+[data-theme="dark"] .pill.g{border-color:#1f4a35}
+[data-theme="dark"] .pill.a{border-color:#4a3a14}
+[data-theme="dark"] .pill.t{border-color:#1d4749}
+[data-theme="dark"] .pill.p{border-color:#372a4d}
+[data-theme="dark"] .hero{box-shadow:0 3px 14px rgba(0,0,0,.5)}
+</style>
+<meta name="description" content="判断推理「一拖五」题组调研报告：题型解剖与三大题型画像、翻译推理五类句式速查、鲁滨逊定律、五步核心流水线、反向代入秒杀法、八条高频陷阱清单、考场时间取舍与 7 天速成 / 14 天实战训练方案。">
+<meta name="keywords" content="行测,判断推理,一拖五,题组,翻译推理,鲁滨逊定律,反向代入,逻辑判断,备考调研">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+<header class="sd-topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">判断推理 · 一拖五题组调研报告</span>
+  <button id="sd-theme" class="sd-theme" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<header class="hero">
+  <div class="kicker">公考专项调研 · 行测判断推理</div>
+  <h1>「一拖五」题组：如何把它快速做对</h1>
+  <div class="meta">
+    <b>报告类型</b>：方法调研 + 实战手册　|
+    <b>调研日期</b>：2026年10月23日　|
+    <b>适用考试</b>：2027 国考 · 湖北省考 · 鄂州市事业单位<br>
+    <b>距笔试</b>：37 天（2026年11月29日）　|
+    <b>资料依据</b>：粉笔《逻辑一拖五解题策略梳理》讲义（含 2020 / 2022 国考真题）、本机错题复盘文档、本地专项笔记
+  </div>
+  <div class="tags">
+    <span>翻译推理</span><span>分组分配</span><span>排序捆绑</span>
+    <span>反向代入法</span><span>鲁滨逊定律</span><span>时间管理</span><span>避坑清单</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="notice">
+  <b>调研说明（请先读这段）：</b>本报告结论全部来自<b>可核验的一手材料</b>——①您本机 Downloads 里的粉笔讲义《第1讲 逻辑一拖五解题策略梳理》（内含 2020/2022 国考排序类真题原文）；②本机《行测判断推理·一拖五全能笔记》《行测逻辑分组题核心笔记》《行测逻辑判断·翻译推理全坑点汇总+错题深度复盘手册》《行测判断推理错题复盘文档》等既有复盘资料；③粉笔题库体系结构（第三章「逻辑一拖五 60 题」）。<br>
+  写报告期间本机<b>无法访问百度/搜狗/必应等搜索引擎</b>（验证码拦截 + DNS 解析失败），因此<b>未能采集大规模网络统计数据</b>。凡涉及题量、占比、分值、时间配比的部分，均标注为<b>经验测算值</b>而非官方数据；真题年份与原文则直接引自讲义，可回溯核对。
+</div>
+
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#s1">结论先行：一拖五值不值得死磕</a></li>
+    <li><a href="#s2">解剖：一拖五到底是什么题</a></li>
+    <li><a href="#s3">三大题型画像</a></li>
+    <li><a href="#s4">翻译推理速查：把话变成箭头</a></li>
+    <li><a href="#s5">核心流水线：五步固定动作</a></li>
+    <li><a href="#s6">反向代入法：最快的秒杀通道</a></li>
+    <li><a href="#s7">高频陷阱清单（八条）</a></li>
+    <li><a href="#s8">时间与取舍：考场提速</a></li>
+    <li><a href="#s9">训练方案：7 天速成 / 14 天实战</a></li>
+    <li><a href="#s10">附录：真题演练与自测清单</a></li>
+  </ol>
+</nav>
+
+<h2 id="s1">一、结论先行：一拖五值不值得死磕</h2>
+
+<div class="kpi">
+  <div class="item"><div class="num">5</div><div class="lbl">每组题量（共享同一份材料）</div></div>
+  <div class="item"><div class="num t">5</div><div class="lbl">分值（同其他单题，无额外溢价）</div></div>
+  <div class="item"><div class="num amber">8–10</div><div class="lbl">建议用时（分钟 / 组，经验值）</div></div>
+  <div class="item"><div class="num warn">1</div><div class="lbl">头号失分点：小题条件继承</div></div>
+</div>
+
+<div class="card nv">
+  <div class="card-title"><span class="dot"></span>核心判断</div>
+  <p><b>一拖五不是"五道难题"，而是"一份材料、五个提问角度"。</b>分值密度和普通题一样，真正的价值在于：<b>材料只需要读懂一次</b>，后面四题全部复用同一套约束框架。省下的是阅读与建模的时间，不是思考的深度。</p>
+  <p>所以策略<b>不是"五题都做"，而是"一题定框架，四题收割"</b>：第一题是突破口，第二、三题通常最快，第四题套用已建好的模型，第五题如果推 3 步以上仍然复杂，<b>应当放弃</b>。</p>
+  <p>能不能做对，几乎完全取决于<b>翻译推理功底</b>。粉笔把这套题放在「第三章 逻辑一拖五 60 题」单独立章，开头直接挂上"翻译推理知识汇总，供大家查漏补缺"——这个编排本身就说明：<b>一拖五不是新题型，是翻译推理的实战应用</b>。翻译推理不过关，一拖五必然崩盘。</p>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>给 Mr.Liu 的现状判断（基于本机复盘资料）</div>
+  <ul>
+    <li><b>已具备：</b>翻译推理的六大翻译规则、鲁滨逊定律、逆否等价这些主干知识，本机笔记记录完整且体系化，说明理论层已经过。</li>
+    <li><b>真正的漏洞：</b>复盘文档里被反复标记为"致命失误"的不是新知识，而是<b>三个老坑反复踩</b>——「只有…否则…」箭头方向搞反、「只有+地点」漏掉唯一性语义、「否前肯后」推出无依据的确定结论。</li>
+    <li><b>结论：</b>不需要再学新方法，需要的是<b>把已有方法在限时条件下跑成肌肉记忆</b>。第 5、7、9 节都围绕这一点设计。</li>
+  </ul>
+</div>
+
+<h2 id="s2">二、解剖：一拖五到底是什么题</h2>
+
+<h3>2.1 题组结构</h3>
+<div class="card">
+  <p>固定骨架是三段式：</p>
+  <pre><span class="k">【总题干】</span>一组人 / 物 / 位置 + 一组约束条件（硬性约束 + 假言命题 + 数量限制）
+<span class="k">【设问】</span>「根据上述材料，回答第 1—5 题」
+<span class="k">【五问】</span>1. 总排序/总匹配 → 2—5. 加条件、换问法、缩小范围</pre>
+  <p>五个设问的提问方式只有四种，<b>提问方式直接决定解法</b>——这是全篇最该背下来的一张表：</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>设问形式</th><th>例句</th><th>解法</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr><td><b>哪项可能为真</b></td><td>下列哪项安排是<b>可能的</b>？</td><td><span class="pill t">正向代入</span></td><td>只要能找到一种合法分配不违反条件，选项即成立</td></tr>
+      <tr><td><b>哪项必然为真</b></td><td>由此可以推出？</td><td><span class="pill r">反向取反代入</span></td><td>选项多为否定句（"XX 不 XX"），取反后假设成立却推出矛盾，则原选项必然为真</td></tr>
+      <tr><td><b>附加条件型</b></td><td>如果研发部在戊字楼，那么…</td><td><span class="pill a">以附加条件为起点正向推</span></td><td>附加条件是新事实，可直接激活链条</td></tr>
+      <tr><td><b>哪项不可能为真</b></td><td>以下哪项安排<b>是不可能的</b>？</td><td><span class="pill g">正向代入找冲突</span></td><td>与任何条件冲突的选项直接出局</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<h3>2.2 为什么它比单题划算：三种收益</h3>
+<div class="grid3">
+  <div class="card tight tl"><div class="card-title"><span class="dot"></span>收益一：读题摊薄</div>
+    <p style="font-size:14px">材料只读一遍。普通题要读 5 遍材料，一拖五读 1 遍。<b>对时间紧张的考场，这是硬通货。</b></p></div>
+  <div class="card tight tl"><div class="card-title"><span class="dot"></span>收益二：框架复用</div>
+    <p style="font-size:14px">第 1 题画出的表格（人 × 位置 / 人 × 物）<b>直接就是后四题的解题工具</b>，不用重新建模。</p></div>
+  <div class="card tight tl"><div class="card-title"><span class="dot"></span>收益三：排除复用</div>
+    <p style="font-size:14px">第 1 题排除掉的组合，在后几题还能当"已知不可行"用，减少重复试错。</p></div>
+</div>
+
+<h2 id="s3">三、三大题型画像</h2>
+
+<p>粉笔讲义体系中，一拖五落到三大核心题型。识别题型是第一步——<b>题型决定突破口在哪</b>。</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>题型</th><th>核心特征</th><th>元素规则</th><th>突破口</th><th>高频陷阱</th><th>难度</th></tr></thead>
+  <tbody>
+    <tr><td><b>一一对应</b></td><td>两边元素数量相等</td><td>一人一物，不可重复</td><td>确定一个，<b>双向划掉</b></td><td>忽略"一物只能一人"，两人同物</td><td>简单</td></tr>
+    <tr><td><b>分组题</b></td><td>一批人分 2~3 组</td><td>同组可多人，<b>不均等</b></td><td><b>人数 / 名额计算</b></td><td>默认每组有人；混淆"至多"与"至少"</td><td>中~难</td></tr>
+    <tr><td><b>排序题</b></td><td>有先后位次</td><td>位置唯一，不重复</td><td>画位置横线，<b>捆绑打包</b></td><td>把"A 在 B 之后"当成"紧邻"</td><td>中等</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="card am">
+  <div class="card-title"><span class="dot"></span>识别口诀（背下来，考场上 5 秒定型）</div>
+  <p><b>两边元素一样多、一人一物 → 一一匹配；一堆人分几组、看名额多少 → 分组；有先后位次、画横线 → 排序。</b></p>
+</div>
+
+<h3>3.1 排序类：讲义收录的国考真题原型</h3>
+<div class="card">
+  <p>粉笔讲义第 2 讲标题即为「<b>排序类（2020 / 2022 国考）</b>」，说明排序型一拖五是国考真题的成熟题型。原题（讲义原文节选）：</p>
+  <div class="quote">
+    某集团公司有生产、销售、研发、人事、财务、法务 6 个部门，现有从前到后的 6 栋办公楼：戊字楼、己字楼、庚字楼、辛字楼、壬字楼和癸字楼，每部门各一栋楼，并且各部门安排符合如下要求：<br>
+    （1）销售部在财务部和生产部之前；（2）人事部紧接在研发部或者生产部的后面；（3）紧接在法务部后面的是研发部或者销售部。
+  </div>
+  <p>五个设问分别是：</p>
+  <ol>
+    <li>下列各部门办公楼按照从前到后的顺序排列，哪项<b>符合</b>上述要求？</li>
+    <li>如果研发部在戊字楼，那么下列哪项<b>可能</b>为真？</li>
+    <li>如果法务部在壬字楼，那么销售部在：</li>
+    <li>如果销售部安排在戊字楼，则以下哪项安排<b>不可能</b>？</li>
+    <li>下列哪两个部门<b>不可能</b>依次安排在庚字楼和辛字楼？</li>
+  </ol>
+  <p class="tag-src">—— 讲义《第 1 讲 逻辑一拖五解题策略梳理》第 6 页 · 2020 国考真题 · 可回原 PDF 核对</p>
+  <p><b>从这五问能读出三个规律：</b></p>
+  <ul>
+    <li><b>设问分布均匀</b>：符合 / 可能 / 可能（条件型）/ 不可能 / 不可能，覆盖全部四种提问方式——命题人就是拿这几种问法轮换出题。</li>
+    <li><b>第 1 题是"全排列"型</b>，四个选项就是四种排列，属于"直接比对型"，是<b>全组最容易拿分的一题</b>，务必先拿。</li>
+    <li><b>第 5 题是"两元素相对位置"型</b>，本质是<b>捆绑 + 排除</b>，不必排出完整六宫格也能做。</li>
+  </ul>
+</div>
+
+<h2 id="s4">四、翻译推理速查：把话变成箭头</h2>
+
+<p>这一节是<b>一拖五的发动机</b>。讲义明确写：翻译规则属"高频应用，必须熟练掌握"。以下速查表整合自讲义原文 + 本机《翻译推理全坑点汇总》+《一拖五全能笔记》三份材料。</p>
+
+<h3>4.1 五类翻译句式</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>类型</th><th>句式</th><th>翻译</th><th>一句话记忆</th></tr></thead>
+  <tbody>
+    <tr><td><b>前推后</b><br>（充分）</td><td>如果 P 那么 Q；只要 P 就 Q；若 P 则 Q；所有 P 都 Q；P 必然 Q</td><td><code>P → Q</code></td><td>肯前必肯后；否后必否前</td></tr>
+    <tr><td><b>后推前</b><br>（必要）</td><td>只有 P 才 Q；……才……；除非 P 否则不 Q；不 P 不 Q</td><td><code>Q → P</code></td><td><b>谁是必要谁在箭头后</b></td></tr>
+    <tr><td><b>必要条件标志</b></td><td>P 是 Q 的必要条件 / 前提 / 基础 / 关键；必须 P；必然 P</td><td><code>Q → P</code></td><td>看到"必须/前提/必要"，被修饰的那个放箭头后</td></tr>
+    <tr><td><b>否一推一</b></td><td>除非 P 否则 Q；P 否则 Q；P，除非 Q；P 或 Q；P 和 Q 至少一个</td><td><code>¬P → Q</code><br><code>¬Q → P</code></td><td>去掉"除非"，否前推后</td></tr>
+    <tr><td><b>一推否一</b></td><td>P 和 Q 并非都能；不可能同时 P 和 Q；P 和 Q 不能共存</td><td><code>P → ¬Q</code><br><code>Q → ¬P</code></td><td>不能同存，必有一假</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>一拖五第一杀手：「只有…否则…」家族</div>
+  <div class="table-wrap" style="margin:6px 0 10px">
+  <table>
+    <thead><tr><th>句式</th><th>正确翻译</th><th>常见错法</th></tr></thead>
+    <tbody>
+      <tr><td>只有 P，否则 Q</td><td><code>¬P → Q</code></td><td>当成"只有…才…"后推前，<b>箭头方向反</b></td></tr>
+      <tr><td>除非 P，否则 Q</td><td><code>¬P → Q</code></td><td>后推前</td></tr>
+      <tr><td>除非 P，否则不 Q</td><td><code>Q → P</code></td><td>与"否则 Q"混淆</td></tr>
+      <tr><td>Q，除非 P（倒装）</td><td><code>¬P → Q</code></td><td>看不出倒装结构</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>「只有」有两种完全独立的用法</b>，这是出题人专属陷阱：</p>
+  <ul>
+    <li><b>连词用法</b>「只有 P，<b>才</b> Q」= 必要条件 <code>Q → P</code>，P 可多人、可共存，<b>没有唯一性</b>；</li>
+    <li><b>修饰用法</b>「只有 P + 地点」（<b>无"才"</b>）= <b>绝对唯一性</b>：该地点仅有 P 一人，无任何其他人。</li>
+  </ul>
+  <p>本机复盘文档记录的错题正栽在这：把「只有赵去乙地，否则周去丙地」直接译成 <code>周去丙 → 赵去乙</code>，<b>既反了箭头，又丢了唯一性</b>。正确拆解：<code>¬(乙地只有赵一人) → 周去丙</code>，逆否即 <code>周不去丙 → 乙地只能有赵</code>；假设"周去乙地"直接与唯一性矛盾，秒杀排除。</p>
+</div>
+
+<h3>4.2 三组极易混的量词</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>表述</th><th>逻辑式</th><th>允许情况</th><th>高频错</th></tr></thead>
+  <tbody>
+    <tr><td>至少一个</td><td><code>P ∨ Q</code></td><td>可两个都选</td><td>—</td></tr>
+    <tr><td>至多一个</td><td><code>¬(P∧Q) = ¬P ∨ ¬Q</code></td><td><b>可以都不选</b></td><td>误当"要么…要么…"</td></tr>
+    <tr><td>恰好一个</td><td><code>要么 P 要么 Q</code></td><td>必须选且仅选一个</td><td>误当"至多一个"</td></tr>
+    <tr><td>要么 P 要么 Q</td><td><code>P ⊕ Q</code></td><td>不共存、不全假</td><td>与"或"混淆</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="tag-src">—— 本机《一拖五全能笔记》「逻辑词速查总表」</p>
+
+<h3>4.3 鲁滨逊定律：假言转选言</h3>
+<div class="card tl">
+  <p><b>公式：</b><code>A → B ⟺ ¬A ∨ B</code>　　<b>人话：</b>如果 A 那么 B，等于「非 A，或者 B」。</p>
+  <p><b>用途一 · 真假推理：</b>题干给 <code>A→B</code>，直接换成 <code>¬A ∨ B</code> 判断真假。<br>
+  例：如果上岸就刷题 = 不上岸，或者刷题。什么时候这句话是<b>假话</b>？只有「A 真且 B 假」（上岸且不刷题）时 <code>A→B</code> 才为假——这就是假言命题的矛盾。</p>
+  <p><b>用途二 · 归谬推理：</b><code>A→B</code> 且 <code>A→¬B</code> ⇒ <code>¬A</code>。A 推出矛盾的两个结果，说明 A 一定不成立。</p>
+  <p><b>禁忌：</b>鲁滨逊只针对"→"，<b>双向箭头不能直接套</b>。<code>A↔B</code> 等价于 <code>(A→B)∧(B→A)</code>，要拆成两个假言分别用。</p>
+</div>
+
+<h3>4.4 推理规则（讲义标注"一拖五高频应用"）</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>规则</th><th>公式</th><th>用法</th></tr></thead>
+  <tbody>
+    <tr><td><b>逆否等价</b></td><td><code>A→B ≡ ¬B→¬A</code></td><td>写完假言<b>立刻补写逆否</b>，这是考场最省时间的动作</td></tr>
+    <tr><td><b>传递律</b></td><td><code>A→B，B→C ⇒ A→C</code></td><td>一条推完看能否触发下一个条件，形成链条</td></tr>
+    <tr><td><b>德摩根</b></td><td><code>¬(A∧B)=¬A∨¬B</code><br><code>¬(A∨B)=¬A∧¬B</code></td><td>取反时<b>且或互换</b>，高频错点</td></tr>
+    <tr><td><b>假言取否</b></td><td><code>¬(A→B)=A∧¬B</code></td><td>假言命题的矛盾是<b>事实并列</b>，不是新的箭头</td></tr>
+    <tr><td><b>二难推理</b></td><td><code>A→B，¬A→B ⇒ B</code></td><td>一拖五较少应用，知道即可</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="dot"></span>必背：否前、肯后无结论</div>
+  <p><code>A→B</code> 成立时，四种情形：</p>
+  <ul>
+    <li><b>A 真 → B 必真</b>（肯前，有效）</li>
+    <li><b>¬B 真 → ¬A 真</b>（否后，有效）</li>
+    <li><b>¬A 真 → ？</b>（否前
+无效，只能推出可能性结论）</li>
+    <li><b>B 真 → ？</b>（肯后无效，只能推出可能性结论）</li>
+  </ul>
+  <p class="tag-src">—— 讲义原文：「箭头前为假、箭头后为真，只能推出可能性结论，不能推出确定结论。」这是本机错题复盘中另一个被反复标记的致命失误。</p>
+</div>
+</div>
+
+<h2 id="s5">五、核心流水线：五步固定动作</h2>
+
+<p>这是全报告最该练成肌肉记忆的一段。本机《一拖五全能笔记》里的「固定解题流水线」，与《分组题核心笔记》的「标准解题流程」互相印证，本报告做了合并与强化。</p>
+
+<ol class="steps">
+  <li><b>Step 0 · 前置准备（只做一次）</b>——通读总题干：圈主体、数元素（人几个、物几个、位置几个）、判断题型（一一对应 / 分组 / 排序）、把<b>所有</b>条件翻译成符号。<br>
+  <span class="pill">硬性约束加粗</span> <span class="pill a">假言单独标记</span> <span class="pill r">小题附加条件只在本题有效</span></li>
+  <li><b>Step 1 · 看提问方式（决定方法）</b>——可能→正向代入；必然→取反代入；附加条件型→以附加条件为起点正向推；不可能→代入找冲突。<b>先看问法，再动笔</b>，不要一上来就推理。</li>
+  <li><b>Step 2 · 提取信息、连锁推导</b>——先写硬性约束（锚点），再看假言（找前件能不能激活），最后连锁：一条推完看能否触发下一个条件；假言难推进时用鲁滨逊转换。</li>
+  <li><b>Step 3 · 逐项验证（按优先级排错）</b>——① 硬性约束优先，一眼错直接排除；② 再验假言，注意否前肯后无效；③ 再查数量限制（人数上下限、一一对应不重复）；④ 最后查陷阱（是否继承了上题条件？至多/至少翻译对了吗？主体偷换了吗？）</li>
+  <li><b>Step 4 · 验算与收尾</b>——问「可能」：找到 1 种合法方案即可；问「必然」：所有可行方案都满足才算对，<b>存在 1 种方案让它不成立就排除</b>。推出矛盾=假设不成立；无矛盾=该情况可以存在。</li>
+</ol>
+
+<div class="card nv">
+  <div class="card-title"><span class="dot"></span>硬性约束优先级：为什么假言要放最后</div>
+  <p>三类约束的优先级是固定的：</p>
+  <div class="table-wrap" style="margin:8px 0">
+  <table>
+    <thead><tr><th>优先级</th><th>约束类型</th><th>性质</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>正向硬性约束（必须是什么）</td><td>直接锁定候选池</td><td>"甲只能在 A 或 B"→ 候选池 = {A,B}，可直接填表，是推理起点</td></tr>
+      <tr><td><b>2</b></td><td>反向否定约束（不能是什么）</td><td>排除单个可能</td><td>信息弱，单独用很难得确定结论，多用于后期筛选项</td></tr>
+      <tr><td><b>3</b></td><td>假言条件（如果…那么…）</td><td><b>条件触发型</b></td><td>前件不成立时这条规则恒真（没用），不能当固定事实用</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>实操口诀：先抓"必须是"，再看"不能是"，假言放最后，触发才启用。</b>硬性约束优先级原则出自本机《分组题核心笔记》「硬性约束优先级原则」一节。</p>
+</div>
+
+<div class="card pu">
+  <div class="card-title"><span class="dot"></span>分组题专属：集合唯一性 vs 个体事件</div>
+  <p>这是分组题里最贵的坑，也是讲义与本地笔记<b>共同标记为高价值考点</b>的内容。</p>
+  <div class="table-wrap" style="margin:8px 0">
+  <table>
+    <thead><tr><th>对比维度</th><th>集合唯一性</th><th>个体事件</th></tr></thead>
+    <tbody>
+      <tr><td>约束范围</td><td>整套分组方案</td><td>单独某一个个体</td></tr>
+      <tr><td>"否则"否定的对象</td><td>否定整套方案 → 直接作废</td><td>只否定该个体，他人不受影响</td></tr>
+      <tr><td>逻辑箭头</td><td>方案成立 → 条件成立</td><td>个体可参与 → 条件成立</td></tr>
+      <tr><td>破坏后果</td><td><b>整组全部排除</b></td><td>仅该个体失效，其余照常分配</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>判断标准只有一条：看"否则"后面否定的是谁。</b>否定整套方案 = 集合事件；否定某个人的资格 = 个体事件。<b>不要用"前后是不是同一个人"来判断</b>——那是表象，最容易误判。</p>
+  <p>另一条并列陷阱：<b>「如果甲去 A 或 B，乙去 C 或 D」没有"那么"，不是假言，是两个选言并列</b>，正确翻译是 <code>(甲A∨甲B) ∧ (乙C∨乙D)</code>。口诀：<b>有"那么"才是"推"，只摆两个限制是"且"。</b></p>
+</div>
+
+<h2 id="s6">六、反向代入法：最快的秒杀通道</h2>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>方法原理</div>
+  <p>当选项形式是 <b>"X 不 Y"</b>（否定句）时，把选项<b>取反</b>，即假设"X Y"成立，再把这个假设代入题干条件：</p>
+  <ul>
+    <li>推出<b>矛盾</b> → 假设不成立 → <b>原选项必然为真</b>（这就是答案）；</li>
+    <li><b>没有</b>矛盾 → 该选项只是"可能真"，排除。</li>
+  </ul>
+  <p><b>适用场景：</b>题干大量"如果…则…"，一一匹配型；选项简短且都是否定句。</p>
+</div>
+
+<h3>6.1 真题演示（讲义《一拖五全能笔记》收录）</h3>
+<div class="card">
+  <div class="quote">
+    小奇、小兰、小康、小梅、小迪五人，购买凉卷粉、酥油茶、烤乳扇、鲜花饼、豌豆粉五种不同小食，每人只买一种。已知：<br>
+    ① 如果小奇购买凉卷粉，则小康购买豌豆粉<br>
+    ② 如果小康不购买酥油茶，则小迪购买凉卷粉<br>
+    ③ 如果小迪购买鲜花饼，则小梅购买凉卷粉<b>且</b>小兰购买豌豆粉<br>
+    ④ 小兰不购买鲜花饼<b>且</b>小康不购买烤乳扇
+  </div>
+  <p><b>问：可以推出？</b>　A. 小奇不购买凉卷粉　B. 小迪不购买烤乳扇　C. 小梅不购买酥油茶　D. 小康不购买豌豆粉</p>
+  <p><b>条件翻译：</b></p>
+  <pre>① 奇凉 → 康豌
+② ¬康酥 → 迪凉
+③ 迪鲜 → (梅凉 ∧ 兰豌)
+④ ¬兰鲜 ∧ ¬康烤</pre>
+  <p><b>验证 A（取反代入）：</b>取反假设「小奇买凉卷粉」</p>
+  <pre><span class="k">①</span> 奇凉 → 康豌        ⇒ 小康 = 豌豆粉 ⇒ 小康 ≠ 酥油茶
+<span class="k">②</span> ¬康酥 → 迪凉        ⇒ 小迪 = 凉卷粉
+<span class="k">矛盾</span> 小奇 = 凉卷粉 <span class="k">且</span> 小迪 = 凉卷粉   ⇒ 一物两人，不可能</pre>
+  <p><b>⇒ 假设不成立 → 小奇一定不买凉卷粉，A 正确。</b>做到这里可以直接选 A 走人，其余选项验算均无矛盾，不是必然结论。</p>
+  <p><b>矛盾只有两类表现：</b>① 一个人被推出买两种不同的东西；② 同一个物品被分给两个人。<b>见到这两类，直接秒杀，不用再算人数。</b></p>
+</div>
+
+<h2 id="s7">七、高频陷阱清单（八条）</h2>
+
+<div class="card rd">
+  <div class="card-title"><span class="dot"></span>按踩坑频率排序</div>
+  <ol>
+    <li><b>【头号坑】小题条件继承。</b>第 3 题题干写"假设小康买豌豆粉"，这个假设<b>只在第 3 题成立</b>，第 4 题要恢复原始题干。<b>做完一题立刻扔掉附加条件。</b>这是"一拖五专属"陷阱，其他题型不会有。</li>
+    <li><b>「只有…否则…」箭头方向反。</b>当成"只有…才…"翻译，方向整体颠倒。</li>
+    <li><b>漏掉"只有+地点"的唯一性语义。</b>把集合唯一性当成普通必要条件。</li>
+    <li><b>否前、肯后推出确定结论。</b>用无效推理去排除选项，等于自己给自己挖坑。</li>
+    <li><b>混淆"至多一个"与"要么…要么…"。</b>至多可以都不选，要么要么必须且只能选一个。</li>
+    <li><b>主体偷换 / 对象混淆。</b>人名相近（小梅/小迪、小康/小兰）、物品相近（酥油茶/豌豆粉、凉卷粉/鲜花饼）；选项悄悄把"小康不买烤乳扇"换成"小迪不买烤乳扇"。</li>
+    <li><b>排序题把"在…之后"当成"紧邻"。</b>题干没写"紧接"就不要默认相邻。</li>
+    <li><b>分组题默认每组有人。</b>题干没写"每组至少 1 人"，某组可能就是空的。</li>
+  </ol>
+  <p class="tag-src">—— 前 5 条来自本机《翻译推理全坑点汇总 + 错题深度复盘手册》，后 3 条来自《一拖五全能笔记》「高频错误与文字陷阱清单」</p>
+</div>
+
+<div class="card am">
+  <div class="card-title"><span class="dot"></span>草稿纸左上角的速记（建议直接背下来）</div>
+  <pre><span class="c">【一拖五固定套路】</span>
+<span class="k">0</span>. 总题干：列元素，翻译全部条件，区分硬性/假言；小题假设只在本题有效
+<span class="k">1</span>. 看提问：可能→正向代入；一定真→反向取反；给附加条件→正向推
+<span class="k">2</span>. 先固定信息，再激活假言，连锁推导
+<span class="k">3</span>. 排错顺序：硬性约束优先 → 再验假言，注意否前肯后无效
+<span class="k">4</span>. 陷阱自查：不继承上题条件；区分至多/至少；看清主体
+<span class="k">5</span>. 判定：有矛盾必假；无矛盾即可行
+
+<span class="c">【翻译口诀】</span>
+否则看非A，才字看后推；只有无才是唯一，假言矛盾是且非；否前肯后无结论，先逻后数不吃亏。</pre>
+</div>
+
+<h2 id="s8">八、时间与取舍：怎么在考场提速</h2>
+
+<div class="card">
+  <p>下表的时间是<b>经验测算值</b>（依据一拖五的材料阅读量与推理性质推导），<b>不是官方数据</b>，请按自己的实际节奏校准。校准方法见第 9 节。</p>
+  <div class="table-wrap" style="margin:8px 0">
+  <table>
+    <thead><tr><th>题目位置</th><th>目标用时</th><th>做法</th><th>拿分预期</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 题</td><td>2.0–2.5 分钟</td><td>总排序/总匹配题，直接比对选项，<b>必拿</b></td><td><span class="pill g">高</span></td></tr>
+      <tr><td>第 2、3 题</td><td>各 1.5–2 分钟</td><td>套用第 1 题建立的框架，通常一两步链式推理即出</td><td><span class="pill g">高</span></td></tr>
+      <tr><td>第 4 题</td><td>2–2.5 分钟</td><td>附加条件型，正向推；冲突即刻排除</td><td><span class="pill a">中</span></td></tr>
+      <tr><td>第 5 题</td><td>2–3 分钟，<b>超时就跳</b></td><td>常为"相对位置"型，捆绑 + 排除；推 3 步以上仍复杂 → <b>标记跳过</b></td><td><span class="pill r">低，优先放弃</span></td></tr>
+      <tr><td><b>整组</b></td><td><b>8–10 分钟</b></td><td>若 12 分钟还没拿到 3 题，果断跳组</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="card-title" style="margin-top:14px"><span class="dot"></span>取舍原则</div>
+  <ul>
+    <li><b>先做第 1 题。</b>它既是拿分题，也是"建模题"——不建模，后面四题都要重新读材料。</li>
+    <li><b>做完第 1 题先看一眼后面四问的提问方式</b>，反推哪些条件是关键的，别在无关条件上耗时间。</li>
+    <li><b>整组卡壳 12 分钟 = 放弃信号。</b>整套判断推理（国考约 40 题）里，一拖五只占 5 题，不值得为它牺牲定义判断、类比推理这些更快拿分的题。</li>
+    <li><b>涂卡策略：</b>一拖五五题连做，中间不涂卡，做完一组一次涂完——省下 4 次翻答题卡的时间。</li>
+  </ul>
+</div>
+
+<h2 id="s9">九、训练方案：7 天速成 / 14 天实战</h2>
+
+<div class="grid2">
+  <div class="card tl">
+    <div class="card-title"><span class="dot"></span>方案 A · 7 天速成（在职，每天 60–75 分钟）</div>
+    <ul class="check">
+      <li><b>D1</b>　通读第 4 节翻译速查，闭卷默写「否则家族」四种句式 + 必背口诀</li>
+      <li><b>D2</b>　专攻「只有+地点」唯一性：把本机错题复盘里那道「只有赵去乙地」重做 3 遍，每遍写完整拆解</li>
+      <li><b>D3</b>　否前肯后专项：20 道真假/翻译推理小练习，只练"能推出/不能推出"判断</li>
+      <li><b>D4</b>　一一对应型一拖五 2 组，限时 10 分钟/组，练<b>画表 + 双向划掉</b></li>
+      <li><b>D5</b>　分组型 2 组，限时 10 分钟/组，练<b>人数计算 + 硬性约束优先</b></li>
+      <li><b>D6</b>　排序型 2 组（含 2020 国考那道六部门题），限时 10 分钟/组，练<b>画位置横线 + 捆绑</b></li>
+      <li><b>D7</b>　综合 3 组，不看笔记裸做，做完对照本报告第 7 节逐题自查陷阱</li>
+    </ul>
+  </div>
+  <div class="card gr">
+    <div class="card-title"><span class="dot"></span>方案 B · 14 天实战（每天 90 分钟）</div>
+    <ul class="check">
+      <li><b>前 7 天</b>　同方案 A</li>
+      <li><b>D8–D10</b>　<b>限时整卷</b>：每 3 天一套判断推理专项，严格计时，做完统计每组用时</li>
+      <li><b>D11</b>　错题归因：把所有错题按第 7 节八条陷阱<b>分类打标</b>，统计哪一类反复出现</li>
+      <li><b>D12</b>　只做归因出的<b>最高频那一类</b>，30 道定向突破</li>
+      <li><b>D13</b>　<b>裸考模拟</b>：把本报告第 10 节的速记卡默写一遍再进考场</li>
+      <li><b>D14</b>　复盘：重做 D11 的错题，检验是否真的改掉了</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--grey);margin-top:8px">距笔试还有 <b>37 天</b>，方案 B 的时间完全来得及，建议直接上 B。</p>
+  </div>
+</div>
+
+<div class="card nv">
+  <div class="card-title"><span class="dot"></span>训练期的核心纪律（比计划更重要）</div>
+  <ul>
+    <li><b>必须计时。</b>不限时训练等于无效训练——一拖五考的是"限定时间内能不能把方法跑完"，不是"会不会"。</li>
+    <li><b>必须写拆解过程。</b>只在脑子里想，等于没做。写下来才能看到箭头方向、量词翻译这些具体错在哪。</li>
+    <li><b>错题按陷阱分类，不按题号分类。</b>同一道题错了不叫错题，归因到"哪条规则没执行"才叫复盘。</li>
+    <li><b>不要追求 5 题全对。</b>目标设定为<b>稳定拿到 4 题</b>（第 5 题常为故意设计的难题），这才是性价比最高的策略。</li>
+  </ul>
+</div>
+
+<h2 id="s10">十、附录：真题演练与自测清单</h2>
+
+<h3>10.1 真题演练（2020 国考 · 讲义收录）</h3>
+<div class="card">
+  <p>材料见第 3.1 节。请<b>先自己限时做 8 分钟</b>，再做下面的自评。</p>
+  <div class="table-wrap" style="margin:8px 0">
+  <table>
+    <thead><tr><th>自评维度</th><th>达标线</th><th>没达标说明什么</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 题是否正确</td><td>必须对</td><td>排序建模没建立，先回去练画位置横线</td></tr>
+      <tr><td>整组用时</td><td>≤ 10 分钟</td><td>超过 12 分钟说明在硬推，先练"冲突秒杀"</td></tr>
+      <tr><td>是否中过"小题条件继承"</td><td>一次都不能中</td><td>做题时用笔在题号旁标"条件已清"，做下一题先擦掉</td></tr>
+      <tr><td>第 5 题处理</td><td>能在 2 分钟内判断"放弃还是再试"</td><td>缺乏取舍判断，容易在单题上超时</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<h3>10.2 考场自测清单（开考前 30 秒默背）</h3>
+<div class="card">
+  <ul class="check">
+    <li>我看清了吗——<b>哪个是"可能"、哪个是"必然"</b>？</li>
+    <li>条件翻译对了吗——<b>有"才"还是没"才"？有"否则"还是"除非"？</b></li>
+    <li>假言是<b>前推后</b>还是<b>后推前</b>？箭头方向对吗？</li>
+    <li>「至多」还是「至少」还是「恰好」？翻译出来了吗？</li>
+    <li>我用的是<b>肯前/否后</b>，还是误用了否前/肯后？</li>
+    <li><b>上一题的附加条件我清掉了吗？</b></li>
+    <li>选项里的主体和人名，是题干里那个吗？</li>
+    <li>如果推出矛盾，是"一人两物"还是"一物两人"？</li>
+  </ul>
+</div>
+
+<div class="card gr">
+  <div class="card-title"><span class="dot"></span>最后一条结论</div>
+  <p>一拖五的"快"，不来自更聪明的技巧，而来自<b>三件事的确定化</b>：</p>
+  <ol>
+    <li><b>读题一次成型</b>——第 1 题就把表画好；</li>
+    <li><b>提问方式决定动作</b>——看到"必然"就取反，看到"可能"就代入，不纠结；</li>
+    <li><b>错法只有两类</b>——一人两物、一物两人，见到就秒杀，不做多余计算。</li>
+  </ol>
+  <p>把这三点练成条件反射，5 道题的分就从"看运气"变成"稳拿 4 道"。</p>
+</div>
+
+<footer>
+  本报告由小刘生成 · 2026年10月23日 · 方法论依据：粉笔《逻辑一拖五解题策略梳理》讲义（2020 / 2022 国考真题）、本机《一拖五全能笔记》《分组题核心笔记》《翻译推理全坑点汇总》《判断推理错题复盘文档》<br>
+  时间与分值部分为经验测算值，非官方数据；真题年份与原文可回讲义 PDF 核对 · 距 2026年11月29日笔试 37 天
+</footer>
+
+</div>
+<button id="sd-backtop" class="sd-backtop" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'onedragfive_report_theme';
+  var btn = document.getElementById('sd-theme');
+  function apply(t){
+    if (t === 'dark') { document.documentElement.setAttribute('data-theme','dark'); btn.textContent='☀️'; }
+    else { document.documentElement.removeAttribute('data-theme'); btn.textContent='🌙'; }
+  }
+  var saved = null;
+  try { saved = window.localStorage.getItem(KEY); } catch(e){}
+  apply(saved === 'dark' ? 'dark' : 'light');
+  btn.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(cur);
+    try { window.localStorage.setItem(KEY, cur); } catch(e){}
+  });
+
+  var bt = document.getElementById('sd-backtop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 400) bt.classList.add('show'); else bt.classList.remove('show');
+  });
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->

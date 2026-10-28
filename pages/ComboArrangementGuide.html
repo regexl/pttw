@@ -117,7 +117,7 @@ footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;
 }
 
 /* ===== 亮色模式对比度微调 =====
-   原讲义的 teal / gold / grey 三个色值在浅底上只有 3.8~4.5:1（低于 WCAG AA 4.5:1），
+   原讲义的 teal / accent / grey 三个色值在浅底上只有 3.4~4.5:1（低于 WCAG AA 4.5:1），
    这里各压深一档；深色模式另有一套变量，不受影响。 */
 :root{ --teal:#0a6a72; --gold:#8a5d0e; --grey:#5c6673; }
 
@@ -129,21 +129,21 @@ footer{text-align:center;color:var(--grey);font-size:12.5px;padding:30px 10px 0;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
-.sd-topbar a{color:var(--deep);text-decoration:none;font-weight:600;font-size:14px}
-.sd-topbar a:hover{color:var(--gold)}
+.sd-topbar a{color:var(----deep);text-decoration:none;font-weight:600;font-size:14px}
+.sd-topbar a:hover{color:var(----gold)}
 .sd-topbar .brand-sub{color:var(--grey);font-size:13px}
 .sd-theme{
   margin-left:auto;width:34px;height:34px;border-radius:50%;
   border:1px solid var(--line);background:var(--bg);font-size:15px;
   display:flex;align-items:center;justify-content:center;transition:.2s;
 }
-.sd-theme:hover{border-color:var(--gold);transform:rotate(-15deg)}
+.sd-theme:hover{border-color:var(----gold);transform:rotate(-15deg)}
 .sd-backtop{
   position:fixed;bottom:22px;right:22px;width:42px;height:42px;border-radius:50%;
-  background:var(--deep);color:#fff;border:none;font-size:19px;display:none;z-index:99;
+  background:var(----deep);color:#fff;border:none;font-size:19px;display:none;z-index:99;
   box-shadow:0 2px 8px rgba(0,0,0,.25);transition:all .2s;
 }
-.sd-backtop:hover{background:var(--gold)}
+.sd-backtop:hover{background:var(----gold)}
 .sd-backtop.show{display:block}
 h2{scroll-margin-top:64px}
 .toc a{scroll-margin-top:64px}
@@ -152,11 +152,12 @@ h2{scroll-margin-top:64px}
 [data-theme="dark"]{
   --ink:#e6eaef; --ink2:#c2cad4; --grey:#8b95a3;
   --line:#2b3340; --bg:#12151b;
-  --gold:#d9a441; --gold-light:#33260f;
-  --red:#f07a6c; --red-light:#3a1d1a;
   --teal:#4fc4cd; --teal-light:#123033;
   --green:#57c98c; --green-light:#12301f;
+  --red:#f07a6c; --red-light:#3a1d1a;
   --purple:#a98fe0; --purple-light:#241d33;
+  --gold:#d9a441; --gold-light:#33260f;
+  --amber:#d9a441; --amber-light:#33260f;
   --deep-light:#18263a;
 }
 [data-theme="dark"] .card,
@@ -165,22 +166,24 @@ h2{scroll-margin-top:64px}
 [data-theme="dark"] .toc,
 [data-theme="dark"] .table-wrap,
 [data-theme="dark"] ol.steps>li,
-[data-theme="dark"] .num4 .b{background:#181c24}
+[data-theme="dark"] .num4 .b,
+[data-theme="dark"] .kpi .item,
+[data-theme="dark"] .item{background:#181c24}
 [data-theme="dark"] .card{box-shadow:0 1px 5px rgba(0,0,0,.35)}
 [data-theme="dark"] tbody tr:nth-child(even){background:#1d222c}
 [data-theme="dark"] .notice{color:#e8c98a}
 [data-theme="dark"] .notice b{color:#f7dda4}
 [data-theme="dark"] code{background:#232a36;color:#d7dee8}
-[data-theme="dark"] h2{color:#8ab4f8;border-left-color:#3b6ea8}
-[data-theme="dark"] h3{color:#c8d4e2}
+[data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
 [data-theme="dark"] th{background:#1e4a78;border-color:#1e4a78}
 [data-theme="dark"] td{border-color:var(--line)}
-[data-theme="dark"] pre{background:#1c2230;color:#d7dee8}
-/* --deep / --deep-dark 是深藏青，源页面把它们当文字色用；暗色下必须换成浅色，
+[data-theme="dark"] h3{color:#c8d4e2}
+/* --primary / --primary-dark 是深藏青，源页面把它们当文字色用；暗色下必须换成浅色，
    但作为表头底色/边框时又要保持深色，所以这里只覆盖「文字用途」的规则 */
 [data-theme="dark"] .toc-title,
 [data-theme="dark"] .card-title,
 [data-theme="dark"] .num4 .b .t{color:#9cc4f5}
+[data-theme="dark"] h2{color:#8ab4f8;border-left-color:#3b6ea8}
 [data-theme="dark"] h4,
 [data-theme="dark"] strong,
 [data-theme="dark"] td b,
