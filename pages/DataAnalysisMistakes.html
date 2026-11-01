@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>行测资料分析错题复盘汇总</title>
-<meta name="description" content="25 道资料分析典型错题逐题精批：翻番、变化幅度、倍数、平均数分母、混合增长率、增长量倍数、隔年增量、容斥比重极值、累计存量、二维分组统计、平均数语序、环比增速比较、综合分析计数、柱状图读数、百分点等差、扶贫连锁资料等高频易错考点 + 避坑口诀表、公式语序方法论与标准读题流程模板。">
+<meta name="description" content="26 道资料分析典型错题逐题精批：翻番、变化幅度、倍数、平均数分母、混合增长率、增长量倍数、隔年增量、容斥比重极值、累计存量、二维分组统计、平均数语序、环比增速比较、综合分析计数、柱状图读数、百分点等差、扶贫连锁资料、产销率等高频易错考点 + 避坑口诀表、易混统计术语速查、公式语序方法论与标准读题流程模板。">
 <meta name="keywords" content="行测,资料分析,错题复盘,翻番,混合增长率,线段法,百化分,避坑口诀">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📕</text></svg>">
 <style>
@@ -165,6 +165,11 @@ strong{color:var(--ink)}
 }
 .summary-section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow)}
 .hl{background:var(--warn-soft);color:var(--warn);padding:0 5px;border-radius:3px;font-weight:600}
+.qcard-sub{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line-soft)}
+.qcard-sub h4{font-size:14.5px;font-weight:700;color:var(--primary);margin:0 0 8px}
+.qcard-sub ul,.qcard-sub ol{margin:0 0 4px 22px}
+.qcard-sub li{margin-bottom:7px;line-height:1.8}
+.qcard-sub p{margin-bottom:7px}
 ul.tag-group{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 ul.tag-group li{margin:0}
 .conclusion{
@@ -216,9 +221,9 @@ footer strong{color:rgba(255,255,255,.9)}
   <div class="wrap hero-inner">
     <span class="hero-tag">资料分析 · 错题复盘</span>
     <h1>11 道典型错题逐题精批<br>把「会错的地方」变成「不会再错」</h1>
-    <p class="hero-sub">不是题目罗列，是规律提炼。25 道题每一道都标出错因类型、正确解法与避坑口诀，另附 10 条避坑口诀表、公式语序与方法论速查、10 项可执行改进措施，以及一套可直接复用的标准读题流程。</p>
+    <p class="hero-sub">不是题目罗列，是规律提炼。26 道题每一道都标出错因类型、正确解法与避坑口诀，另附 10 条避坑口诀表、3 条易混统计术语速查、公式语序与方法论速查、13 项可执行改进措施，以及一套可直接复用的标准读题流程。</p>
     <div class="hero-meta">
-      <span><span class="dot"></span>题量：25 道典型错题</span>
+      <span><span class="dot"></span>题量：26 道典型错题</span>
       <span><span class="dot"></span>错误类型：5 类</span>
       <span><span class="dot"></span>覆盖考点：10 个高频易错点</span>
       <span><span class="dot"></span>适用：国考 / 省考 资料分析</span>
@@ -250,7 +255,7 @@ footer strong{color:rgba(255,255,255,.9)}
 
     <div class="overview">
       <h3 class="sub">1. 覆盖核心知识点</h3>
-      <p>本次复盘共 25 道典型错题，全面覆盖资料分析高频易错考点：翻番概念辨析、增长率与变化幅度辨析、倍数与增长率辨析、平均数分母判定、混合增长率（线段法）、增长量计算与倍数、隔年增量与基期、两集合容斥比重极值、两期比重逆用、累计存量与增量转化。</p>
+      <p>本次复盘共 26 道典型错题，全面覆盖资料分析高频易错考点：翻番概念辨析、增长率与变化幅度辨析、倍数与增长率辨析、平均数分母判定、混合增长率（线段法）、增长量计算与倍数、隔年增量与基期、两集合容斥比重极值、两期比重逆用、累计存量与增量转化。</p>
       <p>第二批深度复盘新增覆盖：</p>
       <ul>
           <li>现期比重计算与临界判定</li>
@@ -272,6 +277,16 @@ footer strong{color:rgba(255,255,255,.9)}
         <li><span class="badge">两期比重比较</span></li>
         <li><span class="badge">百分点等差计算</span></li>
         <li><span class="badge">综合分析（选是/选非）</span></li>
+      </ul>
+
+      <p>第四批复盘新增覆盖：</p>
+      <ul>
+        <li>现期比值、统计专有名词定义、比值计数问题（产销率）</li>
+      </ul>
+
+      <p>第四批复盘核心错误类型：</p>
+      <ul>
+        <li><strong>知识点型错误</strong>：公式分子分母倒置（统计术语记忆不牢，依赖语感推导）</li>
       </ul>
 
       <h3 class="sub">2. 高频错误类型</h3>
@@ -433,11 +448,44 @@ footer strong{color:rgba(255,255,255,.9)}
     </table>
   </section>
 
+      <h3 class="sub">附：易混统计术语速查（分子分母倒置重灾区）</h3>
+<table class="error-table">
+                <thead>
+                    <tr>
+                        <th>术语名称</th>
+                        <th>正确公式</th>
+                        <th>常见错误写法</th>
+                        <th>指标含义</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>产销率</td>
+                        <td>销量 ÷ 产量</td>
+                        <td>产量 ÷ 销量</td>
+                        <td>产出产品的销售转化情况</td>
+                    </tr>
+                    <tr>
+                        <td>资产负债率</td>
+                        <td>负债 ÷ 资产</td>
+                        <td>资产 ÷ 负债</td>
+                        <td>企业负债占资产比重</td>
+                    </tr>
+                    <tr>
+                        <td>资料分析利润率</td>
+                        <td>利润 ÷ 营业收入</td>
+                        <td>利润 ÷ 成本</td>
+                        <td>营收利润率（和数量经济区分）</td>
+                    </tr>
+                </tbody>
+            </table>
+      <p class="hint">看到「XX 率」先默写分子分母：<b>语义优先于语序</b>，词语先后顺序 ≠ 分子分母顺序。</p>
+
   <!-- ============ 三、分题复盘 ============ -->
   <section class="section" id="review">
     <div class="sec-num">03 / REVIEW</div>
     <h2 class="sec-title">三、分题详细复盘</h2>
-    <p class="sec-lead">每题四段：题干 → 正确解法 → 错因 → 避坑要点。错因一栏是重点——它对应的是你的思考习惯，而不是这道题的知识点。第 12–16 题为第二批深度复盘（另含「错误表现」），第 17–25 题为第三批真题复盘（另含「你的答案 vs 正确答案」与「解题逻辑」）。</p>
+    <p class="sec-lead">每题四段：题干 → 正确解法 → 错因 → 避坑要点。错因一栏是重点——它对应的是你的思考习惯，而不是这道题的知识点。第 12–16 题为第二批深度复盘（另含「错误表现」），第 17–25 题为第三批真题复盘（另含「你的答案 vs 正确答案」与「解题逻辑」），第 26 题是产销率单题深挖（含选项解析与四维复盘）。</p>
 
     <div class="question-card">
       <h3>第 1 题：IPv4 地址翻番判断</h3>
@@ -786,6 +834,83 @@ footer strong{color:rgba(255,255,255,.9)}
       <div class="tip">避坑规则：题干写明“按此幅度/速率计算”，允许外推，属于给定条件，不是脑补；选非优先验算带比重的选项</div>
     </div>
 
+    <div class="question-card">
+      <h3>第 26 题：插电式混合动力汽车产销率大于 100% 的季度有几个</h3>
+      <span class="tag tag-point">考点：资料分析-现期比值、统计专有名词定义、比值计数问题</span>
+      <span class="tag tag-mistake">错误类型：知识点型错误：公式分子分母倒置</span>
+      <p><strong>题干：</strong>2024年一至四季度，我国插电式混合动力汽车产销率大于100%的季度有几个？</p>
+      <p><strong>作答情况：</strong>正确答案：A（1个）｜你的作答：C（3个）｜全站正确率：53%｜你的用时：2分30秒</p>
+      <p class="mistake-reason">依靠词语字面顺序主观脑补公式，没有记住官方统计定义，“产销率”想当然记成产量÷销量，实际定义为销量÷产量。</p>
+      <div class="tip"><strong>专属口诀：</strong>产销率 = 销量 ÷ 产量（卖除以造）。核心思维：语义优先于语序，名词文字顺序不等于分子分母顺序。</div>
+
+      <div class="qcard-sub">
+        <h4>1. 题干拆解</h4>
+        <ul>
+          <li>题型：资料分析｜现期比值计数题（概念辨析类简单计算）</li>
+          <li>限定条件：时间2024年1-4季度、主体插电混动汽车、判定条件：产销率＞100%、统计满足条件季度数量</li>
+          <li>命题意图：不考察复杂速算，专门利用汉语语序惯性挖坑，检验考生对固定统计术语的记忆准确性；属于低难度、高翻车率送分题。</li>
+          <li>核心判定逻辑：产销率＞100%等价于当期销量＞产量（可消耗库存）。</li>
+        </ul>
+      </div>
+
+      <div class="qcard-sub">
+        <h4>2. 选项解析</h4>
+        <ul>
+          <li><strong>A（正确项）：1个</strong>
+                    <p>标准公式：产销率 = 销量 ÷ 产量 ×100%。代入季度数据，仅四季度销量＞产量，满足大于100%，共1个。</p>
+                </li>
+          <li><strong>C（你的错选答案）：3个</strong>
+                    <p>错误类型：公式倒置。按照错误公式【产量÷销量】计算，算出3个季度比值＞100%，对应C选项，是本题头号陷阱。</p>
+                </li>
+          <li><strong>B（全站高频易错项）：2个</strong>
+                    <p>错误类型：找数失误、季度数据混淆产量销量，计算出错。</p>
+                </li>
+          <li><strong>D：4个</strong>
+                    <p>错误类型：完全不理解产销率含义，无依据判断。</p>
+                </li>
+          <li><strong>易错辨析：</strong>正确项与易错C项数据源完全一致，唯一差别就是分子分母颠倒，是典型反直觉术语陷阱。</li>
+        </ul>
+      </div>
+
+      <div class="qcard-sub">
+        <h4>3. 四维深度复盘</h4>
+        <p><strong>题目属性：</strong>错题｜隐性短板：统计术语记忆不牢固，依赖语感推导公式，无标准化校验动作</p>
+        <p><strong>三问复盘：</strong></p>
+        <ol>
+          <li>为什么选错：思路偏差，顺着“产、销”文字顺序主观构造公式，没有记忆固定统计定义；属于知识点漏洞，不是单纯粗心。</li>
+          <li>正确推导链条：先锁定术语公式→定位各季度产量、销量→销量÷产量→和100%对比→统计数量。</li>
+          <li>落地避坑规则：看到XX率，禁止按词语先后顺序直接写分子分母，优先回忆指标含义和标准定义。</li>
+        </ol>
+        <p><strong>错因分类：</strong>知识点型（专有统计术语记忆颠倒）</p>
+        <p><strong>考场复盘：</strong></p>
+        <ul>
+          <li>标准用时：30–60秒；你用时2分30秒，低难度题目耗时超标，根源是公式不确定、反复验算内耗。</li>
+          <li>考场风险：这类简单题极易“自信翻车”，做完不核对概念，事后才发现错误。</li>
+          <li>考场策略：秒杀类小题，先默写公式再找数；概念拿不准优先标记，不要盲目硬算。</li>
+        </ul>
+      </div>
+
+      <div class="qcard-sub">
+        <h4>4. 通用解题方法论</h4>
+        <ul>
+          <li>专属口诀：产销率 = 销量 ÷ 产量（卖除以造）</li>
+          <li>比值类题目固定流程：回忆定义→理解指标意义→标记分子分母→定位数据→计算比较</li>
+          <li>核心思维：<span class="hl">语义优先于语序</span>，名词文字顺序不等于分子分母顺序。</li>
+        </ul>
+      </div>
+
+      <div class="qcard-sub">
+        <h4>5. 复盘总结</h4>
+        <ul>
+          <li><b>考点</b>：现期比值计数、统计专有名词产销率定义</li>
+          <li><b>本次核心问题</b>：语感优先，公式分子分母倒置，属于基础概念漏洞，不是计算能力问题</li>
+          <li><b>解题标准动作</b>：先锁定义公式，再找数据计算；产销率=销量÷产量</li>
+          <li><b>考场定位</b>：秒杀小题，控制1分钟以内；概念存疑时不要强行计算</li>
+          <li><b>提升方向</b>：专项整理资料分析易颠倒比率，建立“先定义、后计算”的硬性做题顺序</li>
+        </ul>
+      </div>
+    </div>
+
   </section>
 
   <!-- ============ 四、改进措施 ============ -->
@@ -885,6 +1010,22 @@ footer strong{color:rgba(255,255,255,.9)}
                 <td>综合分析单题控制在90s内</td>
             </tr>
         </table>
+
+      <h3 class="sub">11. 短期立刻执行</h3>
+      <ul>
+          <li>单独建立一张“易混比率术语卡片”，每天早读滚动背诵，不依靠语感；</li>
+          <li>以后遇到陌生比率，动笔先写定义，再找数字，禁止直接上手计算；</li>
+          <li>凡是比值＞100%的判定题，先思考指标意义，辅助校验分子分母是否写反。</li>
+      </ul>
+
+      <h3 class="sub">12. 中期刷题规范</h3>
+      <ul>
+          <li>资料分析读题第一步：识别题型+识别专有名词；名词陌生/容易混淆，做标记；</li>
+          <li>错题标签增加分类：【公式记反】【术语混淆】【找数错误】【计算失误】，定期统计哪一类出错最多；</li>
+      </ul>
+
+      <h3 class="sub">13. 考场标准化避坑动作</h3>
+      <p>看到XX率 → 停顿1秒：这个率是谁除以谁？这个指标是想表达什么？确认完毕再取数。</p>
 
       <h3 class="sub">10. 考场时间与取舍策略</h3>
       <ul>
@@ -987,7 +1128,7 @@ footer strong{color:rgba(255,255,255,.9)}
 <footer>
   <div class="wrap">
     <p><strong>行测资料分析错题复盘汇总</strong></p>
-    <p>25 道典型错题 · 10 条避坑口诀 · 5 条经典陷阱 · 10 项改进措施 · 1 套解题流程模板</p>
+    <p>26 道典型错题 · 10 条避坑口诀 · 3 条易混术语 · 5 条经典陷阱 · 13 项改进措施 · 1 套解题流程模板</p>
     <p style="margin-top:10px"><a href="../index.html#notes" style="color:rgba(255,255,255,.8)">← 返回学习笔记</a></p>
   </div>
 </footer>
