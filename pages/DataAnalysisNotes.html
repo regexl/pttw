@@ -668,6 +668,52 @@
                 <p>坑 2：仅适用于分子分母同增/同减；一增一减可直接秒杀：分子↑分母↓，分数变大；分子↓分母↑，分数变小。</p>
             </div>
             <p>关联知识点：两期比重判断（a＞b 比重上升，本质就是分子增速＞分母增速）</p>
+
+            <h3>特例：分母含 A 的两类分数，可直接比 A/B</h3>
+            <p>当两个分数的分子分母结构<strong>完全同类</strong>时，可以把复杂的那部分约掉，只比 <code class="code-inline">A/B</code>：</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>比较形式</th>
+                        <th>结论</th>
+                        <th>方向</th>
+                        <th>前提</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code class="code-inline">A/(A+B)</code></td>
+                        <td>直接比较 <code class="code-inline">A/B</code></td>
+                        <td>同向：A/B 大 → 原分数也大</td>
+                        <td>A、B 均为正</td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-inline">A/(B−A)</code></td>
+                        <td>直接比较 <code class="code-inline">A/B</code></td>
+                        <td>同向：A/B 大 → 原分数也大</td>
+                        <td>A、B 均为正且 <code class="code-inline">B−A＞0</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="callout info">
+                <div class="label">推导（交叉相乘后 A₁A₂ 抵消）</div>
+                <p><code class="code-inline">A₁/(A₁+B₁) ＞ A₂/(A₂+B₂) ⟺ A₁(A₂+B₂) ＞ A₂(A₁+B₁) ⟺ A₁B₂ ＞ A₂B₁ ⟺ A₁/B₁ ＞ A₂/B₂</code> ✓</p>
+                <p><code class="code-inline">A₁/(B₁−A₁) ＞ A₂/(B₂−A₂) ⟺ A₁(B₂−A₂) ＞ A₂(B₁−A₁) ⟺ A₁B₂ ＞ A₂B₁ ⟺ A₁/B₁ ＞ A₂/B₂</code> ✓</p>
+                <p>两种形式殊途同归：结论都是<strong>同向</strong>，比的也都是 <strong>A/B</strong>。</p>
+            </div>
+            <div class="callout warn">
+                <div class="label">注意</div>
+                <p>坑 1：两个分数必须<strong>同为</strong> A/(A+B) 或<strong>同为</strong> A/(B−A)，不能一种一个混着比。</p>
+                <p>坑 2：A/(B−A) 要求 <strong>B−A＞0</strong>；若 B−A≤0 该分数本身无意义，题目不会这么出。</p>
+                <p>坑 3：结论是<strong>同向</strong>不是反向，别顺手写反。</p>
+                <p>坑 4：只比大小，不求值。题目若要求算出 A/(A+B) 的具体百分数，仍需实算。</p>
+            </div>
+            <div class="callout tip">
+                <div class="label">实战价值</div>
+                <p>题干给两个部分量 A、B，问「哪部分占整体的比重更大」，而选项是接近的百分数时，直接比 A/B：数值更小、口径更整，可用倍数观察法一眼看出，还避免了直除截位误差导致结论反转。</p>
+                <p>例 1（占整体）：甲 30、乙 40 → 30/70；丙 20、丁 25 → 20/45。比 A/B：0.75 vs 0.8 → 甲小。全程不用做一次除法。</p>
+                <p>例 2（占其余）：甲 30、乙 40 → 30/(40−30) = 3；丙 20、丁 25 → 20/(25−20) = 4。比 A/B：0.75 vs 0.8 → 甲小 ✓</p>
+            </div>
         </section>
 
         <!-- ===== Chapter 3 ===== -->
