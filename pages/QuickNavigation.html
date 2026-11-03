@@ -8,7 +8,7 @@
     <meta name="description" content="整理常用站点、分组导航、代码片段和快捷入口的个人导航工具。">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.14/vue.min.js"></script>
+    <script src="../viewport/js/vue.js?v=20250118"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -106,24 +106,26 @@
             content: '';
             position: absolute;
             top: -30%;
-            right: -5%;
+            right: 0;
             width: 300px;
             height: 300px;
             background: rgba(255,255,255,0.1);
             border-radius: 50%;
             filter: blur(60px);
+            pointer-events: none;
         }
 
         .app-header::after {
             content: '';
             position: absolute;
             bottom: -20%;
-            left: -3%;
+            left: 0;
             width: 200px;
             height: 200px;
             background: rgba(255,255,255,0.08);
             border-radius: 50%;
             filter: blur(40px);
+            pointer-events: none;
         }
 
         .header-content {
@@ -248,7 +250,8 @@
             border-radius: var(--radius);
             font-weight: 600;
             font-size: 0.9rem;
-            display: flex;
+            display: inline-flex;
+            vertical-align: middle;
             align-items: center;
             gap: 0.5rem;
             transition: var(--transition);
@@ -289,15 +292,6 @@
             align-items: center;
             gap: 0.5rem;
             font-weight: 600;
-        }
-            color: white;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
         }
 
         .btn-more:hover {
@@ -546,6 +540,10 @@
             position: relative;
         }
 
+        .item-card.link-card {
+            cursor: pointer;
+        }
+
         .item-card:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
@@ -740,6 +738,60 @@
             font-size: 1rem;
             color: var(--text-secondary);
             margin-top: 0.25rem;
+        }
+
+        /* ===== 时间分割线复制 ===== */
+        .time-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .time-copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.9rem;
+            border: 1px solid var(--primary);
+            border-radius: var(--radius);
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .time-copy-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .time-format-select {
+            padding: 0.5rem 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .time-preview {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .time-preview code {
+            background: var(--bg-subtle, rgba(0, 0, 0, 0.04));
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Consolas', monospace;
         }
 
         /* ===== 添加按钮 ===== */
@@ -938,6 +990,7 @@
 
         /* ===== Toast ===== */
         .toast {
+            pointer-events: none;
             position: fixed;
             bottom: 2rem;
             left: 50%;
@@ -997,6 +1050,13 @@
         }
 
         /* ===== Responsive ===== */
+        /* 触屏没有 :hover，编辑/删除按钮会永远隐形 —— 用 (hover:none) 常显 */
+        @media (hover: none) {
+            .item-actions {
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 768px) {
             .category-content {
                 grid-template-columns: 1fr;
@@ -1006,6 +1066,38 @@
             .btn-more span,
             .btn-primary span {
                 display: none;
+            }
+
+            /* 顶栏在窄屏放不下 logo + 4 个按钮：收紧间距与内边距，保证全部可见 */
+            .header-actions {
+                gap: 0.35rem;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .header-actions .btn-action,
+            .header-actions .btn-more {
+                padding: 0.5rem 0.6rem;
+                gap: 0;
+            }
+
+            .app-subtitle {
+                display: none;
+            }
+
+            .app-title {
+                font-size: 1.05rem;
+            }
+
+            .app-logo-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            /* 筛选栏的两个按钮改成并排（inline-flex）后，窄屏同样保持一行 */
+            .filter-bar .btn-primary {
+                padding: 0.5rem 0.8rem;
             }
 
             .batch-action-bar {
@@ -1037,10 +1129,11 @@
                             <i :class="isDemoMode ? 'fas fa-sign-out-alt' : 'fas fa-play'"></i>
                             <span>{{ isDemoMode ? '退出演示' : '演示' }}</span>
                         </button>
-                        <button class="btn-action" @click="showImportMenu = true" v-if="!isDemoMode">
-                            <i class="fas fa-download"></i>
+                        <button class="btn-action" @click="triggerImport()" v-if="!isDemoMode">
+                            <i class="fas fa-file-import"></i>
                             <span>导入</span>
                         </button>
+                        <input type="file" accept="application/json,.json" style="display:none" @change="importData" ref="importInput">
                         <button class="btn-action" @click="exportData" v-if="!isDemoMode">
                             <i class="fas fa-upload"></i>
                             <span>导出</span>
@@ -1064,6 +1157,10 @@
                             <div class="dropdown-divider" v-if="selectedItems.length > 0"></div>
                             <div class="dropdown-item" @click="clearSelection" v-if="selectedItems.length > 0">
                                 <i class="fas fa-times"></i> 取消选择
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" @click="exportJson">
+                                <i class="fas fa-file-export"></i> 导出 JSON 备份
                             </div>
                         </div>
                     </div>
@@ -1144,9 +1241,9 @@
                     <div
                         v-for="item in getLinksByCategory(category.id)"
                         :key="item.id"
-                        class="item-card"
+                        class="item-card link-card"
                         :class="{ selected: selectedItems.includes(item.id) }"
-                        @click="toggleItemSelection(item.id)"
+                        @click="openItem(item)"
                     >
                         <input
                             type="checkbox"
@@ -1157,7 +1254,8 @@
                         >
                         <div class="item-content">
                             <div class="item-icon">
-                                <img :src="'https://www.google.com/s2/favicons?sz=32&domain_url=' + item.url" @error="$event.target.style.display='none'" @load="$event.target.parentElement.innerHTML='<i class=\'fas fa-globe\'></i>'">
+                                <img v-if="!faviconFailed[item.id]" :src="faviconUrl(item.url)" @error="markFaviconFailed(item.id)" alt="" loading="lazy">
+                                <i v-else class="fas fa-globe"></i>
                             </div>
                             <div class="item-info">
                                 <div class="item-name">{{ item.name }}</div>
@@ -1224,6 +1322,16 @@
             <div class="time-tool" v-if="showTimeTool">
                 <div class="time-display">{{ currentTime }}</div>
                 <div class="time-date">{{ currentDate }}</div>
+                <div class="time-actions">
+                    <button class="time-copy-btn" @click="copyTimeDivider" title="复制带时间戳的分割线">
+                        <i class="fas fa-copy"></i>
+                        <span>复制时间分割线</span>
+                    </button>
+                    <select class="time-format-select" v-model="timeDividerFormat" @change="saveTimeDividerFormat" title="分割线格式">
+                        <option v-for="(fmt, key) in timeDividerFormats" :key="key" :value="key">{{ fmt.label }}</option>
+                    </select>
+                </div>
+                <div class="time-preview"><code>{{ timeDividerPreview }}</code></div>
             </div>
         </main>
 
@@ -1332,10 +1440,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn-primary w-100 mb-2" @click="showAddItemModal = false; openAddLinkModal()">
+                    <button class="btn-primary w-100 mb-2" @click="showAddItemModal = false; openAddLinkModal(addItemTargetCategoryId)">
                         <i class="fas fa-link"></i> 添加链接
                     </button>
-                    <button class="btn-primary w-100" @click="showAddItemModal = false; openAddSnippetModal()">
+                    <button class="btn-primary w-100" @click="showAddItemModal = false; openAddSnippetModal(addItemTargetCategoryId)">
                         <i class="fas fa-code"></i> 添加代码片段
                     </button>
                 </div>
@@ -1480,6 +1588,14 @@
             { id: 10, type: 'link', name: 'Jenkins', url: 'https://jenkins.internal.com', categoryId: 4 },
         ];
 
+        // 版本迁移预留：将来提升 version 时在这里做数据升级，避免旧数据被静默丢弃
+        function migrateQuicknavData(data, oldVersion) {
+            if (!data || typeof data !== 'object') return null;
+            if (!Array.isArray(data.categories)) data.categories = [];
+            if (!Array.isArray(data.items)) data.items = [];
+            return oldVersion < 1 ? data : null;
+        }
+
         new Vue({
             el: '#app',
             data: {
@@ -1491,6 +1607,16 @@
                 showTimeTool: true,
                 currentTime: '',
                 currentDate: '',
+                currentDateISO: '',
+                timerId: null,
+                faviconFailed: {},
+                addItemTargetCategoryId: null,
+                timeDividerFormat: 'rule',
+                timeDividerFormats: {
+                    rule: { label: '横线包裹', build: (ts) => '────── ' + ts + ' ──────' },
+                    dash: { label: '短横线', build: (ts) => '--- ' + ts + ' ---' },
+                    bracket: { label: '方括号', build: (ts) => '【' + ts + '】' }
+                },
                 searchQuery: '',
                 filterCategory: '',
                 selectedItems: [],
@@ -1537,7 +1663,13 @@
                     if (this.filterCategory) {
                         cats = cats.filter(cat => cat.id === this.filterCategory);
                     }
-                    return cats.sort((a, b) => a.order - b.order);
+                    // 不要对响应式数组原地排序
+                    return cats.slice().sort((a, b) => a.order - b.order);
+                },
+                timeDividerPreview() {
+                    const ts = ((this.currentDateISO || '') + ' ' + (this.currentTime || '')).trim();
+                    const fmt = this.timeDividerFormats[this.timeDividerFormat] || this.timeDividerFormats.rule;
+                    return fmt.build(ts);
                 }
             },
             watch: {
@@ -1550,11 +1682,12 @@
             mounted() {
                 this.loadData();
                 this.updateTime();
-                setInterval(() => this.updateTime(), 1000);
+                this.timerId = setInterval(() => this.updateTime(), 1000);
                 document.addEventListener('click', this.handleDocumentClick);
                 document.addEventListener('keydown', this.handleGlobalShortcut);
             },
             beforeDestroy() {
+                if (this.timerId) { clearInterval(this.timerId); this.timerId = null; }
                 document.removeEventListener('click', this.handleDocumentClick);
                 document.removeEventListener('keydown', this.handleGlobalShortcut);
             },
@@ -1574,18 +1707,30 @@
                     if (collapsed) {
                         this.collapsedCategories = collapsed;
                     }
+                    const fmt = AppUtils.createNamespacedStorage('quicknav_time_divider_fmt', { version: 1 }).get(null);
+                    if (fmt && this.timeDividerFormats[fmt]) {
+                        this.timeDividerFormat = fmt;
+                    }
                 },
                 saveData() {
-                    const storage = AppUtils.createNamespacedStorage('quicknav_data', { version: 1 });
+                    // 演示模式下内存里是演示数据，绝不能写盘 —— 否则会覆盖用户的真实书签
+                    if (this.isDemoMode) return;
+                    const storage = AppUtils.createNamespacedStorage('quicknav_data', { version: 1, migrate: migrateQuicknavData });
                     storage.set({ categories: this.categories, items: this.items });
                 },
                 saveCollapsed() {
+                    if (this.isDemoMode) return;
                     AppUtils.createNamespacedStorage('quicknav_collapsed').set(this.collapsedCategories);
                 },
                 updateTime() {
                     const now = new Date();
                     this.currentTime = now.toLocaleTimeString('zh-CN', { hour12: false });
                     this.currentDate = now.toLocaleDateString('zh-CN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    this.currentDateISO = this.formatDateISO(now);
+                },
+                formatDateISO(d) {
+                    const pad = (n) => String(n).padStart(2, '0');
+                    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
                 },
                 getItemsByCategory(categoryId) {
                     return this.items.filter(item => item.categoryId === categoryId);
@@ -1681,7 +1826,7 @@
                         this.toast('链接已更新');
                     } else {
                         this.items.push({
-                            id: Date.now(),
+                            id: this.genItemId(),
                             type: 'link',
                             name: this.linkForm.name,
                             url: this.linkForm.url,
@@ -1723,7 +1868,7 @@
                         this.toast('片段已更新');
                     } else {
                         this.items.push({
-                            id: Date.now(),
+                            id: this.genItemId(),
                             type: 'snippet',
                             name: this.snippetForm.name,
                             content: this.snippetForm.content,
@@ -1830,11 +1975,12 @@
                     this.showBatchDeleteModal = true;
                 },
                 batchDelete() {
+                    const count = this.selectedItems.length;
                     this.items = this.items.filter(i => !this.selectedItems.includes(i.id));
                     this.saveData();
                     this.showBatchDeleteModal = false;
                     this.clearSelection();
-                    this.toast('已删除 ' + this.selectedItems.length + ' 项');
+                    this.toast('已删除 ' + count + ' 项');
                 },
                 // Demo Mode
                 enterDemoMode() {
@@ -1853,13 +1999,128 @@
                     this.originalItems = [];
                     this.isDemoMode = false;
                 },
+                // 打开链接（校验协议，只允许 http/https）
+                openItem(item) {
+                    if (!item || !item.url) return;
+                    const url = String(item.url).trim();
+                    if (!/^https?:\/\//i.test(url)) {
+                        this.toast('链接需要以 http:// 或 https:// 开头', 'error');
+                        return;
+                    }
+                    window.open(url, '_blank', 'noopener');
+                },
+                // favicon：走国内可达的 favicon.im，失败退化成地球图标
+                faviconUrl(url) {
+                    const domain = String(url || '').replace(/^https?:\/\//i, '').split('/')[0];
+                    return domain ? 'https://favicon.im/' + encodeURIComponent(domain) : '';
+                },
+                markFaviconFailed(id) {
+                    this.$set(this.faviconFailed, id, true);
+                },
+                // 导入 / 导出 JSON 备份（与 xlsx 导出互补，形成闭环）
+                triggerImport() {
+                    const el = this.$refs.importInput;
+                    if (el) { el.value = ''; el.click(); }
+                },
+                importData(e) {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        try {
+                            const data = JSON.parse(String(reader.result));
+                            if (!data || !Array.isArray(data.categories) || !Array.isArray(data.items)) {
+                                throw new Error('文件结构不对，应为 { categories: [], items: [] }');
+                            }
+                            this.categories = data.categories;
+                            this.items = data.items;
+                            this.saveData();
+                            this.toast('已导入 ' + data.categories.length + ' 个分组 / ' + data.items.length + ' 项');
+                        } catch (err) {
+                            this.toast('导入失败：' + (err.message || '文件格式不正确'), 'error');
+                        }
+                    };
+                    reader.onerror = () => this.toast('读取文件失败', 'error');
+                    reader.readAsText(file);
+                },
+                exportJson() {
+                    const payload = JSON.stringify({
+                        categories: this.categories,
+                        items: this.items,
+                        exportedAt: new Date().toISOString()
+                    }, null, 2);
+                    AppUtils.downloadBlob(payload, '快捷导航备份_' + this.localDateStr() + '.json', 'application/json');
+                    this.toast('已导出 JSON 备份');
+                },
+                localDateStr() {
+                    const d = new Date();
+                    const pad = (n) => String(n).padStart(2, '0');
+                    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+                },
+                // 单调递增 id，避免 Date.now() 同毫秒撞车
+                genItemId() {
+                    return this.items.reduce((m, i) => Math.max(m, Number(i.id) || 0), 0) + 1;
+                },
                 // Copy
                 copyToClipboard(text) {
-                    navigator.clipboard.writeText(text).then(() => {
+                    const payload = String(text == null ? '' : text);
+                    // 非安全上下文（file://、非 HTTPS、旧浏览器）下 navigator.clipboard
+                    // 可能整个不存在；此时 writeText 抛的是同步异常，.catch() 抓不到，
+                    // 会静默失败 —— 所以先判存在性，再走 execCommand 降级。
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        try {
+                            navigator.clipboard.writeText(payload).then(() => {
+                                this.toast('已复制到剪贴板');
+                            }).catch(() => {
+                                if (this.copyViaExecCommand(payload)) {
+                                    this.toast('已复制到剪贴板');
+                                } else {
+                                    this.toast('复制失败', 'error');
+                                }
+                            });
+                            return;
+                        } catch (e) {
+                            // 继续走降级
+                        }
+                    }
+                    if (this.copyViaExecCommand(payload)) {
                         this.toast('已复制到剪贴板');
-                    }).catch(() => {
+                    } else {
                         this.toast('复制失败', 'error');
-                    });
+                    }
+                },
+                // 降级方案：临时 textarea + execCommand('copy')
+                copyViaExecCommand(text) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-1000px';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    let ok = false;
+                    try {
+                        ta.select();
+                        ta.setSelectionRange(0, ta.value.length);
+                        ok = document.execCommand('copy');
+                    } catch (e) {
+                        ok = false;
+                    }
+                    document.body.removeChild(ta);
+                    return ok;
+                },
+                // 复制带时间戳的分割线（时间取点击那一刻，不受 1s tick 边界影响）
+                copyTimeDivider() {
+                    const now = new Date();
+                    const pad = (n) => String(n).padStart(2, '0');
+                    const ts = this.formatDateISO(now) + ' ' +
+                        pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+                    const fmt = this.timeDividerFormats[this.timeDividerFormat] || this.timeDividerFormats.rule;
+                    this.copyToClipboard(fmt.build(ts));
+                },
+                saveTimeDividerFormat() {
+                    AppUtils.createNamespacedStorage('quicknav_time_divider_fmt', { version: 1 })
+                        .set(this.timeDividerFormat);
                 },
                 // Export
                 exportData() {
@@ -1887,7 +2148,7 @@
                         XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(snippetsData), '代码片段');
                     }
                     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(categoriesData), '分组');
-                    XLSX.writeFile(wb, '快捷导航导出_' + new Date().toISOString().slice(0, 10) + '.xlsx');
+                    XLSX.writeFile(wb, '快捷导航导出_' + this.localDateStr() + '.xlsx');
                     this.toast('导出成功');
                 },
                 // Toast
