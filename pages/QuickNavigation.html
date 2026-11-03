@@ -1667,7 +1667,8 @@
                     return cats.slice().sort((a, b) => a.order - b.order);
                 },
                 timeDividerPreview() {
-                    const ts = ((this.currentDateISO || '') + ' ' + (this.currentTime || '')).trim();
+                    const d = new Date();
+                    const ts = this.dividerTimestamp(d, this.currentTime);
                     const fmt = this.timeDividerFormats[this.timeDividerFormat] || this.timeDividerFormats.rule;
                     return fmt.build(ts);
                 }
@@ -2111,12 +2112,18 @@
                 },
                 // 复制带时间戳的分割线（时间取点击那一刻，不受 1s tick 边界影响）
                 copyTimeDivider() {
-                    const now = new Date();
-                    const pad = (n) => String(n).padStart(2, '0');
-                    const ts = this.formatDateISO(now) + ' ' +
-                        pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+                    const ts = this.dividerTimestamp(new Date());
                     const fmt = this.timeDividerFormats[this.timeDividerFormat] || this.timeDividerFormats.rule;
                     this.copyToClipboard(fmt.build(ts));
+                },
+                // 分割线用的完整时间戳：2026-11-03 星期二 12:54:30
+                dividerTimestamp(d, timeOverride) {
+                    const pad = (n) => String(n).padStart(2, '0');
+                    const weekday = d.toLocaleDateString('zh-CN', { weekday: 'long' });
+                    const time = timeOverride || (
+                        pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds())
+                    );
+                    return this.formatDateISO(d) + ' ' + weekday + ' ' + time;
                 },
                 saveTimeDividerFormat() {
                     AppUtils.createNamespacedStorage('quicknav_time_divider_fmt', { version: 1 })
