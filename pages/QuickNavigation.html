@@ -6,8 +6,8 @@
     <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
     <title>快捷导航 - 个人工作台</title>
     <meta name="description" content="整理常用站点、分组导航、代码片段和快捷入口的个人导航工具。">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="../viewport/assets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css">
     <script src="../viewport/js/vue.js?v=20250118"></script>
     <style>
         :root {
@@ -846,6 +846,95 @@
             border-radius: var(--radius-sm);
         }
 
+        /* ===== 汉字笔顺（嵌入 hanzipi.com） ===== */
+        .hanzi-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hanzi-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .hanzi-source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .hanzi-source:hover {
+            color: var(--primary);
+        }
+
+        .hanzi-search {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 475px;
+            margin: 0 auto 0.85rem;
+        }
+
+        .hanzi-input {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 0.55rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .hanzi-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+        }
+
+        .hanzi-wrap {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: var(--radius-sm);
+        }
+
+        .hanzi-frame {
+            width: 720px;
+            height: 560px;
+            transform-origin: top left;
+        }
+
+        .hanzi-frame iframe {
+            display: block;
+            width: 720px;
+            height: 560px;
+            border: 0;
+            background: #fff;
+            border-radius: var(--radius-sm);
+        }
+
+        /* 窄屏换用较窄的基准宽度：该站 980px 以下走移动版布局，
+           笔顺动画图是 300px 固定宽，基准太窄会横向溢出 */
+        @media (max-width: 640px) {
+            .hanzi-frame {
+                width: 480px;
+                height: 460px;
+            }
+
+            .hanzi-frame iframe {
+                width: 480px;
+                height: 460px;
+            }
+        }
+
         /* ===== 添加按钮 ===== */
         .add-item-btn {
             border: 2px dashed var(--border);
@@ -1398,6 +1487,24 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 汉字笔顺（嵌入 hanzipi.com） -->
+            <div class="time-tool">
+                <div class="hanzi-head">
+                    <span class="hanzi-title"><i class="fas fa-language"></i> 汉字笔顺</span>
+                    <a class="hanzi-source" href="https://www.hanzipi.com/" target="_blank" rel="noopener">hanzipi.com</a>
+                </div>
+                <div class="hanzi-search">
+                    <input class="hanzi-input" id="hanziInput" type="text" autocomplete="off"
+                        placeholder="输入汉字，查笔顺 / 拼音 / 部首" @keyup.enter="lookupHanzi">
+                    <button class="btn primary" @click="lookupHanzi">查询</button>
+                </div>
+                <div class="hanzi-wrap" ref="hanziWrap">
+                    <div class="hanzi-frame" ref="hanziBox">
+                        <iframe ref="hanziFrame" src="https://www.hanzipi.com/%E5%AD%A6.html" width="720" height="560" frameborder="0" loading="lazy" title="汉字笔顺"></iframe>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- 模态框 -->
@@ -1630,7 +1737,7 @@
         <a href="https://232310.xyz/#contact"><i class="fas fa-envelope"></i> 联系我</a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="../viewport/js/xlsx.full.min.js"></script>
     <script src="../viewport/js/app-utils.js"></script>
     <script>
         const DEMO_CATEGORIES = [
@@ -1749,14 +1856,14 @@
                 this.loadData();
                 this.updateTime();
                 this.timerId = setInterval(() => this.updateTime(), 1000);
-                this.$nextTick(this.syncStopwatchScale);
-                window.addEventListener('resize', this.syncStopwatchScale);
+                this.$nextTick(this.syncEmbedScale);
+                window.addEventListener('resize', this.syncEmbedScale);
                 document.addEventListener('click', this.handleDocumentClick);
                 document.addEventListener('keydown', this.handleGlobalShortcut);
             },
             beforeDestroy() {
                 if (this.timerId) { clearInterval(this.timerId); this.timerId = null; }
-                window.removeEventListener('resize', this.syncStopwatchScale);
+                window.removeEventListener('resize', this.syncEmbedScale);
                 document.removeEventListener('click', this.handleDocumentClick);
                 document.removeEventListener('keydown', this.handleGlobalShortcut);
             },
@@ -2136,6 +2243,34 @@
                     const scale = Math.min(1, avail / 475);
                     frame.style.transform = 'scale(' + scale + ')';
                     frame.style.height = (250 * scale) + 'px';
+                },
+                // 嵌入的汉字笔顺同理；基准宽度由媒体查询决定，故用 offsetWidth 读实际值
+                syncHanziScale() {
+                    const wrap = this.$refs.hanziWrap;
+                    const box = this.$refs.hanziBox;
+                    if (!wrap || !box) return;
+                    const avail = wrap.clientWidth;
+                    if (!avail) return;
+                    const base = box.offsetWidth || 720;
+                    const baseH = box.offsetHeight || 560;
+                    const scale = Math.min(1, avail / base);
+                    box.style.transform = 'scale(' + scale + ')';
+                    box.style.height = (baseH * scale) + 'px';
+                },
+                syncEmbedScale() {
+                    this.syncStopwatchScale();
+                    this.syncHanziScale();
+                },
+                // 查汉字：切 iframe 到该字的笔顺页（该站单字路径为 /字.html）
+                lookupHanzi() {
+                    const el = document.getElementById('hanziInput');
+                    const raw = (el && el.value ? el.value : '').trim();
+                    if (!raw) return;
+                    const ch = Array.from(raw)[0];
+                    const frame = this.$refs.hanziFrame;
+                    if (!frame) return;
+                    frame.src = 'https://www.hanzipi.com/' + encodeURIComponent(ch) + '.html';
+                    this.$nextTick(this.syncHanziScale);
                 },
                 // 单调递增 id，避免 Date.now() 同毫秒撞车
                 genItemId() {
