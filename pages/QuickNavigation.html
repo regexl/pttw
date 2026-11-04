@@ -794,6 +794,58 @@
             font-family: 'SF Mono', 'Consolas', monospace;
         }
 
+        /* ===== 在线秒表（嵌入 clockcn.com） ===== */
+        .stopwatch-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stopwatch-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .stopwatch-source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .stopwatch-source:hover {
+            color: var(--primary);
+        }
+
+        .stopwatch-wrap {
+            width: 100%;
+            max-width: 475px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: var(--radius-sm);
+        }
+
+        /* 嵌入页内部是固定 70px 字号，不响应式 —— 用 scale 等比缩放适配窄屏 */
+        .stopwatch-frame {
+            width: 475px;
+            height: 250px;
+            transform-origin: top left;
+        }
+
+        .stopwatch-frame iframe {
+            display: block;
+            width: 475px;
+            height: 250px;
+            border: 0;
+            background: #fff;
+            border-radius: var(--radius-sm);
+        }
+
         /* ===== 添加按钮 ===== */
         .add-item-btn {
             border: 2px dashed var(--border);
@@ -1333,6 +1385,19 @@
                 </div>
                 <div class="time-preview"><code>{{ timeDividerPreview }}</code></div>
             </div>
+
+            <!-- 在线秒表（嵌入 clockcn.com） -->
+            <div class="time-tool">
+                <div class="stopwatch-head">
+                    <span class="stopwatch-title"><i class="fas fa-stopwatch"></i> 在线秒表</span>
+                    <a class="stopwatch-source" href="https://clockcn.com/miaobiao/" target="_blank" rel="noopener">clockcn.com</a>
+                </div>
+                <div class="stopwatch-wrap" ref="stopwatchWrap">
+                    <div class="stopwatch-frame" ref="stopwatchFrame">
+                        <iframe src="https://clockcn.com/embed/miaobiao/" width="475" height="250" frameborder="0" allowfullscreen loading="lazy" title="在线秒表"></iframe>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- 模态框 -->
@@ -1684,11 +1749,14 @@
                 this.loadData();
                 this.updateTime();
                 this.timerId = setInterval(() => this.updateTime(), 1000);
+                this.$nextTick(this.syncStopwatchScale);
+                window.addEventListener('resize', this.syncStopwatchScale);
                 document.addEventListener('click', this.handleDocumentClick);
                 document.addEventListener('keydown', this.handleGlobalShortcut);
             },
             beforeDestroy() {
                 if (this.timerId) { clearInterval(this.timerId); this.timerId = null; }
+                window.removeEventListener('resize', this.syncStopwatchScale);
                 document.removeEventListener('click', this.handleDocumentClick);
                 document.removeEventListener('keydown', this.handleGlobalShortcut);
             },
@@ -2057,6 +2125,17 @@
                     const d = new Date();
                     const pad = (n) => String(n).padStart(2, '0');
                     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+                },
+                // 嵌入的秒表是固定 475×250 且内部不响应式，按容器宽度等比缩放
+                syncStopwatchScale() {
+                    const wrap = this.$refs.stopwatchWrap;
+                    const frame = this.$refs.stopwatchFrame;
+                    if (!wrap || !frame) return;
+                    const avail = wrap.clientWidth;
+                    if (!avail) return;
+                    const scale = Math.min(1, avail / 475);
+                    frame.style.transform = 'scale(' + scale + ')';
+                    frame.style.height = (250 * scale) + 'px';
                 },
                 // 单调递增 id，避免 Date.now() 同毫秒撞车
                 genItemId() {
