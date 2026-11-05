@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公考高频成语 915 词 · 背诵手册</title>
+<meta name="description" content="公考高频成语 915 条，按考频排序，支持速查表、背诵卡与释义测验三种模式，含掌握度进度追踪。">
+<meta name="keywords" content="行测,言语理解,逻辑填空,成语,高频成语,背诵,公考">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<style>
+:root{
+  --ink:#1a2332; --ink-soft:#3a4a5e; --ink-mute:#6b7a8f;
+  --paper:#faf8f5; --paper-warm:#f3efe8; --card:#fffdfa;
+  --line:#d9d2c7; --line-soft:#e8e2d8;
+  --primary:#1a365d; --primary-deep:#0f2440; --accent:#c2410c; --accent-soft:#fde8d8;
+  --good:#15803d; --good-soft:#dcfce7; --warn:#b45309; --warn-soft:#fef3c7;
+  --bad:#b91c1c; --bad-soft:#fee2e2; --info:#1d4ed8; --info-soft:#dbeafe;
+  --shadow:0 1px 3px rgba(26,35,50,.08),0 4px 12px rgba(26,35,50,.06);
+  --shadow-lg:0 4px 16px rgba(26,35,50,.1),0 12px 32px rgba(26,35,50,.08);
+  --radius:12px;
+  --hero-a:#1a365d; --hero-b:#0f2440;
+}
+[data-theme="dark"]{
+  --ink:#e8eaed; --ink-soft:#c2cad4; --ink-mute:#8b94a4;
+  --paper:#12151b; --paper-warm:#1a1e26; --card:#181c24;
+  --line:#2b3340; --line-soft:#232833;
+  --primary:#8ab4f8; --primary-deep:#aecbfa; --accent:#f97316; --accent-soft:#3a2415;
+  --good:#4ade80; --good-soft:#12301f; --warn:#fbbf24; --warn-soft:#33260c;
+  --bad:#f87171; --bad-soft:#3a1d1a; --info:#93c5fd; --info-soft:#16243d;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.5),0 12px 32px rgba(0,0,0,.4);
+  --hero-a:#182642; --hero-b:#0b1322;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--primary)}
+code{font-family:'SF Mono','Consolas',monospace}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px;width:100%}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:14px;
+  padding:10px 20px;background:color-mix(in srgb,var(--paper) 90%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+}
+.topbar a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:500}
+.topbar a:hover{color:var(--accent)}
+.topbar .brand-sub{font-size:12.5px;color:var(--ink-mute)}
+.theme-toggle{
+  margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:var(--card);font-size:15px;display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.theme-toggle:hover{border-color:var(--accent);transform:rotate(-15deg)}
+
+/* ---------- Hero ---------- */
+.hero{background:linear-gradient(135deg,var(--hero-a) 0%,var(--hero-b) 100%);color:#fff;padding:36px 0 28px}
+.hero .tag{
+  display:inline-block;font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.28);padding:4px 14px;border-radius:2px;margin-bottom:16px;font-weight:500;
+}
+.hero h1{font-size:clamp(24px,4.2vw,34px);font-weight:800;line-height:1.3;margin-bottom:10px;letter-spacing:-.01em}
+.hero p{font-size:15px;color:rgba(255,255,255,.82);max-width:760px;margin-bottom:22px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.hero-stats>div{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 14px}
+.hero-stats .n{font-size:1.5rem;font-weight:700;line-height:1.2}
+.hero-stats .n.good{color:#86efac}
+.hero-stats .n.warn{color:#fcd34d}
+.hero-stats .l{font-size:11.5px;color:rgba(255,255,255,.72);margin-top:2px}
+.progress-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#fbbf24,#4ade80);transition:width .45s ease}
+
+/* ---------- 工具栏 ---------- */
+.toolbar{
+  position:sticky;top:55px;z-index:50;
+  background:color-mix(in srgb,var(--paper) 93%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding:10px 0 0;
+}
+.toolbar-inner{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-bottom:10px}
+.toolbar input[type=search]{
+  flex:1 1 210px;min-width:0;padding:8px 12px;border:1px solid var(--line);
+  border-radius:8px;background:var(--card);font-size:13.5px;outline:none;
+}
+.toolbar input[type=search]:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--info-soft)}
+.toolbar select,.toolbar .ghost-btn{
+  padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+  color:var(--ink-soft);font-size:13px;outline:none;transition:.18s;
+}
+.toolbar .ghost-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:8px}
+.tab{
+  flex:0 0 auto;padding:8px 16px;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink-soft);font-size:13.5px;font-weight:500;transition:.18s;
+}
+.tab:hover{border-color:var(--primary);color:var(--primary)}
+.tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* ---------- 主体 ---------- */
+main{padding:24px 0 60px;min-height:56vh}
+.stage-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-mute);margin-bottom:14px}
+.stage-meta .pos{font-weight:600;color:var(--ink-soft)}
+
+/* ---------- 速查表 ---------- */
+.group{margin-bottom:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:var(--shadow)}
+.group-head{
+  display:flex;align-items:center;gap:12px;width:100%;padding:12px 18px;
+  background:var(--paper-warm);border:none;text-align:left;font-size:15px;font-weight:700;color:var(--primary);
+}
+.group-head .letter{
+  width:32px;height:32px;border-radius:8px;background:var(--primary);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex:0 0 auto;
+}
+.group-head .cnt{font-size:12px;color:var(--ink-mute);font-weight:400}
+.group-head .arrow{margin-left:auto;color:var(--ink-mute);transition:transform .2s;font-size:12px}
+.group.open .group-head .arrow{transform:rotate(180deg)}
+.group-body{display:none;border-top:1px solid var(--line)}
+.group.open .group-body{display:block}
+.idiom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:12px;padding:16px}
+.idiom{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px;
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.idiom:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--line)}
+.idiom .w{font-size:19px;font-weight:700;letter-spacing:2px;color:var(--ink);line-height:1.4}
+.idiom .p{font-size:11.5px;color:var(--ink-mute);letter-spacing:.5px;margin:3px 0 8px;font-family:'SF Mono','Consolas',monospace}
+.idiom .m{font-size:13.5px;color:var(--ink-soft);line-height:1.75}
+.idiom .m.clamped{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.freq{
+  display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;margin-left:8px;
+  vertical-align:middle;font-weight:600;letter-spacing:.3px;
+}
+.freq.hi{background:var(--bad-soft);color:var(--bad)}
+.freq.mid{background:var(--warn-soft);color:var(--warn)}
+.freq.lo{background:var(--paper-warm);color:var(--ink-mute)}
+.mark{background:var(--warn-soft);color:var(--warn);padding:0 3px;border-radius:3px}
+
+/* ---------- 背诵卡 ---------- */
+.flash-wrap{max-width:680px;margin:0 auto}
+.flash{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow-lg);padding:44px 36px;text-align:center;min-height:330px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+}
+.flash .fw{font-size:clamp(30px,7vw,46px);font-weight:800;letter-spacing:5px;line-height:1.35;color:var(--ink)}
+.flash .fp{font-size:13px;color:var(--ink-mute);letter-spacing:1px;font-family:'SF Mono','Consolas',monospace}
+.flash .fm{font-size:17px;color:var(--ink-soft);line-height:1.95;text-align:left;max-width:540px}
+.flash .hintline{font-size:12.5px;color:var(--ink-mute)}
+.flash .cover{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;background:var(--card);border-radius:16px;
+}
+.flash .cover .tip{font-size:13px;color:var(--ink-mute)}
+.flash-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.btn{
+  padding:9px 18px;border:1px solid var(--line);border-radius:9px;background:var(--card);
+  color:var(--ink-soft);font-size:13.5px;font-weight:500;transition:.18s;
+}
+.btn:hover{border-color:var(--primary);color:var(--primary)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{opacity:.9;color:#fff}
+.btn.good{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.btn.warn{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.btn.bad{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ---------- 测验 ---------- */
+.quiz{max-width:680px;margin:0 auto}
+.quiz-q{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-lg);
+  padding:30px 32px;margin-bottom:16px;
+}
+.quiz-q .tag{font-size:11.5px;color:var(--ink-mute);letter-spacing:.1em;margin-bottom:10px;display:block}
+.quiz-q .stem{font-size:17px;line-height:1.95;color:var(--ink)}
+.opts{display:grid;gap:10px;margin-top:20px}
+.opt{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:13px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+  transition:.18s;font-size:16px;
+}
+.opt:hover{border-color:var(--primary);background:var(--info-soft)}
+.opt .k{
+  width:24px;height:24px;border-radius:6px;background:var(--paper-warm);color:var(--ink-soft);
+  display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:0 0 auto;
+}
+.opt .w{font-weight:700;letter-spacing:2px}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.right .k{background:var(--good);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opt.disabled{cursor:default;pointer-events:none}
+.quiz-fb{margin-top:18px;padding:14px 18px;border-radius:10px;font-size:14px;line-height:1.8}
+.quiz-fb.ok{background:var(--good-soft);border-left:4px solid var(--good);color:var(--good)}
+.quiz-fb.no{background:var(--bad-soft);border-left:4px solid var(--bad);color:var(--bad)}
+.quiz-fb b{font-weight:700}
+
+.empty{
+  text-align:center;padding:56px 20px;color:var(--ink-mute);font-size:14px;
+  background:var(--card);border:1px dashed var(--line);border-radius:var(--radius);
+}
+.hint{text-align:center;font-size:12px;color:var(--ink-mute);margin-top:14px}
+
+footer{
+  text-align:center;padding:26px 20px;color:var(--ink-mute);font-size:12.5px;
+  border-top:1px solid var(--line);background:var(--paper-warm);
+}
+footer a{color:var(--ink-soft)}
+
+@media (max-width:640px){
+  .hero{padding:26px 0 22px}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .toolbar{top:52px}
+  .brand-sub{display:none}
+  .idiom-grid{grid-template-columns:1fr;padding:12px}
+  .flash{padding:30px 20px;min-height:280px}
+  .flash .fw{letter-spacing:3px}
+  .quiz-q{padding:22px 18px}
+  .toolbar select,.toolbar .ghost-btn{padding:7px 8px;font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="../index.html#notes">← 返回学习笔记</a>
+  <span class="brand-sub">公考高频成语 · 背诵手册</span>
+  <button id="theme-toggle" class="theme-toggle" title="切换主题" aria-label="切换主题">🌙</button>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="tag">行测言语理解 · 逻辑填空</span>
+    <h1>公考高频成语 <span id="hero-count">915</span> 词</h1>
+    <p>按考频排序，先攻高频。三种模式：速查表按拼音首字母检索、背诵卡逐词过、释义测验检验掌握度，进度自动保存在本机。</p>
+    <div class="hero-stats">
+      <div><div class="n" id="st-total">0</div><div class="l">词条总数</div></div>
+      <div><div class="n good" id="st-known">0</div><div class="l">已掌握</div></div>
+      <div><div class="n warn" id="st-fuzzy">0</div><div class="l">模糊</div></div>
+      <div><div class="n" id="st-rate">0%</div><div class="l">掌握率</div></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap toolbar-inner">
+    <input type="search" id="search" placeholder="搜索成语 / 拼音 / 释义（按 / 聚焦）" autocomplete="off">
+    <select id="filter-freq" aria-label="考频筛选">
+      <option value="all">全部考频</option>
+      <option value="hi">高频 ≥20 次</option>
+      <option value="mid">中频 8–19 次</option>
+      <option value="lo">低频 ≤7 次</option>
+    </select>
+    <select id="filter-status" aria-label="掌握度筛选">
+      <option value="all">全部状态</option>
+      <option value="unknown">只看未掌握</option>
+      <option value="fuzzy">只看模糊</option>
+      <option value="known">只看已掌握</option>
+    </select>
+    <button class="ghost-btn" id="btn-random">随机抽一个</button>
+    <button class="ghost-btn" id="btn-reset">重置进度</button>
+  </div>
+  <div class="wrap">
+    <div class="tabs" id="mode-tabs">
+      <button class="tab active" data-mode="list">速查表</button>
+      <button class="tab" data-mode="flash">背诵卡</button>
+      <button class="tab" data-mode="quiz">释义测验</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap" id="stage"></div>
+</main>
+
+<footer>
+  数据源自《公考高频成语1000词》（OCR 版），共 915 条有效词条 · 掌握度进度保存在本机浏览器<br>
+  <a href="../index.html#notes">返回学习笔记</a>
+</footer>
+
+<script src="../viewport/js/app-utils.js"></script>
+<script type="application/json" id="idiom-data">[[1,"一蹴而就",47,"比喻事情轻而易举，一下子就成功。通常用于否定句。","yi cu er jiu"],[2,"层出不穷",45,"接连不断地出现，没有穷尽。","ceng chu bu qiong"],[3,"司空见惯",43,"指某事物十分常见，不足为奇。","si kong jian guan"],[4,"南辕北辙",41,"比喻行动和目的正好相反。","nan yuan bei zhe"],[5,"日新月异",39,"每天都在更新，每月都有变化。指发展或进步迅速，不断出现新事物、新气像。","ri xin yue yi"],[6,"独树一帜",36,"比喻独特新奇，自成一家。","du shu yi zhi"],[7,"相得益彰",36,"指两个人或两件事物互相配合，双方的能力和作用更能显示出来。褒义词。","xiang de yi zhang"],[8,"大相径庭",36,"比喻相差很远，大不相同。","da xiang jing ting"],[9,"潜移默化",36,"指人的思想或性格不知不觉受到感染、影响而发生了变化。","qian yi mo hua"],[10,"根深蒂固",32,"比喻基础深厚，不容易动摇。中性词。","gen shen di gu"],[11,"未雨绸缪",29,"天还没有下雨，先把门窗绑牢。比喻事先做好准备工作","wei yu chou mou"],[12,"毋庸置疑",29,"事实明显或理由充分，不必怀疑。","wu yong zhi yi"],[13,"有目共睹",29,"形容事物非常明显。","you mu gong du"],[14,"比比皆是",27,"到处都是，形容极其常见。","bi bi jie shi"],[15,"一成不变",27,"一经形成，不再改变。一般用于否定句，极少用于肯定句。","yi cheng bu bian"],[16,"水到渠成",27,"比喻有条件之后，事情自然会成功，即功到自然成。和“ 瓜熟蒂落” 相近。","shui dao qu cheng"],[17,"相辅相成",26,"指两件事物互相配合，互相辅助，缺一不可。","xiang fu xiang cheng"],[18,"背道而驰",25,"朝相反的方向跑去，比喻彼此的方向和目的完全相反。","bei dao er chi"],[19,"有的放矢",25,"比喻说话或做事有明确的目的，有针对性。","you di fang shi"],[20,"不言而喻",25,"不用说话就能明白。形容道理很明显。","bu yan er yu"],[21,"此起彼伏",23,"这里起来，那里下去。表示频繁地出现或产生。","ci qi bi fu"],[22,"举足轻重",23,"比喻所处地位重要，一举一动都会影响全局。","ju zu qing zhong"],[23,"不可或缺",23,"表示非常重要，不能有一点点的缺失，不能少一点。或：稍微。","bu ke huo que"],[24,"屡见不鲜",23,"常常见到，并不新奇。通常指不好的现象。","lv jian bu xian"],[25,"一劳永逸",23,"辛苦一次，把事情办好，以后就可以不再费力了。","yi lao yong yi"],[26,"方兴未艾",23,"多形容新生事物正在蓬勃发展。","fang xing wei ai"],[27,"如火如荼",23,"形容大规模的行动气势旺盛，气氛热烈。","ru huo ru tu"],[28,"人云亦云",23,"人家怎么说，自己也跟着怎么说。指没有主见，只会随声附和。","ren yun yi yun"],[29,"标新立异",22,"形容故意与众不同以显示自己。贬义。","biao xin li yi"],[30,"捉襟见肘",22,"比喻顾此失彼，穷于应付。","zhuo jin jian zhou"],[31,"良莠不齐",22,"好人坏人都有，混在一起。有时也可用来指商品质量参差不齐。","liang you bu qi"],[32,"浮光掠影",22,"比喻观察不细致，学习不深入，印象不深刻。","fu guang lve ying"],[33,"栩栩如生",22,"指艺术形象非常逼真，如同活的一样。","xu xu ru sheng"],[34,"无可厚非",21,"不能过分责备。指说话做事虽有缺点，但还有可取之处，应予谅解。","wu ke hou fei"],[35,"博大精深",21,"( 思想、学说等) 广博高深。","bo da jing shen"],[36,"理所当然",21,"按道理应当这样。","li suo dang ran"],[37,"缘木求鱼",21,"比喻方向或办法不对头，不可能达到目的。","yuan mu qiu yu"],[38,"耳濡目染",21,"耳朵经常听到，眼睛经常看到，不知不觉地受到影响。","er ru mu ran"],[39,"迫在眉睫",21,"形容事情已到眼前，情势十分紧迫。","po zai mei jie"],[40,"纸上谈兵",21,"比喻只凭书本知识空发议论，不能解决实际问题。","zhi shang tan bing"],[41,"莫衷一是",21,"不能决定哪个是对的。形容意见分歧，没有一致的看法。","mo zhong yi shi"],[42,"因势利导",21,"顺着事情发展的趋势，向有利于实现目的的方向加以引导。","yin shi li dao"],[43,"汗牛充栋",21,"书很多，尤其指藏书多，也可以指著作多。","han niu chong dong"],[44,"不胜枚举",21,"不能一个个地列举出来。形容数量很多。","bu sheng mei ju"],[45,"应运而生",21,"现指适应时机而产生。","ying yun er sheng"],[46,"鱼龙混杂",21,"比喻坏人和好人混在一起。","yu long hun za"],[47,"源远流长",21,"指源头很远，水流很长，比喻历史悠久。","yuan yuan liu chang"],[48,"独善其身",21,"指在污浊的环境中能不受干扰地坚持自己的美好品格。现在也指缺乏集体精神。","du shan qi shen"],[49,"休戚与共",21,"形容关系密切，祸福相连、利害相关。","xiu qi yu gong"],[50,"轻而易举",21,"形容事情容易做，不费力，省事。强调做起来轻松，搭配对象为事情。","qing er yi ju"],[51,"循规蹈矩",21,"指遵守规矩，不敢违反。拘守旧准则，不敢稍做变动。中性词，现多有贬义用法。","xun gui dao ju"],[52,"立竿见影",21,"把竹竿立在太阳光下，立刻就看到影子。比喻收效迅速。","li gan jian ying"],[53,"家喻户晓",21,"家家户户都知道，形容事物名气大、广为流传，人所共知。","jia yu hu xiao"],[54,"纷至沓来",21,"形容接连不断的到来。有方向性，多用来指人、信件、消息等。","fen zhi ta lai"],[55,"推陈出新",21,"对旧的文化进行批判地继承，剔除其糟粕，吸取其精华，创造出新的文化。","tui chen chu xin"],[56,"进退维谷",21,"无论是进还是退，都是处在困境之中。形容进退两难。","jin tui wei gu"],[57,"惟妙惟肖",21,"描写或模仿的非常逼真。","wei miao wei xiao"],[58,"脱颖而出",20,"比喻人的才能全部显示出来。","tuo ying er chu"],[59,"显而易见",20,"形容事情或道理很明显，极容易看清楚。","xian er yi jian"],[60,"凤毛麟角",20,"比喻珍贵而稀少的人或物。修饰人时，强调突出、优秀、拔尖。","feng mao lin jiao"],[61,"此消彼长",20,"这个下降，那个上升。","ci xiao bi zhang"],[62,"按部就班",20,"按明一定的步盘，也指按老规矩办事。缺乏创新精神。带贬义色彩，但有中性用法。","an bu jiu ban"],[63,"亦步亦趋",20,"比喻由于缺乏主张，或为了讨好，事事模仿或追随。别人。贬义词。","yi bu yi qu"],[64,"扑朔迷离",20,"后来形容事物错综复杂，不容易看清真相。","pu shuo mi li"],[65,"眼花缭乱",20,"形容眼睛看见复杂纷繁的东西而感到迷乱，也比喻事物复杂，无法辨清。","yan hua liao luan"],[66,"因地制宜",20,"根据当地的实际情况，制定适当的措施。","yin di zhi yi"],[67,"固步自封",20,"比喻守着老一套，不求进步。","gu bu zi feng"],[68,"天马行空",20,"比喻气势豪放，不受拘束( 多用在评价写作、绘画和书法等方面)。","tian ma xing kong"],[69,"无所适从",20,"指不知怎么办才好。","wu suo shi cong"],[70,"顾此失彼",20,"顾了这个，丢了那个。形容照顾不过来。","gu ci shi bi"],[71,"走马观花",20,"指大略地观察一下。","zou ma guan hua"],[72,"脸炙人口",20,"比喻好的诗文受到人们和称赞和传颂。","lian zhi ren kou"],[73,"如履薄冰",20,"比喻行事极为谨慎，存有戒心。","ru lv bo bing"],[74,"殊途同归",19,"比喻采取不同的方法而得到相同的结果。","shu tu tong gui"],[75,"嗤之以鼻",19,"用鼻子吭声冷笑。表示轻蔑。","chi zhi yi bi"],[76,"举步维艰",19,"形容处境或行动十分艰难。","ju bu wei jian"],[77,"针锋相对",19,"比喻双方在雷略、论点及行动方式等方面尖锐对立。","zhen feng xiang dui"],[78,"振聋发聩",19,"比喻用语言文字唤醒糊涂麻木的人，使他们清醒过来。褒义。","zhen long fa kui"],[79,"相提并论",19,"把不同的人或不同的事放在一起谈论或看待。","xiang ti bing lun"],[80,"崭露头角",19,"比喻突出地显露出才能和本领( 多指青少年)。","zhan lu tou jiao"],[81,"望尘莫及",19,"比喻远远落后。多用于表示对人钦佩的自谦语。","wang chen mo ji"],[82,"五花八门",19,"比喻事物变化多端或花样繁多。","wu hua ba men"],[83,"一日千里",19,"比喻事物进展极快。","yi ri qian li"],[84,"突飞猛进",19,"形容进步和发展特别迅速。","tu fei meng jin"],[85,"势在必行",19,"指某事根据事物的发展趋势必须做。","shi zai bi xing"],[86,"寥寥无几",19,"宴寥：形容数量少。非常稀少，没有几个。","liao liao wu ji"],[87,"无足轻重",18,"指无关紧要。","wu zu qing zhong"],[88,"瞻前顾后",18,"看看前面再看看后面。形容做事谨慎，考虑周密。","zhan qian gu hou"],[89,"不谋而合",18,"指事先没有商量过，意见或行动却完全一致。","bu mou er he"],[90,"循序渐进",18,"按照一定的步骤逐渐深入或提高( 指学习或工作)","xun xu jian jin"],[91,"如出一辙",18,"比喻两件事情非常相似。","ru chu yi zhe"],[92,"与生俱来",18,"个人的特别、不可替代性，一生下来就是如此。","yu sheng ju lai"],[93,"习以为常",18,"指某种事情经常去做，或某种现象经常看到，也就觉得很平常了。","xi yi wei chang"],[94,"喜闻乐见",18,"喜欢听，乐意看。指事物很受欢迎。","xi wen le jian"],[95,"首当其冲",18,"比喻最先受到攻击或遭到灾难。不是“ 冲在最前面” 的意思。","shou dang qi chong"],[96,"相形见绌",17,"跟另一人或事物比较之后，显出了不足。","xiang xing jian chu"],[97,"泥沙俱下",17,"比喻好人和坏人混杂在一起，或者好的事物和坏的事物一起来到。","ni sha ju xia"],[98,"众说纷纭",17,"人多嘴杂，各有各的说法，议论纷纷。","zhong shuo fen yun"],[99,"泾渭分明",17,"比喻界限清楚或是非分明。","jing wei fen ming"],[100,"随波逐流",17,"比喻没有坚定的立场，没有主见，盲目地随着别人行动。","sui bo zhu liu"],[101,"息息相关",17,"形容彼此的关系非常密切。","xi xi xiang guan"],[102,"墨守成规",17,"指固执旧法，一成不变。贬义词。","mo shou cheng gui"],[103,"置若罔闻",16,"放在一边，好像没有听见似的。指不予理睬。","zhi ruo wang wen"],[104,"望而生畏",16,"表示看见了就害怕。","wang er sheng wei"],[105,"望洋兴叹",16,"原指在伟大事物面前感叹自己的渺小，现多比喻做事时因力不胜任而感到无可奈何。","wang yang xing tan"],[106,"声名鹊起",16,"名声突然大振，知名度迅速提高。强调从不出名到出名这一过程。","sheng ming que qi"],[107,"无孔不入",16,"有空子就钻。比喻利用一切机会进行活动( 含贬义)。","wu kong bu ru"],[108,"等量齐观",16,"指对有差别的事物同等看待。一般用作否定句。","deng liang qi guan"],[109,"琳琅满目",16,"满眼都是珍贵的东西，形容美好的事物很多，如书籍、工艺品很多。","lin lang man mu"],[110,"刻不容缓",16,"指形势紧迫，一刻也不允许拖延。含贬义，也可用作中性词。","ke bu rong huan"],[111,"不遗余力",16,"指毫无保留地使出全部力量。遗","bu yi yu li"],[112,"无与伦比",15,"指事物非常完美，没有能跟它相比的。","wu yu lun bi"],[113,"与日俱增",15,"随着时间的推移不断增加、增多。","yu ri ju zeng"],[114,"如日中天",15,"比喻事物正发展到十分兴盛的阶段。","ru ri zhong tian"],[115,"精益求精",15,"( 学术、技术、作品、产品等) 好了还求更好。","jing yi qiu jing"],[116,"积重难返",15,"经过长时间形成的思想作风或习惯，很难改变。贬义词。","ji zhong nan fan"],[117,"曲高和寡",15,"比喻言论或作品不通俗，能了解的人很少。","qu gao he gua"],[118,"独一无二",15,"没有相同的或没有可以相比的。","du yi wu er"],[119,"适得其反",15,"恰恰得到与预期相反的结果。","shi de qi fan"],[120,"水涨船高",15,"也作水涨船高。比喻事物随着它所凭借的基础的提高而提高。","shui zhang chuan gao"],[121,"欣欣向荣",15,"比喻事业蓬勃发展，兴旺昌盛。","xin xin xiang rong"],[122,"接踵而至",15,"指人们前脚跟着后脚，接连不断地来。形容来者很多，络绎不绝。","jie zhong er zhi"],[123,"错综复杂",15,"形容头绪多，情况复杂。","cuo zong fu za"],[124,"目不暇接",14,"指东西多，眼睛都看不过来。","mu bu xia jie"],[125,"相去甚远",14,"互相之间存在很大差异和距离。","xiang qu shen yuan"],[126,"一如既往",14,"指态度没有变化，完全象从前一样。","yi ru ji wang"],[127,"闭门造车",14,"比喻做事不考虑实际情况，只凭主观，自作主张。贬义。","bi men zao che"],[128,"不可思议",14,"原有神秘奥妙的意思，现多指无法想象，难以理解。一般是褒义词。","bu ke si yi"],[129,"削足适履",14,"比喻不合理的牵就凑合或不顾具体条件，生搬硬套。","xue zu shi lv"],[130,"随心所欲",14,"随着自己的意思，想要干什么就干什么。中性词。","sui xin suo yu"],[131,"薪火相传",14,"比喻学问和技艺代代相传。","xin huo xiang chuan"],[132,"兢兢业业",14,"形容做事谨慎、勤恳。","jing jing ye ye"],[133,"昙花一现",14,"比喻美好的事物或景象出现了一下，很快就消失。","tan hua yi xian"],[134,"危在旦夕",14,"形容危险就在眼前。","wei zai dan xi"],[135,"交相辉映",13,"各种光亮、色彩等互相映照。","jiao xiang hui ying"],[136,"大行其道",13,"指某种新潮事物流行、盛行，成为一种风尚。一般含贬义，也可用作中性词。","da xing qi dao"],[137,"惊天动地",13,"形容某个事件的声势或意义极大。","jing tian dong di"],[138,"柳暗花明",13,"比喻在困难中遇到转机。","liu an hua ming"],[139,"别具一格",13,"另有一种独特的风格，","bie ju yi ge"],[140,"望而却步",13,"形容事物可怕或讨厌，使人一看就往后退缩。","wang er que bu"],[141,"绘声绘色",13,"形容叙述或描写生动逼真。","hui sheng hui se"],[142,"一鸣惊人",13,"用以比喻平时没有特殊的表现，一下子做出惊人的成绩。","yi ming jing ren"],[143,"顺理成章",13,"指写文章或做事情顺着条理就能做好。也比喻某种情况自然产生某种结果。","shun li cheng zhang"],[144,"江河日下",13,"江河的水天天向下流。比喻情况一天一天地坏下去。","jiang he ri xia"],[145,"特立独行",13,"指有操守、有见识，不随波逐流。","te li du xing"],[146,"浩如烟海",13,"形容典籍、图书等极为丰富。范围比“ 汗牛充栋” 要广，既说明多，也可说明丰富。","hao ru yan hai"],[147,"鱼目混珠",13,"比喻用假的冒充真的，以假乱真。","yu mu hun zhu"],[148,"熙熙攘攘",13,"形容人来人往，非常热闹拥挤，","xi xi rang rang"],[149,"鹤立鸡群",13,"比喻一个人的仪表或才能在周围一群人里显得很突出。褒义词。","he li ji qun"],[150,"屈指可数",13,"形容数目很少，扳着手指头就能数过来。","qu zhi ke shu"],[151,"好高鹜远",13,"脱离实际地追求目前不可能实现的过高、过远的目标。","hao gao wu yuan"],[152,"深入浅出",13,"用浅显易懂的话把深刻的道理表达出来( 指文章或讲话)。","shen ru qian chu"],[153,"门可罗雀",13,"形容事业由盛而衰，宾客稀少。程度比“ 门庭冷落” 要重。","men ke luo que"],[154,"异军突起",13,"比喻一支新力量突然出现。异军","yi jun tu qi"],[155,"风起云涌",13,"比喻许多事物相继兴起，迅速发展，声势浩大。","feng qi yun yong"],[156,"大势所趋",13,"整个形势发展的趋向","da shi suo qu"],[157,"并驾齐驱",13,"比喻彼此的力量或才能不分高下。","bing jia qi qu"],[158,"浅尝辄止",13,"略微尝试一下就停下来。指不深入钻研。","qian chang zhe zhi"],[159,"责无旁贷",13,"自己应尽的责任，不能推卸给旁人。","ze wu pang dai"],[160,"同舟共济",13,"大家坐一条船过河。比喻在艰险的处境中团结互助，共同战胜困难。","tong zhou gong ji"],[161,"明察秋毫",13,"指人目光敏锐，任何细小的事物都能看得很清楚，现多形容人能洞察事理。","ming cha qiu hao"],[162,"生机勃勃",13,"形容自然界充满生命力。或社会生活活跃。","sheng ji bo bo"],[163,"夸夸其谈",13,"形容说话浮夸不切实际。贬义词。","kua kua qi tan"],[164,"因循守旧",13,"死守老一套，不图更新。贬义。","yin xun shou jiu"],[165,"波澜壮阔",13,"比喻声势雄壮或规模巨大。","bo lan zhuang kuo"],[166,"杀鸡取卵",13,"也说杀鸡取蛋。比喻只顾眼前微小的好处而损害长远的利益。卵","sha ji qu luan"],[167,"高枕无忧",13,"比喻平安无事，不用担忧，也比喻放松警惕。","gao zhen wu you"],[168,"引人入胜",13,"景物或文艺作品吸引人。","yin ren ru sheng"],[169,"入木三分",13,"形容书法极有笔力。现多比喻分析问题很深刻。","ru mu san fen"],[170,"如影随形",13,"好像影子老是跟着身体一样，比喻两个人常在一起，十分亲密。","ru ying sui xing"],[171,"妙趣横生",13,"形容人的谈吐、诗文等充满了美妙的意趣或洋溢着美妙的意趣。","miao qu heng sheng"],[172,"于事无补",13,"对事物的做法或应对方法不能起到作用，对事情毫无补益。","yu shi wu bu"],[173,"水乳交融",13,"水和乳汁融合在一起，比喻关系非常融洽或结合十分紧密。","shui ru jiao rong"],[174,"始终如一",13,"指人能坚持，做事从不间断。","shi zhong ru yi"],[175,"休戚相关",13,"形容关系密切，利害一致。休；喜悦。戚","xiu qi xiang guan"],[176,"唾手可得",13,"比喻极容易得到。","tuo shou ke de"],[177,"高瞻远瞩",13,"形容眼光远大。","gao zhan yuan zhu"],[178,"矢志不渝",13,"发誓立志不会改变，表示永远不变心。","shi zhi bu yu"],[179,"微不足道",13,"非常藐小，不值得一提。","wei bu zu dao"],[180,"革故鼎新",13,"旧指朝政变革或改朝换代。现泛指除去旧的，建立新的。","ge gu ding xin"],[181,"急功近利",13,"急于追求眼前的成效和利益。","ji gong jin li"],[182,"殚精竭虑",13,"使尽了精力，费尽了心思。","dan jing jie lv"],[183,"格格不入",13,"形容彼此不协调，不相容。多用来形容思想、感情、言论等。","ge ge bu ru"],[184,"千姿百态",12,"形容姿态多种多样，各不相同。","qian zi bai tai"],[185,"光怪陆离",12,"形容奇形怪状，五颜六色，现象奇特，也形容事物离奇多变。不能用来形容人。","guang guai lu li"],[186,"见仁见智",12,"对同一个问题，不同的人从不同的立场或角度有不同的看法。","jian ren jian zhi"],[187,"不屑一顾",12,"认为不值得一看。形容极端轻视。","bu xie yi gu"],[188,"沧海桑田",12,"后用沧海桑田比喻世事变化很大。","cang hai sang tian"],[189,"不以为然",12,"不认为是对的。表示不同意或否定。","bu yi wei ran"],[190,"今非昔比",12,"指现在不是过去能比得上的。多指形势等发生了巨大的变化，且多指好的变化。","jin fei xi bi"],[191,"任重道远",12,"担子很重，路程遥远。比喻责任重大，需要经过长期的艰苦奋斗。","ren zhong dao yuan"],[192,"同日而语",12,"把不同的人或不同的事放在一起谈论或看待。一般用作否定句或反问句。","tong ri er yu"],[193,"一目了然",12,"一眼就能看得清清楚楚。","yi mu liao ran"],[194,"前所未有",12,"历史上从来没有过。","qian suo wei you"],[195,"分道扬镳",12,"也说分道扬镜。原指分路而行。后多比喻因目标不同而各走各的路。","fen dao yang biao"],[196,"独辟蹊径",12,"比喻独创一种风格或新的方法。独辟蹈径强调过程，独树一帜强调结果。","du pi xi jing"],[197,"视而不见",12,"指不注意，不重视，睁着眼却没看见，也指不理睬，看见了当作没看见。","shi er bu jian"],[198,"一马当先",12,"作战时策马冲锋在前，形容领先或带头。","yi ma dang xian"],[199,"势如破竹",12,"形容作战或工作节节胜利，毫无阻碍。","shi ru po zhu"],[200,"融会贯通",12,"把各方面的知识和道理融化汇合，得到全面透彻的理解。","rong hui guan tong"],[201,"釜底抽薪",12,"比喻从根本上解决问题。","fu di chou xin"],[202,"一步登天",12,"比喻一下子就达到很高的境界或程度。也用来比喻人突然得志，爬上高位。","yi bu deng tian"],[203,"大张旗鼓",12,"形容进攻的声势和规模很大。也形容群众活动声势和规模很大。","da zhang qi gu"],[204,"珠联壁合",12,"比喻杰出的人才或美好的事物聚集在一起。","zhu lian bi he"],[205,"功亏一篑",12,"比喻做事情只差最后一步，没能完成.","gong kui yi kui"],[206,"功败垂成",12,"指事情接近成功的时候却遭到了失败。","gong bai chui cheng"],[207,"明哲保身",12,"明智的人善于保全自己。现指因怕连累自己而回避原则斗争的处世态度。多含贬义。","ming zhe bao shen"],[208,"耳熟能详",12,"指听得多了，能够说得很清楚、很详细。","er shu neng xiang"],[209,"醍酮灌顶",12,"比喻听了高明的意见使人受到很大启发。也形容清凉舒适。","ti tong guan ding"],[210,"唇齿相依",12,"比喻双方关系密切。相互依存。","chun chi xiang yi"],[211,"心无旁鹜",12,"旁：另外的：骛：追求。心思没有另外的追求，形容心思集中，专心致志。","xin wu pang wu"],[212,"不计其数",12,"无法计算数目，形容极多。","bu ji qi shu"],[213,"轰轰烈烈",12,"状态词。形容气魄雄伟，声势浩大。","hong hong lie lie"],[214,"风靡一时",12,"形容一种事物在一个时期内非常风行。","feng mi yi shi"],[215,"推波助澜",12,"比喻从旁助长或推动事物( 多指坏的事物) 的发展，扩大声势或影响。","tui bo zhu lan"],[216,"润物无声",12,"指有大胸怀者，做了贡献而不张扬，默默奉献。","run wu wu sheng"],[217,"沧海一粟",12,"比喻非常渺小。粟( sù )。","cang hai yi su"],[218,"脱胎换骨",12,"比喻重新做人。","tuo tai huan gu"],[219,"当务之急",12,"当前任务中最急切要办的事。","dang wu zhi ji"],[220,"越俎代庭",12,"后比喻越权办事或包办代替。越：超过。","yue zu dai ting"],[221,"如数家珍",12,"像数自己家里的珍宝一样，形容对列举的事物或叙述的故事十分熟悉。","ru shu jia zhen"],[222,"信手拈来",12,"指写文章时能自由纯熟地选用词语或应用典故，用不着怎么思考。","xin shou nian lai"],[223,"耳目一新",12,"听到的、看到的都跟以前不一样，感到很新鲜。","er mu yi xin"],[224,"囫图吞枣",12,"比喻笼统地接受，不加分析，食而不化。","hu tu tun zao"],[225,"深入人心",12,"指理论、学说、政策等为人们深切了解和信服。","shen ru ren xin"],[226,"齐头并进",12,"不分先后地一齐前进或同时进行。","qi tou bing jin"],[227,"饮鸩止渴",11,"比喻用错误的办法来解决眼前的困难而不顾严重后果。","yin zhen zhi ke"],[228,"难以为继",11,"难于继续下去。","nan yi wei ji"],[229,"活灵活现",11,"形容神情逼真，使人感到好像亲眼看到一般。指说话、表演等。","huo ling huo xian"],[230,"烟消云散",11,"比喻消失得无影无踪。","yan xiao yun san"],[231,"闻名遐迩",11,"遐：远：迩：近。形容名声很大，远近都知道。","wen ming xia er"],[232,"空中楼阁",11,"指海市厨楼，多用来比喻虚幻的事物或脱离实际的理论、计划等。","kong zhong lou ge"],[233,"独占鳌头",11,"比喻占首位或获得第一名。","du zhan ao tou"],[234,"无懈可击",11,"没有可以被攻击或挑剔的漏洞。形容十分严密。","wu xie ke ji"],[235,"有条不紊",11,"有条理，有次序，一点儿不乱。","you tiao bu wen"],[236,"空穴来风",11,"比喻流言、消息的传播不是完全没有原因的。","kong xue lai feng"],[237,"掩耳盗铃",11,"比喻自己欺骗自己，明明掩盖不住的事情偏要想法子掩盖。","yan er dao ling"],[238,"异彩纷呈",11,"比喻突出的成就或表现纷纷呈现。","yi cai fen cheng"],[239,"居安思危",11,"虽然处在平安的环境里，也想到有出现危险的可能。指有应付意外事件的思想准备。","ju an si wei"],[240,"妄自菲薄",11,"过分看不起自己。形容自卑心理。","wang zi fei bo"],[241,"蒸蒸日上",11,"形容事业一天天向上发展。","zheng zheng ri shang"],[242,"刻舟求剑",11,"比喻不懂事物已发展变化而仍静止地看问题。","ke zhou qiu jian"],[243,"一无是处",11,"没有一点儿对的或好的地方。","yi wu shi chu"],[244,"包罗万象",11,"内容丰富，应有尽有","bao luo wan xiang"],[245,"翻天覆地",11,"也说天翻地覆。形容变化巨大而彻底。","fan tian fu di"],[246,"出类拔萃",11,"超出同类之上。可用于人，也可用于物。用于人时，多指才干、实力、品行超群。","chu lei ba cui"],[247,"防患未然",11,"在祸患发生之前就加以预防。","fang huan wei ran"],[248,"鬼斧神工",11,"形容事物神奇巧妙，不是人力所能达到的( 一般指大自然造就的)","gui fu shen gong"],[249,"登堂入室",11,"比喻学问或技能从浅到深，达到很高的水平。","deng tang ru shi"],[250,"毋庸讳言",11,"指用不着隐讳，可以直说的内容。","wu yong hui yan"],[251,"千篇一律",11,"指文章公式化。也比喻办事按一个格式，非常机械。也泛指事物形式陈旧呆板。","qian pian yi lv"],[252,"匪夷所思",11,"指言谈行动离奇古怪，不是一般人根据常情所能想象的。","fei yi suo si"],[253,"不绝如缕",11,"多形容局面危急或声音、气息等低沉微弱、时断时续。","bu jue ru lv"],[254,"炙手可热",11,"比喻气焰很盛，权势很大。经常被媒体误用为某人或某事很红火，名气大。","zhi shou ke re"],[255,"坚不可摧",11,"非常坚固，摧毁不了。","jian bu ke cui"],[256,"鞭辟入里",11,"形容作学问切实，也形容分析透彻，切中要害。","bian pi ru li"],[257,"守株待兔",11,"原比喻希图不经过努力而得到成功的侥幸心理。现也比喻死守狭隘经验。","shou zhu dai tu"],[258,"绝无仅有",11,"只有一个，再没有别的。形容非常少有、极为稀有。","jue wu jin you"],[259,"天差地别",11,"比喻差别极大。","tian cha di bie"],[260,"卷土重来",11,"比喻失败之后，重新恢复势力。一般含贬义。","juan tu chong lai"],[261,"以偏概全",11,"用片面的观点看待整体问题。","yi pian gai quan"],[262,"得天独厚",11,"具备的条件特别优越，所处环境特别好。","de tian du hou"],[263,"举重若轻",11,"比喻能力强，能够轻松地胜任繁重的工作或处理困难的问题。","ju zhong ruo qing"],[264,"蔚然成风",11,"指一件事情逐渐发展盛行，形成一种良好风气。褒义词。","wei ran cheng feng"],[265,"置之不理",11,"放在一边，不理不睬。","zhi zhi bu li"],[266,"跌宕起伏",11,"形容事物多变，不稳定，也比喻音乐音调忽高忽低，有时也形容心情。","die dang qi fu"],[267,"费尽心机",11,"挖空心思，想尽办法。贬义词。","fei jin xin ji"],[268,"耸人听闻",11,"故意夸大或捏造事实，使人听了感到惊异或震动。","song ren ting wen"],[269,"妇孺皆知",11,"妇女和小孩都知道，侧重于非常浅显、简单明了的事物。","fu ru jie zhi"],[270,"猝不及防",11,"事情来得突然，来不及防备。","cu bu ji fang"],[271,"销声匿迹",11,"指隐藏起来，不公开露面。","xiao sheng ni ji"],[272,"出神入化",11,"形容技艺达到了绝妙的境界。","chu shen ru hua"],[273,"自以为是",11,"总以为自己是对的。形容主观，不虚心。","zi yi wei shi"],[274,"轻描淡写",11,"说话写文章把重要问题轻轻带过。含贬义。","qing miao dan xie"],[275,"事与愿违",11,"事实与愿望相反，指原来打算做的事没能做到。","shi yu yuan wei"],[276,"一以贯之",11,"用一个根本性的事理贯通事情的始末或全部的道理。","yi yi guan zhi"],[277,"断章取义",11,"不顾全篇文章或谈话的内容，孤立地取其中的一段。指引用与原意不符。","duan zhang qu yi"],[278,"岌岌可危",11,"形容非常危险，快要倾覆或灭亡。","ji ji ke wei"],[279,"苦心孤诣",11,"指苦心钻研，到了别人所达不到的地步。也指为寻求解决问题的办法而煞费苦心。","ku xin gu yi"],[280,"抱残守缺",10,"守着残缺的东西不放。形容思想守旧，不知变革。贬义词。","bao can shou que"],[281,"寅吃卯粮",10,"比喻指经济困难，入不敷出。中性词。","yin chi mao liang"],[282,"石破天惊",10,"比喻文章议论新奇惊人。","shi po tian jing"],[283,"面目全非",10,"样子完全不同了。形容改变得不成样子。含贬义。","mian mu quan fei"],[284,"林林总总",10,"形容众多。","lin lin zong zong"],[285,"明日黄花",10,"比喻过时的事物或消息。经常被误写做“ 昨日黄花”。","ming ri huang hua"],[286,"因噎废食",10,"比喻要做的事情由于出了点小毛病或怕出问题就索性不去干。","yin ye fei shi"],[287,"熟视无睹",10,"看惯了就象没看见一样。也指看到某种现象，但不关心，只当没有看见。","shu shi wu du"],[288,"箪路蓝缕",10,"形容创业的艰苦。","dan lu lan lv"],[289,"美轮美奂",10,"形容房屋高大华丽。不能用来修饰别的事物。","mei lun mei huan"],[290,"自然白艾",10,"悔恨自己的错误。","zi ran bai ai"],[291,"不约而同",10,"事先没有约定而相互一致。","bu yue er tong"],[292,"危言耸听",10,"指故意说些夸大的吓人的话，使人惊疑震动。","wei yan song ting"],[293,"夜郎自大",10,"比喻人无知而又狂妄自大。","ye lang zi da"],[294,"妄自尊大",10,"形容狂妄自大，不把别人放眼里。","wang zi zun da"],[295,"偷梁换柱",10,"比喻暗中玩弄手法，以假代真，以劣代优。","tou liang huan zhu"],[296,"异曲同工",10,"比喻话的说法不一而用意相同，或一件事情的做法不同而都巧妙地达到目的。","yi qu tong gong"],[297,"不足挂齿",10,"表示不值得一提。","bu zu gua chi"],[298,"炉火纯青",10,"比喻技艺或学问修养达到精粹完美的境界或做事情，达到纯熟的地步。","lu huo chun qing"],[299,"应接不暇",10,"形容景物繁多，来不及观赏","ying jie bu xia"],[300,"刚愎自用",10,"十分固执自信，不考虑别人的意见。贬义。","gang bi zi yong"],[301,"触类旁通",10,"掌握了某一事物的知识或规律，进而推知同类事物的知识或规律。指学习。","chu lei pang tong"],[302,"粉墨登场",10,"指坏人乔装打扮，登上政治舞台，贬义词，不是一般上场、登台的意思。","fen mo deng chang"],[303,"扬汤止沸",10,"比喻办法不彻底，不能从根本上解决问题。","yang tang zhi fei"],[304,"优柔寡断",10,"指做事犹豫，缺乏决断。","you rou gua duan"],[305,"沽名钓誉",10,"用某种不正当的手段捞取名誉。","gu ming diao yu"],[306,"老生常谈",10,"比喻人们听惯了的没有新鲜意思的话。","lao sheng chang tan"],[307,"相濡以沫",10,"比喻一同在困难的处境里，用微薄的力量互相帮助。多含褒义。","xiang ru yi mo"],[308,"孜孜不倦",10,"指工作或学习勤奋不知疲倦。","zi zi bu juan"],[309,"高屋建瓴",10,"比喻居高临下，不可阻遏的形势。现指对事物把握全面，了解透彻。","gao wu jian ling"],[310,"阳春白雪",10,"比喻高深的不通俗的文学艺术。","yang chun bai xue"],[311,"孤芳自赏",10,"自命清高、自我欣赏。贬义词。","gu fang zi shang"],[312,"本末倒置",10,"比喻把主要的和次要的、本质和非本质的关系弄颠倒了.","ben mo dao zhi"],[313,"并行不悖",10,"可以共存，而不相互违背。可同时进行，不相冲突。","bing xing bu bei"],[314,"无稽之谈",10,"没有根据的说法。","wu ji zhi tan"],[315,"风生水起",10,"形容事情做得有生气，蓬勃兴旺。","feng sheng shui qi"],[316,"从容不迫",10,"形容态度镇静，不慌不忙，从容镇定。","cong rong bu po"],[317,"吹毛求疵",10,"比喻故意挑剔别人的缺点，寻找差错，","chui mao qiu ci"],[318,"俯拾皆是",10,"只要低下头来捡取，到处都是，形容多而易得。","fu shi jie shi"],[319,"群策群力",10,"指发挥集体的作用，大家一起来想办法，贡献力量。","qun ce qun li"],[320,"独具匠心",10,"具有独到的灵巧的心思。多指在技巧和艺术方面的创造性。","du ju jiang xin"],[321,"披沙拣金",10,"比喻从大量的东西中选取精华。","pi sha jian jin"],[322,"各抒己见",10,"各人充分发表自己的意见。","ge shu ji jian"],[323,"惊心动魄",10,"使人感受极深，震动极大。后常形容使人惊骇紧张到极点。","jing xin dong po"],[324,"画地为牢",10,"比喻只许在指定的范围内活动。","hua di wei lao"],[325,"骑虎难下",10,"比喻做一件事情进行下去有困难，但情况又不允许中途停止，陷于进退两难的境地。","qi hu nan xia"],[326,"抑扬顿挫",10,"指声音的高低起伏和停顿转折。","yi yang dun cuo"],[327,"画饼充饥",10,"比喻用空想来安慰自己。","hua bing chong ji"],[328,"盛气凌人",10,"形容傲慢自大，气势逼人。","sheng qi ling ren"],[329,"生生不息",10,"事物不断繁衍生长，永不停止。","sheng sheng bu xi"],[330,"亘古不变",10,"从古至今永远也不会改变。","gen gu bu bian"],[331,"见微知著",10,"见到事情的苗头，就能知道它的实质和发展趋势。","jian wei zhi zhu"],[332,"正本清源",10,"比喻从根本上加以整顿清理","zheng ben qing yuan"],[333,"坚忍不拔",10,"形容意志坚定，不可动摇。","jian ren bu ba"],[334,"络绎不绝",10,"形容人、马、车、船等连续不断。","luo yi bu jue"],[335,"充耳不闻",10,"形容有意不听别人的意见。含贬义。","chong er bu wen"],[336,"差强人意",10,"马马虎虎还凑合，勉强使人满意。不是“ 很差，不能让人满意” 的意思。","cha qiang ren yi"],[337,"别出心裁",10,"表示与众不同的新观念或办法。侧重观念、思路与众不同。","bie chu xin cai"],[338,"集思广益",10,"指集中群众的智慧，广泛吸收有益的意见。","ji si guang yi"],[339,"一叶障目",10,"指看不到事物的全貌。","yi ye zhang mu"],[340,"气势磅礴",10,"形容气势雄伟壮大。","qi shi pang bo"],[341,"蜻蜓点水",10,"比喻做事肤浅不深入。","qing ting dian shui"],[342,"哗众取宠",10,"以浮夸的言论迎合群众，骗取群众的信赖和支持。","hua zhong qu chong"],[343,"一意孤行",10,"指不接受别人的劝告，顽固地按照自己的主观想法去做。","yi yi gu xing"],[344,"不可一世",10,"认为当代的人都不行。形容目空一切狂妄自大到了极点。","bu ke yi shi"],[345,"荒诞不经",10,"形容言论荒谬，不合情理。","huang dan bu jing"],[346,"侃侃而谈",10,"理直气壮、从容不迫地说话。强调说话人的神志。褒义词。","kan kan er tan"],[347,"妙笔生花",10,"比喻有杰出的写作才能。","miao bi sheng hua"],[348,"移花接木",10,"比喻暗中用手段更换人或事物来欺骗别人。","yi hua jie mu"],[349,"信口开河",10,"比喻随口乱说一气。贬义词。","xin kou kai he"],[350,"死灰复燃",10,"原比喻失势的人重新得势。现场比喻已经消失了的恶势力又重新活动起来。贬义词。","si hui fu ran"],[351,"不负众望",10,"指为人所信服，很争气，不辜负大家的期望。","bu fu zhong wang"],[352,"人迹罕至",10,"指偏僻荒凉的地方很少有人来过。侧重来的人少，比如人少偏僻的地方偏远的地方。","ren ji han zhi"],[353,"口若悬河",10,"形容能说会辨，说起来没个完。褒义。","kou ruo xuan he"],[354,"始料未及",10,"最初的设想没有按照预期的目标发展，让人感到突然和意外的惊讶。","shi liao wei ji"],[355,"无可非议",10,"没有什么可以指责的。表示做得妥当。","wu ke fei yi"],[356,"巧夺天工",10,"指人工的精巧胜过天然制成，形容技艺十分高超。","qiao duo tian gong"],[357,"滥竽充数",10,"比喻无本领的冒充有本领，次货冒充好货。","lan yu chong shu"],[358,"贻笑大方",10,"指让内行人笑话。多为自谦的说法。注意“ 贻笑大方” 本就有“ 让人笑话” 的意思。","yi xiao da fang"],[359,"运筹帷幄",10,"指在后方决定作战方案。也泛指主持大计，考虑决策。","yun chou wei wo"],[360,"前功尽弃",10,"以前的功劳全部丢失。也指以前的努力全部白费。","qian gong jin qi"],[361,"出乎意料",10,"出人意料、意想不到。","chu hu yi liao"],[362,"丰衣足食",10,"形容生活富裕。褒义。","feng yi zu shi"],[363,"沉渣泛起",10,"比喻已经绝迹了的腐朽、陈旧事物又重新出现，贬义词。","chen zha fan qi"],[364,"迥然不同",10,"形容相差得远，很明显不一样。","jiong ran bu tong"],[365,"众口一词",9,"所有的人都说同样的话。","zhong kou yi ci"],[366,"洁身自好",9,"形容在污浊的环境中，保持自身清白，不同流合污。也指顾惜尊重自己。","jie shen zi hao"],[367,"一脉相承",9,"从同一血统、派别世代相承流传下来。比喻某种思想、行为或学说之间有维承关系。","yi mai xiang cheng"],[368,"继往开来",9,"继承前人的事业，开辟未来的道路。","ji wang kai lai"],[369,"前赴后继",9,"前面的冲上去了，后面的紧跟上来。形容不断投入战斗，奋勇冲杀向前。","qian fu hou ji"],[370,"只言片语",9,"个别词句或片断的话。","zhi yan pian yu"],[371,"一拍即合",9,"比喻双方很容易一致，也比喻因情意相投或有利害关系，一下子就说到一起。","yi pai ji he"],[372,"危机四伏",9,"到处隐藏着危险的祸根。","wei ji si fu"],[373,"偃旗息鼓",9,"原指行军时隐蔽行踪，不让敌人觉察。比喻事情终止或声势减弱。","yan qi xi gu"],[374,"微言大义",9,"包含在精微语言里的深刻的道理。","wei yan da yi"],[375,"处心积虑",9,"形容蓄谋已久。贬义词。","chu xin ji lv"],[376,"颠扑不破",9,"比喻理论学说完全正确，不会被驳倒推翻。","dian pu bu po"],[377,"拾人牙慧",9,"比喻拾取别人的一言半语当作自己的话。贬义词，","shi ren ya hui"],[378,"以邻为壑",9,"比喻只图自己一方的利益，把困难或祸害转嫁给别人。","yi lin wei he"],[379,"刻骨铭心",9,"形容记忆深刻，永远不忘。","ke gu ming xin"],[380,"煞费苦心",9,"形容费尽心思。中性词。","sha fei ku xin"],[381,"上行下效",9,"上面的人怎么做，下面的人就跟着怎么干。多含贬义。","shang xing xia xiao"],[382,"讳疾忌医",9,"比喻怕人批评而掩饰自己的缺点和错误。","hui ji ji yi"],[383,"穿凿附会",9,"把讲不通的或不相干的道理、事情硬扯在一起进行解释。","chuan zao fu hui"],[384,"管中窥豹",9,"比喻只看到事物的一部分，指所见不全面或略有所得。用法多为贬义。","guan zhong kui bao"],[385,"耳提面命",9,"多指长辈对晚辈、上级对下级等恳切地教导。不是“ 当着面诉说/任命” 的意思。","er ti mian ming"],[386,"盘根错节",9,"比喻事情复杂，纠缠不清。强调各种事物和关系相互交织，纠缠在一起。","pan gen cuo jie"],[387,"纷繁芜杂",9,"形容文章内容芜杂，没有条理，或者是事情杂乱无章，没有头绪。","fen fan wu za"],[388,"怨天尤人",9,"指遇到挫折或出了问题，一味报怨天，责怪别人。","yuan tian you ren"],[389,"浩浩荡荡",9,"形容水势广大的样子。后形容事物的广阔壮大，或前进的人流声势浩大。","hao hao dang dang"],[390,"稍纵即逝",9,"形容时间或机会等很容易流逝。","shao zong ji shi"],[391,"多如牛毛",9,"形容极多。一般指不好的事物。","duo ru niu mao"],[392,"别开生面",9,"比喻另外开辟一种新局面或创造出一种新的风格式样。","bie kai sheng mian"],[393,"车水马龙",9,"形容来往车马很多，连续不断的热闹情景。","che shui ma long"],[394,"目空一切",9,"什么都不放在眼里。形容极端骄傲自大。","mu kong yi qie"],[395,"骇人听闻",9,"使人听了非常吃惊、害怕。","hai ren ting wen"],[396,"卓尔不群",9,"才干、德行超出寻常，与众不同。一般用来修饰人。","zhuo er bu qun"],[397,"自高自大",9,"自以为了不起。","zi gao zi da"],[398,"罄竹难书",9,"指罪行极多。","qing zhu nan shu"],[399,"不以为意",9,"不把它放在心上。表示对人、对事抱轻视态度。","bu yi wei yi"],[400,"望其项背",9,"望见他的颈项和后背，比喻赶得上。通常用作否定句或反问句。","wang qi xiang bei"],[401,"恒河沙数",9,"象恒河里的沙粒一样，无法计算。形容数量极多。","heng he sha shu"],[402,"各执一端",9,"各有各的说法，一般指双方或多方处于具有争论的环境中，各自占据事实的一面。","ge zhi yi duan"],[403,"阿谀奉承",9,"曲从拍马，迎合别人，蝎力向人讨好。","e yu feng cheng"],[404,"烂熟于心",9,"形容非常熟悉。","lan shu yu xin"],[405,"前仆后继",9,"前面的倒下了，后面的紧跟上去。形容斗争的英勇壮烈。","qian pu hou ji"],[406,"无所作为",9,"没有做出任何成绩。指工作中安于现状，缺乏创造性。","wu suo zuo wei"],[407,"东山再起",9,"指再度出任要职。也比喻失势之后又重新得势。一般是褒义。","dong shan zai qi"],[408,"锦衣玉食",9,"精美的衣食。形容豪华奢侈的生活。","jin yi yu shi"],[409,"连绵不断",9,"形容连续不止，从不中断。","lian mian bu duan"],[410,"身体力行",9,"亲身体验，努力实行。褒义词。","shen ti li xing"],[411,"一步到位",9,"一步就能把事情解决。强调“ 到位” , 即可以把事情解决。","yi bu dao wei"],[412,"生搬硬套",9,"不顾实际情况，机械地运用别人的经验，照抄别人的办法。","sheng ban ying tao"],[413,"荣辱与共",9,"互相照应，共同分享荣耀和承担耻辱。","rong ru yu gong"],[414,"乏善可陈",9,"说不出有什么优点，没有什么好称道的。含有不满之意。","fa shan ke chen"],[415,"统筹兼顾",9,"统一筹划，全面照顾。","tong chou jian gu"],[416,"亡羊补牢",9,"比喻出了问题以后想办法补救，可以防止继续受损失。中性词。","wang yang bu lao"],[417,"跃然纸上",9,"形容文学作品叙述描写真实生动。","yue ran zhi shang"],[418,"噤若寒蝉",9,"比喻因害怕有所顾虑而不敢说话。不是怕冷。","jin ruo han chan"],[419,"投鼠忌器",9,"比喻做事有顾忌，不敢放手干。","tou shu ji qi"],[420,"垂头丧气",9,"形容因失败或不顺利而情绪低落、萎蘑不振的样子。","chui tou sang qi"],[421,"孜孜以求",9,"不知疲倦地探求。","zi zi yi qiu"],[422,"步履维艰",9,"多指行走困难，行动不方便。也指创业经营艰辛，事物发展困难。","bu lv wei jian"],[423,"一筹莫展",9,"一点计策也施展不出，一点办法也想不出来。","yi chou mo zhan"],[424,"门庭冷落",9,"形容十分冷落，宾客稀少。","men ting leng luo"],[425,"枉费心机",9,"白费心思。贬义词。","wang fei xin ji"],[426,"薪尽火传",9,"比喻师父传业于弟子，一代代地传下去。","xin jin huo chuan"],[427,"各持己见",9,"每个人都坚持自己的意见。","ge chi ji jian"],[428,"不刊之论",9,"指正确的、不可修改的言论。","bu kan zhi lun"],[429,"去粗取精",9,"除去杂质，留取精华。","qu cu qu jing"],[430,"去伪存真",9,"除掉虚假的，留下真实的。","qu wei cun zhen"],[431,"雪中送炭",9,"比喻在别人急需时给以物质上或精神上的帮助。","xue zhong song tan"],[432,"以管窥天",9,"通过竹管子的孔看天，比喻见闻狭隘或看事片面。","yi guan kui tian"],[433,"寸步难行",9,"形容走路困难。也比喻处境艰难。","cun bu nan xing"],[434,"齐心协力",8,"形容认识一致，共同努力。","qi xin xie li"],[435,"捷足先登",8,"比喻行动快的人先达到目的或先得到所求的东西。","jie zu xian deng"],[436,"一板一眼",8,"比喻言语、行动有条理或合规矩。有时也比喻做事死板，不懂得灵活掌握。","yi ban yi yan"],[437,"顺水推舟",8,"比喻顺着某个趋势或某种方便说话办事。","shun shui tui zhou"],[438,"固若金汤",8,"形容防守非常坚固。","gu ruo jin tang"],[439,"不孚众望",8,"不能使大家信服，未符合大家的期望。","bu fu zhong wang"],[440,"川流不息",8,"一般形容行人、车马等象水流一样连续不断。","chuan liu bu xi"],[441,"一唱百和",8,"形容附和的人极多。一般含褒义。","yi chang bai he"],[442,"支离破碎",8,"形容事物零散破碎，不完整。","zhi li po sui"],[443,"体无完肤",8,"全身的皮肤没有一块好的。形容遍体都是伤。也比喻理由全部被驳倒。","ti wu wan fu"],[444,"万人空巷",8,"多形容庆祝、欢迎等盛况。","wan ren kong xiang"],[445,"落井下石",8,"比喻乘人有危难时加以陷害。","luo jing xia shi"],[446,"掷地有声",8,"比喻文章文辞优美，语言铿锵有力。现也形容落实力度大。","zhi di you sheng"],[447,"高谈阔论",8,"多指不着边际地大发议论。贬义。","gao tan kuo lun"],[448,"无出其右",8,"没有能超过他的。多用来说人。","wu chu qi you"],[449,"洞若观火",8,"形容对事物观察得清楚明白。","dong ruo guan huo"],[450,"无可争辩",8,"没有什么可争辩的。表示确实无疑。","wu ke zheng bian"],[451,"水中捞月",8,"比喻去做根本做不到的事情，只能白费力气。","shui zhong lao yue"],[452,"口口相传",8,"指不著文字，口口相传。","kou kou xiang chuan"],[453,"急如星火",8,"形容非常急促紧迫。","ji ru xing huo"],[454,"百折不挠",8,"比喻意志坚强，品节刚毅。","bai zhe bu nao"],[455,"触目惊心",8,"看见某种严重情况而内心震惊。形容事态严重，引起轰动。","chu mu jing xin"],[456,"矫揉造作",8,"比喻故意做作，不自然。","jiao rou zao zuo"],[457,"声势浩大",8,"声威和气势非常壮大。","sheng shi hao da"],[458,"助纣为虐",8,"比喻帮助坏人干坏事。","zhu zhou wei nve"],[459,"每况愈下",8,"指情况越来越坏。","mei kuang yu xia"],[460,"今不如昔",8,"指今天不如过去。","jin bu ru xi"],[461,"不闻不问",8,"人家说的不听，也不主动去问。形容对事情不关心。中性。","bu wen bu wen"],[462,"颇有微词",8,"有很多( 隐晦的) 批评和不满的话语，表示对某人某事不满。程度比较轻。","po you wei ci"],[463,"精妙绝伦",8,"精致巧妙，独一无二，没有可以相比的。","jing miao jue lun"],[464,"金玉良言",8,"比喻可贵面有价值的劝告。","jin yu liang yan"],[465,"改弦更张",8,"比喻改革制度或变更计划、方法。","gai xian geng zhang"],[466,"青黄不接",8,"旧粮已经吃完，新粮尚未接上。也比喻人才或物力前后接不上。","qing huang bu jie"],[467,"身先士卒",8,"作战时将领亲自带头，冲在士兵前面。现在也用来比喻领导带头，褒义词。","shen xian shi zu"],[468,"滔滔不绝",8,"对话很多，说起来没个完。中性词。","tao tao bu jue"],[469,"五光十色",8,"形容色彩鲜艳，花样繁多。","wu guang shi se"],[470,"目无全牛",8,"指人的技艺高超，得心应手。形容技艺已经到达非常纯熟的地步。","mu wu quan niu"],[471,"不可理喻",8,"形容蛮横或固执，不讲道理。贬义词","bu ke li yu"],[472,"无所事事",8,"闲着什么也不干。贬义。","wu suo shi shi"],[473,"门庭若市",8,"现形容来的人很多，非常热闹。","men ting ruo shi"],[474,"互利共荣",8,"彼此合作，共同分享利益和荣耀。","hu li gong rong"],[475,"燃眉之急",8,"火烧眉毛那样紧急。形容非常急迫的事情。","ran mei zhi ji"],[476,"异口同声",8,"不同的人说同样的话，形容意见一致。","yi kou tong sheng"],[477,"具体而微",8,"指事物的各个组成部分大体都有了，不过形状和规模比较小些。","ju ti er wei"],[478,"为虎作揖",8,"比喻充当恶人的帮凶。","wei hu zuo yi"],[479,"家常便饭",8,"比喻常见的事情。当作名词用。侧重于人们经常接触、感受到，已经熟悉的事物。","jia chang bian fan"],[480,"一鳞半爪",8,"比喻零星片段的事物。","yi lin ban zhao"],[481,"蛛丝马迹",8,"比喻事情所留下的隐约可寻的痕迹和线索。","zhu si ma ji"],[482,"安然无虞",8,"指平安顺利，没有忧患。","an ran wu yu"],[483,"能言善辩",8,"形容能说会道，有辩才。","neng yan shan bian"],[484,"望眼欲穿",8,"眼睛都要望穿了。形容盼望殷切。","wang yan yu chuan"],[485,"翘首以盼",8,"仰着脖子等待着出现，很急切地希望看到某人、某事、某物的出现。","qiao shou yi pan"],[486,"危如累卵",8,"比喻形势非常危险，如同堆起来的蛋，随时都有塌下打碎的可能。","wei ru lei luan"],[487,"改弦易辙",8,"比喻改变原来的方向、计划、办法等。","gai xian yi zhe"],[488,"朝不保夕",8,"形容形势危急，难以预料。","zhao bu bao xi"],[489,"常备不懈",8,"时刻准备着，毫不松懈。","chang bei bu xie"],[490,"夕惕若厉",8,"朝夕戒惧，如临危境，不敢稍懈。形容做事情谨慎小心，不敢怠慢。","xi ti ruo li"],[491,"不易之论",8,"不可更改的言论。形容论断或意见非常正确。","bu yi zhi lun"],[492,"泰然自若",8,"形容在紧急情况下沉着镇定，不慌不乱。","tai ran zi ruo"],[493,"神情自若",8,"神情态度仍和原来一样。","shen qing zi ruo"],[494,"旁若无人",8,"形容态度傲慢，不把别人放在眼里。","pang ruo wu ren"],[495,"冥顽不灵",8,"形容愚昧无知。侧重于说明一个人脑子笨，不知变通，难以开化。","ming wan bu ling"],[496,"混淆是非",8,"故意把正确的说成错误的，把错误的说成正确的。","hun xiao shi fei"],[497,"破旧立新",8,"破除旧的，建立新的。褒义。","po jiu li xin"],[498,"牵强附会",8,"把本来没有某种意义的事物硬说成有某种意义，贬义。","qian qiang fu hui"],[499,"抱薪救火",8,"比喻用错误的方法去消除灾祸，结果使灾祸反而扩大。","bao xin jiu huo"],[500,"言传身教",8,"既用言语来教导，又用行动来示范。对行动起模范作用。","yan chuan shen jiao"],[501,"吉光片羽",8,"比喻残存的珍贵文物。","ji guang pian yu"],[502,"危言危行",8,"说正直的话，做正直的事。指正直的言行。","wei yan wei xing"],[503,"水火不容",8,"相互对立的两件事不能彼此相容，通常形容对立的双方有仇恨或矛盾冲突，","shui huo bu rong"],[504,"坚如磐石",8,"像大石头一样坚固。形容不能动摇。","jian ru pan shi"],[505,"文不加点",7,"文章一气呵成，无须修改，形容文思敏捷，写作技巧纯熟。","wen bu jia dian"],[506,"置之度外",7,"指不把个人的生死利害等放在心上。褒义。","zhi zhi du wai"],[507,"侧目而视",7,"斜着眼睛看人，形容憎恨或又怕又愤恨。","ce mu er shi"],[508,"临阵磨枪",7,"比喻事到临头才匆忙准备。","lin zhen mo qiang"],[509,"窥斑见豹",7,"比喻只看到事物的一部分，指所见不全面或略有所得。","kui ban jian bao"],[510,"一孔见天",7,"形容看问题的角度单一、范围狭小。","yi kong jian tian"],[511,"摩肩接踵",7,"肩碰着肩，脚碰着脚。形容人多拥挤。","mo jian jie zhong"],[512,"奇观异彩",7,"指的是奇特的景观或表现。","qi guan yi cai"],[513,"倾巢而出",7,"比喻敌人出动全部兵力进行侵扰。","qing chao er chu"],[514,"人头攒动",7,"一般用于形容某些地方人口密度较大。其程度不如人山人海高。","ren tou cuan dong"],[515,"豆古长青",7,"指长久不衰。","dou gu chang qing"],[516,"刮目相看",7,"指别人已有进步，不能再用老眼光去看他。","gua mu xiang kan"],[517,"青眼有加",7,"表示对人的赏识或者喜爱。","qing yan you jia"],[518,"另眼相看",7,"指看待某个人不同一般。也指不被重视的人得到重视。","ling yan xiang kan"],[519,"大言不惭",7,"说大话而毫不感到难为情。贬义词。","da yan bu can"],[520,"史无前例",7,"历史上从来没有过的事。指前所未有。","shi wu qian li"],[521,"毁于一日",7,"指长期劳动的成果一下子被毁掉。","hui yu yi ri"],[522,"荒谬绝伦",7,"形容事物积极荒唐、不合情理。","huang miu jue lun"],[523,"愤世嫉俗",7,"对不合理的社会和习俗表示愤恨憎恶。","fen shi ji su"],[524,"怪诞离奇",7,"指事物奇怪、古怪、匪夷所思。","guai dan li qi"],[525,"影影绰绰",7,"形容人或物模模糊糊，不真切。","ying ying chuo chuo"],[526,"疑窦重重",7,"可疑的地方很多。","yi dou chong chong"],[527,"熟能生巧",7,"熟练了，就能找到窍门，形容做事非常熟练。","shu neng sheng qiao"],[528,"妙言要道",7,"中肯的名言。深微的道理。","miao yan yao dao"],[529,"不经之谈",7,"荒诞无稽、没有根据的话。","bu jing zhi tan"],[530,"至理名言",7,"最正确的道理，最精辟的言论。","zhi li ming yan"],[531,"天造地设",7,"指事物自然形成，合乎理想，不必再加人工。","tian zao di she"],[532,"热火朝天",7,"形容群众性的活动情绪热烈，气氛高涨，就象炽热的火焰照天燃烧一样。","re huo chao tian"],[533,"瓜熟蒂落",7,"指时机一旦成熟，事情自然成功。","gua shu di luo"],[534,"不忍卒读",7,"不忍心读完。形容文章内容悲惨动人，令人涕泪满面。","bu ren zu du"],[535,"事必躬亲",7,"不论什么事一定要亲自去做，亲自过问。","shi bi gong qin"],[536,"文过饰非",7,"用漂亮的言词掩饰自己的过失和错误。","wen guo shi fei"],[537,"安之若素",7,"形容面对困境毫不介意，和往常一样，心情平静。","an zhi ruo su"],[538,"栉风沐雨",7,"形容人经常在外面不顾风雨地辛苦奔波。","zhi feng mu yu"],[539,"如虎添翼",7,"比喻强大的事物更加强大了。","ru hu tian yi"],[540,"超脱尘俗",7,"是超越常规的礼法习惯。","chao tuo chen su"],[541,"倚马可待",7,"倚在即将出发的战马前起草文件，可以等着完稿。比喻文章写得快。","yi ma ke dai"],[542,"文过其实",7,"形容文辞浮夸不切实际。","wen guo qi shi"],[543,"临渴掘井",7,"比喻事先没有准备，临时才想办法。","lin ke jue jing"],[544,"和光同尘",7,"指不露锋芒，与世无争的消极处世态度。也比喻同流合污。贬义词。","he guang tong chen"],[545,"迂回曲折",7,"弯弯曲曲，绕来绕去。常比喻事物发展的曲折性。","yu hui qu zhe"],[546,"麻木不仁",7,"比喻对外界事物反应迟钝或漠不关心。贬义。","ma mu bu ren"],[547,"失枝脱节",7,"比喻因关照呼应不周而造成失误或差错。不是整体中有部分缺失的意思。","shi zhi tuo jie"],[548,"不尽相同",7,"不完全一样。","bu jin xiang tong"],[549,"寥若晨星",7,"稀少得好象早晨的星星。指为数极少。","liao ruo chen xing"],[550,"自行其是",7,"指做自己认为对的事，不考虑别人的意见。","zi xing qi shi"],[551,"一挥而就",7,"形容写字、写文章、画画快。","yi hui er jiu"],[552,"信口雌黄",7,"指不顾事实，随口乱说或妄作评论。","xin kou ci huang"],[553,"坐井观天",7,"比喻眼界小，见识少。","zuo jing guan tian"],[554,"力透纸背",7,"形容书法刚劲有力。也形容诗文立意深刻，词语精练。褒义词。","li tou zhi bei"],[555,"汹涌澎湃",7,"形容声势浩大，不可阻挡。","xiong yong peng pai"],[556,"名声大噪",7,"由于名声高而引起人们的极大关注。","ming sheng da zao"],[557,"惨淡经营",7,"指在困难的境况中艰苦地从事某种事业。褒义，","can dan jing ying"],[558,"病入膏肓",7,"形容病情十分严重，无法医治。比喻事情到了无法挽救的地步。","bing ru gao huang"],[559,"惊鸿一瞥",7,"多形容女性轻盈如雁之身姿。","jing hong yi pie"],[560,"怙恶不谄",7,"坚持作恶，不肯悔改。","hu e bu chan"],[561,"曲尽其妙",7,"把其中微妙之处委婉细致地充分表达出来。形容表达能力很强。","qu jin qi miao"],[562,"百思不解",7,"百般思索也无法理解。指对事情感到意外，不可思议。","bai si bu jie"],[563,"莫名其妙",7,"说不出其中的奥妙。指发生的事情很奇怪，说不出解释的道理来。","mo ming qi miao"],[564,"趋炎附势",7,"奉承和依附有权有势的人。","qu yan fu shi"],[565,"精挑细琢",7,"比喻做事情精益求精。","jing tiao xi zuo"],[566,"锦上添花",7,"比喻好上加好，美上添美。","jin shang tian hua"],[567,"迎刃而解",7,"比喻主要问题解决了，其他有关的问题就很容易解决。","ying ren er jie"],[568,"千奇百怪",7,"形容事物奇异而多样。","qian qi bai guai"],[569,"焕然一新",7,"指改变旧日的面貌，呈现出崭新的样子。","huan ran yi xin"],[570,"束手无策",7,"形容遇到问题毫无解决的办法。","shu shou wu ce"],[571,"全神贯注",7,"形容注意力高度集中。","quan shen guan zhu"],[572,"源源不断",7,"形容接连不断。","yuan yuan bu duan"],[573,"千方百计",7,"想尽一切办法，用尽一切计谋。","qian fang bai ji"],[574,"柳岸花明",7,"比喻在困难中遇到转机。","liu an hua ming"],[575,"道听途说",7,"意思是路上听来的、路上传播的话。泛指没有根据的传闻。含贬义。","dao ting tu shuo"],[576,"昭然若揭",7,"形容真相完全暴露出来。","zhao ran ruo jie"],[578,"大同小异",7,"意思是指大体相同，略有差异。","da tong xiao yi"],[579,"数不胜数",7,"意思是数都数不过来。形容数量极多，很难计算。","shu bu sheng shu"],[582,"过犹不及",7,"意思是事情做得过头，就跟做得不够一样，都是不合适的。","guo you bu ji"],[583,"得不偿失",7,"意思是所得的利益抵偿不了所受的损失。","de bu chang shi"],[584,"春风化雨",7,"意思是指适宜草木生长的风雨，多用在人或事，比喻良好的熏陶和教育。","chun feng hua yu"],[585,"急于求成",7,"形容急着要取得成功。含贬义。","ji yu qiu cheng"],[586,"举一反三",7,"意思是从懂得的一点，类推而知道其它的。含褒义。","ju yi fan san"],[588,"合情合理",7,"符合情理。","he qing he li"],[589,"来势汹汹",7,"意思是动作或事物到来的气势很厉害。","lai shi xiong xiong"],[590,"不分轩轻",7,"不分高下、轻重。比喻对待二者的态度或看法差不多。","bu fen xuan qing"],[591,"条分缕析",7,"一条一缕地分析。形容分析得细密清楚而有条理。","tiao fen lv xi"],[592,"左支右绌",7,"指力量不足，应付了这一方面，那一方面又有了问题。","zuo zhi you chu"],[593,"独木难支",7,"意思是一根木头支持不住高大的房子，比喻一个人的力量难以支撑全局。","du mu nan zhi"],[594,"矫枉过正",7,"把弯曲的东西扭直，结果过了头，又歪向另一方。比喻纠正错误超过了应有的限度。","jiao wang guo zheng"],[596,"近在咫尺",7,"形容距离很近。咫( zhǐ ) : 古代长度名，周制八寸，合现在市尺六寸二厘三分。","jin zai zhi chi"],[597,"街谈巷议",7,"大街小巷里人们的议论。指民间的舆论。","jie tan xiang yi"],[598,"根治病灶",7,"彻底治疗由病原微生物病变引起的疾病。","gen zhi bing zao"],[599,"爱莫能助",7,"指有心帮助，但因力量不够或条件所限而做不到。","ai mo neng zhu"],[600,"大放异彩",7,"闪耀着无比灿烂的光辉，散发出奇异的光彩或色彩。比喻有着优异的表现","da fang yi cai"],[601,"恍如隔世",7,"仿佛隔了一世。多感慨因人事变迁很大而感到一切都陌生了。","huang ru ge shi"],[602,"口耳相传",7,"口说耳听地往下传授。","kou er xiang chuan"],[603,"手足无措",7,"形容举动慌乱或没有办法应付。","shou zu wu cuo"],[604,"模棱两可",7,"对问题或事物正反两方面，持既不肯定、也不否定的态度。","mo leng liang ke"],[605,"熠熠生辉",7,"形容光彩闪耀的样子；熠熠，闪烁的样子。","yi yi sheng hui"],[606,"赏心悦目",7,"悦目：看了舒服。指看到了美好的景色而心情愉悦。","shang xin yue mu"],[607,"难能可贵",7,"意思是做到了难做之事，十分可贵。","nan neng ke gui"],[608,"津津乐道",7,"意思是很有兴趣地说个不停。","jin jin le dao"],[609,"口诛笔伐",7,"用语言文字进行揭露、批判和声讨。","kou zhu bi fa"],[610,"触手可及",7,"指近在手边，一伸手就可以接触到。形容距离极近。","chu shou ke ji"],[611,"登峰造极",7,"意思是登上顶峰，指到达最高点；比喻学问、技艺等已达到最高的境界。","deng feng zao ji"],[612,"相映成趣",7,"意思是相互衬托着，显得很有趣味，很有意思。","xiang ying cheng qu"],[613,"半斤八两",7,"意思是指彼此不相上下，实力相当。","ban jin ba liang"],[614,"经天纬地",7,"意思是形容有治理天下才能的经世之才。含褒义。","jing tian wei di"],[615,"毫无二致",7,"意思是丝毫没有什么两样，指完全一样。","hao wu er zhi"],[616,"各有千秋",7,"意思是各有各的存在的价值。比喻在同一层次内各人有各人的长处，各有各的特色。","ge you qian qiu"],[617,"变幻莫测",7,"解释是指事物变化很多不能预料，变化多端，难以揣测。","bian huan mo ce"],[618,"斗转星移",7,"意思是星斗变动位置，指季节或时间的变化。","dou zhuan xing yi"],[620,"匠心独运",7,"意思是独创性地运用精巧的心思。含褒义。","jiang xin du yun"],[622,"截然不同",7,"意思是事物之间，界限分明，全然不一样。","jie ran bu tong"],[623,"激浊扬清",7,"本意为冲去污水，让清水上来。比喻抨击坏人坏事，褒扬好人好事。","ji zhuo yang qing"],[624,"拨云见日",7,"比喻冲破黑暗见到光明。也比喻疑团消除，心里顿时明白。","bo yun jian ri"],[625,"停滞不前",7,"形容不继续前进，停留不动。","ting zhi bu qian"],[626,"一知半解",7,"意思是指知道得不全面，理解得也不透彻。","yi zhi ban jie"],[627,"不求甚解",7,"意思是只求知道个大概，不求彻底了解。常指学习或研究不认真、不深入。","bu qiu shen jie"],[628,"欲速不达",7,"意思是想求快速，反而不能达到目的。","yu su bu da"],[629,"作茧自缚",7,"意思是春蚕吐丝为茧，将自己裹缚其中。比喻弄巧成拙，自作自受。含贬义。","zuo jian zi fu"],[630,"恰如其分",7,"一指说话办事不过分；二指办事或说话十分恰当合适。含褒义。","qia ru qi fen"],[631,"和风细雨",7,"意思是比喻耐心地和颜悦色地批评或劝说。含褒义。","he feng xi yu"],[634,"委曲求全",7,"意思是勉强迁就，以求保全。也指为了顾全大局而让步。含褒义。","wei qu qiu quan"],[635,"虚与委蛇",7,"意思是指对人虚情假意，敷衍应酬。含贬义。","xu yu wei yi"],[636,"驾轻就熟",7,"意思是赶着轻载的车走在熟路上。比喻对某事有经验，很熟悉，做起来容易。","jia qing jiu shu"],[637,"稗官野史",7,"泛称小说及记载不见经传的轶闻琐事的著述。旧时小说、杂史的统称。","bai guan ye shi"],[638,"安身立命",7,"意思是生活有着落。含褒义。","an shen li ming"],[639,"兴旺发达",7,"意思是指事物或事业充分发展、欣欣向荣的景象。","xing wang fa da"],[640,"分庭抗礼",7,"意思是指比喻双方平起平坐，地位相等、实力相当，可以抗衡。","fen ting kang li"],[641,"细枝末节",7,"比喻事情或问题的细小而无关紧要的部分。含贬义。","xi zhi mo jie"],[643,"深恶痛绝",7,"指对某人或对某事物厌恶、痛恨到极点。","shen wu tong jue"],[644,"退避三舍",7,"意思是主动退让九十里。比喻退让和回避，避免冲突。含贬义。","tui bi san she"],[646,"敬而远之",7,"表示尊敬却有所顾虑不愿接近。","jing er yuan zhi"],[647,"荒腔走板",7,"原意是指演员唱曲音调不准、不和板眼，现多用来比喻说话离题或举动","huang qiang zou ban"],[648,"颜面尽失",7,"丢面子、脸面全丢了。","yan mian jin shi"],[649,"人尽皆知",7,"意思是全部的人都知道，比喻一件事流传很广泛。","ren jin jie zhi"],[650,"接二连三",7,"意思是一个接着一个，接连不断。","jie er lian san"],[651,"安居乐业",7,"意思指人民生活安定美满的样子，比喻安定地生活，愉快地工作。含褒义。","an ju le ye"],[653,"瑕瑜互见",7,"意思是比喻有缺点也有优点表示客观的评价，比喻优点、缺点都有。","xia yu hu jian"],[654,"海晏河清",7,"意思是比喻天下太平。晏：平静。","hai yan he qing"],[655,"渊淳岳峙",7,"意思是喻人品德如渊水深沉，如高山耸立。用于书面语。","yuan chun yue zhi"],[656,"钟灵毓秀",7,"意思是凝聚了天地间的灵气，孕育着优秀的人物。指山川秀美，人才辈出。","zhong ling yu xiu"],[658,"弹冠相庆",7,"意思是比喻一个人做了官或升了官，他的同伙因此将得到援引，有官可做。","tan guan xiang qing"],[659,"言外之意",7,"意思是指有这个意思，但没有在话里明说出来。","yan wai zhi yi"],[660,"低头折节",7,"意思是丧失气节，屈服于他人。","di tou zhe jie"],[661,"弦外之音",7,"原指音乐的余音。比喻言外之意，即在话里间接透露，而不是明说出来的意思。","xian wai zhi yin"],[662,"额手称庆",7,"意思是双手合掌，举到额头，表示感到庆幸。形容令人称快的事情。","e shou cheng qing"],[665,"击节赞叹",7,"指打着拍子欣赏诗文或艺术作品。形容对人的行为、言论、诗文、技艺等十分赞赏。","ji jie zan tan"],[666,"投闲置散",7,"指不被重视或不被任用。","tou xian zhi san"],[667,"贪大求快",7,"过分地贪图规模大而全面。含贬义。","tan da qiu kuai"],[668,"按图索骥",7,"指按照图像寻找好马，比喻按线索寻找，也比喻办事机械、死板。","an tu suo ji"],[669,"别有匠心",7,"构思巧妙，与众不同。","bie you jiang xin"],[670,"入室升堂",7,"意思是人的学识技艺等方面有高深的造诣。","ru shi sheng tang"],[671,"遮风挡雨",7,"意思是比喻起保护作用。","zhe feng dang yu"],[672,"保驾护航",7,"保护某事物能让其能正常发展。","bao jia hu hang"],[673,"披荆斩棘",7,"意思是指拨开荆，砍掉棘，比喻在前进道路上清除障碍，克服困难。","pi jing zhan ji"],[674,"冰山一角",6,"一般指非常大的事物只显露出很小的一部分。","bing shan yi jiao"],[675,"九牛一毛",6,"意思是这九头牛身上的一根毛，比喻渺小、轻微，或很大数量中的极少数。","jiu niu yi mao"],[677,"弱肉强食",6,"原指动物中弱者被强者吞食，比喻弱的被强的吞并。","ruo rou qiang shi"],[678,"优胜劣汰",6,"指生物在生存竞争中适应力强的保存下来，适应力差的被淘汰。","you sheng lie tai"],[679,"物竞天择",6,"原指生物进化的一般规律，后也用于人类社会的发展。","wu jing tian ze"],[682,"指点迷津",6,"意思是针对事物的困难处，提供解决的方向、办法或途径。","zhi dian mi jin"],[684,"建言献策",6,"陈述主张或意见，通过口头或文章提出的有益的意见，出谋划策，进献计策。","jian yan xian ce"],[685,"出谋划策",6,"意思是制定计谋策略。多指为人出主意。","chu mou hua ce"],[686,"陈词滥调",6,"形容语言陈腐、空泛。含贬义。","chen ci lan diao"],[687,"轻车熟路",6,"意思是赶着装载很轻的车子走熟悉的路，比喻事情又熟悉又容易。含褒义。","qing che shu lu"],[688,"流口常谈",6,"意思是人人挂在嘴上的老话。","liu kou chang tan"],[689,"毫不例外",6,"一点都不例外，不搞特别，不搞特殊。","hao bu li wai"],[690,"无一例外",6,"指都是这样，没有其他特殊的。","wu yi li wai"],[691,"无一幸免",6,"没有一个人能逃脱( 灾难) , 数量上指全部。","wu yi xing mian"],[692,"不出所料",6,"意思是指事由变化，在预料之中，形容原先预料的准确。","bu chu suo liao"],[693,"逸闻轶事",6,"意思是指流传在外不见记载的事迹。用于书面语。","yi wen yi shi"],[694,"龙蛇混杂",6,"比喻好人和坏人混在一起。","long she hun za"],[695,"胡编乱造",6,"意思指没有根据、不合情理地胡乱编造。","hu bian luan zao"],[697,"俯仰可拾",6,"低头就能拣到，形容数量多，到处都是，极易得到。","fu yang ke shi"],[698,"少之又少",6,"很少很少，几乎没有的意思。","shao zhi you shao"],[699,"大道至简",6,"意思是大道理( 基本原理、方法和规律) 是极其简单的，简单到一两句话就能明白。","da dao zhi jian"],[700,"通俗易懂",6,"意思为广大人民群众都能懂得。","tong su yi dong"],[701,"不温不火",6,"意思是不冷淡也不火爆，形容平淡适中。","bu wen bu huo"],[702,"后继无人",6,"意思是没有后人来继承前人的事业。","hou ji wu ren"],[703,"拔地而起",6,"指山峰、植物、建筑物等高耸在地面上。形容从地面上突兀而起，非常高耸。","ba di er qi"],[704,"横空出世",6,"意思是形容人或物高大，横在空中，浮出人世，或比喻卓尔不群。","heng kong chu shi"],[705,"破土而出",6,"从土里冒出来。比喻在重重压力下显露头角。","po tu er chu"],[706,"曲意逢迎",6,"意思是违背自己的本心去迎合别人。","qu yi feng ying"],[707,"心口不一",6,"意思是心里想的和嘴上说的不一样。形容人的虚伪、诡诈。含贬义。","xin kou bu yi"],[708,"不切实际",6,"意思是指不符合实际。用于虚幻的想法。","bu qie shi ji"],[710,"好大喜功",6,"指不管条件是否许可，一心想做大事立大功。多用以形容浮夸的作风，","hao da xi gong"],[711,"投其所好",6,"意思是迎合别人的喜好。含贬义。","tou qi suo hao"],[712,"百家争鸣",6,"比喻允许各种学术流派发表意见。","bai jia zheng ming"],[714,"循循善诱",6,"指善于引导别人进行学习。用于教育。","xun xun shan you"],[715,"广开言路",6,"意思是指尽量给下面创造发表意见的条件。含褒义。","guang kai yan lu"],[716,"以理服入",6,"用道理说服人，用道理使人信服。含褒义。","yi li fu ru"],[717,"畅所欲言",6,"尽情地说出想说的话，没有约束地把心里话吐露出来。","chang suo yu yan"],[718,"诲人不倦",6,"意思是指教导别人而不厌倦。","hui ren bu juan"],[719,"求同存异",6,"意思是找出共同点，保留不同意见。含褒义。","qiu tong cun yi"],[720,"一针见血",6,"意思是比喻说话直截了当，切中要害。含褒义。多用于批评性意见或建议。","yi zhen jian xie"],[721,"无关痛痒",6,"意思指与自身利害没有关系或无足轻重。","wu guan tong yang"],[722,"和颜悦色",6,"意思是和蔼喜悦的神色；和蔼可亲的面色。形容态度温和亲切。","he yan yue se"],[723,"隔靴搔痒",6,"意思是指隔着靴子挠痒痒。比喻说话写文章没有抓住主题和要点，不中肯，不贴切。","ge xue sao yang"],[724,"洋洋盈耳",6,"意思是指宏亮而优美的声音充满双耳，形容讲话、读书的声音悦耳动听。","yang yang ying er"],[725,"舌灿莲花",6,"形容人口才好，口齿伶俐，能言善道，有如莲花般地美妙。","she can lian hua"],[726,"闻一知十",6,"意思是听到一点就能理解很多；形容善于类推。含褒义。","wen yi zhi shi"],[727,"旁征博引",6,"意思是指说话、写文章引用材料作为依据或例证。","pang zheng bo yin"],[728,"妙语连珠",6,"意思是巧妙风趣的话一个接一个。","miao yu lian zhu"],[729,"声情并茂",6,"指演唱、朗诵等的音色、唱腔和表达的感情都很动人。含褒义。","sheng qing bing mao"],[730,"引经据典",6,"意思是引用经典书籍作为论证的依据。用于谈话与写作方面。","yin jing ju dian"],[731,"兴师动众",6,"意思是指大规模出兵。现多指动用很多人力做某件事。含贬义。","xing shi dong zhong"],[732,"劳民伤财",6,"意思是既使人民劳苦，又耗费钱财；现也指滥用人力物力。含贬义。","lao min shang cai"],[733,"繁文缛节",6,"比喻过分繁琐的仪式或礼节。也比喻其他繁琐多余的事项。含贬义。","fan wen ru jie"],[734,"无可争议",6,"指对一个问题的看法、观点或做法，没有其他不同的看法、观点可以辩论。","wu ke zheng yi"],[736,"大动干戈",6,"意思是大规模地进行战争。比喻大张声势地行事。","da dong gan ge"],[737,"无可讳言",6,"意思为没有什么不可以直说的，指可以坦率地说。","wu ke hui yan"],[738,"避重就轻",6,"指回避重的责任，只拣轻的来承担，也指回避主要的问题，只谈无关重要的方面。","bi zhong jiu qing"],[739,"暗度陈仓",6,"将真实的意图隐藏在不令人生疑的行动的背后。","an du chen cang"],[741,"难以割舍",6,"不愿意舍弃或丢开。","nan yi ge she"],[742,"永生难忘",6,"意思是指一辈子也难以忘怀。","yong sheng nan wang"],[743,"撼天震地",6,"意思是指摇动了天，震撼了地。形容声势浩大，无坚不摧的力量。","han tian zhen di"],[744,"茫然不解",6,"意思是一无所知，不理解。","mang ran bu jie"],[745,"知之甚少",6,"对某方面知道的太少。","zhi zhi shen shao"],[746,"沉思翰藻",6,"寓意深刻，文辞华丽。","chen si han zao"],[747,"文采斐然",6,"意思是指文章中表现出来的典雅艳丽和令人赏心悦目的色彩和风格，说入文采好。","wen cai fei ran"],[748,"形神兼备",6,"指书法和雕塑绘画作品，不但有美妙的形态且有神韵。","xing shen jian bei"],[749,"举不胜举",6,"意思是列举也列举不完。形容数量很多。","ju bu sheng ju"],[750,"缀玉联珠",6,"比喻撰写美好的诗文。","zhui yu lian zhu"],[751,"振臂高呼",6,"举起手欢呼，形容非常高兴。","zhen bi gao hu"],[752,"不负韶华",6,"指不辜负美好的时光、美好的年华。","bu fu shao hua"],[753,"无足挂齿",6,"意思是哪里值得挂在嘴上；不值一提。","wu zu gua chi"],[754,"不负春光",6,"不辜负春天的大好时光。","bu fu chun guang"],[755,"无伤大雅",6,"意思指虽有影响但对主要方面没有妨害。","wu shang da ya"],[756,"无关紧要",6,"释义为不重要，不会影响大局。","wu guan jin yao"],[757,"水丰草茂",6,"指水流充沛，草儿茂盛。","shui feng cao mao"],[758,"广袤无垠",6,"形容广阔得望不到边际，辽阔无边。比喻非常广阔。","guang mao wu yin"],[760,"山高水长",6,"像山一样高耸，如水一般长流。原比喻人的风范或声誉像高山一样永远存在。","shan gao shui chang"],[761,"海阔天空",6,"意指像大海那样广阔，如蓝天那样空旷，形容开阔，无拘无束，比喻言谈漫无边际。","hai kuo tian kong"],[762,"天高地阔",6,"天空高远，大地辽阔，形容空间很广阔。","tian gao di kuo"],[763,"学思践悟",6,"指学习再思考，再通过实践悟出道理。","xue si jian wu"],[764,"细照笃行",6,"指将焦裕禄精神作为一面镜子从里到外、从上到下反复照一照，深入检查自己。","xi zhao du xing"],[766,"知行合一",6,"指的是思想与行动的高度统一。","zhi xing he yi"],[767,"一无所有",6,"意思是什么也没有。指钱财，也指成绩、知识。","yi wu suo you"],[768,"一无所获",6,"什么东西都没有得到。指没有收获。","yi wu suo huo"],[769,"一无所知",6,"意思是什么也不知道。指人见识少。","yi wu suo zhi"],[770,"参差不齐",6,"原意是长短、高低、大小不一致，形容很不整齐或水平不一。","cen ci bu qi"],[771,"热闹非凡",6,"意思是形容热闹的场面或景象。","re nao fei fan"],[772,"破绽百出",6,"意思是比喻说话做事漏洞非常多。含贬义。","po zhan bai chu"],[773,"百花齐放",6,"意思是形容百花盛开，丰富多彩。比喻各种不同形式和风格的艺术自由发展。","bai hua qi fang"],[774,"群雄逐鹿",6,"形容各派势力争夺最高统治地位。","qun xiong zhu lu"],[776,"遗文逸事",6,"意思是前代或前人遗留下来而少为人知的传闻，多指不见于正式记载的。","yi wen yi shi"],[777,"身临其境",6,"意思指亲身面临那种境地；也作身历其境。含褒义。","shen lin qi jing"],[778,"设身处地",6,"意思是设想自己处在别人的境地。指站在别人的处境替别人着想。","she shen chu di"],[779,"想方设法",6,"意思是想种种办法。含褒义。","xiang fang she fa"],[780,"畏首畏尾",6,"意思是前也怕，后也怕；比喻做事胆子小，顾虑多。","wei shou wei wei"],[781,"谈虎色变",6,"意思是比喻只要提到可怕的事情，紧张的连脸色都变了。","tan hu se bian"],[782,"如鱼得水",6,"意思是好像鱼得到水一样。比喻得到跟自己十分投合的人或对自己很合适的环境。","ru yu de shui"],[784,"毫不相干",6,"指跟某个事物没有丝毫联系。","hao bu xiang gan"],[785,"判若云泥",6,"意思是高低差别就像天上的云彩和地下的泥土那样悬殊。","pan ruo yun ni"],[786,"悄然兴起",6,"意思是不知不觉中，某样事物开始流行或兴盛起来。","qiao ran xing qi"],[787,"心不在焉",6,"意思是心思不在这里，指思想不集中。含贬义。","xin bu zai yan"],[788,"味同嚼蜡",6,"表面意思是像吃蜡一样，没有一点儿味。形容语言或文章枯燥无味。含贬义。","wei tong jiao la"],[789,"兴味索然",6,"意思是一点儿兴趣都没有。","xing wei suo ran"],[790,"死而复生",6,"意思是死去了又活过来，形容生命不息。","si er fu sheng"],[791,"重见天日",6,"指重新看到了天和太阳。比喻脱离黑暗，重见光明。","chong jian tian ri"],[792,"互为表里",6,"意思是甲为乙的外表，乙为甲的内里；比喻互相依存，互相接受。","hu wei biao li"],[793,"互相标榜",6,"意思是互相称颂，互相吹嘘；多用贬义。","hu xiang biao bang"],[794,"互为因果",6,"意思是原因和结果相互联系，相互转化。","hu wei yin guo"],[795,"互剥痛疮",6,"意思是比喻互揭隐私。","hu bo tong chuang"],[796,"众望所归",6,"意思是用于形容某人威望很高，受到大家敬仰和信赖。","zhong wang suo gui"],[797,"大海捞针",6,"意思是在大海里捞一根针。比喻极难找到。用于比喻句中。","da hai lao zhen"],[798,"不了了之",6,"意思是用不能了结事情的办法去了结。指把未做完的事情放在一边不管，就算完事。","bu liao liao zhi"],[799,"敷衍塞责",6,"指工作不认真负责，表面应付了事。","fu yan se ze"],[801,"石沉大海",6,"意思是把石头扔到海里会沉下去，再也找不到。比喻从此以后再也没有消息。","shi chen da hai"],[802,"无动于衷",6,"意思是心里一点儿也没有触动。指对应该关心、注意的事情毫不关心。","wu dong yu zhong"],[803,"收效甚微",6,"指付出的努力基本没什么效果。收效，成果。甚，很。微，少。","shou xiao shen wei"],[804,"粗制滥造",6,"意思是写文章或做东西马虎草率，只求数量，不顾质量。含贬义。","cu zhi lan zao"],[805,"得心应手",6,"意思是心手相应，运用自如，多形容技艺纯熟。","de xin ying shou"],[806,"绰绰有余",6,"形容房屋或钱财非常宽裕，用不完。","chuo chuo you yu"],[807,"望文生义",6,"意思是指不了解某一词句的确切涵义或来源缘由，光从字面上去牵强附会。贬义。","wang wen sheng yi"],[808,"游刃有余",6,"意思是刀刃运转于骨节空隙中，有回旋的余地；比喻技术熟练，经验丰富。","you ren you yu"],[809,"金科玉律",6,"原形容法令条文的尽善尽美。现比喻必须遵守、不能变更的信条。含褒义。","jin ke yu lv"],[810,"天经地义",6,"指天地间历久不变的常道。指理所当然，不容置疑的问题。也指理所当的事。","tian jing di yi"],[811,"日异月殊",6,"每天每月都有差异。形容变化大。","ri yi yue shu"],[812,"五颜六色",6,"形容色彩复杂或花样繁多。引申为各色各样。","wu yan liu se"],[813,"万紫千红",6,"形容百花齐放，色彩艳丽；多指繁盛的春色，也比喻事物丰富多彩。","wan zi qian hong"],[814,"姹紫嫣红",6,"形容各种花朵娇艳美丽。","cha zi yan hong"],[815,"日臻完善",6,"意思是一天天逐步达到完美的境地。","ri zhen wan shan"],[816,"高歌猛进",6,"意思是高声歌唱，勇猛前进；形容在前进的道路上，充满乐观精神。","gao ge meng jin"],[817,"烜赫一时",6,"意思是指在一个时期内名声威势很盛。贬义词。","xuan he yi shi"],[818,"电光火石",6,"意思是闪电的光，燧石的火；原为佛家语，比喻事物瞬息即逝。","dian guang huo shi"],[819,"杳无音讯",6,"意思是指没有一点消息，形容信息断绝，了解不到对方的情况。","yao wu yin xun"],[821,"无影无踪",6,"没有一点踪影。形容完全消失，不知去向。","wu ying wu zong"],[822,"动荡不安",6,"意思是动荡摇摆，不安定；形容局势不稳定，不平静。","dong dang bu an"],[823,"阴差阳错",6,"意思是比喻由于偶然的因素而造成了差错。含贬义。","yin cha yang cuo"],[824,"死气沉沉",6,"意思是形容气氛不活泼，也形容人精神消沉，不振作。含贬义。","si qi chen chen"],[825,"不期而遇",6,"意思是没有约定而遇见。指意外碰见。","bu qi er yu"],[826,"了无生机",6,"一点生命的活力都没有，奄奄一息的样子。","liao wu sheng ji"],[827,"机缘巧合",5,"特殊的缘分，巧妙的融合遇到，在一起。","ji yuan qiao he"],[828,"奄奄一息",5,"形容气息微弱临近死亡。也比喻事物即将消亡、湮没或毁灭。含贬义。","yan yan yi xi"],[830,"逢机遘会",5,"意思是遭逢机会。","feng ji gou hui"],[831,"专心致志",5,"意思是把心思全放在上面。形容一心一意，聚精会神。含褒义。","zhuan xin zhi zhi"],[832,"穷经皓首",5,"意思是直到年老头白还在钻研经书和古籍，形容勤勉好学，至老不倦。","qiong jing hao shou"],[833,"学而不厌",5,"意思是学习没有满足的时候，比喻非常好学。","xue er bu yan"],[834,"锲而不舍",5,"意思是不停地雕刻。比喻有恒心，有毅力。","qie er bu she"],[835,"奋发图强",5,"意思是振作精神，以求强盛。含褒义。","fen fa tu qiang"],[836,"一盘散沙",5,"意思是比喻力量分散，没有组织起来。","yi pan san sha"],[837,"精神振奋",5,"意思是振作精神，奋发努力，相当的精神。","jing shen zhen fen"],[838,"人心涣散",5,"意思是思想不统一。形容人心不齐。","ren xin huan san"],[839,"聚精会神",5,"形容专心致志，注意力高度集中的样子。","ju jing hui shen"],[840,"繁荣昌盛",5,"指国家兴旺发达，欣欣向荣。","fan rong chang sheng"],[841,"离心离德",5,"意思是思想不统一，信念也不一致。指不一条心。","li xin li de"],[842,"精神抖擞",5,"形容精神振奋，饱满。含褒义。","jing shen dou sou"],[843,"分崩离析",5,"意思是形容国家或集团四分五裂，不可收拾。","fen beng li xi"],[844,"素不相识",5,"意思是向来不认识。素：平素，向来，用于人。","su bu xiang shi"],[846,"不忘初心",5,"不忘记最初的心愿。","bu wang chu xin"],[847,"力争上游",5,"意思是比喻努力争取有利形势。","li zheng shang you"],[848,"风流云散",5,"意思是象风和云那样流动散开，比喻在一起的人分散到四面八方。","feng liu yun san"],[849,"风雨同舟",5,"意思是指在狂风暴雨中同乘一条船，一起与风雨搏斗，比喻共同经历患难。","feng yu tong zhou"],[850,"通同一气",5,"意思是串通在一起。","tong tong yi qi"],[851,"平分秋色",5,"意思是比喻双方各得一半，不分高低，表示平局。","ping fen qiu se"],[852,"一唱一和",5,"意思是指一个先唱，一个随声应和。原形容两人感情相通；现也比喻二人互相配合。","yi chang yi he"],[853,"势均力敌",5,"意思是双方力量相等，不分高低。","shi jun li di"],[854,"遥相呼应",5,"意思是远远地互相联系，互相配合。含褒义。","yao xiang hu ying"],[855,"风驰电掣",5,"意思是形容非常迅速，像风吹闪电一样快。","feng chi dian che"],[856,"电闪雷鸣",5,"比喻快速有力，也比喻轰轰烈烈。","dian shan lei ming"],[857,"风风火火",5,"意思是形容急急忙忙，冒冒失失的样子。","feng feng huo huo"],[858,"风声鹤唳",5,"形容惊慌疑惧。用于战争等。","feng sheng he li"],[859,"艰苦奋斗",5,"意思是不怕艰难困苦，坚持英勇斗争。","jian ku fen dou"],[860,"困难重重",5,"一个困难接着一个困难","kun nan chong chong"],[861,"举步艰难",5,"意思是形容已陷入十分艰难的处境。","ju bu jian nan"],[862,"投机取巧",5,"意思是用不正当的手段谋取私利。也指靠小聪明占便宜。含贬义。","tou ji qu qiao"],[864,"斗折蛇行",5,"意思是像北斗星一样弯曲，像蛇一样曲折行进。形容道路曲折蜿蜒。","dou zhe she xing"],[865,"登高履危",5,"意思是比喻诚惶诚恐。用于人生。","deng gao lv wei"],[866,"拾级而上",5,"意思是顺着阶梯一步一步的往上走。","she ji er shang"],[867,"叹为观止",5,"形容所见到的事物好到了极点。","tan wei guan zhi"],[868,"触目皆是",5,"意思是眼睛所看到的地方，到处都是。形容很多。","chu mu jie shi"],[869,"斗量车载",5,"意思是形容数量很多。","dou liang che zai"],[870,"蓬荜生辉",5,"形容贵客来访令主人感到增光不少。蓬荜","peng bi sheng hui"],[871,"纤尘不染",5,"原指佛教徒修行时，排除物欲，保持心地洁净；现泛指丝毫不受坏习惯的影响。","xian chen bu ran"],[872,"皮里阳秋",5,"意思是藏在心里不说出来的言论。","pi li yang qiu"],[873,"买椟还珠",5,"指买了装了珍珠的木匣退还了珍珠；比喻取舍不当，次要的东西比主要的还好。","mai du huan zhu"],[874,"一语双关",5,"意思是一句话包含两个意思。","yi yu shuang guan"],[875,"略逊一筹",5,"意思指比较起来，稍微差一点。","lve xun yi chou"],[876,"三言两语",5,"意思是几句话，形容话很少。","san yan liang yu"],[877,"寥寥数语",5,"非常简括地说。","liao liao shu yu"],[878,"无可比拟",5,"意思是没有可以相比的。含褒义。","wu ke bi ni"],[879,"迷惑不解",5,"意思是对某一事物怀疑迷惑，认识不清。","mi huo bu jie"],[880,"朝思暮想",5,"意思是早晚都想念。形容非常想念或经常想着某一件事。","zhao si mu xiang"],[881,"潜精研思",5,"意思为专心钻研。用于学术等。","qian jing yan si"],[882,"一步之遥",5,"一步的距离，比喻很近，可以说离某物，也可以说离成功。","yi bu zhi yao"],[883,"一脉相通",5,"意思是指事物之间相互关联，犹如一条脉络贯穿下来可以互通。","yi mai xiang tong"],[884,"相差无几",5,"意思是彼此没有多大差别。","xiang cha wu ji"],[885,"衣钵相传",5,"意思是中国禅宗初祖至五祖师徒间传授道法，常付衣钵为信，故称。","yi bo xiang chuan"],[887,"箪门圭窦",5,"意思是形容住室极其简陋，旧指穷人住处。","dan men gui dou"],[888,"岸芷汀兰",5,"岸边的香草，小洲上的兰花，香气浓郁，颜色青葱。形容人像芳兰一样品德高尚。","an zhi ting lan"],[889,"兰艾同焚",5,"意思是兰花跟艾草一起烧掉。比喻不分好坏，一同消灭。","lan ai tong fen"],[890,"粉墙黛瓦",5,"指雪白的墙壁，青黑的瓦，用来描写房屋。","fen qiang dai wa"],[891,"一丝一缕",5,"一根丝一根线。①形容微小的东西。②借指衣服。","yi si yi lv"],[892,"钟鸣鼎食",5,"击钟列鼎而食，形容贵族的豪华排场。","zhong ming ding shi"],[893,"曲径通幽",5,"意思是弯曲的小路通到风景美丽的地方。形容景色雅致迷人。含褒义。","qu jing tong you"],[894,"桑枢瓮牖",5,"意思是用桑树做门轴，用瓦罐做窗户，比喻贫苦之家。","sang shu weng you"],[895,"枝繁叶茂",5,"形容枝叶繁盛茂密，或比喻家族人丁兴旺，后代子孙多。","zhi fan ye mao"],[896,"繁花似锦",5,"意思是许多色彩纷繁的鲜花，好像富丽多彩的锦缎。形容美好的景色和","fan hua si jin"],[897,"春色满园",5,"意思是整个园子里一片春天的景色。比喻到处是欣欣向荣的景象。","chun se man yuan"],[898,"生机盎然",5,"意思是充满生机和活力的，形容生命力旺盛的样子。一般比喻花草树木生机盎然。","sheng ji ang ran"],[899,"珠联璧合",5,"比喻杰出的人才或美好的事物聚集在一起。","zhu lian bi he"],[900,"行之有效",5,"指某种方法或措施已经实行过，证明很有效用。","xing zhi you xiao"],[901,"力所能及",5,"自己的能力所能办到的。","li suo neng ji"],[902,"啼笑皆非",5,"哭也不是，笑也不是。形容既令人难受，又让人觉得可笑。","ti xiao jie fei"],[903,"沙里淘金",5,"比喻好东西不易得到，也比喻做事费力大而收获少，也比喻从大量材料里选取精华。","sha li tao jin"],[904,"百里挑一",5,"形容十分出众。","bai li tiao yi"],[905,"迫不得已",5,"迫于无奈，不由得不那样( 做)。","po bu de yi"],[906,"缺一不可",5,"少一样也不行。","que yi bu ke"],[907,"硕果仅存",5,"比喻经过淘汰，留下来的稀少可贵的人或物。","shuo guo jin cun"],[908,"长盛不衰",5,"长久兴盛而不衰败，比喻长时间保持旺盛的势头。一般用来形容文化、传统等。","zhang sheng bu shuai"],[909,"冷嘲热讽",5,"尖刻、辛辣的嘲笑和讽刺。","leng chao re feng"],[910,"寡不敌众",5,"人少的一方抵挡不住人多的一方。","gua bu di zhong"],[911,"疾言厉色",5,"言语急促，神色严厉。形容对人发怒时说话的神情。","ji yan li se"],[912,"势单力薄",5,"指力量不足。声名鹊起。","shi dan li bao"],[913,"广为人知",5,"流传很广，大家都知道。","guang wei ren zhi"],[914,"相视莫逆",5,"形容彼此间友谊深厚，无所违逆于心。","xiang shi mo ni"],[915,"势如累卵",5,"形容事态非常危险。","shi ru lei luan"],[916,"鞭长莫及",5,"原来是说虽然鞭子长，但是不应该打到马肚子上，后来借指力量达不到。","bian chang mo ji"],[917,"无能为力",5,"用不上力量。指没有能力去做或力量达不到。","wu neng wei li"],[918,"字斟句酌",4,"对每一字、每一句都仔细推敲，形容说话或写作的态度慎重。","zi zhen ju zhuo"],[919,"板上钉钉",4,"比喻事情已定，不能变更。","ban shang ding ding"],[920,"翘首以待",4,"形容殷切盼望。","qiao shou yi dai"],[921,"雷打不动",4,"形容坚定，不可动摇。","lei da bu dong"],[922,"茅塞顿开",4,"被堵塞的心忽然被打开了。形容受到启发，一下子理解领会了道理。","mao se dun kai"],[923,"如梦初醒",4,"好像刚从梦里面醒过来，比喻从糊涂的，错误的境地里刚刚醒悟出来。","ru meng chu xing"],[924,"惊世骇俗",4,"因言行异于寻常而使人震惊。也说惊世震俗。","jing shi hai su"],[926,"独领风骚",4,"形容超群出众，没有谁可与之相比。","du ling feng sao"],[927,"一往无前",4,"指不把前进道路上的困难放在眼里，无所畏惧、毫不动摇地奋勇前进。","yi wang wu qian"],[928,"和而不唱",4,"赞同别人的意见，不坚持自己的说法。","he er bu chang"],[929,"迎来送往",4,"走的欢送，来的欢迎。形容忙于交际应酬。","ying lai song wang"],[930,"日渐式微",4,"事物逐渐地由兴盛而衰落。","ri jian shi wei"],[931,"不值一提",4,"不值得提起。","bu zhi yi ti"],[932,"力不从心",4,"心里想做，但力量或能力办不到。","li bu cong xin"],[933,"高山仰止",4,"比喻对高尚的品德的仰慕。","gao shan yang zhi"],[934,"转瞬即逝",4,"形容很快就会失去或消失。","zhuan shun ji shi"],[935,"千变万化",4,"形容变化极多。","qian bian wan hua"],[936,"五彩斑斓",4,"表示颜色非常好看，色彩非常丰富。","wu cai ban lan"],[937,"先入为主",4,"先看到一种情况或先听了一种意见，形成成见，后来就不再考虑情况变化。","xian ru wei zhu"],[938,"朝令夕改",4,"也说朝令暮改。早晨发布的命令，晚上就改变。后比喻经常改变主张和办法。","zhao ling xi gai"],[939,"洗心革面",4,"清除坏思想，改变旧面貌。比喻彻底改过自新。","xi xin ge mian"],[940,"严于律己",4,"严格的约束自己。","yan yu lv ji"],[941,"一去不返",4,"一去就不再回来了。","yi qu bu fan"],[942,"无所不在",4,"到处都存在；到处都有。","wu suo bu zai"],[943,"目不窥园",4,"后用以形容埋头读书，专心治学。","mu bu kui yuan"],[944,"渐行渐远",4,"主要是由于人的性格、观念、背景等的不同，以至于本来很要好的两个入形同陌路。","jian xing jian yuan"],[945,"铺天盖地",4,"形容声势大，来势猛，到处都是。","pu tian gai di"],[946,"手不释卷",4,"手不离书本。形容勤学不倦。","shou bu shi juan"],[947,"皓首穷经",4,"一直到年老白头之时还在深入钻研经书和古籍。","hao shou qiong jing"],[948,"杯水风波",4,"字面解读就是一杯水所引起的风波表示小题大做。","bei shui feng bo"],[949,"瓜田李下",4,"经过瓜田，不弯下身来提鞋，免得人家怀疑摘瓜。","gua tian li xia"],[950,"一叶知秋",4,"看见一片落叶，就知道秋天将要来了。比喻从事物的某些迹象预料到事物的发展。","yi ye zhi qiu"]]</script>
+<script>
+(function () {
+  'use strict';
+
+  var RAW = JSON.parse(document.getElementById('idiom-data').textContent);
+  var DATA = RAW.map(function (r) {
+    return { n: r[0], w: r[1], f: r[2], m: r[3], p: r[4], i: r[4] ? r[4].charAt(0).toUpperCase() : '#' };
+  });
+  var LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+  var STORE = AppUtils.createNamespacedStorage('idiom1000_progress', { version: 1 });
+  var THEME_STORE = AppUtils.createNamespacedStorage('idiom1000_theme');
+
+  var state = {
+    known: {}, fuzzy: {},
+    mode: 'list',
+    idx: 0,
+    flashUp: true,     // 背面（释义）朝上？
+    quiz: null,
+    openGroups: {},
+    query: '',
+    freq: 'all',
+    status: 'all'
+  };
+
+  var stage = document.getElementById('stage');
+  function esc(v) { return AppUtils.escapeHTML(v); }
+
+  function freqClass(f) { return f >= 20 ? 'hi' : (f >= 8 ? 'mid' : 'lo'); }
+
+  // ---------------- 持久化 ----------------
+  function save() {
+    STORE.set({ known: state.known, fuzzy: state.fuzzy });
+  }
+  function load() {
+    var d = STORE.get(null);
+    if (d && typeof d === 'object') {
+      state.known = d.known || {};
+      state.fuzzy = d.fuzzy || {};
+    }
+  }
+  function markOf(n) {
+    if (state.known[n]) return 1;
+    if (state.fuzzy[n]) return 2;
+    return 0;
+  }
+  function setMark(n, v) {
+    if (v === 1) { state.known[n] = 1; delete state.fuzzy[n]; }
+    else if (v === 2) { state.fuzzy[n] = 1; delete state.known[n]; }
+    else { delete state.known[n]; delete state.fuzzy[n]; }
+    save();
+  }
+
+  // ---------------- 统计 ----------------
+  function updateStats() {
+    var known = Object.keys(state.known).length;
+    var fuzzy = Object.keys(state.fuzzy).length;
+    document.getElementById('st-total').textContent = DATA.length;
+    document.getElementById('st-known').textContent = known;
+    document.getElementById('st-fuzzy').textContent = fuzzy;
+    var rate = DATA.length ? Math.round(known / DATA.length * 100) : 0;
+    document.getElementById('st-rate').textContent = rate + '%';
+    document.getElementById('progress-fill').style.width = rate + '%';
+    document.getElementById('hero-count').textContent = DATA.length;
+  }
+
+  // ---------------- 筛选 ----------------
+  function matchQuery(r, q) {
+    if (!q) return true;
+    return (r.w + ' ' + r.p + ' ' + r.m).toLowerCase().indexOf(q) >= 0;
+  }
+  function matchFreq(r) {
+    if (state.freq === 'all') return true;
+    if (state.freq === 'hi') return r.f >= 20;
+    if (state.freq === 'mid') return r.f >= 8 && r.f <= 19;
+    return r.f <= 7;
+  }
+  function matchStatus(r) {
+    if (state.status === 'all') return true;
+    var m = markOf(r.n);
+    if (state.status === 'known') return m === 1;
+    if (state.status === 'fuzzy') return m === 2;
+    return m === 0;
+  }
+  function filtered() {
+    var q = state.query.trim().toLowerCase();
+    return DATA.filter(function (r) {
+      return matchQuery(r, q) && matchFreq(r) && matchStatus(r);
+    });
+  }
+
+  // ---------------- 速查表 ----------------
+  function renderList() {
+    var list = filtered();
+    if (!list.length) {
+      stage.innerHTML = '<div class="empty">没有匹配的成语，换个关键词或放宽筛选条件。</div>';
+      return;
+    }
+    var q = state.query.trim();
+    var html = '<div class="stage-meta">共 <span class="pos">' + list.length + '</span> 条' +
+      (q ? '　匹配「' + esc(q) + '」' : '') + '</div>';
+
+    if (q || state.freq !== 'all' || state.status !== 'all') {
+      // 过滤态：直接平铺
+      html += '<div class="idiom-grid">' + list.map(function (r) {
+        return idiomCard(r, q);
+      }).join('') + '</div>';
+    } else {
+      // 默认态：按拼音首字母分组折叠
+      var groups = {};
+      var order = [];
+      list.forEach(function (r) {
+        if (!groups[r.i]) { groups[r.i] = []; order.push(r.i); }
+        groups[r.i].push(r);
+      });
+      order.sort(function (a, b) { return LETTERS.indexOf(a) - LETTERS.indexOf(b); });
+      html += order.map(function (L) {
+        var open = state.openGroups[L] ? ' open' : '';
+        var rows = groups[L];
+        return '<div class="group' + open + '">' +
+          '<button class="group-head">' +
+            '<span class="letter">' + esc(L) + '</span>' +
+            '<span class="cnt">' + rows.length + ' 个成语</span>' +
+            '<span class="arrow">▼</span>' +
+          '</button>' +
+          '<div class="group-body"><div class="idiom-grid">' +
+            rows.map(function (r) { return idiomCard(r, ''); }).join('') +
+          '</div></div>' +
+        '</div>';
+      }).join('');
+    }
+    stage.innerHTML = html;
+    bindList();
+  }
+
+  function idiomCard(r, q) {
+    var m = r.m.length > 78 ? r.m.slice(0, 78) + '…' : r.m;
+    return '<div class="idiom">' +
+      '<div class="w">' + hl(r.w, q) + '<span class="freq ' + freqClass(r.f) + '">考频' + r.f + '</span></div>' +
+      '<div class="p">' + hl(r.p, q) + '</div>' +
+      '<div class="m' + (q ? '' : ' clamped') + '">' + hl(m, q) + '</div>' +
+    '</div>';
+  }
+
+  function hl(text, q) {
+    var safe = esc(text);
+    if (!q) return safe;
+    var needle = esc(q);
+    var i = safe.toLowerCase().indexOf(needle.toLowerCase());
+    if (i < 0) return safe;
+    return safe.slice(0, i) + '<mark class="mark">' + safe.substr(i, needle.length) + '</mark>' + safe.slice(i + needle.length);
+  }
+
+  function bindList() {
+    var heads = stage.querySelectorAll('.group-head');
+    for (var i = 0; i < heads.length; i++) {
+      heads[i].addEventListener('click', function () {
+        var g = this.parentNode;
+        var L = this.querySelector('.letter').textContent;
+        g.classList.toggle('open');
+        state.openGroups[L] = g.classList.contains('open');
+      });
+    }
+  }
+
+  // ---------------- 背诵卡 ----------------
+  function flashQueue() {
+    var q = state.query.trim().toLowerCase();
+    var list = DATA.filter(function (r) {
+      return matchQuery(r, q) && matchFreq(r) && matchStatus(r);
+    });
+    list.sort(function (a, b) { return b.f - a.f; });   // 高频优先
+    return list;
+  }
+
+  function renderFlash() {
+    var list = flashQueue();
+    if (!list.length) {
+      stage.innerHTML = '<div class="empty">当前筛选下没有可背的成语，换个条件试试。</div>';
+      return;
+    }
+    if (state.idx >= list.length) state.idx = 0;
+    var r = list[state.idx];
+    var m = markOf(r.n);
+
+    var body = state.flashUp
+      ? '<div class="fw">' + esc(r.w) + '</div>' +
+        '<div class="fp">' + esc(r.p) + '</div>' +
+        '<span class="freq ' + freqClass(r.f) + '">考频' + r.f + ' 次</span>' +
+        '<div class="hintline">按 空格 看释义 · 1 认识 · 2 模糊 · 3 不认识</div>'
+      : '<div class="fm">' + esc(r.m) + '</div>' +
+        '<div class="fw" style="font-size:26px">' + esc(r.w) + '</div>' +
+        '<div class="fp">' + esc(r.p) + '</div>' +
+        '<span class="freq ' + freqClass(r.f) + '">考频' + r.f + ' 次</span>';
+
+    stage.innerHTML =
+      '<div class="stage-meta">' +
+        '<span class="pos">第 ' + (state.idx + 1) + ' / ' + list.length + ' 条</span>' +
+        '<span>·</span><span>原编号 ' + r.n + '</span>' +
+        (m === 1 ? '<span class="freq hi" style="margin:0">已掌握</span>' :
+         m === 2 ? '<span class="freq mid" style="margin:0">模糊</span>' : '') +
+      '</div>' +
+      '<div class="flash-wrap"><div class="flash" id="flash">' + body + '</div></div>' +
+      '<div class="flash-actions">' +
+        '<button class="btn" id="f-prev">← 上一条</button>' +
+        '<button class="btn primary" id="f-flip">看' + (state.flashUp ? '释义' : '成语') + '</button>' +
+        '<button class="btn" id="f-next">下一条 →</button>' +
+        '<button class="btn good" id="f-known">1 认识</button>' +
+        '<button class="btn warn" id="f-fuzzy">2 模糊</button>' +
+        '<button class="btn bad" id="f-unknown">3 不认识</button>' +
+      '</div>' +
+      '<div class="hint">空格 / 回车 翻面 · ← → 切换 · 1 / 2 / 3 标记掌握度</div>';
+
+    bindFlash(list);
+  }
+
+  function bindFlash(list) {
+    function step(d) {
+      state.idx = (state.idx + d + list.length) % list.length;
+      state.flashUp = true;
+      renderFlash();
+    }
+    function on(id, fn) { var el = document.getElementById(id); if (el) el.addEventListener('click', fn); }
+    on('f-prev', function () { step(-1); });
+    on('f-next', function () { step(1); });
+    on('f-flip', function () { state.flashUp = !state.flashUp; renderFlash(); });
+    on('f-known', function () { setMark(list[state.idx].n, 1); state.flashUp = false; renderFlash(); });
+    on('f-fuzzy', function () { setMark(list[state.idx].n, 2); state.flashUp = false; renderFlash(); });
+    on('f-unknown', function () { setMark(list[state.idx].n, 0); state.flashUp = false; renderFlash(); });
+  }
+
+  // ---------------- 释义测验 ----------------
+  function buildQuiz() {
+    var pool = DATA.filter(function (r) { return matchFreq(r) && matchStatus(r); });
+    if (pool.length < 4) pool = DATA.slice();
+    var right = pool[Math.floor(Math.random() * pool.length)];
+    // 干扰项优先取同考频段
+    var band = pool.filter(function (r) {
+      return r.n !== right.n && Math.abs(r.f - right.f) <= 4;
+    });
+    var others = band.length >= 3 ? band : pool.filter(function (r) { return r.n !== right.n; });
+    var picked = [];
+    var guard = 0;
+    while (picked.length < 3 && guard++ < 500) {
+      var c = others[Math.floor(Math.random() * others.length)];
+      if (c && picked.every(function (x) { return x.n !== c.n; })) picked.push(c);
+    }
+    var opts = picked.concat([right]).sort(function () { return Math.random() - 0.5; });
+    return { right: right, opts: opts, answered: false };
+  }
+
+  function renderQuiz() {
+    if (!state.quiz) state.quiz = buildQuiz();
+    var q = state.quiz;
+    var optsHtml = q.opts.map(function (o) {
+      var cls = 'opt';
+      if (q.answered) {
+        cls += ' disabled';
+        if (o.n === q.right.n) cls += ' right';
+      }
+      return '<button class="' + cls + '" data-n="' + o.n + '">' +
+        '<span class="k">' + 'ABCD'.charAt(q.opts.indexOf(o)) + '</span>' +
+        '<span class="w">' + esc(o.w) + '</span>' +
+      '</button>';
+    }).join('');
+
+    var fb = '';
+    if (q.answered) {
+      fb = '<div class="quiz-fb ' + (q.picked === q.right.n ? 'ok' : 'no') + '">' +
+        (q.picked === q.right.n ? '✓ 答对了。' : '✗ 答错了，正确答案是 <b>' + esc(q.right.w) + '</b>。') +
+        '<br>' + esc(q.right.m) +
+      '</div>';
+    }
+
+    stage.innerHTML =
+      '<div class="quiz">' +
+        '<div class="quiz-q">' +
+          '<span class="tag">根据释义选出正确的成语</span>' +
+          '<div class="stem">' + esc(q.right.m) + '</div>' +
+          '<div class="opts">' + optsHtml + '</div>' +
+          fb +
+        '</div>' +
+        '<div class="flash-actions">' +
+          '<button class="btn primary" id="q-next">下一题</button>' +
+          '<button class="btn" id="q-skip">跳过</button>' +
+        '</div>' +
+        '<div class="hint">答对自动记为「已掌握」；也可按 1 / 2 / 3 标记 · 空格下一题</div>' +
+      '</div>';
+
+    var btns = stage.querySelectorAll('.opt');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        if (q.answered) return;
+        q.picked = Number(this.getAttribute('data-n'));
+        q.answered = true;
+        if (q.picked === q.right.n) { setMark(q.right.n, 1); }
+        else { setMark(q.right.n, 2); }
+        renderQuiz();
+      });
+    }
+    var nb = document.getElementById('q-next');
+    if (nb) nb.addEventListener('click', function () { state.quiz = buildQuiz(); renderQuiz(); });
+    var sk = document.getElementById('q-skip');
+    if (sk) sk.addEventListener('click', function () { state.quiz = buildQuiz(); renderQuiz(); });
+  }
+
+  // ---------------- 渲染入口 ----------------
+  function render() {
+    updateStats();
+    if (state.mode === 'flash') renderFlash();
+    else if (state.mode === 'quiz') renderQuiz();
+    else renderList();
+  }
+
+  function setMode(m) {
+    state.mode = m;
+    state.idx = 0;
+    state.quiz = null;
+    state.flashUp = true;
+    var tabs = document.querySelectorAll('#mode-tabs .tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-mode') === m);
+    }
+  }
+
+  // ---------------- 事件 ----------------
+  function initTheme() {
+    var btn = document.getElementById('theme-toggle');
+    function apply(t) {
+      if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); btn.textContent = '☀️'; }
+      else { document.documentElement.removeAttribute('data-theme'); btn.textContent = '🌙'; }
+    }
+    apply(THEME_STORE.get('light') || 'light');
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(cur);
+      THEME_STORE.set(cur);
+    });
+  }
+
+  function initControls() {
+    var search = document.getElementById('search');
+    search.addEventListener('input', AppUtils.debounce(function () {
+      state.query = search.value;
+      state.idx = 0;
+      render();
+    }, 140));
+
+    document.getElementById('filter-freq').addEventListener('change', function () {
+      state.freq = this.value; state.idx = 0; state.quiz = null; render();
+    });
+    document.getElementById('filter-status').addEventListener('change', function () {
+      state.status = this.value; state.idx = 0; state.quiz = null; render();
+    });
+    document.getElementById('mode-tabs').addEventListener('click', function (ev) {
+      var t = ev.target.closest('.tab');
+      if (!t) return;
+      setMode(t.getAttribute('data-mode'));
+      render();
+    });
+    document.getElementById('btn-random').addEventListener('click', function () {
+      var pool = filtered();
+      if (!pool.length) { alert('当前筛选下没有条目'); return; }
+      setMode('flash');
+      state.flashUp = true;
+      var r = pool[Math.floor(Math.random() * pool.length)];
+      var q = flashQueue();
+      state.idx = Math.max(0, q.findIndex(function (x) { return x.n === r.n; }));
+      render();
+    });
+    document.getElementById('btn-reset').addEventListener('click', function () {
+      if (!confirm('确定清空全部 ' + DATA.length + ' 个成语的掌握度标记？')) return;
+      state.known = {}; state.fuzzy = {};
+      save(); render();
+    });
+  }
+
+  function initKeyboard() {
+    document.addEventListener('keydown', function (ev) {
+      var tag = (ev.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'select' || tag === 'textarea') {
+        if (ev.key === 'Escape') ev.target.blur();
+        return;
+      }
+      if (ev.key === '/') { ev.preventDefault(); document.getElementById('search').focus(); return; }
+      if (state.mode === 'flash') {
+        var list = flashQueue();
+        if (!list.length) return;
+        var r = list[state.idx];
+        if (ev.key === ' ') { ev.preventDefault(); state.flashUp = !state.flashUp; renderFlash(); }
+        else if (ev.key === 'ArrowLeft') { ev.preventDefault(); state.idx = (state.idx - 1 + list.length) % list.length; state.flashUp = true; renderFlash(); }
+        else if (ev.key === 'ArrowRight') { ev.preventDefault(); state.idx = (state.idx + 1) % list.length; state.flashUp = true; renderFlash(); }
+        else if (ev.key === '1') { setMark(r.n, 1); state.flashUp = false; renderFlash(); }
+        else if (ev.key === '2') { setMark(r.n, 2); state.flashUp = false; renderFlash(); }
+        else if (ev.key === '3') { setMark(r.n, 0); state.flashUp = false; renderFlash(); }
+      } else if (state.mode === 'quiz') {
+        var q = state.quiz;
+        if (ev.key === ' ') { ev.preventDefault(); state.quiz = buildQuiz(); renderQuiz(); }
+        else if (q && !q.answered && '1234'.indexOf(ev.key) >= 0) {
+          var o = q.opts[Number(ev.key) - 1];
+          if (o) {
+            q.picked = o.n; q.answered = true;
+            if (q.picked === q.right.n) setMark(q.right.n, 1); else setMark(q.right.n, 2);
+            renderQuiz();
+          }
+        }
+      }
+    });
+  }
+
+  // ---------------- 启动 ----------------
+  load();
+  initTheme();
+  initControls();
+  initKeyboard();
+  render();
+})();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
