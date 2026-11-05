@@ -186,6 +186,7 @@ body{
 .method-body{
   padding:16px;
   display:none;
+  overflow-x:auto;
 }
 .method-card.open .method-body{display:block}
 /* ===== 通用元素 ===== */
@@ -375,11 +376,13 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
 <!-- ===== Hero ===== -->
 <div class="hero">
   <h1>资料分析速算技巧大全</h1>
-  <p>八大核心方法 · 放缩法专项 · 等差求和 · 高频错误避坑 · 解题逻辑</p>
+  <p>十大核心方法 · 放缩法专项 · 乘法放缩 · 颠倒数速算 · 等差求和 · 高频错误避坑</p>
   <div class="badges">
     <span class="badge">截位直除</span>
     <span class="badge">百化分</span>
     <span class="badge">放缩法</span>
+    <span class="badge">乘法放缩</span>
+    <span class="badge">颠倒数</span>
     <span class="badge">等差求和</span>
     <span class="badge">分数比较</span>
     <span class="badge">错位加减</span>
@@ -396,6 +399,9 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
     <a href="#method4">错位加减</a>
     <a href="#method5">首数尾数</a>
     <a href="#fangsuo">放缩法</a>
+    <a href="#chengfa">乘法放缩</a>
+    <a href="#daodian">颠倒数</a>
+    <a href="#sucal">速算汇总</a>
     <a href="#dengcha">等差求和</a>
     <a href="#errors">高频错误</a>
     <a href="#logic">解题逻辑</a>
@@ -408,7 +414,7 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
 <!-- ===== 总览 ===== -->
 <div class="section" id="overview">
   <div class="section-title"><span class="num">0</span>方法体系总览</div>
-  <div class="section-sub">资料分析速算八大核心方法，按使用频率排序</div>
+  <div class="section-sub">资料分析速算十大核心方法，按使用频率排序</div>
   <div class="quick-grid">
     <div class="quick-card">
       <h4>① 截位直除法</h4>
@@ -441,6 +447,14 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
     <div class="quick-card">
       <h4>⑧ 有效数字法</h4>
       <p>乘除混合保留前两位有效数字，大幅简化运算量。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑨ 乘法放缩</h4>
+      <p>乘积不变反向等比例变化；移多补少凑整可严格相等。</p>
+    </div>
+    <div class="quick-card">
+      <h4>⑩ 颠倒数速算</h4>
+      <p>两位数加颠倒数 = 11×(数字之和)，进位规则口算即得。</p>
     </div>
   </div>
   <div class="tip-box">
@@ -781,9 +795,383 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
   </div>
 </div>
 
+<!-- ===== 乘法放缩专项 ===== -->
+<div class="section" id="chengfa">
+  <div class="section-title"><span class="num">7</span>乘法放缩专项</div>
+  <div class="section-sub">乘积不变原理 · 等比例放缩 · 移多补少 · 三种放缩区分</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>乘法等比例放缩 <span class="tag">核心原理</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p>核心原理：<strong>乘积不变，两个数反向等比例变化。</strong></p>
+      <div class="formula">
+        A × B = (A × (1+r)) × (B ÷ (1+r))
+      </div>
+      <ul class="steps">
+        <li>A 扩大 r 倍，B 就要除以 r；A 缩小 r 倍，B 就要乘以 r</li>
+        <li><strong>百分数表述（资料分析最常用）</strong>：A 增加 x%，B 就要减少大约 x%；A 减少 x%，B 就要增加大约 x%</li>
+      </ul>
+      <div class="warn-box">
+        <div class="warn-title">注意</div>
+        <p>这是<strong>近似</strong>技巧！只有 x% 比较小（一般 &lt; 10%）的时候误差很小，符合资料分析选项差距要求；百分比过大时误差会明显变大。</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例：计算 123 × 456</div>
+        <p>将 123 缩小为 120（减少 3，降幅约 3/123 ≈ 2.4%）</p>
+        <p>为保持乘积近似不变，456 需要增加约 2.4%</p>
+        <p>456 × (1+2.4%) ≈ 456 + 11 = 467</p>
+        <p>原式 ≈ 120 × 467，大幅降低口算难度</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">核心口诀</div>
+        <p>一大一小，变化幅度相近；一个往下砍几个点，另一个往上补几个点，乘积近似不变。</p>
+      </div>
+      <table>
+        <tr><th>运算类型</th><th>放缩规则</th><th>公式</th></tr>
+        <tr><td>除法 A/B</td><td>分子分母同向同比例变化，值不变</td><td>A/B = (A×(1+r)) / (B×(1+r))</td></tr>
+        <tr><td class="highlight">乘法 A×B</td><td class="highlight">两个数反向同比例变化，乘积近似不变</td><td class="highlight">A×B ≈ (A×(1+r)) × (B÷(1+r))</td></tr>
+      </table>
+      <div class="case-box">
+        <div class="case-title">考场实战套路（百化分配套）</div>
+        <p>例：计算 568 × 16.7%</p>
+        <p>已知 16.7% ≈ 1/6</p>
+        <p>利用放缩：568 除以 6，同时 16.7% 乘以 6，乘积不变</p>
+        <p>568 × 16.7% = (568÷6) × (16.7%×6) ≈ 94.7 × 1 ≈ <strong>94.7</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>乘法移多补少（加减型放缩） <span class="tag">重点</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p>即 A 加减一部分，B 反向加减一部分，使最终乘积与原 A×B 相等，也叫「加减凑整放缩」。</p>
+
+      <p><strong>1. A 增加 a，B 减少 b，乘积不变</strong></p>
+      <p>目标等式：A × B = (A+a) × (B-b)，展开推导：</p>
+      <div class="formula">
+        (A+a)(B-b) = AB - Ab + aB - ab<br>
+        AB = AB - Ab + aB - ab<br>
+        0 = -Ab + aB - ab<br>
+        b(A+a) = aB<br>
+        <strong>b = aB / (A+a)</strong>
+      </div>
+
+      <p><strong>2. A 减少 a，B 增加 b，乘积不变</strong></p>
+      <p>目标等式：A × B = (A-a) × (B+b)，展开推导：</p>
+      <div class="formula">
+        (A-a)(B+b) = AB + Ab - aB - ab<br>
+        AB = AB + Ab - aB - ab<br>
+        0 = Ab - aB - ab<br>
+        aB = b(A-a)<br>
+        <strong>b = aB / (A-a)</strong>
+      </div>
+
+      <div class="case-box">
+        <div class="case-title">直观举例验证：A=100，B=200，AB=20000</div>
+        <p>若 A 减少 20（a=20），求 B 需要增加的量 b</p>
+        <p>代入公式：b = (20×200) / (100-20) = 4000 / 80 = 50</p>
+        <p>验证：(100-20) × (200+50) = 80 × 250 = 20000，严格相等</p>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">考场极简算法</div>
+        <p>不用记公式，直接用乘积除以凑整后的新数，得到 B 的目标值。</p>
+        <div class="formula">目标 B' = (A×B) / 凑整后的 A ，增减量 = |B' - B|</div>
+      </div>
+
+      <div class="case-box">
+        <div class="case-title">例：计算 487 × 112</div>
+        <p>将 487 凑整为 500（增加 13）</p>
+        <p>目标 B' ≈ (487×112) / 500 ≈ 109</p>
+        <p>即 487+13→500，112 大约减 3，原式 ≈ 500×109，口算即可</p>
+      </div>
+
+      <div class="case-box">
+        <div class="case-title">例：246 × 150，将 246 凑为 250（+4）</div>
+        <p>原式乘积 = 246×150 = 36900</p>
+        <p>新的 B 值 = 36900 ÷ 250 = 147.6</p>
+        <p>B 需要减少：150 - 147.6 = 2.4</p>
+        <p>验证：250 × 147.6 = 36900，严格相等</p>
+      </div>
+
+      <div class="warn-box">
+        <div class="warn-title">常见误区</div>
+        <p>不是绝对数值加减相等，而是<strong>比例（增长率）近似相等</strong>。100×200 中 100 减 20 变 80、200 加 20 变 220，80×220 = 17600 ≠ 20000，误差极大；正确做法是 100 减 20%（变 80）、200 加 25%（变 250），80×250 = 20000 严格相等。</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-title">实战适用范围</div>
+        <p>仅用于微调数字凑整，变化幅度一般控制在 5% 以内，此时 A↓3%、B↑3% 的误差完全可以忽略。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>三种放缩核心区分 <span class="tag">必看</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>放缩类型</th><th>操作方式</th><th>核心特点</th><th>适用场景</th></tr>
+        <tr>
+          <td class="highlight">比例放缩</td>
+          <td>乘除系数，反向变化</td>
+          <td>比例变化，小幅近似</td>
+          <td>百分比微调估算</td>
+        </tr>
+        <tr>
+          <td class="highlight">移多补少（加减放缩）</td>
+          <td>加减绝对数值，反向变化</td>
+          <td>凑整百整十，可严格相等</td>
+          <td>数字凑整简化计算</td>
+        </tr>
+        <tr>
+          <td class="highlight">除法截位放缩</td>
+          <td>分子分母同向同比例</td>
+          <td>分数值严格不变</td>
+          <td>约分、截位直除</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 颠倒数 ===== -->
+<div class="section" id="daodian">
+  <div class="section-title"><span class="num">8</span>两位数颠倒数进位加法</div>
+  <div class="section-sub">两位数加它的颠倒数，结果一定是 11 的倍数</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>通用加法公式 <span class="tag">必背</span></h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p>定义：一个两位数 10a+b（十位 a，个位 b），它的颠倒数为 10b+a。</p>
+      <div class="formula">
+        (10a+b) + (10b+a) = 11a + 11b = <strong>11 × (a+b)</strong>
+      </div>
+      <p>核心结论：两位数加它的颠倒数，结果一定是 11 的倍数，等于 11 乘以两个数字之和。</p>
+      <ul class="steps">
+        <li><strong>不进位（和为两位数）：</strong>当 a+b ≤ 9 时，结果为两位数，两个数位数字相同，均为 a+b</li>
+        <li><strong>进位（和为三位数）：</strong>当 a+b ≥ 10 时，结果为三位数，发生进位</li>
+      </ul>
+      <div class="tip-box">
+        <div class="tip-title">进位版快速口算规则</div>
+        <p>设 S = a+b（S ≥ 10）</p>
+        <p>① 百位固定为 1　② 十位数字 = S - 10　③ 个位数字 = S - 10（与十位相同）</p>
+        <p>即结果形式为：<strong>1 后面跟两个相同的数字（S-10）</strong></p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例1：48 + 84</div>
+        <p>a=4，b=8，S=12 ≥ 10 → S-10 = 2，结果为 1 2 2 → <strong>132</strong></p>
+        <p>验证：11×12 = 132，正确</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例2：76 + 67</div>
+        <p>S=13，S-10=3，结果为 <strong>143</strong></p>
+        <p>验证：11×13 = 143，正确</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例3：99 + 99</div>
+        <p>S=18，S-10=8，结果为 <strong>198</strong></p>
+        <p>验证：11×18 = 198，正确</p>
+      </div>
+      <p><strong>颠倒数减法补充：</strong></p>
+      <div class="formula">大数减小数：(10a+b) - (10b+a) = 9(a-b)</div>
+      <p>结果一定是 9 的倍数，例如 84-48 = 36 = 9×(8-4)。</p>
+      <table>
+        <tr><th>条件</th><th>结果形式</th><th>示例</th></tr>
+        <tr><td>a+b ≤ 9（不进位）</td><td>两位数，两个数位均为 a+b</td><td>23+32=55</td></tr>
+        <tr><td class="highlight">a+b ≥ 10（进位）</td><td class="highlight">三位数，百位 1，后两位均为 a+b-10</td><td class="highlight">48+84=132</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 全套速算技巧汇总 ===== -->
+<div class="section" id="sucal">
+  <div class="section-title"><span class="num">9</span>全套速算技巧汇总</div>
+  <div class="section-sub">加减速算 · 乘法速算 · 除法与分数速算 · 资料分析进阶</div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>加减速算</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p><strong>（1）尾数法</strong>　适用：选项末位数字不同，且计算精度与题干一致。方法：只计算最后 1~2 位数字，直接锁定答案。</p>
+      <div class="case-box">
+        <div class="case-title">例</div>
+        <p>3456 + 2781，尾数 6+1=7，直接选尾数为 7 的选项</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">慎用场景</div>
+        <p>存在小数、四舍五入或选项尾数相同时慎用。</p>
+      </div>
+
+      <p><strong>（2）高位叠加法</strong>　适用：多个数字连续求和。方法：不从个位开始，从高位依次累加，再合并结果。</p>
+      <div class="case-box">
+        <div class="case-title">例：527 + 364 + 181</div>
+        <p>百位：5+3+1 = 9 → 900</p>
+        <p>十位：2+6+8 = 16 → 160</p>
+        <p>个位：7+4+1 = 12 → 12</p>
+        <p>合计：900 + 160 + 12 = <strong>1072</strong></p>
+      </div>
+
+      <p><strong>（3）凑整抵消法</strong>　将接近整十、整百的数凑成整数，再补偿差值。</p>
+      <div class="case-box">
+        <div class="case-title">例</div>
+        <p>347 + 98 = 347 + 100 - 2 = 445</p>
+        <p>512 - 197 = 512 - 200 + 3 = 315</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>乘法速算</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p><strong>（1）×11 错位相加</strong>　口诀：两头一拉，中间相加，满十进一。</p>
+      <div class="case-box">
+        <div class="case-title">例1：63 × 11</div>
+        <p>两头 6 和 3 拉开，中间 6+3=9 → <strong>693</strong></p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例2：78 × 11</div>
+        <p>两头 7 和 8 拉开，中间 7+8=15，进位 → <strong>858</strong></p>
+      </div>
+
+      <p><strong>（2）常用系数速算（资料高频）</strong></p>
+      <ul class="steps">
+        <li>A × 1.5 = A + A÷2　例：240×1.5 = 240+120 = <strong>360</strong></li>
+        <li>A × 1.1 = A + 0.1A　例：356×1.1 = 356+35.6 = <strong>391.6</strong></li>
+        <li>A × 0.9 = A - 0.1A　例：420×0.9 = 420-42 = <strong>378</strong></li>
+      </ul>
+
+      <p><strong>（3）除以 5、25、125 转化</strong></p>
+      <ul class="steps">
+        <li>÷5 = ×2，小数点左移一位　例：360÷5 = 720÷10 = <strong>72</strong></li>
+        <li>÷25 = ×4，小数点左移两位　例：140÷25 = 560÷100 = <strong>5.6</strong></li>
+        <li>÷125 = ×8，小数点左移三位　例：240÷125 = 1920÷1000 = <strong>1.92</strong></li>
+      </ul>
+
+      <p><strong>（4）头同尾合十</strong>　条件：两个两位数，十位数字相同，个位数字相加等于 10。</p>
+      <div class="tip-box">
+        <div class="tip-title">口诀</div>
+        <p>头×(头+1) 放前面，尾×尾 放后面，不足两位补 0</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例1：43 × 47</div>
+        <p>头：4×(4+1) = 20，尾：3×7 = 21 → 结果 <strong>2021</strong></p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例2：81 × 89</div>
+        <p>头：8×9 = 72，尾：1×9 = 09 → 结果 <strong>7209</strong></p>
+      </div>
+
+      <p><strong>（5）尾同头合十</strong>　条件：两个两位数，个位数字相同，十位数字相加等于 10。</p>
+      <div class="tip-box">
+        <div class="tip-title">口诀</div>
+        <p>头1×头2 + 尾 放前面，尾×尾 放后面</p>
+      </div>
+      <div class="case-box">
+        <div class="case-title">例：27 × 87</div>
+        <p>前半：2×8 + 7 = 23，后半：7×7 = 49 → 结果 <strong>2349</strong></p>
+      </div>
+
+      <p><strong>（6）十几乘十几</strong>　口诀：头乘头，尾加尾，尾乘尾，满十进位。</p>
+      <div class="case-box">
+        <div class="case-title">例：13 × 14</div>
+        <p>头：1×1=1，尾加：3+4=7，尾乘：3×4=12</p>
+        <p>进位后结果：<strong>182</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>除法与分数速算</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p><strong>（1）截位直除法（资料第一核心技巧）</strong>（详见第 1 节）</p>
+      <ul class="steps">
+        <li>选项首位不同：差距大，分母截 2 位计算</li>
+        <li>首位相同、第二位不同：差距小，分母截 3 位计算</li>
+        <li>一步除法优先只截分母；多步乘除分子分母同截，方便约分</li>
+        <li>无需除到底，算出可区分选项的首位/次位即可停止</li>
+      </ul>
+
+      <p><strong>（2）化除为乘</strong>　适用条件：增长率 |r| ≤ 5%。</p>
+      <div class="formula">
+        A / (1+r) ≈ A × (1-r)<br>
+        A / (1-r) ≈ A × (1+r)
+      </div>
+      <div class="case-box">
+        <div class="case-title">例</div>
+        <p>452 / (1+3%) ≈ 452 × 0.97</p>
+      </div>
+      <div class="warn-box">
+        <div class="warn-title">注意</div>
+        <p>增长率绝对值大于 5% 时误差显著增大，不推荐使用。</p>
+      </div>
+
+      <p><strong>（3）百化分（增长量计算核心）</strong>（详见第 2 节）</p>
+      <ul class="steps">
+        <li>增长量 = 现期量 / (n+1)，当 r = 1/n 时</li>
+        <li>减少量 = 现期量 / (n-1)，当 r = -1/n 时</li>
+      </ul>
+
+      <p><strong>（4）分数比较</strong></p>
+      <ul class="steps">
+        <li><strong>分数性质（瞪眼法）：</strong>分子大、分母小的分数，值一定更大</li>
+        <li><strong>差分法：</strong>适用于两个分数非常接近、一大一小的情况
+          <ul>
+            <li>定义分子分母都大的为「大分数」，另一个为「小分数」</li>
+            <li>分子分母分别相减，得到「差分数」</li>
+            <li>差分数 &gt; 小分数 → 大分数 &gt; 小分数；反之则反</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="case-box">
+        <div class="case-title">例：比较 512/134 和 547/142</div>
+        <p>大分数 547/142，小分数 512/134，差分数 = (547-512)/(142-134) = 35/8 = 4.375</p>
+        <p>差分数 &gt; 小分数 → 大分数 <strong>547/142 更大</strong></p>
+      </div>
+
+      <p><strong>（5）除法拆分（包子法）</strong>　方法：将分母视为 100 份，先算 1 份的大小，再看分子包含多少份。</p>
+      <div class="case-box">
+        <div class="case-title">例：计算 47 ÷ 426</div>
+        <p>1 份 ≈ 426÷100 = 4.26</p>
+        <p>47 约包含 11 份，结果约为 11% 多一点</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>资料分析进阶技巧</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <p><strong>（1）假设分配法</strong>　适用：已知现期量和增长率，求基期量和增长量。方法：先假设一个好算的基期值，算出对应增长量，再将剩余差值进行二次分配，误差可控，计算速度快于直除。</p>
+      <p><strong>（2）混合增长率口诀</strong>　整体增长率介于两个部分增长率之间，且偏向基期量更大的那一侧。</p>
+    </div>
+  </div>
+</div>
+
 <!-- ===== 等差求和 ===== -->
 <div class="section" id="dengcha">
-  <div class="section-title"><span class="num">7</span>等差求和法专项</div>
+  <div class="section-title"><span class="num">10</span>等差求和法专项</div>
   <div class="section-sub">累计值、年均增长量题目的秒杀工具</div>
 
   <div class="method-card open">
@@ -878,7 +1266,7 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
 
 <!-- ===== 高频错误 ===== -->
 <div class="section" id="errors">
-  <div class="section-title"><span class="num">8</span>高频错误与避坑指南</div>
+  <div class="section-title"><span class="num">11</span>高频错误与避坑指南</div>
   <div class="section-sub">考场最容易丢分的十大易错点，逐条对照排查</div>
 
   <div class="method-card open">
@@ -1002,7 +1390,7 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
 
 <!-- ===== 解题逻辑 ===== -->
 <div class="section" id="logic">
-  <div class="section-title"><span class="num">9</span>解题逻辑与决策流程</div>
+  <div class="section-title"><span class="num">12</span>解题逻辑与决策流程</div>
   <div class="section-sub">拿到题目后如何快速选择最优速算方法</div>
 
   <div class="method-card open">
@@ -1144,7 +1532,7 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
 
 <!-- ===== 速查表 ===== -->
 <div class="section" id="quick">
-  <div class="section-title"><span class="num">10</span>终极速查对照表</div>
+  <div class="section-title"><span class="num">13</span>终极速查对照表</div>
   <div class="section-sub">考前最后一眼，所有公式和技巧一表打尽</div>
 
   <div class="method-card open">
@@ -1199,6 +1587,28 @@ td.highlight{background:#fef5e7;font-weight:600;color:var(--accent)}
           <tr><td>6.25%</td><td>1/16</td><td>16</td><td>17</td></tr>
         </table>
       </div>
+    </div>
+  </div>
+
+  <div class="method-card open">
+    <div class="method-header" onclick="toggleCard(this)">
+      <h3>乘法放缩与颠倒数速查</h3>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="method-body">
+      <table>
+        <tr><th>场景</th><th>操作</th><th>公式 / 口诀</th></tr>
+        <tr><td>乘法等比例放缩</td><td>一增一减，比例相反</td><td>A×B ≈ (A×(1+r)) × (B÷(1+r))</td></tr>
+        <tr><td>乘法移多补少</td><td>凑整后反推另一数</td><td>B' = (A×B) / 凑整后的 A</td></tr>
+        <tr><td>两位数加颠倒数</td><td>a+b ≤ 9 不进位</td><td>结果两位数 = (a+b)(a+b)</td></tr>
+        <tr><td class="highlight">两位数加颠倒数</td><td class="highlight">a+b ≥ 10 进位</td><td class="highlight">结果 = 1(S-10)(S-10)</td></tr>
+        <tr><td>两位数减颠倒数</td><td>大数减小数</td><td>结果 = 9(a-b)，必为 9 的倍数</td></tr>
+        <tr><td>×11</td><td>两头一拉，中间相加</td><td>中间满十进一</td></tr>
+        <tr><td>头同尾合十</td><td>头×(头+1) 前面，尾×尾 后面</td><td>不足两位补 0</td></tr>
+        <tr><td>尾同头合十</td><td>头1×头2+尾 前面，尾×尾 后面</td><td>—</td></tr>
+        <tr><td>十几乘十几</td><td>头乘头，尾加尾，尾乘尾</td><td>满十进位</td></tr>
+        <tr><td>÷5 / ÷25 / ÷125</td><td>×2 / ×4 / ×8 后移小数点</td><td>左移 1 / 2 / 3 位</td></tr>
+      </table>
     </div>
   </div>
 
