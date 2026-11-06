@@ -1245,10 +1245,15 @@
                 flex-wrap: wrap;
             }
         }
+
+        /* Vue 挂载前隐藏原始模板，避免脚本出错时把 {{ }} 直接暴露给用户 */
+        [v-cloak] {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <!-- Header -->
         <header class="app-header" :class="{ 'demo-mode': isDemoMode }">
             <div class="demo-banner" v-if="isDemoMode">
@@ -1686,7 +1691,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>确定要删除「<strong>{{ itemToDelete?.name }}</strong>」吗？此操作不可恢复。</p>
+                    <p>确定要删除「<strong>{{ itemToDelete ? itemToDelete.name : '' }}</strong>」吗？此操作不可恢复。</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-cancel" @click="showDeleteModal = false">取消</button>
@@ -1710,7 +1715,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>确定要删除「<strong>{{ categoryToDelete?.name }}</strong>」分组吗？该分组下的所有项目也会被删除。</p>
+                    <p>确定要删除「<strong>{{ categoryToDelete ? categoryToDelete.name : '' }}</strong>」分组吗？该分组下的所有项目也会被删除。</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-cancel" @click="showDeleteCategoryModal = false">取消</button>
@@ -1868,6 +1873,13 @@
                 document.removeEventListener('keydown', this.handleGlobalShortcut);
             },
             methods: {
+                // 首个分组的 id（无分组时为 undefined）；不要用 ?. 以兼容旧浏览器。
+                // 用方法而不是 computed：computed 会缓存，而 Vue 2 不监听数组下标赋值，
+                // 缓存可能与原来的内联表达式（每次求值）不一致。
+                firstCategoryId() {
+                    const first = this.categories[0];
+                    return first ? first.id : undefined;
+                },
                 loadData() {
                     const storage = AppUtils.createNamespacedStorage('quicknav_data', { version: 1 });
                     const data = storage.get(null);
@@ -1939,7 +1951,7 @@
                     }
                 },
                 selectAll() {
-                    const allIds = this.filteredCategories.flatMap(cat => this.getItemsByCategory(cat.id).map(item => item.id));
+                    const allIds = this.filteredCategories.reduce((acc, cat) => acc.concat(this.getItemsByCategory(cat.id).map(item => item.id)), []);
                     this.selectedItems = allIds;
                     this.showMoreMenu = false;
                 },
@@ -1958,7 +1970,8 @@
                 handleGlobalShortcut(e) {
                     if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
                         e.preventDefault();
-                        document.querySelector('.search-input')?.focus();
+                        const searchInput = document.querySelector('.search-input');
+                        if (searchInput) searchInput.focus();
                     }
                     if (e.key === 'Escape') {
                         this.showLinkModal = false;
@@ -1975,7 +1988,7 @@
                 // Link Modal
                 openAddLinkModal(categoryId) {
                     this.editingLink = null;
-                    this.linkForm = { name: '', url: '', categoryId: categoryId || this.categories[0]?.id };
+                    this.linkForm = { name: '', url: '', categoryId: categoryId || this.firstCategoryId() };
                     this.showLinkModal = true;
                 },
                 openEditLinkModal(item) {
@@ -2016,7 +2029,7 @@
                 // Snippet Modal
                 openAddSnippetModal(categoryId) {
                     this.editingSnippet = null;
-                    this.snippetForm = { name: '', content: '', categoryId: categoryId || this.categories[0]?.id, isWarning: false };
+                    this.snippetForm = { name: '', content: '', categoryId: categoryId || this.firstCategoryId(), isWarning: false };
                     this.showSnippetModal = true;
                 },
                 openEditSnippetModal(item) {
@@ -2127,7 +2140,7 @@
                 // Batch Move
                 openBatchMoveModal() {
                     if (this.selectedItems.length === 0) return;
-                    this.batchMoveTargetId = this.categories[0]?.id;
+                    this.batchMoveTargetId = this.firstCategoryId();
                     this.showMoreMenu = false;
                     this.showBatchMoveModal = true;
                 },
