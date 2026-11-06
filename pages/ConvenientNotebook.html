@@ -215,7 +215,9 @@
     if (savedTheme) {
       applyTheme(savedTheme);
     } else {
-      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+      // 不用 ?. —— 旧浏览器解析 ES2020 可选链会整块报错，导致脚本全挂
+      const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+      const prefersDark = mediaQuery ? mediaQuery.matches : false;
       applyTheme(prefersDark ? 'dark' : 'light');
     }
     themeToggle.addEventListener('click', () => {
