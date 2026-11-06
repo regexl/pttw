@@ -603,7 +603,9 @@
         }
 
         function renderCashFlowChart(history) {
-            const ctx = document.getElementById('cashFlowChart')?.getContext('2d');
+            // 不用 ?. —— 旧浏览器解析 ES2020 可选链会整块报错，导致脚本全挂
+            const canvas = document.getElementById('cashFlowChart');
+            const ctx = canvas ? canvas.getContext('2d') : null;
             if(!ctx) return;
             if (chartInstances.cashFlow) chartInstances.cashFlow.destroy();
             chartInstances.cashFlow = new Chart(ctx, {
@@ -783,12 +785,21 @@
             const wsSummary = XLSX.utils.json_to_sheet(summaryData);
             XLSX.utils.book_append_sheet(wb, wsSummary, '资产总览');
             state.assets.forEach(asset => {
-                const cleanTransactions = asset.transactions.map(({id, ...tx}) => tx);
+                // 不用对象剩余/展开（ES2018）—— 旧浏览器解析不了会整块报错
+                const cleanTransactions = asset.transactions.map(function (tx) {
+                    const copy = Object.assign({}, tx);
+                    delete copy.id;
+                    return copy;
+                });
                 const wsAsset = XLSX.utils.json_to_sheet(cleanTransactions);
                 const safeSheetName = `${asset.name}(${asset.code})`.replace(/[*?:/\\\[\]]/g, "_").slice(0, 31);
                 XLSX.utils.book_append_sheet(wb, wsAsset, safeSheetName);
             });
-            const cleanCashFlows = state.cashFlows.map(({id, ...cf}) => cf);
+            const cleanCashFlows = state.cashFlows.map(function (cf) {
+                const copy = Object.assign({}, cf);
+                delete copy.id;
+                return copy;
+            });
             const wsCashFlow = XLSX.utils.json_to_sheet(cleanCashFlows);
             XLSX.utils.book_append_sheet(wb, wsCashFlow, '资金流水');
             XLSX.writeFile(wb, `investment-export-${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -825,7 +836,8 @@
                         if (cashFlowSheet) importedState.cashFlows = XLSX.utils.sheet_to_json(cashFlowSheet);
                     }
                     if (importedState && Array.isArray(importedState.assets)) {
-                        state = { ...state, ...importedState, cashFlows: importedState.cashFlows || [] };
+                        // 不用对象展开（ES2018）—— 旧浏览器解析不了会整块报错
+                        state = Object.assign({}, state, importedState, { cashFlows: importedState.cashFlows || [] });
                         applyTheme(); syncTranslations(); render();
                         alert(getTranslation('dataImported'));
                     } else throw new Error('Invalid file format');
@@ -902,12 +914,11 @@
             if (!loadedState) {
                 return;
             }
-            state = {
-                ...state,
-                ...loadedState,
+            // 不用对象展开（ES2018）—— 旧浏览器解析不了会整块报错
+            state = Object.assign({}, state, loadedState, {
                 assets: Array.isArray(loadedState.assets) ? loadedState.assets : [],
                 cashFlows: Array.isArray(loadedState.cashFlows) ? loadedState.cashFlows : [],
-            };
+            });
         }
 
         function sanitize(str) {
