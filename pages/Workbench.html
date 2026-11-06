@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="310332c6-bb2a-4410-90c1-0d681395f9b2"></script>
+    <title>个人工作台 - Productivity Hub</title>
+    <meta name="description" content="个人生产力工作台:待办/日程/习惯/笔记/工具快说一站式入口,支持任务勾选、新增、暗色主题。">
+    <link rel="stylesheet" href="../viewport/assets/fontawesome-free-6.4.2-web/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #fb7185;
+            --success: #34d399;
+            --success-dark: #10b981;
+            --warning: #fbbf24;
+            --warning-dark: #f59e0b;
+            --danger: #ef4444;
+            --info: #38bdf8;
+            --info-dark: #0ea5e9;
+            --purple: #a78bfa;
+
+            --bg: #f8fafc;
+            --bg-pattern: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                         radial-gradient(circle at 100% 100%, rgba(251, 113, 133, 0.05) 0%, transparent 40%);
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --surface-translucent: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(255, 255, 255, 0.7);
+
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --primary-light: #a5b4fc;
+            --primary-dark: #6366f1;
+            --success-dark: #34d399;
+            --warning-dark: #fbbf24;
+            --info-dark: #38bdf8;
+
+            --bg: #0b1220;
+            --bg-pattern: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                         radial-gradient(circle at 100% 100%, rgba(251, 113, 133, 0.08) 0%, transparent 40%);
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --surface-translucent: rgba(30, 41, 59, 0.85);
+            --sidebar-bg: rgba(15, 23, 42, 0.6);
+
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+
+            --border: #334155;
+            --border-light: #1e293b;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            background-image: var(--bg-pattern);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        /* ===== 布局 ===== */
+        .app {
+            display: grid;
+            grid-template-columns: 240px 1fr 320px;
+            gap: 1.25rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.25rem;
+            min-height: 100vh;
+        }
+
+        /* ===== 通用卡片 ===== */
+        .card {
+            background: var(--surface-translucent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .card-title-link {
+            font-size: 0.75rem;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .card-title-link:hover { text-decoration: underline; }
+
+        /* ===== 侧边栏 ===== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: sticky;
+            top: 1.25rem;
+            align-self: start;
+            max-height: calc(100vh - 2.5rem);
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 0.25rem;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .brand-text small {
+            display: block;
+            font-weight: 400;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: -2px;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 0 0.5rem;
+            margin: 0.5rem 0 0.5rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.55rem 0.75rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-item a:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .nav-item a.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item a.active .nav-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .nav-label { flex: 1; }
+
+        .nav-count {
+            background: var(--border-light);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            padding: 1px 7px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* ===== 个人简介卡 ===== */
+        .profile-card {
+            text-align: center;
+            padding: 1.25rem 1rem;
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 0.75rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-name { font-weight: 700; font-size: 1rem; margin: 0; }
+        .profile-role { font-size: 0.78rem; color: var(--text-secondary); margin: 0.2rem 0 0.75rem; }
+
+        .profile-streak {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 113, 133, 0.15));
+            padding: 0.4rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: var(--warning-dark);
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .profile-streak { color: var(--warning); }
+
+        /* ===== 主区 ===== */
+        .main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            min-width: 0;
+        }
+
+        /* ===== 顶部 Hero ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: 1.75rem 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: 20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hero-greeting {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin: 0 0 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0 0 0.4rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.92rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.1rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== 指标卡网格 ===== */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .metric {
+            background: var(--surface-translucent);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .metric:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .metric-icon.primary { background: rgba(99, 102, 241, 0.12); color: var(--primary); }
+        .metric-icon.success { background: rgba(52, 211, 153, 0.12); color: var(--success-dark); }
+        .metric-icon.warn { background: rgba(251, 191, 36, 0.12); color: var(--warning-dark); }
+        .metric-icon.danger { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
+        .metric-icon.info { background: rgba(56, 189, 248, 0.12); color: var(--info-dark); }
+
+        [data-theme="dark"] .metric-icon.success { color: var(--success); }
+        [data-theme="dark"] .metric-icon.warn { color: var(--warning); }
+        [data-theme="dark"] .metric-icon.info { color: var(--info); }
+
+        .metric-info { min-width: 0; }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .metric-trend {
+            font-size: 0.7rem;
+            color: var(--success-dark);
+            font-weight: 600;
+        }
+
+        .metric-trend.down { color: var(--danger); }
+
+        /* ===== 待办列表 ===== */
+        .todo-section {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .todo-input-wrap {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 0.55rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 0.88rem;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .todo-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+
+        .btn {
+            padding: 0.55rem 1rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .btn-ghost {
+            background: var(--surface-hover);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover { background: var(--border); color: var(--text); }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: var(--surface-hover);
+            border: none;
+            padding: 0.35rem 0.75rem;
+            border-radius: 14px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .todo-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.65rem 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .todo-item:last-child { border-bottom: none; }
+        .todo-item:hover { background: var(--surface-hover); border-radius: var(--radius-sm); }
+
+        .todo-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+            background: var(--surface);
+        }
+
+        .todo-check:hover { border-color: var(--primary); }
+
+        .todo-item.done .todo-check {
+            background: var(--success-dark);
+            border-color: var(--success-dark);
+        }
+
+        .todo-check i {
+            color: white;
+            font-size: 0.6rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .todo-item.done .todo-check i { opacity: 1; }
+
+        .todo-content { flex: 1; min-width: 0; }
+
+        .todo-title {
+            font-size: 0.9rem;
+            margin: 0;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .todo-item.done .todo-title {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            align-items: center;
+        }
+
+        .todo-priority {
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .todo-priority.high { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
+        .todo-priority.mid { background: rgba(251, 191, 36, 0.12); color: var(--warning-dark); }
+        .todo-priority.low { background: rgba(99, 102, 241, 0.12); color: var(--primary); }
+
+        [data-theme="dark"] .todo-priority.mid { color: var(--warning); }
+
+        .todo-tag {
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: var(--border-light);
+            font-size: 0.65rem;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .todo-item:hover .todo-actions { opacity: 1; }
+
+        .todo-action-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .todo-action-btn:hover { background: var(--border-light); color: var(--text); }
+        .todo-action-btn.delete:hover { color: var(--danger); }
+
+        /* ===== 进度 ===== */
+        .progress-section {
+            margin-bottom: 0.85rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== 目标卡 ===== */
+        .goal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .goal-item {
+            padding: 0.65rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface-hover);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .goal-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .goal-pct {
+            font-size: 0.78rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ===== 习惯打卡 ===== */
+        .habit-list {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+
+        .habit-day {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .habit-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: var(--border-light);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .habit-cell.done {
+            background: var(--success);
+            color: white;
+        }
+
+        .habit-cell.today {
+            border: 2px solid var(--primary);
+        }
+
+        .habit-cell:hover { transform: scale(1.1); }
+
+        /* ===== 笔记卡 ===== */
+        .note-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .note-item {
+            padding: 0.65rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface-hover);
+            border-left: 3px solid var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .note-item:hover { transform: translateX(2px); }
+
+        .note-item:nth-child(2) { border-left-color: var(--accent); }
+        .note-item:nth-child(3) { border-left-color: var(--success-dark); }
+        .note-item:nth-child(4) { border-left-color: var(--warning); }
+
+        .note-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0 0 0.2rem;
+        }
+
+        .note-preview {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .note-time {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* ===== 工具快说 ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .tool-tile {
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface-hover);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .tool-tile:hover {
+            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .tool-tile:hover .tool-tile-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .tool-tile-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.4rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tool-tile-name {
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        /* ===== 右侧栏 ===== */
+        .rightbar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: sticky;
+            top: 1.25rem;
+            align-self: start;
+            max-height: calc(100vh - 2.5rem);
+            overflow-y: auto;
+        }
+
+        /* 日历 */
+        .calendar {
+            text-align: center;
+        }
+
+        .calendar-month {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 0.75rem;
+        }
+
+        .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+
+        .cal-day.muted { color: var(--text-muted); opacity: 0.4; }
+        .cal-day:hover { background: var(--surface-hover); }
+        .cal-day.has-event { position: relative; font-weight: 600; }
+        .cal-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        .cal-day.today {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+        }
+        .cal-day.today::after { background: white; }
+
+        /* 日程 */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .schedule-item:hover { background: var(--surface-hover); }
+
+        .schedule-time {
+            flex-shrink: 0;
+            width: 56px;
+            text-align: center;
+        }
+
+        .schedule-hour {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.1;
+        }
+
+        .schedule-min {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .schedule-bar {
+            width: 3px;
+            border-radius: 2px;
+            background: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .schedule-content { flex: 1; min-width: 0; }
+
+        .schedule-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0 0 0.15rem;
+        }
+
+        .schedule-meta {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* 活动流 */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            position: relative;
+        }
+
+        .activity-list::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            bottom: 12px;
+            width: 2px;
+            background: var(--border-light);
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .activity-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            flex-shrink: 0;
+            z-index: 1;
+            border: 3px solid var(--bg);
+        }
+
+        .activity-dot.success { background: var(--success-dark); }
+        .activity-dot.primary { background: var(--primary); }
+        .activity-dot.warn { background: var(--warning-dark); }
+        .activity-dot.info { background: var(--info-dark); }
+
+        [data-theme="dark"] .activity-dot.warn { background: var(--warning); }
+        [data-theme="dark"] .activity-dot.info { background: var(--info); }
+
+        .activity-content { flex: 1; min-width: 0; padding-top: 2px; }
+
+        .activity-text {
+            font-size: 0.82rem;
+            margin: 0;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* 顶栏按钮 */
+        .topbar {
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            z-index: 50;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-translucent);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--surface);
+            color: var(--text);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            font-size: 0.88rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 响应式 */
+        @media (max-width: 1100px) {
+            .app { grid-template-columns: 1fr 320px; }
+            .sidebar { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .app {
+                grid-template-columns: 1fr;
+                padding: 0.75rem;
+                gap: 0.85rem;
+            }
+            .rightbar { position: static; max-height: none; }
+            .hero { padding: 1.25rem; }
+            .hero-title { font-size: 1.25rem; }
+            .hero-stats { width: 100%; justify-content: space-between; }
+            .hero-stat { padding: 0.5rem 0.75rem; }
+            .todo-section { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+<!-- 浮动顶栏按钮(主题切换 + 添加任务) -->
+<div class="topbar">
+    <button class="icon-btn" id="addTaskBtn" title="新增任务"><i class="fas fa-plus"></i></button>
+    <button class="icon-btn" id="themeToggle" title="切换主题"><i class="fas fa-moon"></i></button>
+</div>
+
+<div class="app">
+
+    <!-- ========== 侧边栏 ========== -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon"><i class="fas fa-grip"></i></div>
+            <div class="brand-text">
+                工作台
+                <small>Personal Hub</small>
+            </div>
+        </div>
+
+        <div class="profile-card card">
+            <div class="profile-avatar">E</div>
+            <p class="profile-name">Ethan</p>
+            <p class="profile-role">测试开发工程师</p>
+            <div class="profile-streak">
+                <i class="fas fa-fire"></i> 连续打卡 12 天
+            </div>
+        </div>
+
+        <div>
+            <p class="nav-section-title">工作区</p>
+            <ul class="nav-list">
+                <li class="nav-item"><a class="active">
+                    <i class="fas fa-house nav-icon"></i><span class="nav-label">概览</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-list-check nav-icon"></i><span class="nav-label">任务</span>
+                    <span class="nav-count" id="navTaskCount">0</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-calendar-day nav-icon"></i><span class="nav-label">日程</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-note-sticky nav-icon"></i><span class="nav-label">笔记</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-bullseye nav-icon"></i><span class="nav-label">目标</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-chart-line nav-icon"></i><span class="nav-label">复盘</span>
+                </a></li>
+            </ul>
+        </div>
+
+        <div>
+            <p class="nav-section-title">集合</p>
+            <ul class="nav-list">
+                <li class="nav-item"><a>
+                    <i class="fas fa-folder nav-icon"></i><span class="nav-label">项目</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-bookmark nav-icon"></i><span class="nav-label">收藏</span>
+                    <span class="nav-count">23</span>
+                </a></li>
+                <li class="nav-item"><a>
+                    <i class="fas fa-tag nav-icon"></i><span class="nav-label">标签</span>
+                </a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- ========== 主区 ========== -->
+    <main class="main">
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <div>
+                    <p class="hero-greeting" id="greeting"><i class="fas fa-sun"></i> 下午好</p>
+                    <h1 class="hero-title">Ethan's Workbench</h1>
+                    <p class="hero-subtitle">今天是 2026 年 6 月 2 日 周二 · 已完成 5 项任务,继续加油 💪</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="heroDone">0</span>
+                        <span class="hero-stat-label">已完成</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="heroStreak">12</span>
+                        <span class="hero-stat-label">连续天数</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value">4.6h</span>
+                        <span class="hero-stat-label">专注时长</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 指标卡 -->
+        <section class="metric-grid">
+            <div class="metric">
+                <div class="metric-icon primary"><i class="fas fa-list-check"></i></div>
+                <div class="metric-info">
+                    <p class="metric-label">今日待办</p>
+                    <p class="metric-value" id="metricTodo">0</p>
+                    <span class="metric-trend">+2 较昨日</span>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon success"><i class="fas fa-circle-check"></i></div>
+                <div class="metric-info">
+                    <p class="metric-label">本周完成</p>
+                    <p class="metric-value">23</p>
+                    <span class="metric-trend">+18% 较上周</span>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon warn"><i class="fas fa-clock"></i></div>
+                <div class="metric-info">
+                    <p class="metric-label">平均专注</p>
+                    <p class="metric-value">42<span style="font-size:0.7em">min</span></p>
+                    <span class="metric-trend">+5min 较上周</span>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon info"><i class="fas fa-fire"></i></div>
+                <div class="metric-info">
+                    <p class="metric-label">习惯完成</p>
+                    <p class="metric-value">5<span style="font-size:0.7em">/7</span></p>
+                    <span class="metric-trend">本周 71%</span>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon danger"><i class="fas fa-bell"></i></div>
+                <div class="metric-info">
+                    <p class="metric-label">待处理</p>
+                    <p class="metric-value">3</p>
+                    <span class="metric-trend down">2 项紧急</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 待办 + 习惯 -->
+        <section class="todo-section">
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="card-title-text">
+                        <span class="card-title-icon" style="background: rgba(99,102,241,0.12); color: var(--primary);"><i class="fas fa-list-check"></i></span>
+                        今日待办
+                    </span>
+                    <span id="todoProgress" style="font-size: 0.78rem; color: var(--text-secondary);">0 / 0</span>
+                </h2>
+
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>完成进度</span>
+                        <span id="progressPct">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+                </div>
+
+                <div class="todo-input-wrap">
+                    <input class="todo-input" id="todoInput" type="text" placeholder="添加新任务,回车确认..." maxlength="60">
+                    <button class="btn btn-primary" id="addTodoBtn"><i class="fas fa-plus"></i> 添加</button>
+                </div>
+
+                <div class="filter-tabs" id="filterTabs">
+                    <button class="filter-tab active" data-filter="all">全部</button>
+                    <button class="filter-tab" data-filter="todo">待办</button>
+                    <button class="filter-tab" data-filter="done">已完成</button>
+                    <button class="filter-tab" data-filter="high">高优先级</button>
+                </div>
+
+                <ul class="todo-list" id="todoList"></ul>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-title-text">
+                            <span class="card-title-icon" style="background: rgba(52,211,153,0.12); color: var(--success-dark);"><i class="fas fa-fire"></i></span>
+                            习惯打卡
+                        </span>
+                    </h2>
+                    <p style="font-size: 0.85rem; margin: 0 0 0.4rem; font-weight: 600;">每日阅读 30 分钟</p>
+                    <div class="habit-list" id="habitList"></div>
+                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0.6rem 0 0;">点击格子切换完成状态,本周已完成 5/7</p>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="card-title-text">
+                            <span class="card-title-icon" style="background: rgba(167,139,250,0.12); color: var(--purple);"><i class="fas fa-bullseye"></i></span>
+                            本季目标
+                        </span>
+                    </h2>
+                    <div class="goal-list">
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <p class="goal-name">读完 6 本技术书</p>
+                                <span class="goal-pct">67%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 67%"></div></div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <p class="goal-name">体重降到 70kg</p>
+                                <span class="goal-pct">45%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, var(--success-dark), var(--success))"></div></div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <p class="goal-name">输出 20 篇博客</p>
+                                <span class="goal-pct">35%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 35%; background: linear-gradient(90deg, var(--accent), #f472b6)"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具快说 -->
+        <section class="card">
+            <h2 class="card-title">
+                <span class="card-title-text">
+                    <span class="card-title-icon" style="background: rgba(56,189,248,0.12); color: var(--info-dark);"><i class="fas fa-rocket"></i></span>
+                    工具快说
+                </span>
+                <a class="card-title-link" href="index.html">查看全部 →</a>
+            </h2>
+            <div class="tools-grid">
+                <a class="tool-tile" href="SmartNotes.html">
+                    <div class="tool-tile-icon"><i class="far fa-note-sticky"></i></div>
+                    <div class="tool-tile-name">智能便签</div>
+                </a>
+                <a class="tool-tile" href="QuotePilot.html">
+                    <div class="tool-tile-icon"><i class="fas fa-plane-departure"></i></div>
+                    <div class="tool-tile-name">报价工具</div>
+                </a>
+                <a class="tool-tile" href="TripValidator.html">
+                    <div class="tool-tile-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="tool-tile-name">行程验证</div>
+                </a>
+                <a class="tool-tile" href="InvestmentDashboard.html">
+                    <div class="tool-tile-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="tool-tile-name">投资面板</div>
+                </a>
+                <a class="tool-tile" href="QuickNavigation.html">
+                    <div class="tool-tile-icon"><i class="fas fa-compass"></i></div>
+                    <div class="tool-tile-name">快速导航</div>
+                </a>
+                <a class="tool-tile" href="FullFeaturedOnlineWhiteboard.html">
+                    <div class="tool-tile-icon"><i class="fas fa-chalkboard"></i></div>
+                    <div class="tool-tile-name">在线白板</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 笔记速览 -->
+        <section class="card">
+            <h2 class="card-title">
+                <span class="card-title-text">
+                    <span class="card-title-icon" style="background: rgba(251,191,36,0.12); color: var(--warning-dark);"><i class="fas fa-note-sticky"></i></span>
+                    最近笔记
+                </span>
+                <a class="card-title-link" href="SmartNotes.html">打开便签 →</a>
+            </h2>
+            <div class="note-list">
+                <div class="note-item">
+                    <h3 class="note-title">Vue3 组合式 API 速查</h3>
+                    <p class="note-preview">ref / reactive / computed / watch 的常见用法和最佳实践,以及与 Vue2 选项式的对比...</p>
+                    <p class="note-time">2 小时前 · 已编辑 3 次</p>
+                </div>
+                <div class="note-item">
+                    <h3 class="note-title">性能优化清单</h3>
+                    <p class="note-preview">本周压测发现的 5 个性能瓶颈,首屏加载从 3.2s 优化到 1.4s 的具体步骤记录...</p>
+                    <p class="note-time">昨天 · 已编辑 5 次</p>
+                </div>
+                <div class="note-item">
+                    <h3 class="note-title">读书笔记 -《代码整洁之道》</h3>
+                    <p class="note-preview">命名规范、函数单一职责、注释的合理使用。摘录 12 条最值得在团队推广的实践...</p>
+                    <p class="note-time">3 天前</p>
+                </div>
+                <div class="note-item">
+                    <h3 class="note-title">周会要点 - Q2 复盘</h3>
+                    <p class="note-preview">本季度 OKR 完成度 78%,自动化覆盖率从 62% 提升到 81%,下季度重点是...</p>
+                    <p class="note-time">5 月 30 日</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========== 右侧栏 ========== -->
+    <aside class="rightbar">
+
+        <!-- 日历 -->
+        <div class="card calendar">
+            <h2 class="card-title" style="margin: 0;">
+                <span class="card-title-text" style="width: 100%; justify-content: space-between;">
+                    <button class="card-title-link" id="calPrev"><i class="fas fa-chevron-left"></i></button>
+                    <span class="calendar-month" id="calMonth">2026 年 6 月</span>
+                    <button class="card-title-link" id="calNext"><i class="fas fa-chevron-right"></i></button>
+                </span>
+            </h2>
+            <div class="calendar-week">
+                <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+            </div>
+            <div class="calendar-days" id="calDays"></div>
+        </div>
+
+        <!-- 今日日程 -->
+        <div class="card">
+            <h2 class="card-title">
+                <span class="card-title-text">
+                    <span class="card-title-icon" style="background: rgba(99,102,241,0.12); color: var(--primary);"><i class="fas fa-calendar-day"></i></span>
+                    今日日程
+                </span>
+                <span style="font-size: 0.78rem; color: var(--text-secondary);">3 项</span>
+            </h2>
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="schedule-hour">10:00</div>
+                        <div class="schedule-min">30 min</div>
+                    </div>
+                    <div class="schedule-bar" style="background: var(--primary);"></div>
+                    <div class="schedule-content">
+                        <h3 class="schedule-title">产品周会</h3>
+                        <p class="schedule-meta"><i class="fas fa-location-dot"></i> 会议室 A · 参与 8 人</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="schedule-hour">14:00</div>
+                        <div class="schedule-min">1 hour</div>
+                    </div>
+                    <div class="schedule-bar" style="background: var(--accent);"></div>
+                    <div class="schedule-content">
+                        <h3 class="schedule-title">代码评审</h3>
+                        <p class="schedule-meta"><i class="fas fa-code-branch"></i> PR #234 · 性能优化</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="schedule-hour">16:30</div>
+                        <div class="schedule-min">30 min</div>
+                    </div>
+                    <div class="schedule-bar" style="background: var(--success-dark);"></div>
+                    <div class="schedule-content">
+                        <h3 class="schedule-title">一对一沟通</h3>
+                        <p class="schedule-meta"><i class="fas fa-user"></i> 与 Mentor · 线上</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="schedule-hour">19:00</div>
+                        <div class="schedule-min">2 hour</div>
+                    </div>
+                    <div class="schedule-bar" style="background: var(--warning);"></div>
+                    <div class="schedule-content">
+                        <h3 class="schedule-title">读书会</h3>
+                        <p class="schedule-meta"><i class="fas fa-book"></i> 第 4 章 · 思维模型</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近活动 -->
+        <div class="card">
+            <h2 class="card-title">
+                <span class="card-title-text">
+                    <span class="card-title-icon" style="background: rgba(52,211,153,0.12); color: var(--success-dark);"><i class="fas fa-clock-rotate-left"></i></span>
+                    最近活动
+                </span>
+            </h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-dot success"><i class="fas fa-check"></i></div>
+                    <div class="activity-content">
+                        <p class="activity-text">完成了任务 <strong>「接口性能压测」</strong></p>
+                        <span class="activity-time">10 分钟前</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot primary"><i class="fas fa-file-pen"></i></div>
+                    <div class="activity-content">
+                        <p class="activity-text">编辑了笔记 <strong>「Vue3 速查」</strong></p>
+                        <span class="activity-time">2 小时前</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot warn"><i class="fas fa-fire"></i></div>
+                    <div class="activity-content">
+                        <p class="activity-text">完成习惯打卡 <strong>「每日阅读」</strong></p>
+                        <span class="activity-time">今天 08:00</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot info"><i class="fas fa-bullseye"></i></div>
+                    <div class="activity-content">
+                        <p class="activity-text">目标 <strong>「读完 6 本书」</strong> 进度 +1</p>
+                        <span class="activity-time">昨天 22:30</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot success"><i class="fas fa-flag-checkered"></i></div>
+                    <div class="activity-content">
+                        <p class="activity-text">完成本周 <strong>5 项关键任务</strong></p>
+                        <span class="activity-time">5 月 30 日</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle" style="color: var(--primary);"></i> <span id="toastMsg">操作成功</span></div>
+
+<script>
+(function () {
+    'use strict';
+
+    // ========== 数据 ==========
+    const STORAGE_KEY = 'workbench_todos_v1';
+
+    const seedTodos = [
+        { id: 1, title: '完成接口性能压测报告', priority: 'high', tag: '工作', done: false, time: '10:00' },
+        { id: 2, title: '代码评审 PR #234', priority: 'high', tag: '工作', done: false, time: '14:00' },
+        { id: 3, title: '回复产品需求评审邮件', priority: 'mid', tag: '工作', done: true, time: '昨天' },
+        { id: 4, title: '阅读《代码整洁之道》第 6 章', priority: 'low', tag: '学习', done: true, time: '昨天' },
+        { id: 5, title: '整理本周工作日志', priority: 'mid', tag: '工作', done: false, time: '17:00' },
+        { id: 6, title: '健身房 - 力量训练', priority: 'low', tag: '生活', done: false, time: '20:00' },
+        { id: 7, title: '更新个人主页项目卡片', priority: 'low', tag: '副业', done: true, time: '前天' },
+    ];
+
+    // 习惯打卡数据:7 天 (周一-周日) 5/7 完成
+    const habitWeek = [true, true, false, true, true, false, false]; // 索引 6=今天
+    const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
+
+    // 日历事件
+    const eventDays = new Set([3, 5, 12, 15, 18, 20, 25, 28]);
+
+    // ========== 存储 ==========
+    function loadTodos() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return seedTodos.slice();
+    }
+
+    function saveTodos() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(todos)); } catch (e) {}
+    }
+
+    let todos = loadTodos();
+    let activeFilter = 'all';
+    let calYear = 2026;
+    let calMonth = 6; // 6 月 (1-12)
+    const today = { year: 2026, month: 6, day: 2 };
+
+    // ========== DOM ==========
+    const $todoList = document.getElementById('todoList');
+    const $todoInput = document.getElementById('todoInput');
+    const $addBtn = document.getElementById('addTodoBtn');
+    const $addTaskBtn = document.getElementById('addTaskBtn');
+    const $filterTabs = document.getElementById('filterTabs');
+    const $progressFill = document.getElementById('progressFill');
+    const $progressPct = document.getElementById('progressPct');
+    const $todoProgress = document.getElementById('todoProgress');
+    const $navCount = document.getElementById('navTaskCount');
+    const $metricTodo = document.getElementById('metricTodo');
+    const $heroDone = document.getElementById('heroDone');
+    const $themeBtn = document.getElementById('themeToggle');
+    const $habitList = document.getElementById('habitList');
+    const $calDays = document.getElementById('calDays');
+    const $calMonth = document.getElementById('calMonth');
+    const $calPrev = document.getElementById('calPrev');
+    const $calNext = document.getElementById('calNext');
+    const $greeting = document.getElementById('greeting');
+    const $toast = document.getElementById('toast');
+    const $toastMsg = document.getElementById('toastMsg');
+
+    // ========== 工具 ==========
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function showToast(msg) {
+        $toastMsg.textContent = msg;
+        $toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => $toast.classList.remove('show'), 1800);
+    }
+
+    function nextId() {
+        return Math.max(0, ...todos.map(t => t.id)) + 1;
+    }
+
+    // ========== 问候语 ==========
+    function setGreeting() {
+        const h = new Date().getHours();
+        let greet, icon;
+        if (h < 6) { greet = '凌晨好'; icon = 'fa-moon'; }
+        else if (h < 12) { greet = '早上好'; icon = 'fa-sun'; }
+        else if (h < 14) { greet = '中午好'; icon = 'fa-sun'; }
+        else if (h < 18) { greet = '下午好'; icon = 'fa-cloud-sun'; }
+        else { greet = '晚上好'; icon = 'fa-moon'; }
+        $greeting.innerHTML = `<i class="fas ${icon}"></i> ${greet}`;
+    }
+
+    // ========== 渲染：待办 ==========
+    function filteredTodos() {
+        if (activeFilter === 'all') return todos;
+        if (activeFilter === 'todo') return todos.filter(t => !t.done);
+        if (activeFilter === 'done') return todos.filter(t => t.done);
+        if (activeFilter === 'high') return todos.filter(t => t.priority === 'high');
+        return todos;
+    }
+
+    function renderTodos() {
+        const list = filteredTodos();
+        if (list.length === 0) {
+            $todoList.innerHTML = `<li style="text-align:center; padding: 2rem 0; color: var(--text-muted); font-size: 0.88rem;">
+                <i class="fas fa-clipboard-check" style="font-size:1.5rem; opacity:0.3; display:block; margin-bottom:0.5rem;"></i>
+                这里很干净 ✨
+            </li>`;
+        } else {
+            $todoList.innerHTML = list.map(t => {
+                const priLabel = { high: '高', mid: '中', low: '低' }[t.priority];
+                return `
+                <li class="todo-item ${t.done ? 'done' : ''}" data-id="${t.id}">
+                    <div class="todo-check" data-action="toggle"><i class="fas fa-check"></i></div>
+                    <div class="todo-content">
+                        <p class="todo-title">${escapeHtml(t.title)}</p>
+                        <div class="todo-meta">
+                            <span class="todo-priority ${t.priority}">${priLabel}</span>
+                            <span class="todo-tag">${escapeHtml(t.tag)}</span>
+                            <span><i class="far fa-clock"></i> ${escapeHtml(t.time)}</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="todo-action-btn delete" data-action="delete" title="删除"><i class="fas fa-trash-can"></i></button>
+                    </div>
+                </li>`;
+            }).join('');
+        }
+
+        // 统计
+        const total = todos.length;
+        const done = todos.filter(t => t.done).length;
+        const remaining = total - done;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        $todoProgress.textContent = `${done} / ${total}`;
+        $progressPct.textContent = pct + '%';
+        $progressFill.style.width = pct + '%';
+        $navCount.textContent = remaining;
+        $metricTodo.textContent = remaining;
+        $heroDone.textContent = done;
+    }
+
+    // ========== 渲染：习惯 ==========
+    function renderHabit() {
+        const todayIdx = 6; // 周日 = index 6
+        let html = '';
+        for (let i = 0; i < 7; i++) {
+            const isToday = i === todayIdx;
+            const isDone = habitWeek[i];
+            html += `
+                <div class="habit-day">
+                    <div class="habit-cell ${isDone ? 'done' : ''} ${isToday ? 'today' : ''}" data-idx="${i}">
+                        ${isDone ? '<i class="fas fa-check"></i>' : (isToday ? '今' : '')}
+                    </div>
+                    <div style="margin-top: 4px;">${weekDays[i]}</div>
+                </div>`;
+        }
+        $habitList.innerHTML = html;
+    }
+
+    // ========== 渲染：日历 ==========
+    function renderCalendar() {
+        $calMonth.textContent = `${calYear} 年 ${calMonth} 月`;
+
+        // 当月第一天是星期几 (0=周日)
+        const firstDay = new Date(calYear, calMonth - 1, 1).getDay();
+        // 当月天数
+        const daysInMonth = new Date(calYear, calMonth, 0).getDate();
+        // 上月天数
+        const daysInPrev = new Date(calYear, calMonth - 1, 0).getDate();
+
+        const cells = [];
+
+        // 上月补位
+        for (let i = firstDay - 1; i >= 0; i--) {
+            cells.push(`<div class="cal-day muted">${daysInPrev - i}</div>`);
+        }
+        // 当月
+        for (let d = 1; d <= daysInMonth; d++) {
+            const hasEvent = eventDays.has(d);
+            const isToday = calYear === today.year && calMonth === today.month && d === today.day;
+            const classes = ['cal-day'];
+            if (hasEvent) classes.push('has-event');
+            if (isToday) classes.push('today');
+            cells.push(`<div class="${classes.join(' ')}" data-day="${d}">${d}</div>`);
+        }
+        // 下月补位 (补到 6 行 = 42 格)
+        const total = cells.length;
+        const need = total <= 35 ? 35 - total : 42 - total;
+        for (let i = 1; i <= need; i++) {
+            cells.push(`<div class="cal-day muted">${i}</div>`);
+        }
+
+        $calDays.innerHTML = cells.join('');
+    }
+
+    // ========== 事件 ==========
+    function addTodo() {
+        const title = $todoInput.value.trim();
+        if (!title) {
+            $todoInput.focus();
+            return;
+        }
+        todos.unshift({
+            id: nextId(),
+            title,
+            priority: 'mid',
+            tag: '工作',
+            done: false,
+            time: '今天'
+        });
+        $todoInput.value = '';
+        saveTodos();
+        renderTodos();
+        showToast('已添加任务');
+    }
+
+    $addBtn.addEventListener('click', addTodo);
+    $addTaskBtn.addEventListener('click', () => {
+        $todoInput.focus();
+        document.querySelector('.todo-input-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    $todoInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') addTodo();
+    });
+
+    $filterTabs.addEventListener('click', e => {
+        const tab = e.target.closest('.filter-tab');
+        if (!tab) return;
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.dataset.filter;
+        renderTodos();
+    });
+
+    $todoList.addEventListener('click', e => {
+        const item = e.target.closest('.todo-item');
+        if (!item) return;
+        const id = Number(item.dataset.id);
+        // 不用 ?. —— 旧浏览器解析 ES2020 可选链会整块报错，导致脚本全挂
+        const actionEl = e.target.closest('[data-action]');
+        const action = actionEl ? actionEl.dataset.action : null;
+
+        if (action === 'toggle') {
+            const t = todos.find(x => x.id === id);
+            if (t) t.done = !t.done;
+            saveTodos();
+            renderTodos();
+            const target = todos.find(x => x.id === id);
+            showToast(target && target.done ? '已完成 ✓' : '已重新打开');
+        } else if (action === 'delete') {
+            todos = todos.filter(x => x.id !== id);
+            saveTodos();
+            renderTodos();
+            showToast('已删除');
+        }
+    });
+
+    $habitList.addEventListener('click', e => {
+        const cell = e.target.closest('.habit-cell');
+        if (!cell) return;
+        const idx = Number(cell.dataset.idx);
+        habitWeek[idx] = !habitWeek[idx];
+        renderHabit();
+        showToast(habitWeek[idx] ? '已打卡 ✓' : '已取消');
+    });
+
+    $calPrev.addEventListener('click', () => {
+        calMonth--;
+        if (calMonth < 1) { calMonth = 12; calYear--; }
+        renderCalendar();
+    });
+
+    $calNext.addEventListener('click', () => {
+        calMonth++;
+        if (calMonth > 12) { calMonth = 1; calYear++; }
+        renderCalendar();
+    });
+
+    $calDays.addEventListener('click', e => {
+        const d = e.target.closest('.cal-day');
+        if (!d || d.classList.contains('muted')) return;
+        const day = d.dataset.day;
+        if (day) showToast(`已选择 ${calMonth} 月 ${day} 日`);
+    });
+
+    // ========== 主题 ==========
+    function applyTheme(theme) {
+        document.body.dataset.theme = theme;
+        $themeBtn.innerHTML = theme === 'dark'
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+        try { localStorage.setItem('workbench_theme', theme); } catch (e) {}
+    }
+
+    $themeBtn.addEventListener('click', () => {
+        applyTheme(document.body.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+
+    try {
+        const saved = localStorage.getItem('workbench_theme');
+        if (saved) applyTheme(saved);
+    } catch (e) {}
+
+    // ========== 初始化 ==========
+    setGreeting();
+    renderTodos();
+    renderHabit();
+    renderCalendar();
+})();
+</script>
+
+</body>
+</html>
