@@ -1513,10 +1513,15 @@
         opacity: 1;
       }
     }
+
+    /* Vue 挂载前隐藏原始模板，避免脚本出错时把 {{ }} 直接暴露给用户 */
+    [v-cloak] {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div id="app" :data-theme="theme">
+  <div id="app" :data-theme="theme" v-cloak>
     <!-- Header -->
     <header class="app-header" :class="{ 'demo-mode': isDemoMode }">
       <div class="demo-banner" v-if="isDemoMode">
@@ -2261,7 +2266,8 @@
         // 编辑便签
         editNote(note) {
           if (this.isDemoMode) return;
-          this.currentNote = {...note};
+          // 不用对象展开（ES2018）—— 旧浏览器解析不了会整块报错
+          this.currentNote = Object.assign({}, note);
           this.showNoteEditor = true;
           this.editorMode = 'rich';
 
@@ -2320,10 +2326,10 @@
 
           if (index !== -1) {
             // 更新现有便签
-            this.notes.splice(index, 1, {...this.currentNote});
+            this.notes.splice(index, 1, Object.assign({}, this.currentNote));
           } else {
             // 添加新便签
-            this.notes.push({...this.currentNote});
+            this.notes.push(Object.assign({}, this.currentNote));
           }
 
           this.saveNotes();
@@ -2605,10 +2611,10 @@
                 // merge 模式：追加数据
                 const notes = data.notes || [];
                 notes.forEach(note => {
-                  this.notes.push({
-                    ...note,
+                  // 不用对象展开（ES2018）—— 旧浏览器解析不了会整块报错
+                  this.notes.push(Object.assign({}, note, {
                     id: Date.now() + Math.random() // 生成新 ID 避免冲突
-                  });
+                  }));
                 });
               }
 
@@ -2664,7 +2670,9 @@
             const text = event.target.result;
             // 简单的 Markdown 解析，生成一条便签
             const lines = text.split('\n');
-            const title = lines[0]?.replace(/^#+\s*/, '').trim() || file.name;
+            // 不用 ?. —— 旧浏览器解析 ES2020 可选链会整块报错，导致脚本全挂
+            const firstLine = lines[0] ? lines[0].replace(/^#+\s*/, '').trim() : '';
+            const title = firstLine || file.name;
             const content = lines.slice(1).join('<br>');
 
             this.notes = [{
